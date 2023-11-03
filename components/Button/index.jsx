@@ -1,9 +1,21 @@
-import { View, Text, Button } from 'react-native'
+import {  Text, TouchableOpacity } from 'react-native'
 import React from 'react'
+import classnames from "classnames"
 
-const CustomButton = ({children}) => {
+const CustomButton = ({children, className, onPress, textClassName, ...rest}) => {
   return (
-      <Button title={children} className="bg-red text-white" />
+      <TouchableOpacity
+      className={classnames(
+        "py-2 px-4 min-w-full bg-gray-300 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75",
+        className
+      )}
+      {...{ onPress }}
+      {...rest}
+    >
+      <Text className={`text-lg text-center font-semibold ${textClassName}`}>
+        {children}
+      </Text>
+    </TouchableOpacity>
   )
 }
 
