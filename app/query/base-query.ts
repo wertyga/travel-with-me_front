@@ -1,6 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-// import { toast } from 'react-toastify';
-// import { cookies } from '@zoppa/storage/cookie';
+import { storage } from '@/utils';
 import { baseInstance } from './base-instance';
 
 export const baseQuery = async ({
@@ -9,11 +8,11 @@ export const baseQuery = async ({
   ...config
 }: AxiosRequestConfig & { silentError?: boolean }) => {
   try {
-    // const token = cookies.get('token');
+    const token = storage.get('token');
     const authHeader: AxiosRequestConfig['headers'] = {};
-    // if (token) {
-    //   authHeader['Authorization'] = `Bearer ${token}`;
-    // }
+    if (token) {
+      authHeader['Authorization'] = `Bearer ${token}`;
+    }
     const data = await baseInstance.request({
       headers: {
         ...authHeader,
@@ -24,10 +23,10 @@ export const baseQuery = async ({
 
     return { data: data?.data } as any;
   } catch (e: any) {
-    if (typeof window !== 'undefined' && !silentError) {
-      const errorMessage = e.response?.data?.message || e.message;
-      // toast.error(Array.isArray(errorMessage) ? errorMessage[0] : errorMessage);
-    }
+    // if (typeof window !== 'undefined' && !silentError) {
+    //   const errorMessage = e.response?.data?.message || e.message;
+    //   // toast.error(Array.isArray(errorMessage) ? errorMessage[0] : errorMessage);
+    // }
     return {
       error: e.response?.data || { message: e.message },
     };
