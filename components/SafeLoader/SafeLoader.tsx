@@ -1,8 +1,9 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 
-export const Loader = () => {
+export const SafeLoader = () => {
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.container]}>
+      <Text>Safe loader</Text>
       <ActivityIndicator size="large" />
     </View>
   );
@@ -13,11 +14,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'white',
+    width: '100%',
+    height: '100%',
     position: 'absolute',
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
   },
 });

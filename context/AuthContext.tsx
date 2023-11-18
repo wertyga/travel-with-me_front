@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
       console.log({ e });
     }
   };
-  console.log({ sigInLoading });
 
   const isLoading = sigInLoading || sigUpLoading;
   return (

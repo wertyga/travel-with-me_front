@@ -4,6 +4,7 @@ import React from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import HomeScreen from '@/screens/Home';
+import ErrorScreen from '@/screens/Error';
 import LoginScreen from '@/screens/Login';
 
 const Stack = createNativeStackNavigator();
@@ -13,11 +14,13 @@ const Navigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {user ? (
-          <Stack.Screen name="Home" component={HomeScreen} />
-        ) : (
-          <Stack.Screen name="Login" component={LoginScreen} />
-        )}
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Error" component={ErrorScreen} />
+        {/*{user ? (*/}
+        {/*  <Stack.Screen name="Home" component={HomeScreen} />*/}
+        {/*) : (*/}
+        {/*  <Stack.Screen name="Login" component={LoginScreen} />*/}
+        {/*)}*/}
       </Stack.Navigator>
     </NavigationContainer>
   );

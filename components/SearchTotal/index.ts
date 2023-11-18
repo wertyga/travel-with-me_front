@@ -1,0 +1,1 @@
+export { SearchTotal } from './SearchTotal';

@@ -2,7 +2,7 @@ import { NativeWindStyleSheet } from 'nativewind';
 import { Provider } from 'react-redux';
 
 import { AuthProvider } from './context/AuthContext';
-import Navigator from './components/Navigator';
+import Navigator from './app/Navigator';
 import { store } from '@/app/store';
 
 NativeWindStyleSheet.setOutput({
