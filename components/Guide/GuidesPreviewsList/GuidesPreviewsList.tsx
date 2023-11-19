@@ -1,8 +1,8 @@
+import { useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { GuidePreview } from '@/components/Guide/GuidePreview/GuidePreview';
 import { Guide } from '@/types';
 import CarouselEx from 'react-native-snap-carousel';
-import { useRef, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
@@ -33,7 +33,8 @@ export const GuidesPreviewsList = ({
   return (
     <View className="w-full pb-1">
       <LinearGradient
-        colors={['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.3)']}
+        colors={['rgba(0, 0, 0, 0.02)', 'rgba(0, 0, 0, 0.5)']}
+        locations={[0, 0.99]}
         className="pl-4 pb-1 pt-2"
       >
         <ScrollView horizontal key={state.index}>
@@ -49,7 +50,7 @@ export const GuidesPreviewsList = ({
       </LinearGradient>
 
       <LinearGradient
-        colors={['rgba(0, 0, 0, 0.3)', 'rgba(0, 0, 0, 0.7)']}
+        colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.7)']}
         className="h-full"
       >
         <View className="items-center">

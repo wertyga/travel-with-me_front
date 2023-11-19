@@ -17,8 +17,8 @@ export const GuidesCategories = ({ selected, onChange, categories }: Props) => {
         <Text
           key={category}
           onPress={onPress(category)}
-          className={`pr-4 text-white font-bold ${
-            selected.includes(category) ? 'opacity-100' : 'opacity-70'
+          className={`pr-4 font-bold ${
+            selected.includes(category) ? 'text-white' : 'text-[#9ADBFA]'
           }`}
         >
           {category}

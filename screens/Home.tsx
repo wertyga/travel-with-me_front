@@ -92,10 +92,11 @@ const Home = ({ route }) => {
         colors={[
           'rgba(0, 0, 0, 0.1)',
           'rgba(0, 0, 0, 0.4)',
+          'rgba(0, 0, 0, 0.1)',
           'rgba(0, 0, 0, 0.01)',
         ]}
-        locations={[0, 0.7, 0.95]}
-        className="absolute w-full px-4"
+        locations={[0, 0.7, 0.95, 0.99]}
+        className="absolute w-full px-4 pb-4"
       >
         <SearchTotal />
         <GuidesCategories
