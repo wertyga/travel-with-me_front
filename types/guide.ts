@@ -7,6 +7,7 @@ import { Place } from '@/types/place';
 export enum GUIDE_TAGS {
   Guide = 'Guide',
   List = 'GuidesList',
+  Categories = 'GuidesCategories',
 }
 
 export enum CURRENCY {

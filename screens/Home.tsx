@@ -1,6 +1,6 @@
 import { Dimensions, SafeAreaView, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
@@ -10,10 +10,15 @@ import uniq from 'lodash/uniq';
 import flatten from 'lodash/flatten';
 import { Carousel } from '@/components/Carousel';
 import { SearchTotal } from '@/components/SearchTotal';
+import { GuidesCategories } from '@/components/Guide';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
 
 const Home = ({ route }) => {
   const navi = useNavigation();
+  const [state, setState] = useState({
+    filteredCategories: [],
+  });
 
   const {
     data: { city } = {},
@@ -26,6 +31,15 @@ const Home = ({ route }) => {
 
   const { data: { cities = [] } = {}, error: getLightListError } =
     useGetCitiesLightListQuery();
+
+  const onChangeCategory = (category: string) => {
+    setState(prev => ({
+      ...prev,
+      filteredCategories: prev.filteredCategories.includes(category)
+        ? prev.filteredCategories.filter(cat => cat !== category)
+        : [...prev.filteredCategories, category],
+    }));
+  };
 
   useLayoutEffect(() => {
     navi.setOptions({
@@ -56,7 +70,7 @@ const Home = ({ route }) => {
     return <SafeLoader />;
   }
 
-  const allGuidesCategories = uniq(
+  const allGuidesCityCategories = uniq(
     flatten(city.guides?.map(({ categories }) => categories)).filter(
       im => !!im
     ) || []
@@ -74,15 +88,34 @@ const Home = ({ route }) => {
         onSnapToItem={onChangeCity}
       />
 
-      <View className="absolute w-full px-4">
+      <LinearGradient
+        colors={[
+          'rgba(0, 0, 0, 0.1)',
+          'rgba(0, 0, 0, 0.4)',
+          'rgba(0, 0, 0, 0.01)',
+        ]}
+        locations={[0, 0.7, 0.95]}
+        className="absolute w-full px-4"
+      >
         <SearchTotal />
+        <GuidesCategories
+          selected={state.filteredCategories}
+          onChange={onChangeCategory}
+          categories={allGuidesCityCategories}
+          key={city.title}
+        />
 
-        <Text className="text-white font-bold mt-6">
+        <Text className="text-white font-bold mt-4">
           {route.params.city.title}
         </Text>
-      </View>
+      </LinearGradient>
 
-      <CityFullInfo city={city} title={route.params.city.title} />
+      <CityFullInfo
+        key={city.title + state.filteredCategories.join('')}
+        city={city}
+        title={route.params.city.title}
+        filteredCategories={state.filteredCategories}
+      />
     </SafeAreaView>
   );
 };

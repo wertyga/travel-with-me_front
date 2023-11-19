@@ -1,23 +1,34 @@
 import { Dimensions, View } from 'react-native';
 import { GuidesPreviewsList } from '@/components/Guide';
 import { City } from '@/types';
+import intersection from 'lodash/intersection';
 
 type Props = {
   city: City;
   title: string;
+  filteredCategories?: string[];
 };
 
-export const CityFullInfo = ({ city, title }: Props) => {
+export const CityFullInfo = ({
+  city,
+  title,
+  filteredCategories = [],
+}: Props) => {
   const { guides } = city;
   const isShowGuides = title === city.title;
+  const cityGuides =
+    filteredCategories?.length > 0
+      ? guides.filter(
+          guide => !!intersection(guide.categories, filteredCategories).length
+        )
+      : guides;
 
   return (
     <View className="w-full absolute bottom-0 left-0">
       {isShowGuides && (
-        <View className="w-full items-center" key={title}>
+        <View className="w-full items-center">
           <GuidesPreviewsList
-            key={title}
-            guides={guides}
+            guides={cityGuides}
             sliderWidth={Dimensions.get('window').width - 20}
             itemWidth={Dimensions.get('window').width - 20}
           />
