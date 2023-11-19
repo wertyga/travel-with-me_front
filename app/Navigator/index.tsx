@@ -1,11 +1,10 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import HomeScreen from '@/screens/Home';
 import ErrorScreen from '@/screens/Error';
-import LoginScreen from '@/screens/Login';
 
 const Stack = createNativeStackNavigator();
 

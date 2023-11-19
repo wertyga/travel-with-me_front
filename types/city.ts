@@ -5,6 +5,7 @@ import { Guide } from '@/types/guide';
 export enum CITY_TAGS {
   'City' = 'City',
   'List' = 'CitiesList',
+  'LightList' = 'CitiesLightList',
 }
 
 export type City = {

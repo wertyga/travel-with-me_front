@@ -1,9 +1,10 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { CONSTANTS } from '@/styles/constants';
 
 export const Loader = () => {
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.container]}>
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size="large" color={CONSTANTS.colors.accent} />
     </View>
   );
 };
@@ -12,8 +13,8 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    zIndex: 100,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     position: 'absolute',
     top: 0,
     left: 0,

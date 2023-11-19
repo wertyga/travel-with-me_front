@@ -1,13 +1,9 @@
-import { Dimensions, Image, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { GuidePreview } from '@/components/Guide/GuidePreview/GuidePreview';
 import { Guide } from '@/types';
-import { Carousel } from '@/components/Carousel';
-import CarouselEx, {
-  CarouselProperties,
-  ParallaxImageStatic,
-} from 'react-native-snap-carousel';
-import * as React from 'react';
-import { useRef } from 'react';
+import CarouselEx from 'react-native-snap-carousel';
+import { useRef, useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
   guides: Guide[];
@@ -21,20 +17,55 @@ export const GuidesPreviewsList = ({
   itemWidth,
 }: Props) => {
   const ref = useRef();
+  const [state, setState] = useState({
+    index: 0,
+    guidesCategories: guides[0].categories,
+  });
+
+  const onSnapToItem = (index: number) => {
+    setState(prev => ({
+      ...prev,
+      guidesCategories: guides[index].categories,
+      index,
+    }));
+  };
 
   return (
-    <CarouselEx
-      layout="stack"
-      layoutCardOffset={9}
-      ref={ref}
-      data={guides as any}
-      renderItem={({ item: guide }: { item: Guide }) => {
-        return <GuidePreview key={guide._id} guide={guide} />;
-      }}
-      sliderWidth={sliderWidth}
-      itemWidth={itemWidth}
-      inactiveSlideShift={0}
-      useScrollView={true}
-    />
+    <View className="w-full pb-1">
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.3)']}
+        className="pl-4 pb-1 pt-2"
+      >
+        <ScrollView horizontal key={state.index}>
+          {state.guidesCategories.map((category, i) => (
+            <Text
+              key={`${category}-${i}`}
+              className="text-white font-bold pr-3"
+            >
+              {category}
+            </Text>
+          ))}
+        </ScrollView>
+      </LinearGradient>
+
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0.3)', 'rgba(0, 0, 0, 0.7)']}
+        className="h-full"
+      >
+        <View className="items-center">
+          <CarouselEx
+            layout="stack"
+            onSnapToItem={onSnapToItem}
+            ref={ref}
+            data={guides as any}
+            renderItem={({ item: guide }: { item: Guide }) => {
+              return <GuidePreview key={guide._id} guide={guide} />;
+            }}
+            sliderWidth={sliderWidth}
+            itemWidth={itemWidth}
+          />
+        </View>
+      </LinearGradient>
+    </View>
   );
 };

@@ -7,4 +7,5 @@ export enum SORT_BY {
   CreatedAt = 'CreatedAt',
   Popularity = 'Popularity',
   Price = 'Price',
+  GuidesCount = 'GuidesCount',
 }

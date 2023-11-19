@@ -29,7 +29,7 @@ export type Guide = {
   description: string;
   images: string[];
   slug: string;
-  category: string;
+  categories: string[];
   owner: User;
   city: City;
   country: Country;

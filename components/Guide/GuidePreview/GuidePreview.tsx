@@ -1,4 +1,4 @@
-import { View, Image, ImageBackground, Text, StyleSheet } from 'react-native';
+import { View, Image, ImageBackground, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Guide } from '@/types';
 import { getCurrencyMeta } from '@/utils';
@@ -17,8 +17,7 @@ export const GuidePreview = ({ guide }: Props) => {
   return (
     <ImageBackground
       resizeMode="cover"
-      className={`relative w-full h-full bg-gray-400 rounded-2xl overflow-hidden`}
-      imageStyle={styles.image}
+      className={`relative h-60 bg-gray-400 rounded-2xl overflow-hidden`}
       source={{
         uri: guide.images?.[0],
       }}
@@ -31,25 +30,25 @@ export const GuidePreview = ({ guide }: Props) => {
           <Text className="text-white font-bold text-[16px]">
             {guide.title}
           </Text>
-          <Text className="text-white font-bold text-[18px]">
-            {guide.pointsCount}
+          {!!guide.pointsCount && (
+            <Text className="text-white font-bold text-[18px]">
+              {guide.pointsCount}
+            </Text>
+          )}
+        </View>
+        <View className="flex-row justify-between mt-2 mx-4 items-center">
+          <Text className="text-white font-bold text-[12px]">Price</Text>
+          <Text className="text-white font-bold text-[14px]">
+            {priceString}
           </Text>
         </View>
       </LinearGradient>
 
-      <View className="flex-row justify-between mt-2 mx-4 items-center">
-        <Text className="text-white font-bold text-[16px]">Price</Text>
-        <Text className="text-white font-bold text-[18px]">{priceString}</Text>
-      </View>
-
       <View className="flex-row justify-between w-full h-2/5 absolute bottom-0">
-        <LinearGradient
-          colors={['rgba(255, 255, 255, 0.2)', 'rgba(0, 0, 0, 0.2)']}
-          className="h-full w-full absolute z-10 rounded-t-2xl"
-        />
         {pointsImages.map((image, i) => (
-          <Image
-            className={`w-[32%] h-full ${
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0.2)', 'rgba(0, 0, 0, 0.4)']}
+            className={`h-full w-[32%] rounded-t-2xl overflow-hidden ${
               i === 1
                 ? 'rounded-t-lg'
                 : i === 0
@@ -57,19 +56,16 @@ export const GuidePreview = ({ guide }: Props) => {
                 : 'rounded-tl-lg rounded-tr-2xl'
             }`}
             key={`${image}-${i}`}
-            source={{
-              uri: image,
-            }}
-          />
+          >
+            <Image
+              className="w-full h-full object-cover"
+              source={{
+                uri: image,
+              }}
+            />
+          </LinearGradient>
         ))}
       </View>
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-});
