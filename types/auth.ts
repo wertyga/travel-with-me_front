@@ -6,7 +6,18 @@ export enum USER_TAGS {
   Self = 'Self',
 }
 
-export type ConfirmEmailRequest = { token: string };
+export type AuthCommonRequest = {
+  email: string;
+  password: string;
+  username?: string;
+};
+
+export type AuthContextType = {
+  user?: User;
+  setUser: (user: User) => void;
+  signIn: (data: AuthCommonRequest) => void;
+  signUp: (data: AuthCommonRequest) => Promise<boolean>;
+};
 
 export type ChangeEmailRequest = {
   newEmail: string;

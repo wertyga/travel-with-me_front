@@ -15,12 +15,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.wertyga.travel-with-me"
     },
     "experiments": {
       "tsconfigPaths": true
     },
     "android": {
+      "bundleIdentifier": "com.wertyga.travel-with-me",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

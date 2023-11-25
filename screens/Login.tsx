@@ -1,64 +1,50 @@
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-} from 'react-native';
-import React, { useState } from 'react';
-
+import { SafeAreaView, Text } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import Button from '@/components/Button';
+import { SignUpForm, SignInForm } from '@/components/Auth';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
+  const navi = useNavigation();
+  const { signIn, signUp } = useAuth();
   const [state, setState] = useState({
-    email: '',
-    password: '',
+    screen: 'signup',
   });
-  const { signIn } = useAuth();
 
-  const onChange =
-    (key: keyof typeof state) =>
-    ({
-      nativeEvent: { text },
-    }: NativeSyntheticEvent<TextInputChangeEventData>) => {
-      setState(prev => ({ ...prev, [key]: text }));
-    };
+  useLayoutEffect(() => {
+    navi.setOptions({
+      headerShown: false,
+    });
+  }, []);
 
-  const handleLogin = () => {
-    signIn(state.email, state.password);
+  const onChangeForm = () => {
+    setState(prev => ({
+      ...prev,
+      screen: prev.screen === 'signup' ? 'signin' : 'signup',
+    }));
   };
 
+  const onSubmit = async data => {
+    if (state.screen === 'signup') {
+      const isSuccess = await signUp(data);
+
+      if (isSuccess) {
+        setState(prev => ({ ...prev, screen: 'signin' }));
+      }
+    }
+
+    return signIn(data);
+  };
+
+  const { screen } = state;
+
   return (
-    <SafeAreaView className="bg-slate-700 px-2 h-full w-full">
-      <Text className="text-2xl text-white p-4 mt-2 text-center font-bold">
-        Please Login
+    <SafeAreaView className="bg-slate-700 px-2 h-full w-full pt-8">
+      <Text className="text-white text-right mt-2 mr-2" onPress={onChangeForm}>
+        {screen === 'signup' ? 'Sign in' : 'Sign up'}
       </Text>
-      <View className="flex flex-col items-center mt-4 w-full">
-        <TextInput
-          className="text-2xl text-white text-center p-2 w-1/2"
-          style={{ borderBottomColor: 'white', borderBottomWidth: 1 }}
-          value={state.email}
-          onChange={onChange('email')}
-          placeholder="E-mail"
-          autoFocus
-          keyboardType="email-address"
-          textContentType="emailAddress"
-        />
-        <TextInput
-          className="text-2xl text-white text-center mt-6 p-2 w-1/2"
-          style={{ borderBottomColor: 'white', borderBottomWidth: 1 }}
-          value={state.password}
-          onChange={onChange('password')}
-          placeholder="Password"
-          secureTextEntry
-          textContentType="password"
-        />
-        <Button className="mt-10" onPress={handleLogin}>
-          Login
-        </Button>
-      </View>
+      {screen === 'signup' && <SignUpForm onSubmit={onSubmit} />}
+      {screen === 'signin' && <SignInForm onSubmit={onSubmit} />}
     </SafeAreaView>
   );
 };

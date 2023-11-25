@@ -5,7 +5,6 @@ import {
   OauthFacebookRequest,
   SignUpRequest,
   SignInRequest,
-  ConfirmEmailRequest,
   SuccessResponse,
   RecoveryPasswordInitRequest,
   RecoveryPasswordRequest,
@@ -28,17 +27,10 @@ export const authApi = baseApi.injectEndpoints({
     }),
     recoveryPassword: build.mutation<UserResponse, RecoveryPasswordRequest>({
       invalidatesTags: result =>
-        result ? [USER_TAGS.List, USER_TAGS.User] : [],
+        result ? [USER_TAGS.List, USER_TAGS.Self] : [],
       query: data => ({
         method: 'post',
         url: '/auth/change-password',
-        data,
-      }),
-    }),
-    confirmEmail: build.mutation<UserResponse, ConfirmEmailRequest>({
-      query: data => ({
-        method: 'post',
-        url: '/auth/confirm-email',
         data,
       }),
     }),
@@ -50,6 +42,8 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     signIn: build.mutation<UserResponse, SignInRequest>({
+      invalidatesTags: result =>
+        result ? [USER_TAGS.List, USER_TAGS.Self] : [],
       query: data => ({
         method: 'post',
         url: '/auth/signin',
@@ -77,30 +71,7 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
-    // updateSelfUser: build.mutation<UserUpdateResponse, UserUpdateRequest>({
-    //   query: data => ({
-    //     method: 'put',
-    //     url: '/users/update',
-    //     data,
-    //   }),
-    //   async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-    //     const {
-    //       data: { user },
-    //     } = await queryFulfilled;
-    //     dispatch(userSlice.actions.update(user));
-    //   },
-    // }),
   }),
 });
 
-export const {
-  useSignUpMutation,
-  useRecoveryPasswordInitMutation,
-  useOauthFacebookMutation,
-  useOauthGoogleMutation,
-  useSignInMutation,
-  useConfirmEmailMutation,
-  useRecoveryPasswordMutation,
-  useUpdateSelfUserMutation,
-  useChangeEmailMutation,
-} = authApi;
+export const { useSignUpMutation, useSignInMutation } = authApi;

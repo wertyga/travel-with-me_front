@@ -20,7 +20,8 @@ const Search = ({ icon, className, ...inputProps }: Props) => {
         {...inputProps}
       />
       <View className="absolute top-[4px] right-[5px]">
-        <TouchableOpacity className="rounded-full w-6 h-6 bg-[#19B9DD] items-center justify-center ">
+        <TouchableOpacity className="rounded-full w-6 h-6 bg-[#379FA0] items-center justify-center ">
+          {/*<TouchableOpacity className="rounded-full w-6 h-6 bg-[#19B9DD] items-center justify-center ">*/}
           {icon || <FontAwesome name="search" size={12} color="white" />}
         </TouchableOpacity>
       </View>

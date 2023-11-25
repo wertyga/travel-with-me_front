@@ -1,10 +1,11 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 import { CONSTANTS } from '@/styles/constants';
 
 export const Loader = () => {
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.container]}>
       <ActivityIndicator size="large" color={CONSTANTS.colors.accent} />
+      <Text className="text-white mt-1">Loading...</Text>
     </View>
   );
 };
