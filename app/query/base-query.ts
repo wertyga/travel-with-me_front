@@ -25,10 +25,12 @@ export const baseQuery = async ({
 
     return { data: data?.data } as any;
   } catch (e: any) {
-    Toast.show({
-      type: 'error',
-      text1: e.response?.data.message || e.message,
-    });
+    if (!silentError) {
+      Toast.show({
+        type: 'error',
+        text1: e.response?.data.message || e.message,
+      });
+    }
 
     return {
       error: e.response?.data || { message: e.message },

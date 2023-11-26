@@ -21,12 +21,13 @@ export const AuthProvider = ({ children }) => {
 
   const [signInFetch, { isLoading: sigInLoading }] = useSignInMutation();
   const [signUpFetch, { isLoading: sigUpLoading }] = useSignUpMutation();
-  const { data: userSelf, isFetching: selfFetching } = useGetSelfQuery(
-    undefined,
-    {
-      skip: !token,
-    }
-  );
+  const {
+    data: userSelf,
+    isFetching: selfFetching,
+    error: fetchSelfError,
+  } = useGetSelfQuery(undefined, {
+    skip: !token,
+  });
 
   const signIn = async ({ email, password }: AuthCommonRequest) => {
     const { data } = await signInFetch({ email, password });
@@ -68,6 +69,12 @@ export const AuthProvider = ({ children }) => {
 
     setUser(userSelf);
   }, [userSelf]);
+
+  useEffect(() => {
+    if (!fetchSelfError) return;
+
+    logout();
+  }, [fetchSelfError]);
 
   if (selfFetching) {
     return <SafeLoader />;

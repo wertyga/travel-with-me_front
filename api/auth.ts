@@ -1,8 +1,6 @@
 import { baseApi } from '@/app/query';
 import {
-  OauthGoogleRequest,
   UserResponse,
-  OauthFacebookRequest,
   SignUpRequest,
   SignInRequest,
   SuccessResponse,

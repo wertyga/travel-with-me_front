@@ -19,7 +19,7 @@ export const GuidesPreviewsList = ({
   const ref = useRef();
   const [state, setState] = useState({
     index: 0,
-    guidesCategories: guides[0].categories,
+    guidesCategories: guides[0]?.categories || [],
   });
 
   const onSnapToItem = (index: number) => {

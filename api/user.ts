@@ -8,6 +8,7 @@ export const userApi = baseApi.injectEndpoints({
       query: () => ({
         method: 'get',
         url: '/users/self',
+        silentError: true,
       }),
     }),
   }),
