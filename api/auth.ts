@@ -57,21 +57,12 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
-    oauthGoogle: build.mutation<UserResponse, OauthGoogleRequest>({
-      query: data => ({
-        method: 'post',
-        url: '/oauth/google',
-        data,
-      }),
-    }),
-    oauthFacebook: build.mutation<UserResponse, OauthFacebookRequest>({
-      query: data => ({
-        method: 'post',
-        url: '/oauth/facebook',
-        data,
-      }),
-    }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation } = authApi;
+export const {
+  useSignUpMutation,
+  useSignInMutation,
+  useRecoveryPasswordInitMutation,
+  useRecoveryPasswordMutation,
+} = authApi;

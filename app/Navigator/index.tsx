@@ -5,8 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import HomeScreen from '@/screens/Home';
 import ErrorScreen from '@/screens/Error';
 import LoginScreen from '@/screens/Login';
-import { Header } from '@/components/Header';
-import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
+import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +26,10 @@ const Navigator = () => {
             <Stack.Screen name="Error" component={ErrorScreen} />
           </React.Fragment>
         )}
+        <Stack.Screen
+          name="RecoveryPassword"
+          component={RecoveryPasswordScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,5 @@
 import { baseApi } from '@/app/query';
-import { GUIDE_TAGS } from '@/types';
+import { Guide, GUIDE_TAGS } from '@/types';
 
 export const guideApi = baseApi.injectEndpoints({
   endpoints: build => ({
@@ -9,6 +9,16 @@ export const guideApi = baseApi.injectEndpoints({
         return {
           method: 'get',
           url: '/guide/categories',
+        };
+      },
+    }),
+    getGuide: build.query<Guide, { slug: string }>({
+      provideTags: result =>
+        result ? [{ type: GUIDE_TAGS.Guide, id: result._id }] : [],
+      query: ({ slug }) => {
+        return {
+          method: 'get',
+          url: `/guide/${slug}`,
         };
       },
     }),

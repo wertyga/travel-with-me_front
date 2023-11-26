@@ -22,7 +22,6 @@ export type AuthContextType = {
 
 export type ChangeEmailRequest = {
   newEmail: string;
-  redirectUrl: string;
 };
 
 export type SignInRequest = {
@@ -47,16 +46,14 @@ export type SignUpRequest = {
   username: string;
   password: string;
   email: string;
-  redirectUrl: string;
 };
 
 export type RecoveryPasswordInitRequest = {
   email: string;
-  redirectUrl: string;
 };
 
 export type RecoveryPasswordRequest = {
+  email: string;
   token: string;
   password: string;
-  confirmPassword: string;
 };

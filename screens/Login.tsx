@@ -50,6 +50,13 @@ const Login = () => {
 
         {screen === 'signup' && <SignUpForm onSubmit={onSubmit} />}
         {screen === 'signin' && <SignInForm onSubmit={onSubmit} />}
+
+        <Text
+          className="text-white text-right mt-2 mr-2"
+          onPress={() => navi.navigate('RecoveryPassword')}
+        >
+          Forgot password?
+        </Text>
       </View>
     </SafeAreaView>
   );
