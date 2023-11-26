@@ -36,6 +36,7 @@ export const SignUpForm = ({ onSubmit }: Props) => {
                 placeholder="E-mail"
                 keyboardType="email-address"
                 textContentType="emailAddress"
+                autoCapitalize="none"
                 error={errors?.email?.message}
               />
             );

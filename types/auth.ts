@@ -16,6 +16,7 @@ export type AuthContextType = {
   user?: User;
   setUser: (user: User) => void;
   signIn: (data: AuthCommonRequest) => void;
+  logout: () => void;
   signUp: (data: AuthCommonRequest) => Promise<boolean>;
 };
 

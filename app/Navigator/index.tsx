@@ -5,6 +5,8 @@ import { useAuth } from '@/context/AuthContext';
 import HomeScreen from '@/screens/Home';
 import ErrorScreen from '@/screens/Error';
 import LoginScreen from '@/screens/Login';
+import { Header } from '@/components/Header';
+import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 
 const Stack = createNativeStackNavigator();
 

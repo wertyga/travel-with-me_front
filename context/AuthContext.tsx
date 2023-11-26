@@ -11,6 +11,7 @@ import { SafeLoader } from '@/components/SafeLoader';
 export const AuthContext = createContext<AuthContextType>({
   setUser: () => {},
   signIn: () => {},
+  logout: () => {},
   signUp: () => false as any,
 });
 
@@ -48,10 +49,16 @@ export const AuthProvider = ({ children }) => {
     return !!data?.success;
   };
 
+  const logout = async () => {
+    storage.delete('token');
+    setToken(null);
+    setUser(null);
+    console.log(await storage.get('token'));
+  };
+
   useEffect(() => {
     storage.get('token').then(token => {
       if (!token) return;
-
       setToken(token);
     });
   }, []);
@@ -59,18 +66,16 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (!userSelf) return;
 
-    Keyboard.dismiss();
     setUser(userSelf);
   }, [userSelf]);
 
   if (selfFetching) {
-    Keyboard.dismiss();
     return <SafeLoader />;
   }
 
   const isLoading = sigInLoading || sigUpLoading;
   return (
-    <AuthContext.Provider value={{ user, setUser, signIn, signUp }}>
+    <AuthContext.Provider value={{ user, setUser, signIn, signUp, logout }}>
       {children}
       {isLoading && <Loader />}
     </AuthContext.Provider>

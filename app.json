@@ -14,6 +14,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      "@react-native-google-signin/google-signin"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.wertyga.travel-with-me"
@@ -21,12 +24,14 @@
     "experiments": {
       "tsconfigPaths": true
     },
+    "scheme": "travel-with-me",
     "android": {
       "bundleIdentifier": "com.wertyga.travel-with-me",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.wertyga.travelwithme"
     },
     "web": {
       "favicon": "./assets/favicon.png"

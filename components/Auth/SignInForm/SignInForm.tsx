@@ -34,6 +34,7 @@ export const SignInForm = ({ onSubmit }: Props) => {
                 value={value}
                 onChange={onChange}
                 placeholder="E-mail"
+                autoCapitalize="none"
                 keyboardType="email-address"
                 textContentType="emailAddress"
                 error={errors?.email?.message}

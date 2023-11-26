@@ -13,8 +13,9 @@ import { SearchTotal } from '@/components/SearchTotal';
 import { GuidesCategories } from '@/components/Guide';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
+import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 
-const Home = ({ route }) => {
+const Home = ({ route, navigation }) => {
   const navi = useNavigation();
   const [state, setState] = useState({
     filteredCategories: [],
@@ -78,7 +79,7 @@ const Home = ({ route }) => {
   const citiesImages = cities.map(({ image }) => image);
 
   return (
-    <SafeAreaView className="relative w-screen h-screen">
+    <MainLayout className="" route={route} navigation={navigation} title="Home">
       {cityLoading && <Loader />}
       <Carousel
         className="absolute top-0 left-0 w-full h-full"
@@ -96,7 +97,7 @@ const Home = ({ route }) => {
           'rgba(0, 0, 0, 0.01)',
         ]}
         locations={[0, 0.7, 0.95, 0.99]}
-        className="absolute w-full px-4 pb-4"
+        className="absolute w-full px-4 pb-4 pt-24"
       >
         <SearchTotal />
         <GuidesCategories
@@ -117,7 +118,7 @@ const Home = ({ route }) => {
         title={route.params.city.title}
         filteredCategories={state.filteredCategories}
       />
-    </SafeAreaView>
+    </MainLayout>
   );
 };
 
