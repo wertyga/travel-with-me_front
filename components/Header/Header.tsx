@@ -6,6 +6,9 @@ type Props = {
   className?: string;
 };
 
+// MOCK
+const screens = ['Home', 'Error'];
+
 export const Header = ({ title, className = '' }: Props) => {
   const { logout } = useAuth();
 

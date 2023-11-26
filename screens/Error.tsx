@@ -22,7 +22,7 @@ const Error = ({ route }) => {
         >
           <Text
             className="text-white text-[12px]"
-            onPress={() => navi.navigate('Home')}
+            onPress={() => navi.navigate('Home', { isFromError: true })}
           >
             Go Back
           </Text>

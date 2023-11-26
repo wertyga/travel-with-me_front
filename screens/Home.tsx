@@ -1,6 +1,6 @@
 import { Dimensions, SafeAreaView, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
@@ -26,12 +26,16 @@ const Home = ({ route, navigation }) => {
     isFetching: cityLoading,
     error: getCityError,
   } = useGetCityQuery(
-    { slug: route.params?.city.slug },
+    { slug: route.params?.city?.slug },
     { skip: !route.params?.city }
   );
 
-  const { data: { cities = [] } = {}, error: getLightListError } =
-    useGetCitiesLightListQuery();
+  const {
+    data: { cities = [] } = {},
+    error: getLightListError,
+    isFetching,
+    refetch: refetchCities,
+  } = useGetCitiesLightListQuery();
 
   const onChangeCategory = (category: string) => {
     setState(prev => ({
@@ -49,7 +53,7 @@ const Home = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (!getLightListError) return;
+    if (!getLightListError && !getCityError) return;
 
     navigateToError(navi, getLightListError || getCityError);
   }, [getLightListError, getCityError]);
@@ -61,13 +65,22 @@ const Home = ({ route, navigation }) => {
     navi.navigate('Home', { city: cities[index] });
   };
 
-  useEffect(() => {
-    if (!cities.length) return;
+  useFocusEffect(
+    useCallback(() => {
+      if (!cities.length) return;
 
-    onChangeCity(0);
-  }, [cities]);
+      onChangeCity(0);
+    }, [cities])
+  );
 
-  if (!city || !cities.length) {
+  useFocusEffect(
+    useCallback(() => {
+      if (!route.params?.isFromError || isFetching) return;
+      refetchCities();
+    }, [route.params?.isFromError])
+  );
+
+  if (!city || !cities.length || !route.params?.city) {
     return <SafeLoader />;
   }
 
