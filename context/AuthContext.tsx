@@ -10,7 +10,7 @@ import { SafeLoader } from '@/components/SafeLoader';
 
 export const AuthContext = createContext<AuthContextType>({
   setUser: () => {},
-  signIn: () => {},
+  signIn: (() => {}) as any,
   logout: () => {},
   signUp: () => false as any,
 });
@@ -30,12 +30,14 @@ export const AuthProvider = ({ children }) => {
   });
 
   const signIn = async ({ email, password }: AuthCommonRequest) => {
-    const { data } = await signInFetch({ email, password });
+    const { data, error } = await signInFetch({ email, password });
 
     if (data?.user) {
       storage.set('token', data.user.token);
       setUser(data.user);
     }
+
+    return { user: data?.user, error };
   };
 
   const signUp = async ({ email, password, username }: AuthCommonRequest) => {
@@ -54,7 +56,6 @@ export const AuthProvider = ({ children }) => {
     storage.delete('token');
     setToken(null);
     setUser(null);
-    console.log(await storage.get('token'));
   };
 
   useEffect(() => {

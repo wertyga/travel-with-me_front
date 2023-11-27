@@ -1,4 +1,4 @@
-import { View, Text, Button } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '@/context';
 
@@ -16,10 +16,20 @@ export const Header = ({ title, className = '' }: Props) => {
       className={`flex-row justify-between w-full bg-transparent px-4 pt-8 pb-3 items-center ${className}`}
     >
       <Text>{title}</Text>
-      <Button
-        title={!!user ? 'Logout' : 'Sign in'}
-        onPress={!!user ? logout : () => navi.navigate('Login')}
-      />
+      <View>
+        <TouchableOpacity
+          onPress={!!user ? logout : () => navi.navigate('Login')}
+        >
+          <Text className="text-[12px] text-white">
+            {!!user ? 'Logout' : 'Sign in'}
+          </Text>
+        </TouchableOpacity>
+        {!!user && (
+          <TouchableOpacity onPress={() => navi.navigate('ChangeEmail')}>
+            <Text className="text-[12px] text-white">Change e-mail</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };

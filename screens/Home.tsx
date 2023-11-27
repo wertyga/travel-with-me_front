@@ -1,4 +1,4 @@
-import { Dimensions, SafeAreaView, Text, View } from 'react-native';
+import { Dimensions, Text } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { SafeLoader } from '@/components/SafeLoader';

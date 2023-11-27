@@ -15,13 +15,17 @@ export type AuthCommonRequest = {
 export type AuthContextType = {
   user?: User;
   setUser: (user: User) => void;
-  signIn: (data: AuthCommonRequest) => void;
+  signIn: (data: AuthCommonRequest) => Promise<{
+    user?: User;
+    error?: { message: string; statusCode: number };
+  }>;
   logout: () => void;
   signUp: (data: AuthCommonRequest) => Promise<boolean>;
 };
 
 export type ChangeEmailRequest = {
   newEmail: string;
+  password: string;
 };
 
 export type SignInRequest = {

@@ -63,4 +63,5 @@ export const {
   useSignInMutation,
   useRecoveryPasswordInitMutation,
   useRecoveryPasswordMutation,
+  useChangeEmailMutation,
 } = authApi;

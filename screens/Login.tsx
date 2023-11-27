@@ -33,7 +33,10 @@ const Login = () => {
       }
     }
 
-    return signIn(data);
+    const { user } = await signIn(data);
+    if (user) {
+      navi.navigate('Home');
+    }
   };
 
   const { screen } = state;
