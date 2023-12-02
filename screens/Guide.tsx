@@ -17,7 +17,7 @@ const GuideScreen = ({ route }) => {
   return (
     <MainLayout>
       <View className="bg-red-400 w-full h-full">
-        <Map coords={guide.points[0].coords} points={guide.points} />
+        <Map points={guide.points} />
       </View>
     </MainLayout>
   );
