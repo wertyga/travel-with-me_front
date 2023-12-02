@@ -8,13 +8,23 @@ import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import GuideScreen from '@/screens/Guide';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 
+import { Header } from '@/components/Header';
+
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Navigator
+        screenOptions={{
+          header: props => <Header {...props} />,
+        }}
+      >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          // options={{ headerTitle: props => <Header {...props} /> }}
+        />
         <Stack.Screen name="Guide" component={GuideScreen} />
         <Stack.Screen name="Error" component={ErrorScreen} />
         <Stack.Screen

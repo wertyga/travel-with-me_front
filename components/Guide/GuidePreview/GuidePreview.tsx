@@ -1,13 +1,22 @@
-import { View, Image, ImageBackground, Text } from 'react-native';
+import {
+  View,
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Guide } from '@/types';
 import { getCurrencyMeta } from '@/utils';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   guide: Guide;
 };
 
 export const GuidePreview = ({ guide }: Props) => {
+  const navi = useNavigation();
+
   const pointsImages = guide.pointsImages?.slice(0, 3) || [];
 
   const priceString = `${guide.price.amount} ${
@@ -22,50 +31,54 @@ export const GuidePreview = ({ guide }: Props) => {
         uri: guide.images?.[0],
       }}
     >
-      <LinearGradient
-        colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.03)']}
-        className="h-full"
+      <TouchableOpacity
+        onPress={() => navi.navigate('Guide', { guideSlug: guide.slug })}
       >
-        <View className="flex-row justify-between mt-2 mx-4 items-center">
-          <Text className="text-white font-bold text-[16px]">
-            {guide.title}
-          </Text>
-          {!!guide.pointsCount && (
-            <Text className="text-white font-bold text-[18px]">
-              {guide.pointsCount}
+        <LinearGradient
+          colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.03)']}
+          className="h-full"
+        >
+          <View className="flex-row justify-between mt-2 mx-4 items-center">
+            <Text className="text-white font-bold text-[16px]">
+              {guide.title}
             </Text>
-          )}
-        </View>
-        <View className="flex-row justify-between mt-2 mx-4 items-center">
-          <Text className="text-white font-bold text-[12px]">Price</Text>
-          <Text className="text-white font-bold text-[14px]">
-            {priceString}
-          </Text>
-        </View>
-      </LinearGradient>
+            {!!guide.pointsCount && (
+              <Text className="text-white font-bold text-[18px]">
+                {guide.pointsCount}
+              </Text>
+            )}
+          </View>
+          <View className="flex-row justify-between mt-2 mx-4 items-center">
+            <Text className="text-white font-bold text-[12px]">Price</Text>
+            <Text className="text-white font-bold text-[14px]">
+              {priceString}
+            </Text>
+          </View>
+        </LinearGradient>
 
-      <View className="flex-row justify-between w-full h-2/5 absolute bottom-0">
-        {pointsImages.map((image, i) => (
-          <LinearGradient
-            colors={['rgba(255, 255, 255, 0.2)', 'rgba(0, 0, 0, 0.4)']}
-            className={`h-full w-[32%] rounded-t-2xl overflow-hidden ${
-              i === 1
-                ? 'rounded-t-lg'
-                : i === 0
-                ? 'rounded-tr-lg rounded-tl-2xl'
-                : 'rounded-tl-lg rounded-tr-2xl'
-            }`}
-            key={`${image}-${i}`}
-          >
-            <Image
-              className="w-full h-full object-cover"
-              source={{
-                uri: image,
-              }}
-            />
-          </LinearGradient>
-        ))}
-      </View>
+        <View className="flex-row justify-between w-full h-2/5 absolute bottom-0">
+          {pointsImages.map((image, i) => (
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.2)', 'rgba(0, 0, 0, 0.4)']}
+              className={`h-full w-[32%] rounded-t-2xl overflow-hidden ${
+                i === 1
+                  ? 'rounded-t-lg'
+                  : i === 0
+                  ? 'rounded-tr-lg rounded-tl-2xl'
+                  : 'rounded-tl-lg rounded-tr-2xl'
+              }`}
+              key={`${image}-${i}`}
+            >
+              <Image
+                className="w-full h-full object-cover"
+                source={{
+                  uri: image,
+                }}
+              />
+            </LinearGradient>
+          ))}
+        </View>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };

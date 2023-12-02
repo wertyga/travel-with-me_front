@@ -15,10 +15,11 @@ export const guideApi = baseApi.injectEndpoints({
     getGuide: build.query<Guide, { slug: string }>({
       provideTags: result =>
         result ? [{ type: GUIDE_TAGS.Guide, id: result._id }] : [],
-      query: ({ slug }) => {
+      query: params => {
         return {
           method: 'get',
-          url: `/guide/${slug}`,
+          url: `/guide`,
+          params,
         };
       },
     }),

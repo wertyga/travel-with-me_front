@@ -1,35 +1,55 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { getHeaderTitle } from '@react-navigation/elements';
 import { useAuth } from '@/context';
+import { UserPreview } from '@/components/User/UserPreview/UserPreview';
+import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
   title: string;
   className?: string;
 };
 
-export const Header = ({ title, className = '' }: Props) => {
+export const Header = ({ navigation, route, options, back }) => {
+  const title = getHeaderTitle(options, route.name);
   const navi = useNavigation();
   const { logout, user } = useAuth();
 
+  const isHome = route.name === 'Home';
+
   return (
     <View
-      className={`flex-row justify-between w-full bg-transparent px-4 pt-8 pb-3 items-center ${className}`}
+      className={`flex-row justify-between w-full ${
+        isHome ? 'bg-transparent' : 'bg-white'
+      } px-4 pt-8 pb-3 items-center w-full ${isHome ? 'absolute' : ''}`}
     >
-      <Text>{title}</Text>
-      <View>
-        <TouchableOpacity
-          onPress={!!user ? logout : () => navi.navigate('Login')}
-        >
-          <Text className="text-[12px] text-white">
-            {!!user ? 'Logout' : 'Sign in'}
-          </Text>
-        </TouchableOpacity>
-        {!!user && (
-          <TouchableOpacity onPress={() => navi.navigate('ChangeEmail')}>
-            <Text className="text-[12px] text-white">Change e-mail</Text>
+      <View className="flex-row items-center">
+        {back && (
+          <TouchableOpacity className="mr-2" onPress={navigation.goBack}>
+            <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
         )}
+        <Text className={isHome ? 'text-white' : ''}>{title}</Text>
       </View>
+
+      {!!user && (
+        <View className="flex-row items-center">
+          <TouchableOpacity onPress={logout} className="mr-2">
+            <Text className={`text-[12px] ${isHome ? 'text-white' : ''}`}>
+              Logout
+            </Text>
+          </TouchableOpacity>
+          <UserPreview user={user} />
+        </View>
+      )}
+
+      {!user && (
+        <TouchableOpacity onPress={() => navi.navigate('Login')}>
+          <Text className={`text-[12px] ${isHome ? 'text-white' : ''}`}>
+            Sign in
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

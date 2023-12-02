@@ -2,24 +2,23 @@ import { Text, View } from 'react-native';
 import { useGetGuideQuery } from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
+import { Map } from '@/components/Map';
 
-type Props = {
-  slug: string;
-};
-
-const GuideScreen = ({ slug, ...naviProps }: Props) => {
+const GuideScreen = ({ route }) => {
   const { data: guide, isLoading } = useGetGuideQuery(
-    { slug },
-    { skip: !slug }
+    { slug: route.params?.guideSlug },
+    { skip: !route.params?.guideSlug }
   );
 
-  if (!guide && isLoading) {
+  if (!guide || isLoading) {
     return <SafeLoader />;
   }
 
   return (
-    <MainLayout title={guide.title} {...naviProps}>
-      <Text>GuideScreen</Text>
+    <MainLayout>
+      <View className="bg-red-400 w-full h-full">
+        <Map coords={guide.points[0].coords} points={guide.points} />
+      </View>
     </MainLayout>
   );
 };

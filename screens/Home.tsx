@@ -14,6 +14,7 @@ import { GuidesCategories } from '@/components/Guide';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
+import image from 'react-native-reanimated/src/reanimated2/component/Image';
 
 const Home = ({ route, navigation }) => {
   const navi = useNavigation();
@@ -45,12 +46,6 @@ const Home = ({ route, navigation }) => {
         : [...prev.filteredCategories, category],
     }));
   };
-
-  useLayoutEffect(() => {
-    navi.setOptions({
-      headerShown: false,
-    });
-  }, []);
 
   useEffect(() => {
     if (!getLightListError && !getCityError) return;

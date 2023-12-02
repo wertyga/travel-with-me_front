@@ -1,5 +1,4 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { Keyboard } from 'react-native';
 import { useGetSelfQuery, useSignInMutation, useSignUpMutation } from '@/api';
 import { AuthCommonRequest, AuthContextType } from '@/types';
 import { User } from '@/types/user';

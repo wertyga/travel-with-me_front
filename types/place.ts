@@ -12,7 +12,7 @@ export type Place = {
   title: string;
   description: string;
   slug: string;
-  image: string;
+  images: string[];
   coords: Path;
   owner: User;
   likes: Like;
