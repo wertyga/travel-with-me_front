@@ -1,6 +1,5 @@
 import { SafeAreaView, View } from 'react-native';
 import { useLayoutEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { RecoveryPasswordForm } from '@/components/Auth';
 import { Loader } from '@/components/Loader';
 import {
@@ -8,10 +7,13 @@ import {
   useRecoveryPasswordMutation,
 } from '@/api';
 import { useAuth } from '@/context';
+import { RootStackParamList } from '@/app/Navigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const RecoveryPassword = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'RecoveryPassword'>;
+
+const RecoveryPassword = ({ navigation }: Props) => {
   const { logout } = useAuth();
-  const navi = useNavigation();
   const [state, setState] = useState({
     codeSent: false,
   });
@@ -22,7 +24,7 @@ const RecoveryPassword = () => {
     useRecoveryPasswordMutation();
 
   useLayoutEffect(() => {
-    navi.setOptions({
+    navigation.setOptions({
       headerShown: false,
     });
   }, []);
@@ -34,12 +36,20 @@ const RecoveryPassword = () => {
     }
   };
 
-  const onRecovery = async ({ email, code, password }) => {
+  const onRecovery = async ({
+    email,
+    code,
+    password,
+  }: {
+    email: string;
+    code: string;
+    password: string;
+  }) => {
     const { data } = await changePassword({ email, token: code, password });
     if (data?.success) {
       setState(prev => ({ ...prev, codeSent: false }));
       logout();
-      navi.navigate('Login');
+      navigation.navigate('Login');
     }
   };
 

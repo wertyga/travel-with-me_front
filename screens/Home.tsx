@@ -14,9 +14,12 @@ import { GuidesCategories } from '@/components/Guide';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
-import image from 'react-native-reanimated/src/reanimated2/component/Image';
+import { RootStackParamList } from '@/app/Navigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const Home = ({ route, navigation }) => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+const Home = ({ route, navigation }: Props) => {
   const navi = useNavigation();
   const [state, setState] = useState({
     filteredCategories: [],

@@ -3,8 +3,12 @@ import { useGetGuideQuery } from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { Map } from '@/components/Map';
+import { RootStackParamList } from '@/app/Navigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const GuideScreen = ({ route }) => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
+
+const GuideScreen = ({ route }: Props) => {
   const { data: guide, isLoading } = useGetGuideQuery(
     { slug: route.params?.guideSlug },
     { skip: !route.params?.guideSlug }

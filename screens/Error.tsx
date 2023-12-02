@@ -1,13 +1,14 @@
 import { useLayoutEffect } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { CONSTANTS } from '@/styles/constants';
+import { RootStackParamList } from '@/app/Navigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const Error = ({ route }) => {
-  const navi = useNavigation();
+type Props = NativeStackScreenProps<RootStackParamList, 'Error'>;
 
+const Error = ({ route, navigation }: Props) => {
   useLayoutEffect(() => {
-    navi.setOptions({
+    navigation.setOptions({
       headerShown: false,
     });
   }, []);
@@ -22,7 +23,7 @@ const Error = ({ route }) => {
         >
           <Text
             className="text-white text-[12px]"
-            onPress={() => navi.navigate('Home', { isFromError: true })}
+            onPress={() => navigation.navigate('Home', { isFromError: true })}
           >
             Go Back
           </Text>

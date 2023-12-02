@@ -6,9 +6,12 @@ import { Loader } from '@/components/Loader';
 import { useChangeEmailMutation } from '@/api';
 import { useAuth } from '@/context';
 import Toast from 'react-native-toast-message';
+import { RootStackParamList } from '@/app/Navigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const RecoveryPassword = () => {
-  const navi = useNavigation();
+type Props = NativeStackScreenProps<RootStackParamList, 'ChangeEmail'>;
+
+const RecoveryPassword = ({ navigation }: Props) => {
   const { user } = useAuth();
 
   const [changeEmail, { isLoading }] = useChangeEmailMutation();
@@ -24,7 +27,7 @@ const RecoveryPassword = () => {
   };
 
   useLayoutEffect(() => {
-    navi.setOptions({
+    navigation.setOptions({
       headerShown: false,
     });
   }, []);
@@ -32,7 +35,7 @@ const RecoveryPassword = () => {
   useFocusEffect(
     useCallback(() => {
       if (!user) {
-        navi.navigate('Login');
+        navigation.navigate('Login');
       }
     }, [user])
   );
@@ -44,7 +47,7 @@ const RecoveryPassword = () => {
       <View className="w-screen h-screen bg-slate-700 px-2 h-full w-full pt-8">
         <ChangeEmailForm onSubmit={onSubmit} />
         <Text
-          onPress={() => navi.navigate('Home')}
+          onPress={() => navigation.navigate('Home')}
           className="pt-2 text-white text-right"
         >
           Go to home

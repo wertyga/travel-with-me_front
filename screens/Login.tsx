@@ -1,18 +1,21 @@
-import { SafeAreaView, Text, View, StyleSheet } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { SignUpForm, SignInForm } from '@/components/Auth';
-import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@/app/Navigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthCommonRequest } from '@/types';
 
-const Login = () => {
-  const navi = useNavigation();
+type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+const Login = ({ navigation }: Props) => {
   const { signIn, signUp } = useAuth();
   const [state, setState] = useState({
     screen: 'signin',
   });
 
   useLayoutEffect(() => {
-    navi.setOptions({
+    navigation.setOptions({
       headerShown: false,
     });
   }, []);
@@ -24,7 +27,7 @@ const Login = () => {
     }));
   };
 
-  const onSubmit = async data => {
+  const onSubmit = async (data: AuthCommonRequest) => {
     if (state.screen === 'signup') {
       const isSuccess = await signUp(data);
 
@@ -35,7 +38,7 @@ const Login = () => {
 
     const { user } = await signIn(data);
     if (user) {
-      navi.navigate('Home');
+      navigation.navigate('Home');
     }
   };
 
@@ -56,7 +59,7 @@ const Login = () => {
 
         <Text
           className="text-white text-right mt-2 mr-2"
-          onPress={() => navi.navigate('RecoveryPassword')}
+          onPress={() => navigation.navigate('RecoveryPassword')}
         >
           Forgot password?
         </Text>

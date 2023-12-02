@@ -8,7 +8,7 @@ type Props = {
   className?: string;
 };
 
-export const MainLayout = ({ children, className = '', title }: Props) => {
+export const MainLayout = ({ children, className = '' }: Props) => {
   const route = useNavigation();
 
   return (

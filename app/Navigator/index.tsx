@@ -9,8 +9,18 @@ import GuideScreen from '@/screens/Guide';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 
 import { Header } from '@/components/Header';
+import { City } from '@/types';
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Home: { city?: City; isFromError?: boolean } | undefined;
+  ChangeEmail: undefined;
+  RecoveryPassword: undefined;
+  Login: undefined;
+  Guide: { guideSlug: string };
+  Error: { error: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator = () => {
   return (

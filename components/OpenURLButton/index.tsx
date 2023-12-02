@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Alert, Button, Linking, StyleSheet, View } from 'react-native';
+import { Alert, Button, Linking, Text, TouchableOpacity } from 'react-native';
 
 const supportedURL = 'https://google.com';
 
@@ -7,7 +7,7 @@ const unsupportedURL = 'slack://open?team=123456';
 
 type OpenURLButtonProps = {
   url: string;
-  children: string;
+  children: React.ReactNode;
 };
 
 const OpenURLButton = ({ url, children }: OpenURLButtonProps) => {
@@ -24,7 +24,11 @@ const OpenURLButton = ({ url, children }: OpenURLButtonProps) => {
     }
   }, [url]);
 
-  return <Button title={children} onPress={handlePress} />;
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <Text>{children}</Text>
+    </TouchableOpacity>
+  );
 };
 
 export default OpenURLButton;

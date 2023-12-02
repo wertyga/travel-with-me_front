@@ -1,12 +1,25 @@
-import {  Text, TouchableOpacity } from 'react-native'
-import React from 'react'
-import classnames from "classnames"
+import { Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import classnames from 'classnames';
 
-const CustomButton = ({children, className, onPress, textClassName, ...rest}) => {
+type CustomButtonProps = {
+  children: React.ReactNode;
+  className?: string;
+  onPress?: () => void;
+  textClassName?: string;
+};
+
+const CustomButton = ({
+  children,
+  className,
+  onPress,
+  textClassName,
+  ...rest
+}: CustomButtonProps) => {
   return (
-      <TouchableOpacity
+    <TouchableOpacity
       className={classnames(
-        "py-2 px-4 min-w-full bg-gray-300 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75",
+        'py-2 px-4 min-w-full bg-gray-300 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75',
         className
       )}
       {...{ onPress }}
@@ -16,7 +29,7 @@ const CustomButton = ({children, className, onPress, textClassName, ...rest}) =>
         {children}
       </Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
-export default CustomButton
+export default CustomButton;

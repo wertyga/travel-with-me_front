@@ -4,15 +4,15 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { useAuth } from '@/context';
 import { UserPreview } from '@/components/User/UserPreview/UserPreview';
 import { AntDesign } from '@expo/vector-icons';
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 
-type Props = {
-  title: string;
-  className?: string;
-};
-
-export const Header = ({ navigation, route, options, back }) => {
+export const Header = ({
+  navigation,
+  route,
+  options,
+  back,
+}: NativeStackHeaderProps) => {
   const title = getHeaderTitle(options, route.name);
-  const navi = useNavigation();
   const { logout, user } = useAuth();
 
   const isHome = route.name === 'Home';
@@ -44,7 +44,7 @@ export const Header = ({ navigation, route, options, back }) => {
       )}
 
       {!user && (
-        <TouchableOpacity onPress={() => navi.navigate('Login')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text className={`text-[12px] ${isHome ? 'text-white' : ''}`}>
             Sign in
           </Text>
