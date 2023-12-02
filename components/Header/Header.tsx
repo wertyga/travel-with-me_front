@@ -21,7 +21,7 @@ export const Header = ({ navigation, route, options, back }) => {
     <View
       className={`flex-row justify-between w-full ${
         isHome ? 'bg-transparent' : 'bg-white'
-      } px-4 pt-8 pb-3 items-center w-full ${isHome ? 'absolute' : ''}`}
+      } px-4 pt-8 pb-3 items-center w-full mt-5 ${isHome ? 'absolute' : ''}`}
     >
       <View className="flex-row items-center">
         {back && (
