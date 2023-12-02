@@ -3,6 +3,7 @@ import { Marker, Callout } from 'react-native-maps';
 import { Path } from '@/types';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import OpenURLButton from '@/components/OpenURLButton';
 
 type Props = {
   coords: Path;
@@ -45,6 +46,12 @@ export const MapMarker = ({ coords, images, title, description }: Props) => {
             onPress={() => navi.navigate('Login')}
             className="text-blue-500"
           />
+          <OpenURLButton
+            url={`https://maps.google.com/?q=${coords.lat},${coords.lng}`}
+            className="text-blue-500"
+          >
+            Navigate
+          </OpenURLButton>
         </View>
       </Callout>
     </Marker>
