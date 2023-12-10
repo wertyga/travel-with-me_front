@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start --port 8001",
+    "start": "expo start --port 8002",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -11,12 +11,14 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@googlemaps/polyline-codec": "^1.0.28",
     "@hookform/resolvers": "^3.3.2",
     "@react-native-async-storage/async-storage": "^1.19.4",
     "@react-native-google-signin/google-signin": "^10.1.1",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.16",
     "@reduxjs/toolkit": "^1.9.7",
+    "@stripe/stripe-react-native": "0.28.0",
     "@types/lodash": "^4.14.201",
     "@types/react-native-snap-carousel": "^3.8.8",
     "@types/yup": "^0.32.0",

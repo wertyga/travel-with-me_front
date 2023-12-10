@@ -28,7 +28,7 @@ export const GuidePreview = ({ guide }: Props) => {
       resizeMode="cover"
       className={`relative h-60 bg-gray-400 rounded-2xl overflow-hidden`}
       source={{
-        uri: guide.images?.[0],
+        uri: guide.hImage,
       }}
     >
       <TouchableOpacity

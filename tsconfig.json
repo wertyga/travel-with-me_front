@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
+      "react-nativewind": ["./app/nativewind/components"]
     }
   },
   "extends": "@tsconfig/react-native/tsconfig.json",

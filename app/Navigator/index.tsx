@@ -7,7 +7,7 @@ import LoginScreen from '@/screens/Login';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import GuideScreen from '@/screens/Guide';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
-
+import SubscriptionsScreen from '@/screens/Subscriptions';
 import { Header } from '@/components/Header';
 import { City } from '@/types';
 
@@ -36,6 +36,7 @@ const Navigator = () => {
           // options={{ headerTitle: props => <Header {...props} /> }}
         />
         <Stack.Screen name="Guide" component={GuideScreen} />
+        <Stack.Screen name="Subscriptions" component={SubscriptionsScreen} />
         <Stack.Screen name="Error" component={ErrorScreen} />
         <Stack.Screen
           name="Login"

@@ -1,22 +1,22 @@
-import React from 'react';
-import { SafeAreaView, View } from 'react-native';
-import { Header } from '@/components/Header';
-import { useNavigation } from '@react-navigation/native';
+import React, { CSSProperties } from 'react';
+import { Dimensions, SafeAreaView, StyleSheet } from 'react-native';
+import { View } from 'react-nativewind';
 
 type Props = {
   children: React.ReactNode;
-  className?: string;
+  style?: CSSProperties;
 };
 
-export const MainLayout = ({ children, className = '' }: Props) => {
-  const route = useNavigation();
-
+export const MainLayout = ({ children, style = {} }: Props) => {
   return (
     <SafeAreaView>
-      <View className={`relative w-screen h-screen ${className}`}>
-        {children}
-        {/*<Header className="mb-4 absolute top-0 left-0" title={title} />*/}
-      </View>
+      <View style={{ ...styles.container, ...style }}>{children}</View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    height: Dimensions.get('screen').height,
+  },
+});

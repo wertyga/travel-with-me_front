@@ -28,7 +28,8 @@ export type Guide = {
   _id: string;
   title: string;
   description: string;
-  images: string[];
+  vImage: string;
+  hImage: string;
   slug: string;
   categories: string[];
   owner: User;

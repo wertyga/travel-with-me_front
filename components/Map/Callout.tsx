@@ -75,7 +75,7 @@ const CustomCallout = ({
                 textClassName="text-black text-sm"
                 onPress={() => navigation.navigate('Login')}
               >
-                Read more{'  '}
+                Read more
                 <FontAwesome5 name="arrow-right" size={16} color="black" />
               </Button>
             </View>

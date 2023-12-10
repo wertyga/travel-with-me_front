@@ -4,7 +4,7 @@ import { Guide, GUIDE_TAGS } from '@/types';
 export const guideApi = baseApi.injectEndpoints({
   endpoints: build => ({
     getGuidesCategories: build.query<{ categories: string[] }, void>({
-      provideTags: result => (result ? [GUIDE_TAGS.Categories] : []),
+      providesTags: result => (result ? [GUIDE_TAGS.Categories] : []),
       query: () => {
         return {
           method: 'get',
@@ -13,7 +13,7 @@ export const guideApi = baseApi.injectEndpoints({
       },
     }),
     getGuide: build.query<Guide, { slug: string }>({
-      provideTags: result =>
+      providesTags: result =>
         result ? [{ type: GUIDE_TAGS.Guide, id: result._id }] : [],
       query: params => {
         return {

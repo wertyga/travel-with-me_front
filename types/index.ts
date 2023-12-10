@@ -7,3 +7,4 @@ export * from './city';
 export * from './country';
 export * from './guide';
 export * from './place';
+export * from './subscription';

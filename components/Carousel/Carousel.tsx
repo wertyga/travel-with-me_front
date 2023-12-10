@@ -1,25 +1,26 @@
-import { View, Image } from 'react-native';
+import { View, Image, ViewStyle } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import * as React from 'react';
 
 type Props = {
   images: string[];
   onChange?: () => void;
-  className?: string;
+  containerClassName?: string;
   sliderWidth: number;
   itemWidth: number;
-  onSnapToItem: (index: number) => void;
+  onSnapToItem?: (index: number) => void;
 };
 
 export const Carousel = ({
   images,
-  className,
+  containerClassName = '',
   sliderWidth,
   itemWidth,
   onSnapToItem,
+  style,
 }: Props) => {
   return (
-    <View className={className}>
+    <View className={containerClassName}>
       <CarouselEx
         layout="tinder"
         data={images as any}

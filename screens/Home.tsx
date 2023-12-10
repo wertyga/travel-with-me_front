@@ -1,6 +1,6 @@
-import { Dimensions, Text } from 'react-native';
+import { Dimensions, Text, View } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
@@ -11,15 +11,22 @@ import flatten from 'lodash/flatten';
 import { Carousel } from '@/components/Carousel';
 import { SearchTotal } from '@/components/SearchTotal';
 import { GuidesCategories } from '@/components/Guide';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
-import { RootStackParamList } from '@/app/Navigator';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+// MOCK on future
+// <LinearGradient
+//   colors={[
+//     'rgba(0, 0, 0, 0.1)',
+//     'rgba(0, 0, 0, 0.4)',
+//     'rgba(0, 0, 0, 0.1)',
+//     'rgba(0, 0, 0, 0.01)',
+//   ]}
+//   locations={[0, 0.7, 0.95, 0.99]}
+//   className="absolute w-full px-4 pb-4 pt-24"
+// >
 
-const Home = ({ route, navigation }: Props) => {
+const Home = ({ route, navigation }) => {
   const navi = useNavigation();
   const [state, setState] = useState({
     filteredCategories: [],
@@ -90,26 +97,16 @@ const Home = ({ route, navigation }: Props) => {
   const citiesImages = cities.map(({ image }) => image);
 
   return (
-    <MainLayout className="" route={route} navigation={navigation} title="Home">
+    <MainLayout route={route} navigation={navigation} title="Home">
       {cityLoading && <Loader />}
       <Carousel
-        className="absolute top-0 left-0 w-full h-full"
         images={citiesImages}
         sliderWidth={Dimensions.get('window').width}
         itemWidth={Dimensions.get('window').width}
         onSnapToItem={onChangeCity}
       />
 
-      <LinearGradient
-        colors={[
-          'rgba(0, 0, 0, 0.1)',
-          'rgba(0, 0, 0, 0.4)',
-          'rgba(0, 0, 0, 0.1)',
-          'rgba(0, 0, 0, 0.01)',
-        ]}
-        locations={[0, 0.7, 0.95, 0.99]}
-        className="absolute w-full px-4 pb-4 pt-24"
-      >
+      <View className="absolute w-full px-4 pb-4 pt-20">
         <SearchTotal />
         <GuidesCategories
           selected={state.filteredCategories}
@@ -121,7 +118,7 @@ const Home = ({ route, navigation }: Props) => {
         <Text className="text-white font-bold mt-4">
           {route.params.city.title}
         </Text>
-      </LinearGradient>
+      </View>
 
       <CityFullInfo
         key={city.title + state.filteredCategories.join('')}
