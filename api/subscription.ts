@@ -5,6 +5,7 @@ import {
   GetMySubscriptionResponse,
   GetSubscriptionListResponse,
   SUBSCRIPTION_TAGS,
+  SuccessResponse,
   UserSubscription,
 } from '@/types';
 
@@ -27,15 +28,22 @@ export const subscriptionApi = baseApi.injectEndpoints({
         data,
       }),
     }),
-    getUserSubscription: build.query<
+    getMySubscription: build.query<
       GetMySubscriptionResponse,
       GetMySubscriptionRequest
     >({
-      providesTags: [SUBSCRIPTION_TAGS.User],
+      providesTags: [SUBSCRIPTION_TAGS.My],
       query: params => ({
         method: 'get',
-        url: '/subscription/user',
+        url: '/subscription/my',
         params,
+      }),
+    }),
+    cancelUserSubscription: build.mutation<SuccessResponse, void>({
+      invalidatesTags: [SUBSCRIPTION_TAGS.My],
+      query: () => ({
+        method: 'delete',
+        url: '/subscription/',
       }),
     }),
   }),
@@ -44,7 +52,8 @@ export const subscriptionApi = baseApi.injectEndpoints({
 export const {
   useGetSubscriptionListQuery,
   useLazyGetSubscriptionListQuery,
-  useGetUserSubscriptionQuery,
+  useGetMySubscriptionQuery,
   useLazyGetUserSubscriptionQuery,
   useCreateSubscriptionPaymentMutation,
+  useCancelUserSubscriptionMutation,
 } = subscriptionApi;

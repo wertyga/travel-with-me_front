@@ -5,9 +5,14 @@ import { SubscriptionPreview } from '@/types';
 type Props = {
   onBuy: (subscriptionId: string) => void;
   subscriptions: SubscriptionPreview[];
+  disabledIntervals?: string[];
 };
 
-export const SubscriptionList = ({ onBuy, subscriptions }: Props) => {
+export const SubscriptionList = ({
+  onBuy,
+  subscriptions,
+  disabledIntervals = [],
+}: Props) => {
   return (
     <View style={styles.container}>
       {subscriptions.map(sub => (
@@ -15,7 +20,7 @@ export const SubscriptionList = ({ onBuy, subscriptions }: Props) => {
           subscription={sub}
           key={sub.id}
           onBuy={onBuy}
-          isDisabled={sub.isDisabled}
+          isDisabled={disabledIntervals?.includes(sub.interval)}
         />
       ))}
     </View>

@@ -21,6 +21,7 @@
     "@stripe/stripe-react-native": "0.28.0",
     "@types/lodash": "^4.14.201",
     "@types/react-native-snap-carousel": "^3.8.8",
+    "@types/react-redux": "^7.1.33",
     "@types/yup": "^0.32.0",
     "axios": "^1.6.0",
     "babel-plugin-module-resolver": "^5.0.0",

@@ -1,12 +1,14 @@
-import { StyleSheet } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
-import { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { SubscriptionList } from '@/components/Subscription';
 import { Loader } from '@/components/Loader';
 import { MainLayout } from '@/Layouts';
 import {
   useCreateSubscriptionPaymentMutation,
-  useLazyGetSubscriptionListQuery,
+  useCancelUserSubscriptionMutation,
+  useGetMySubscriptionQuery,
+  useGetSubscriptionListQuery,
 } from '@/api';
 import Toast from 'react-native-toast-message';
 import { useAuth } from '@/context';
@@ -15,14 +17,29 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 const Subscriptions = () => {
   const { user } = useAuth();
   const navi = useNavigation();
+  const [pollingIntervalForRefetchMySubscription, setPollingInterval] =
+    useState(0);
 
   const { initPaymentSheet, presentPaymentSheet, loading } = usePaymentSheet();
+
+  const {
+    data: {
+      subscription: mySubscription,
+      disabledSubscriptionsIntervals = [],
+    } = {},
+    refetch: refetchMySubscription,
+  } = useGetMySubscriptionQuery(
+    { isActive: true },
+    { pollingInterval: pollingIntervalForRefetchMySubscription }
+  );
+
   const [createSub, { isLoading: fetchLoading }] =
     useCreateSubscriptionPaymentMutation();
-  const [
-    fetchSubscriptions,
-    { data: { subscriptions = [] } = {}, isFetching: refetchLoading },
-  ] = useLazyGetSubscriptionListQuery();
+  const { data: { subscriptions = [] } = {}, isFetching: refetchLoading } =
+    useGetSubscriptionListQuery();
+
+  const [cancelSubscription, { isLoading: cancelLoading }] =
+    useCancelUserSubscriptionMutation();
 
   const initializePaymentSheet = async (subscriptionId: string) => {
     const { data, error: fetchError } = await createSub({
@@ -46,25 +63,21 @@ const Subscriptions = () => {
     if (error) throw error;
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchSubscriptions();
-    }, [])
-  );
+  const stopPolling = () => {
+    setPollingInterval(0);
+  };
+
+  useFocusEffect(useCallback(refetchMySubscription, []));
+
+  useEffect(() => {
+    return stopPolling;
+  }, []);
 
   const onBuy = async (subscriptionId: string) => {
     try {
-      const { data } = await fetchSubscriptions();
-      const isSubscriptionDisabled = data?.subscriptions?.find(
-        sub => sub.id === subscriptionId && sub.isDisabled
-      );
-
-      if (isSubscriptionDisabled) {
-        return;
-      }
-
       await initializePaymentSheet(subscriptionId);
       await presentPaymentSheet();
+      setPollingInterval(1000);
     } catch (e) {
       Toast.show({
         type: 'error',
@@ -79,7 +92,8 @@ const Subscriptions = () => {
     }
   }, []);
 
-  const isLoading = loading || fetchLoading || refetchLoading;
+  const isLoading = loading || fetchLoading || refetchLoading || cancelLoading;
+  const isShowCancelAction = !!mySubscription && !mySubscription.isCanceled;
   return (
     <MainLayout>
       <StripeProvider
@@ -87,8 +101,21 @@ const Subscriptions = () => {
         merchantIdentifier="com.wertyga.travel-with-me"
       >
         {isLoading && <Loader />}
-        <SubscriptionList onBuy={onBuy} subscriptions={subscriptions} />
+        <SubscriptionList
+          onBuy={onBuy}
+          subscriptions={subscriptions}
+          disabledIntervals={disabledSubscriptionsIntervals}
+        />
       </StripeProvider>
+
+      {isShowCancelAction && (
+        <TouchableOpacity
+          className={`p-2 mt-2 items-center bg-red-400`}
+          onPress={cancelSubscription}
+        >
+          <Text>Cancel My Subscription</Text>
+        </TouchableOpacity>
+      )}
     </MainLayout>
   );
 };

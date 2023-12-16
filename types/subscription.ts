@@ -4,7 +4,7 @@ import { User } from '@/types/user';
 export enum SUBSCRIPTION_TAGS {
   Subscription = 'Subscription',
   List = 'Subscription.List',
-  User = 'Subscription.User',
+  My = 'Subscription.My',
 }
 
 export type SubscriptionPreview = {
@@ -23,6 +23,7 @@ export type UserSubscription = {
   interval: string;
   product: string;
   validUntil: string;
+  isCanceled: boolean;
 };
 
 export type GetSubscriptionListResponse = {
