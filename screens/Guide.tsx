@@ -4,14 +4,9 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import {
-  useGetGuideQuery,
-  useGetMySubscriptionQuery,
-  useLazyGetGuideQuery,
-} from '@/api';
+import { useGetMySubscriptionQuery, useLazyGetGuideQuery } from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts';
 import { RootStackParamList } from '@/app/Navigator';
