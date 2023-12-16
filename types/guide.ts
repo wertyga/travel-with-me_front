@@ -38,8 +38,6 @@ export type Guide = {
   likes: Like;
   routes: Path[];
   points: Place[];
-  price: Price;
   createdAt: string;
   pointsCount?: number;
-  pointsImages?: string[];
 };

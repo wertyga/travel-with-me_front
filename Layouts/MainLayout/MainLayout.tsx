@@ -17,6 +17,6 @@ export const MainLayout = ({ children, style = {} }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('screen').height,
+    height: '100%',
   },
 });

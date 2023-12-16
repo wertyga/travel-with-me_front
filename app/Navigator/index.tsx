@@ -6,6 +6,7 @@ import ErrorScreen from '@/screens/Error';
 import LoginScreen from '@/screens/Login';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import GuideScreen from '@/screens/Guide';
+import GuideMapScreen from '@/screens/GuideMapScreen';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import SubscriptionsScreen from '@/screens/Subscriptions';
 import { Header } from '@/components/Header';
@@ -35,6 +36,7 @@ const Navigator = () => {
           component={HomeScreen}
           // options={{ headerTitle: props => <Header {...props} /> }}
         />
+        <Stack.Screen name="GuideMap" component={GuideMapScreen} />
         <Stack.Screen name="Guide" component={GuideScreen} />
         <Stack.Screen name="Subscriptions" component={SubscriptionsScreen} />
         <Stack.Screen name="Error" component={ErrorScreen} />

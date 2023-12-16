@@ -26,4 +26,8 @@ export const guideApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetGuidesCategoriesQuery, useGetGuideQuery } = guideApi;
+export const {
+  useGetGuidesCategoriesQuery,
+  useGetGuideQuery,
+  useLazyGetGuideQuery,
+} = guideApi;

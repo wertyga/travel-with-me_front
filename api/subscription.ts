@@ -8,6 +8,7 @@ import {
   SuccessResponse,
   UserSubscription,
 } from '@/types';
+import { SUBSCRIPTION_VALIDATION_TAGS } from '@/app/query/base-api';
 
 export const subscriptionApi = baseApi.injectEndpoints({
   endpoints: build => ({
@@ -22,6 +23,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
       { subscription: string },
       CreateSubscriptionResponse
     >({
+      invalidatesTags: result => (!!result ? SUBSCRIPTION_VALIDATION_TAGS : []),
       query: data => ({
         method: 'post',
         url: '/subscription/create',
@@ -40,7 +42,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
       }),
     }),
     cancelUserSubscription: build.mutation<SuccessResponse, void>({
-      invalidatesTags: [SUBSCRIPTION_TAGS.My],
+      invalidatesTags: result => (!!result ? SUBSCRIPTION_VALIDATION_TAGS : []),
       query: () => ({
         method: 'delete',
         url: '/subscription/',

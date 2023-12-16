@@ -4,23 +4,45 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useGetGuideQuery } from '@/api';
+import {
+  useGetGuideQuery,
+  useGetMySubscriptionQuery,
+  useLazyGetGuideQuery,
+} from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GuideShallowOverview } from '@/components/Guide/GuideShallowOverview/GuideShallowOverview';
 import { CONSTANTS } from '@/styles/constants';
-import { PaymentForm } from '@/components/Payments/PaymentForm/PaymentForm';
+import { GuideMap } from '@/components/Guide';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useCallback } from 'react';
+import { useAuth } from '@/context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
 const GuideScreen = ({ route }: Props) => {
-  const { data: guide, isLoading } = useGetGuideQuery(
-    { slug: route.params?.guideSlug },
-    { skip: !route.params?.guideSlug }
+  const navi = useNavigation();
+  const { user } = useAuth();
+
+  const [fetchGuide, { data: guide, isLoading }] = useLazyGetGuideQuery();
+  const { data: { subscription } = {} } = useGetMySubscriptionQuery(undefined, {
+    skip: !user,
+  });
+
+  const goToMap = () => {
+    navi.navigate('GuideMap', { guideSlug: guide.slug });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!route.params?.guideSlug) return;
+      fetchGuide({ slug: route.params?.guideSlug });
+    }, [])
   );
 
   if (!guide || isLoading) {
@@ -42,12 +64,12 @@ const GuideScreen = ({ route }: Props) => {
         >
           <GuideShallowOverview guide={guide} />
 
-          <TouchableOpacity style={styles.btn}>
-            <Text style={styles.btnText}>Buy</Text>
-          </TouchableOpacity>
+          {!!subscription && (
+            <TouchableOpacity style={styles.goToMap} onPress={goToMap}>
+              <Text>Go to map</Text>
+            </TouchableOpacity>
+          )}
         </LinearGradient>
-
-        <PaymentForm />
       </ImageBackground>
     </MainLayout>
   );
@@ -70,4 +92,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   bgImage: {},
+  goToMap: {
+    padding: 20,
+    backgroundColor: CONSTANTS.colors.blue,
+  },
 });

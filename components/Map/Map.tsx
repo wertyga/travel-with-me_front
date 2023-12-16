@@ -1,17 +1,27 @@
 import MapView from 'react-native-maps';
 import { Place } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
+import { StyleSheet } from 'react-native';
+import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 
 type Props = {
   points: Place[];
+  onPress: (point: Place) => void;
 };
 
-export const Map = ({ points }: Props) => {
-  const middlePoint = points[Math.floor(points.length / 2)];
+export const Map = ({ points, onPress }: Props) => {
+  const middlePoint = getMiddleCoordinates(points);
+
+  const handlePointPress = (point: Place) => () => {
+    onPress(point);
+  };
 
   return (
     <MapView
-      className="w-full h-full"
+      style={styles.container}
+      showsUserLocation
+      showsMyLocationButton
+      enableZoomControl
       initialRegion={{
         latitude: middlePoint.coords.lat,
         longitude: middlePoint.coords.lng,
@@ -19,15 +29,23 @@ export const Map = ({ points }: Props) => {
         longitudeDelta: 0.2,
       }}
     >
-      {points.map(({ coords, title, _id, description, images }) => {
+      {points.map((point, index) => {
+        const { coords, title, description, images } = point;
         return (
           <MapMarker
-            key={_id}
-            images={images}
-            {...{ coords, title, description }}
+            key={index}
+            onPress={handlePointPress(point)}
+            {...{ coords, title, description, images }}
           />
         );
       })}
     </MapView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
+});
