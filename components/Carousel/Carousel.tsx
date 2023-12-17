@@ -17,7 +17,6 @@ export const Carousel = ({
   sliderWidth,
   itemWidth,
   onSnapToItem,
-  style,
 }: Props) => {
   return (
     <View className={containerClassName}>

@@ -4,6 +4,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start --port 8002",
+    "start-clear-cache": "expo start -c --port 8002",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -44,7 +45,7 @@
     "react-native-gesture-handler": "^2.13.4",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-maps": "1.7.1",
-    "react-native-reanimated": "3.3.0",
+    "react-native-reanimated": "~3.3.0",
     "react-native-reanimated-carousel": "^3.5.1",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",

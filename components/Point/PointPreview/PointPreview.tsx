@@ -34,7 +34,7 @@ export const PointPreview = ({ point, onClose }: Props) => {
           <AntDesign name="close" size={24} color="white" />
         </TouchableOpacity>
 
-        <View className="flex-row items-center mb-3">
+        <View className="flex-row items-center mb-3 pr-20">
           <TouchableOpacity
             onPress={() => openGoogleMap(coords)}
             className="mr-3"
@@ -45,7 +45,7 @@ export const PointPreview = ({ point, onClose }: Props) => {
         </View>
 
         <ScrollView style={styles.descriptionContainer}>
-          <Text style={styles.description}>{description + description}</Text>
+          <Text style={styles.description}>{description}</Text>
         </ScrollView>
       </LinearGradient>
     </ImageBackground>

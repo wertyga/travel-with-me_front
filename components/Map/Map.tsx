@@ -1,27 +1,46 @@
-import MapView from 'react-native-maps';
+import MapView, { Region } from 'react-native-maps';
 import { Place } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { StyleSheet } from 'react-native';
 import { getMiddleCoordinates } from '@/components/Map/Map.utils';
+import { useState } from 'react';
+import { LatLng } from 'react-native-maps/lib/sharedTypes';
 
 type Props = {
   points: Place[];
-  onPress: (point: Place) => void;
+  onPress: (point: Place & { isChosen?: boolean }) => void;
+  region?: LatLng & { latitudeDelta?: number; longitudeDelta?: number };
 };
 
-export const Map = ({ points, onPress }: Props) => {
+export const Map = ({ points, onPress, region }: Props) => {
+  const [state, setState] = useState({
+    longitudeDelta: 0.2,
+    latitudeDelta: 0.2,
+  });
   const middlePoint = getMiddleCoordinates(points);
 
   const handlePointPress = (point: Place) => () => {
     onPress(point);
   };
 
+  const onRegionChange = ({ longitudeDelta, latitudeDelta }) => {
+    setState(prev => ({ ...prev, longitudeDelta, latitudeDelta }));
+  };
+
+  const { longitudeDelta, latitudeDelta } = state;
+  const currentRegion = region
+    ? { longitudeDelta, latitudeDelta, ...region }
+    : undefined;
   return (
     <MapView
       style={styles.container}
-      showsUserLocation
-      showsMyLocationButton
-      enableZoomControl
+      region={currentRegion}
+      zoomEnabled
+      zoomTapEnabled
+      onRegionChange={onRegionChange}
+      // showsUserLocation
+      // showsMyLocationButton
+      // enableZoomControl
       initialRegion={{
         latitude: middlePoint.coords.lat,
         longitude: middlePoint.coords.lng,
@@ -30,12 +49,12 @@ export const Map = ({ points, onPress }: Props) => {
       }}
     >
       {points.map((point, index) => {
-        const { coords, title, description, images } = point;
+        const { coords, title, description, images, isChosen } = point;
         return (
           <MapMarker
             key={index}
             onPress={handlePointPress(point)}
-            {...{ coords, title, description, images }}
+            {...{ coords, title, description, images, isChosen }}
           />
         );
       })}
