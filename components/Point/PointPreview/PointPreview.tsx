@@ -4,11 +4,13 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import { Place } from '@/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import DefaultImage from '@/assets/images/default_point_image.png';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
+import { openGoogleMap } from '@/components/Map/Map.utils';
 
 type Props = {
   point: Place;
@@ -16,7 +18,7 @@ type Props = {
 };
 
 export const PointPreview = ({ point, onClose }: Props) => {
-  const { images, title, description } = point;
+  const { images, title, coords, description } = point;
 
   return (
     <ImageBackground
@@ -24,14 +26,24 @@ export const PointPreview = ({ point, onClose }: Props) => {
       resizeMode="cover"
     >
       <LinearGradient
-        colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0.1)']}
+        colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0.3)']}
         locations={[0, 0.8]}
         style={styles.container}
       >
         <TouchableOpacity onPress={onClose} style={styles.close}>
           <AntDesign name="close" size={24} color="white" />
         </TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
+
+        <View className="flex-row items-center mb-3">
+          <TouchableOpacity
+            onPress={() => openGoogleMap(coords)}
+            className="mr-3"
+          >
+            <FontAwesome5 name="directions" size={30} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+
         <ScrollView style={styles.descriptionContainer}>
           <Text style={styles.description}>{description + description}</Text>
         </ScrollView>
@@ -58,7 +70,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 10,
   },
   descriptionContainer: {
     paddingBottom: 20,

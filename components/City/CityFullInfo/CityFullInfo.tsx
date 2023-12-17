@@ -22,18 +22,19 @@ export const CityFullInfo = ({
           guide => !!intersection(guide.categories, filteredCategories).length
         )
       : guides;
+  if (!isShowGuides) {
+    return null;
+  }
 
+  const { width } = Dimensions.get('screen');
   return (
-    <View className="w-full absolute bottom-0 left-0">
-      {isShowGuides && (
-        <View className="w-full items-center">
-          <GuidesPreviewsList
-            guides={cityGuides}
-            sliderWidth={Dimensions.get('window').width - 20}
-            itemWidth={Dimensions.get('window').width - 20}
-          />
-        </View>
-      )}
+    <View className={`w-full absolute bottom-0 left-0 items-center`}>
+      <GuidesPreviewsList
+        guides={cityGuides}
+        sliderWidth={width}
+        itemWidth={width}
+        previewContainerClassName={`h-80`}
+      />
     </View>
   );
 };

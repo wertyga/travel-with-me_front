@@ -67,7 +67,11 @@ const Subscriptions = () => {
     setPollingInterval(0);
   };
 
-  useFocusEffect(useCallback(refetchMySubscription, []));
+  useFocusEffect(
+    useCallback(() => {
+      refetchMySubscription();
+    }, [])
+  );
 
   useEffect(() => {
     return stopPolling;

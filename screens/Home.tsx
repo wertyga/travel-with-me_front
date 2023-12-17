@@ -1,6 +1,6 @@
 import { Dimensions, Text, View } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
@@ -33,20 +33,21 @@ const Home = ({ route, navigation }) => {
   });
 
   const {
-    data: { city } = {},
-    isFetching: cityLoading,
-    error: getCityError,
-  } = useGetCityQuery(
-    { slug: route.params?.city?.slug },
-    { skip: !route.params?.city }
-  );
-
-  const {
     data: { cities = [] } = {},
     error: getLightListError,
     isFetching,
     refetch: refetchCities,
   } = useGetCitiesLightListQuery();
+
+  const currentCity = route.params?.city || cities[0];
+  const {
+    data: { city } = {},
+    isFetching: cityLoading,
+    error: getCityError,
+  } = useGetCityQuery(
+    { slug: currentCity?.slug },
+    { skip: !currentCity?.slug }
+  );
 
   const onChangeCategory = (category: string) => {
     setState(prev => ({
@@ -72,20 +73,12 @@ const Home = ({ route, navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (!cities.length) return;
-
-      onChangeCity(0);
-    }, [cities])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
       if (!route.params?.isFromError || isFetching) return;
       refetchCities();
     }, [route.params?.isFromError])
   );
 
-  if (!city || !cities.length || !route.params?.city) {
+  if (!city || !cities.length) {
     return <SafeLoader />;
   }
 
@@ -101,8 +94,8 @@ const Home = ({ route, navigation }) => {
       {cityLoading && <Loader />}
       <Carousel
         images={citiesImages}
-        sliderWidth={Dimensions.get('window').width}
-        itemWidth={Dimensions.get('window').width}
+        sliderWidth={Dimensions.get('screen').width}
+        itemWidth={Dimensions.get('screen').width}
         onSnapToItem={onChangeCity}
       />
 
@@ -115,15 +108,13 @@ const Home = ({ route, navigation }) => {
           key={city.title}
         />
 
-        <Text className="text-white font-bold mt-4">
-          {route.params.city.title}
-        </Text>
+        <Text className="text-white font-bold mt-4">{currentCity.title}</Text>
       </View>
 
       <CityFullInfo
         key={city.title + state.filteredCategories.join('')}
         city={city}
-        title={route.params.city.title}
+        title={currentCity.title}
         filteredCategories={state.filteredCategories}
       />
     </MainLayout>

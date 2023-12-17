@@ -1,6 +1,6 @@
 import {
   View,
-  Image,
+  ScrollView,
   ImageBackground,
   Text,
   TouchableOpacity,
@@ -14,15 +14,23 @@ import DefaultImage from '@/assets/images/default_point_image.png';
 
 type Props = {
   guide: Guide;
+  containerClassName?: string;
 };
 
-export const GuidePreview = ({ guide }: Props) => {
+const CUT_UNTIL = 200;
+
+export const GuidePreview = ({ guide, containerClassName = '' }: Props) => {
   const navi = useNavigation();
 
+  const cutDescription = guide.description.slice(0, CUT_UNTIL);
+  const description =
+    guide.description.length > CUT_UNTIL
+      ? `${cutDescription}...`
+      : cutDescription;
   return (
     <ImageBackground
       resizeMode="cover"
-      className={`relative h-60 bg-gray-400 rounded-2xl overflow-hidden`}
+      className={`${containerClassName}`}
       source={
         guide.hImage
           ? {
@@ -31,11 +39,13 @@ export const GuidePreview = ({ guide }: Props) => {
           : DefaultImage
       }
     >
-      <TouchableOpacity
-        onPress={() => navi.navigate('Guide', { guideSlug: guide.slug })}
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.03)']}
+        className="h-full"
       >
-        <LinearGradient
-          colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.03)']}
+        <TouchableOpacity
+          onPress={() => navi.navigate('Guide', { guideSlug: guide.slug })}
+          activeOpacity={1}
           className="h-full"
         >
           <View className="justify-between mt-2 mx-4">
@@ -47,18 +57,17 @@ export const GuidePreview = ({ guide }: Props) => {
                 {guide.pointsCount}
               </Text>
             )}
-            <Text style={styles.description}>{guide.description}</Text>
+
+            <Text className="text-white leading-5">{description}</Text>
           </View>
-        </LinearGradient>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </LinearGradient>
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  description: {
-    color: 'white',
-    marginTop: 10,
-    lineHeight: 20,
+  touchable: {
+    ...StyleSheet.absoluteFillObject,
   },
 });

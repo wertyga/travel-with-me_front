@@ -1,9 +1,6 @@
-import { Image, Alert, Linking, View, StyleSheet, Text } from 'react-native';
+import { Image, View, StyleSheet, Text } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { Path } from '@/types';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import Callout from '@/components/Map/Callout';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -14,13 +11,7 @@ type Props = {
   onPress: () => void;
 };
 
-export const MapMarker = ({
-  coords,
-  images,
-  title,
-  description,
-  onPress,
-}: Props) => {
+export const MapMarker = ({ coords, images, title, onPress }: Props) => {
   return (
     <Marker
       coordinate={{ latitude: coords.lat, longitude: coords.lng }}
@@ -53,8 +44,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: 40,
+    height: 40,
     objectFit: 'cover',
     resizeMode: 'cover',
     backgroundColor: 'red',

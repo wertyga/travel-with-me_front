@@ -9,12 +9,14 @@ type Props = {
   guides: Guide[];
   sliderWidth: number;
   itemWidth: number;
+  previewContainerClassName?: string;
 };
 
 export const GuidesPreviewsList = ({
   guides,
   sliderWidth,
   itemWidth,
+  previewContainerClassName,
 }: Props) => {
   const ref = useRef();
   const [state, setState] = useState({
@@ -31,7 +33,7 @@ export const GuidesPreviewsList = ({
   };
 
   return (
-    <View className="w-full pb-1">
+    <View className="w-full h-full pb-1">
       <LinearGradient
         colors={['rgba(0, 0, 0, 0.02)', 'rgba(0, 0, 0, 0.5)']}
         locations={[0, 0.99]}
@@ -60,7 +62,13 @@ export const GuidesPreviewsList = ({
             ref={ref}
             data={guides as any}
             renderItem={({ item: guide }: { item: Guide }) => {
-              return <GuidePreview key={guide._id} guide={guide} />;
+              return (
+                <GuidePreview
+                  key={guide._id}
+                  guide={guide}
+                  containerClassName={previewContainerClassName}
+                />
+              );
             }}
             sliderWidth={sliderWidth}
             itemWidth={itemWidth}

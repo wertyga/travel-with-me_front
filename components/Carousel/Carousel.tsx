@@ -24,6 +24,7 @@ export const Carousel = ({
       <CarouselEx
         layout="tinder"
         data={images as any}
+        disableIntervalMomentum={true}
         onSnapToItem={onSnapToItem}
         renderItem={({ item }: any) => {
           return (

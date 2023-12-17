@@ -22,7 +22,7 @@ export const GuideMap = ({ guide }: Props) => {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <Map points={guide.points} onPress={onPointChoose} />
 
       {!!state.point && (
@@ -30,7 +30,7 @@ export const GuideMap = ({ guide }: Props) => {
           <PointPreview point={state.point} onClose={onClose} />
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

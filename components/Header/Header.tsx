@@ -22,7 +22,9 @@ export const Header = ({
     <View
       className={`flex-row justify-between w-full ${
         isFullScreen ? 'bg-transparent' : 'bg-white'
-      } px-4 py-3 items-center w-full mt-5 ${isFullScreen ? 'absolute' : ''}`}
+      } px-4 py-3 pt-6 items-center w-full mt-5 ${
+        isFullScreen ? 'absolute' : ''
+      }`}
     >
       <View className="flex-row items-center">
         {back && (
@@ -37,6 +39,7 @@ export const Header = ({
       <TouchableOpacity onPress={() => navigation.navigate('Subscriptions')}>
         <Text className="text-white">GO TO SUBSCRIPTIONS</Text>
       </TouchableOpacity>
+      {/**/}
 
       {!!user && (
         <View className="flex-row items-center">

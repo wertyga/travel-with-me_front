@@ -1,4 +1,5 @@
-import { Place } from '@/types';
+import { Path, Place } from '@/types';
+import { Alert, Linking } from 'react-native';
 
 export const getMiddleCoordinates = (points: Place[]) => {
   let minLat = 0;
@@ -35,4 +36,37 @@ export const getMiddleCoordinates = (points: Place[]) => {
   });
 
   return middlePoint;
+};
+
+export const openGoogleMap = (coords: Path) => {
+  Linking.openURL(`https://maps.google.com/?q=${coords.lat},${coords.lng}`);
+};
+
+export const openMaps = () => {
+  Alert.alert(
+    'Open in Maps',
+    'Choose the app to open this location',
+    [
+      {
+        text: 'Google Maps',
+        onPress: () =>
+          Linking.openURL(
+            `https://maps.google.com/?q=${coords.lat},${coords.lng}`
+          ),
+      },
+      {
+        text: 'Apple Maps',
+        onPress: () =>
+          Linking.openURL(
+            `http://maps.apple.com/?sll=${coords.lat},${coords.lng}&daddr=${coords.lat},${coords.lng}`
+          ),
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+    ],
+    { cancelable: true }
+  );
 };

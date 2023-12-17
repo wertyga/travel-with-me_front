@@ -15,7 +15,7 @@ import { GuideShallowOverview } from '@/components/Guide/GuideShallowOverview/Gu
 import { CONSTANTS } from '@/styles/constants';
 import { GuideMap } from '@/components/Guide';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAuth } from '@/context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
