@@ -13,23 +13,14 @@ import { SearchTotal } from '@/components/SearchTotal';
 import { GuidesCategories } from '@/components/Guide';
 import * as React from 'react';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
-
-// MOCK on future
-// <LinearGradient
-//   colors={[
-//     'rgba(0, 0, 0, 0.1)',
-//     'rgba(0, 0, 0, 0.4)',
-//     'rgba(0, 0, 0, 0.1)',
-//     'rgba(0, 0, 0, 0.01)',
-//   ]}
-//   locations={[0, 0.7, 0.95, 0.99]}
-//   className="absolute w-full px-4 pb-4 pt-24"
-// >
+import { useHandleFromError } from '@/hooks';
 
 const Home = ({ route, navigation }) => {
   const navi = useNavigation();
+  const carouselRef = useRef(null);
   const [state, setState] = useState({
     filteredCategories: [],
+    cityIndex: 0,
   });
 
   const {
@@ -71,12 +62,16 @@ const Home = ({ route, navigation }) => {
     navi.navigate('Home', { city: cities[index] });
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (!route.params?.isFromError || isFetching) return;
-      refetchCities();
-    }, [route.params?.isFromError])
-  );
+  useEffect(() => {
+    const cityIndex = cities.findIndex(city => city._id === currentCity._id);
+    if (cityIndex && city?.slug === currentCity?.slug) {
+      setTimeout(() => {
+        carouselRef.current?.snapToItem?.(cityIndex, false, false);
+      });
+    }
+  }, [currentCity, cities, city]);
+
+  useHandleFromError(route, refetchCities, isFetching);
 
   if (!city || !cities.length) {
     return <SafeLoader />;
@@ -90,13 +85,16 @@ const Home = ({ route, navigation }) => {
   const citiesImages = cities.map(({ image }) => image);
 
   return (
-    <MainLayout route={route} navigation={navigation} title="Home">
+    <MainLayout route={route}>
       {cityLoading && <Loader />}
       <Carousel
         images={citiesImages}
         sliderWidth={Dimensions.get('screen').width}
         itemWidth={Dimensions.get('screen').width}
         onSnapToItem={onChangeCity}
+        carouselRef={c => {
+          carouselRef.current = c;
+        }}
       />
 
       <View className="absolute w-full px-4 pb-4 pt-20">

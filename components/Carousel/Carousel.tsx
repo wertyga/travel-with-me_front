@@ -1,4 +1,4 @@
-import { View, Image, ViewStyle } from 'react-native';
+import { View, Image } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import * as React from 'react';
 
@@ -9,6 +9,7 @@ type Props = {
   sliderWidth: number;
   itemWidth: number;
   onSnapToItem?: (index: number) => void;
+  carouselRef?: any;
 };
 
 export const Carousel = ({
@@ -17,11 +18,13 @@ export const Carousel = ({
   sliderWidth,
   itemWidth,
   onSnapToItem,
+  carouselRef,
 }: Props) => {
   return (
     <View className={containerClassName}>
       <CarouselEx
         layout="tinder"
+        ref={carouselRef}
         data={images as any}
         disableIntervalMomentum={true}
         onSnapToItem={onSnapToItem}

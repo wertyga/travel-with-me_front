@@ -9,6 +9,7 @@ import GuideScreen from '@/screens/Guide';
 import GuideMapScreen from '@/screens/GuideMapScreen';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import SubscriptionsScreen from '@/screens/Subscriptions';
+import CitiesListScreen from '@/screens/CitiesListScreen';
 import { Header } from '@/components/Header';
 import { City } from '@/types';
 
@@ -18,6 +19,9 @@ export type RootStackParamList = {
   RecoveryPassword: undefined;
   Login: undefined;
   Guide: { guideSlug: string };
+  CitiesList: undefined;
+  GuideMap: undefined;
+  Subscriptions: undefined;
   Error: { error: string };
 };
 
@@ -28,15 +32,13 @@ const Navigator = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          header: props => <Header {...props} />,
+          header: Header,
         }}
+        initialRouteName="CitiesList"
       >
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          // options={{ headerTitle: props => <Header {...props} /> }}
-        />
+        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="GuideMap" component={GuideMapScreen} />
+        <Stack.Screen name="CitiesList" component={CitiesListScreen} />
         <Stack.Screen name="Guide" component={GuideScreen} />
         <Stack.Screen name="Subscriptions" component={SubscriptionsScreen} />
         <Stack.Screen name="Error" component={ErrorScreen} />

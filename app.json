@@ -14,9 +14,7 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "plugins": [
-      "@react-native-google-signin/google-signin"
-    ],
+    "plugins": [],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.wertyga.travel-with-me"

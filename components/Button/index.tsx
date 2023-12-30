@@ -1,35 +1,67 @@
-import { Text, TouchableOpacity } from 'react-native';
 import React from 'react';
-import classnames from 'classnames';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from 'react-native';
+import cn from '@/app/classname';
+import { CText } from '@/components/CText';
+import { CTextProps } from '@/components/CText/CText';
 
 type CustomButtonProps = {
   children: React.ReactNode;
-  className?: string;
+  style?: TouchableOpacityProps;
+  textStyle?: CTextProps['style'];
   onPress?: () => void;
-  textClassName?: string;
+  wide?: boolean;
+  fluid?: boolean;
 };
 
 const CustomButton = ({
   children,
-  className,
+  style,
   onPress,
-  textClassName,
+  textStyle,
+  wide,
+  fluid,
   ...rest
 }: CustomButtonProps) => {
   return (
     <TouchableOpacity
-      className={classnames(
-        'py-2 px-4 min-w-full bg-gray-300 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75',
-        className
+      style={cn(
+        styles.container,
+        style,
+        { [wide]: styles.wide },
+        { [fluid]: styles.fluid }
       )}
-      {...{ onPress }}
+      onPress={onPress}
       {...rest}
     >
-      <Text className={`text-lg text-center font-semibold ${textClassName}`}>
-        {children}
-      </Text>
+      <CText style={cn(styles.text, textStyle)}>{children}</CText>
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 20,
+    backgroundColor: 'rgba(246, 245, 242, 0.40)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 14,
+  },
+  wide: {
+    paddingHorizontal: 20,
+  },
+  fluid: {
+    paddingHorizontal: 20,
+    width: '100%',
+  },
+});
 
 export default CustomButton;
