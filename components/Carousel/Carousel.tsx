@@ -1,6 +1,7 @@
 import { View, Image } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import * as React from 'react';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   images: string[];
@@ -30,11 +31,13 @@ export const Carousel = ({
         onSnapToItem={onSnapToItem}
         renderItem={({ item }: any) => {
           return (
-            <Image
-              source={{ uri: item }}
-              className="h-full w-full object-cover"
-              key={item}
-            />
+            <LinearGradient colors={['rgba(0, 0, 0, 1)', 'rgba(0, 0, 0, 1)']}>
+              <Image
+                source={{ uri: item }}
+                className="h-full w-full object-cover"
+                key={item}
+              />
+            </LinearGradient>
           );
         }}
         sliderWidth={sliderWidth}

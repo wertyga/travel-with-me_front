@@ -1,3 +1,17 @@
+export enum SCREENS {
+  Home = 'Home',
+  GuideMap = 'GuideMap',
+  CitiesList = 'CitiesList',
+  Guide = 'Guide',
+  Subscriptions = 'Subscriptions',
+  Error = 'Error',
+  Login = 'Login',
+  RecoveryPassword = 'RecoveryPassword',
+  ChangeEmail = 'ChangeEmail',
+  Profile = 'Profile',
+  Favorite = 'Favorite',
+}
+
 export enum FONTS {
   Crimson = 'Crimson',
   CrimsonSemiBold = 'CrimsonSemiBold',

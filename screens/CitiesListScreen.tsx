@@ -9,16 +9,14 @@ import Search from '@/components/Search';
 import { Loader } from '@/components/Loader';
 import { navigateToError } from '@/utils';
 import { useHandleFromError } from '@/hooks';
-import { City, FONTS } from '@/types';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
-import { TextInputTextInputEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
+import { FONTS } from '@/types';
+
+import citiesBgImage from '@/assets/images/cities-bg2.png';
+import { CONSTANTS } from '@/styles/constants';
 
 const CitiesListScreen = ({ route }) => {
   const navi = useNavigation();
   const [search, setSearch] = useState('');
-  const [state, setState] = useState<{ cities: City[] }>({
-    cities: [],
-  });
 
   const {
     data: { cities = [] } = {},
@@ -27,22 +25,11 @@ const CitiesListScreen = ({ route }) => {
     refetch: refetchCities,
   } = useGetCitiesLightListQuery();
 
-  const onSearch = ({
-    value,
-  }: NativeSyntheticEvent<TextInputTextInputEventData>) => {
-    console.log({ value });
-    setSearch(value);
-  };
-
   useLayoutEffect(() => {
     navi.setOptions({
       headerShown: false,
     });
   }, []);
-
-  useEffect(() => {
-    setState(prev => ({ ...prev, cities: cities }));
-  }, [cities]);
 
   useEffect(() => {
     if (!error) return;
@@ -53,15 +40,15 @@ const CitiesListScreen = ({ route }) => {
   useHandleFromError(route, refetchCities, isFetching);
 
   const filteredCities = search
-    ? state.cities.filter(({ title, country }) => {
+    ? cities.filter(({ title, country }) => {
         return (
           new RegExp(search, 'i').test(title) ||
           new RegExp(search, 'i').test(country.title)
         );
       })
-    : state.cities;
+    : cities;
   return (
-    <MainLayout style={styles.layout}>
+    <MainLayout style={styles.layout} bgImage={citiesBgImage}>
       <Search
         inputProps={{
           placeholder: "I'm looking for...",
@@ -70,7 +57,6 @@ const CitiesListScreen = ({ route }) => {
         }}
       />
       <CText style={styles.header}>Cities</CText>
-      {isFetching && <Loader />}
       <ScrollView contentContainerStyle={styles.list}>
         {filteredCities.map(city => {
           return (
@@ -84,13 +70,15 @@ const CitiesListScreen = ({ route }) => {
           );
         })}
       </ScrollView>
+
+      {isFetching && <Loader />}
     </MainLayout>
   );
 };
 
 const styles = StyleSheet.create({
   layout: {
-    paddingTop: 50,
+    paddingTop: CONSTANTS.spaces.paddingTop,
   },
   header: {
     fontSize: 30,

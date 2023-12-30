@@ -11,18 +11,18 @@ import ChangeEmailScreen from '@/screens/ChangeEmail';
 import SubscriptionsScreen from '@/screens/Subscriptions';
 import CitiesListScreen from '@/screens/CitiesListScreen';
 import { Header } from '@/components/Header';
-import { City } from '@/types';
+import { City, SCREENS } from '@/types';
 
 export type RootStackParamList = {
-  Home: { city?: City; isFromError?: boolean } | undefined;
-  ChangeEmail: undefined;
-  RecoveryPassword: undefined;
-  Login: undefined;
-  Guide: { guideSlug: string };
-  CitiesList: undefined;
-  GuideMap: undefined;
-  Subscriptions: undefined;
-  Error: { error: string };
+  [SCREENS.Home]: { city?: City; isFromError?: boolean } | undefined;
+  [SCREENS.ChangeEmail]: undefined;
+  [SCREENS.RecoveryPassword]: undefined;
+  [SCREENS.Login]: undefined;
+  [SCREENS.Guide]: { guideSlug: string };
+  [SCREENS.CitiesList]: undefined;
+  [SCREENS.GuideMap]: undefined;
+  [SCREENS.Subscriptions]: undefined;
+  [SCREENS.Error]: { error: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -34,24 +34,30 @@ const Navigator = () => {
         screenOptions={{
           header: Header,
         }}
-        initialRouteName="CitiesList"
+        initialRouteName={SCREENS.CitiesList}
       >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="GuideMap" component={GuideMapScreen} />
-        <Stack.Screen name="CitiesList" component={CitiesListScreen} />
-        <Stack.Screen name="Guide" component={GuideScreen} />
-        <Stack.Screen name="Subscriptions" component={SubscriptionsScreen} />
-        <Stack.Screen name="Error" component={ErrorScreen} />
+        <Stack.Screen name={SCREENS.Home} component={HomeScreen} />
+        <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
+        <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
+        <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
         <Stack.Screen
-          name="Login"
+          name={SCREENS.Subscriptions}
+          component={SubscriptionsScreen}
+        />
+        <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
+        <Stack.Screen
+          name={SCREENS.Login}
           component={LoginScreen}
           key="login-screens"
         />
         <Stack.Screen
-          name="RecoveryPassword"
+          name={SCREENS.RecoveryPassword}
           component={RecoveryPasswordScreen}
         />
-        <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} />
+        <Stack.Screen
+          name={SCREENS.ChangeEmail}
+          component={ChangeEmailScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

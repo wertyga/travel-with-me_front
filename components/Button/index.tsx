@@ -10,7 +10,7 @@ import { CTextProps } from '@/components/CText/CText';
 
 type CustomButtonProps = {
   children: React.ReactNode;
-  style?: TouchableOpacityProps;
+  style?: TouchableOpacityProps['style'];
   textStyle?: CTextProps['style'];
   onPress?: () => void;
   wide?: boolean;
@@ -30,9 +30,9 @@ const CustomButton = ({
     <TouchableOpacity
       style={cn(
         styles.container,
-        style,
         { [wide]: styles.wide },
-        { [fluid]: styles.fluid }
+        { [fluid]: styles.fluid },
+        style
       )}
       onPress={onPress}
       {...rest}

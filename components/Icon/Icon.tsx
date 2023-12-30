@@ -1,9 +1,13 @@
 import MapPoint from './icons/map-point';
 import MapPointSmall from './icons/map-point-small';
+import Profile from './icons/profile';
+import Heart from './icons/heart';
 
-const ICONS_MAP = {
+export const ICONS_MAP = {
   'map-point': MapPoint,
   'map-point-small': MapPointSmall,
+  profile: Profile,
+  heart: Heart,
 };
 
 type Props = {
