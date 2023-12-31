@@ -25,6 +25,7 @@ import { useHandleFromError } from '@/hooks';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { CONSTANTS } from '@/styles/constants';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
+import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 
 const Home = ({ route, navigation }) => {
   const navi = useNavigation();
@@ -94,11 +95,6 @@ const Home = ({ route, navigation }) => {
     return <SafeLoader />;
   }
 
-  const allGuidesCityCategories = uniq(
-    flatten(city.guides?.map(({ categories }) => categories)).filter(
-      im => !!im
-    ) || []
-  );
   const citiesImages = cities.map(({ image }) => image);
 
   return (

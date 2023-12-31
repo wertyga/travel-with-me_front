@@ -5,24 +5,39 @@ import { Icon } from '@/components/Icon';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { City, FONTS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
+import { GuidesSlideList } from '@/components/Guide';
+import { CountryPill } from '@/components/Country';
+import uniq from 'lodash/uniq';
+import flatten from 'lodash/flatten';
 
 type Props = {
   city: City;
 };
 
 export const CityScreenMeta = ({ city }: Props) => {
+  const allGuidesCityCategories = uniq(
+    flatten(city.guides?.map(({ categories }) => categories)).filter(
+      im => !!im
+    ) || []
+  ).map(category => ({ title: category, count: 1 }));
+
   return (
     <BackgroundGradient style={styles.container}>
-      <View style={styles.top}>
-        <Button>
-          <Icon name="map-point-small" color="white" />
-          <CText style={styles.country}>{city.country.title}</CText>
-        </Button>
+      <View style={styles.meta}>
+        <CountryPill title={city.country.title} style={styles.top} />
+        <CText style={styles.aboutText}>About city</CText>
+        <CText style={styles.description} numberOfLines={5}>
+          {city.description}
+        </CText>
       </View>
-      <CText style={styles.aboutText}>About city</CText>
-      <CText style={styles.description} numberOfLines={5}>
-        {city.description}
-      </CText>
+
+      <CityGuidesCategories
+        categories={allGuidesCityCategories}
+        style={styles.categories}
+      />
+
+      <GuidesSlideList guides={city.guides} country={city.country.title} />
     </BackgroundGradient>
   );
 };
@@ -41,8 +56,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   top: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 25,
   },
   country: {
@@ -56,5 +69,11 @@ const styles = StyleSheet.create({
   },
   description: {
     lineHeight: 22,
+  },
+  meta: {
+    marginBottom: 30,
+  },
+  categories: {
+    marginBottom: 30,
   },
 });

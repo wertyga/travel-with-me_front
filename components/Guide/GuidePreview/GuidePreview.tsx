@@ -5,32 +5,31 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Guide } from '@/types';
+import { FONTS, Guide, SCREENS } from '@/types';
 import { getCurrencyMeta } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
 import DefaultImage from '@/assets/images/default_point_image.png';
+import { CText } from '@/components/CText';
+import Button from '@/components/Button';
+import { Icon } from '@/components/Icon';
+import { CountryPill } from '@/components/Country';
 
 type Props = {
   guide: Guide;
   containerClassName?: string;
+  country: string;
 };
 
-const CUT_UNTIL = 200;
-
-export const GuidePreview = ({ guide, containerClassName = '' }: Props) => {
+export const GuidePreview = ({ guide, country }: Props) => {
   const navi = useNavigation();
 
-  const cutDescription = guide.description.slice(0, CUT_UNTIL);
-  const description =
-    guide.description.length > CUT_UNTIL
-      ? `${cutDescription}...`
-      : cutDescription;
   return (
     <ImageBackground
       resizeMode="cover"
-      className={`${containerClassName}`}
+      style={styles.container}
       source={
         guide.hImage
           ? {
@@ -40,25 +39,25 @@ export const GuidePreview = ({ guide, containerClassName = '' }: Props) => {
       }
     >
       <LinearGradient
-        colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.03)']}
-        className="h-full"
+        colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.3)']}
+        style={styles.content}
       >
         <TouchableOpacity
-          onPress={() => navi.navigate('Guide', { guideSlug: guide.slug })}
+          onPress={() =>
+            navi.navigate(SCREENS.Guide, { guideSlug: guide.slug })
+          }
           activeOpacity={1}
-          className="h-full"
+          style={styles.guide}
         >
-          <View className="justify-between mt-2 mx-4">
-            <Text className="text-white font-bold text-[16px]">
-              {guide.title}
-            </Text>
-            {!!guide.pointsCount && (
-              <Text className="text-white font-bold text-[18px]">
-                {guide.pointsCount}
-              </Text>
-            )}
+          <CountryPill style={styles.top} title={country} />
 
-            <Text className="text-white leading-5">{description}</Text>
+          <View>
+            <CText style={styles.title}>{guide.title}</CText>
+            {!!guide.pointsCount && <Text>{guide.pointsCount}</Text>}
+
+            <CText numberOfLines={3} style={styles.description}>
+              {guide.description}
+            </CText>
           </View>
         </TouchableOpacity>
       </LinearGradient>
@@ -66,8 +65,31 @@ export const GuidePreview = ({ guide, containerClassName = '' }: Props) => {
   );
 };
 
+const width = Dimensions.get('screen').width * 0.7;
+
 const styles = StyleSheet.create({
-  touchable: {
-    ...StyleSheet.absoluteFillObject,
+  container: {
+    width,
+    aspectRatio: 1,
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginRight: 10,
+  },
+  top: {},
+  content: {
+    padding: 15,
+    height: '100%',
+  },
+  title: {
+    fontFamily: FONTS.CrimsonBold,
+    fontSize: 20,
+    marginBottom: 5,
+  },
+  description: {
+    fontSize: 14,
+  },
+  guide: {
+    justifyContent: 'space-between',
+    height: '100%',
   },
 });
