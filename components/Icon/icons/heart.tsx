@@ -8,7 +8,7 @@ const SvgComponent = props => {
       width={25}
       height={25}
       fill="none"
-      {...props}
+      {...props.style}
     >
       <Mask
         id="a"

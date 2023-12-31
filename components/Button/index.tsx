@@ -15,6 +15,7 @@ type CustomButtonProps = {
   onPress?: () => void;
   wide?: boolean;
   fluid?: boolean;
+  outlined?: boolean;
 };
 
 const CustomButton = ({
@@ -24,6 +25,7 @@ const CustomButton = ({
   textStyle,
   wide,
   fluid,
+  outlined,
   ...rest
 }: CustomButtonProps) => {
   return (
@@ -32,12 +34,16 @@ const CustomButton = ({
         styles.container,
         { [wide]: styles.wide },
         { [fluid]: styles.fluid },
+        { [outlined]: styles.outlined },
         style
       )}
       onPress={onPress}
       {...rest}
     >
-      <CText style={cn(styles.text, textStyle)}>{children}</CText>
+      {typeof children !== 'string' && children}
+      {typeof children === 'string' && (
+        <CText style={cn(styles.text, textStyle)}>{children}</CText>
+      )}
     </TouchableOpacity>
   );
 };
@@ -50,6 +56,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   text: {
     color: 'white',
@@ -61,6 +68,12 @@ const styles = StyleSheet.create({
   fluid: {
     paddingHorizontal: 20,
     width: '100%',
+  },
+  outlined: {
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderColor: 'white',
+    borderWidth: 1,
   },
 });
 

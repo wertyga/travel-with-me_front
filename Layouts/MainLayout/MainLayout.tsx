@@ -7,10 +7,9 @@ import {
 } from 'react-native';
 import { View } from 'react-nativewind';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { LinearGradient } from 'expo-linear-gradient';
-import { CONSTANTS } from '@/styles/constants';
 import cn from '@/app/classname';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
+import { BackgroundGradient } from '@/components/BackgroundGradient';
 
 type Props = {
   children: React.ReactNode;
@@ -46,12 +45,9 @@ export const MainLayout = ({
         </ImageBackground>
       )}
       {!bgImage && (
-        <LinearGradient
-          colors={[CONSTANTS.colors.bg1, CONSTANTS.colors.bg2]}
-          start={{ x: 0, y: 0.3 }}
-        >
+        <BackgroundGradient>
           <View style={cn(styles.container, style)}>{children}</View>
-        </LinearGradient>
+        </BackgroundGradient>
       )}
 
       {!noFooter && <FooterMenu />}

@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useGetCitiesLightListQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +9,7 @@ import Search from '@/components/Search';
 import { Loader } from '@/components/Loader';
 import { navigateToError } from '@/utils';
 import { useHandleFromError } from '@/hooks';
-import { FONTS } from '@/types';
+import { FONTS, SCREENS } from '@/types';
 
 import citiesBgImage from '@/assets/images/cities-bg2.png';
 import { CONSTANTS } from '@/styles/constants';
@@ -47,6 +47,7 @@ const CitiesListScreen = ({ route }) => {
         );
       })
     : cities;
+
   return (
     <MainLayout style={styles.layout} bgImage={citiesBgImage}>
       <Search
@@ -56,19 +57,21 @@ const CitiesListScreen = ({ route }) => {
           value: search,
         }}
       />
-      <CText style={styles.header}>Cities</CText>
-      <ScrollView contentContainerStyle={styles.list}>
-        {filteredCities.map(city => {
-          return (
-            <TouchableOpacity
-              key={city._id}
-              style={styles.preview}
-              onPress={() => navi.navigate('Home', { city })}
-            >
-              <CityPreview city={city} />
-            </TouchableOpacity>
-          );
-        })}
+      <ScrollView>
+        <CText style={styles.header}>Cities</CText>
+        <View style={styles.list}>
+          {filteredCities.map(city => {
+            return (
+              <TouchableOpacity
+                key={city._id}
+                style={styles.preview}
+                onPress={() => navi.navigate(SCREENS.Home, { city })}
+              >
+                <CityPreview city={city} />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </ScrollView>
 
       {isFetching && <Loader />}
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   preview: {
-    width: '46.9%',
+    width: '46%',
   },
 });
 

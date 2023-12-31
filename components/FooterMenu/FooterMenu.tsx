@@ -1,6 +1,5 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { BlurView } from 'expo-blur';
 import { CText } from '@/components/CText';
 import { Icon } from '@/components/Icon';
 import cn from '@/app/classname';
@@ -17,7 +16,7 @@ export const FooterMenu = () => {
   };
 
   return (
-    <BlurView style={styles.container}>
+    <View style={styles.container}>
       {FOOTER_MENU.map(({ icon, screen, title }) => {
         return (
           <TouchableOpacity
@@ -30,7 +29,7 @@ export const FooterMenu = () => {
           </TouchableOpacity>
         );
       })}
-    </BlurView>
+    </View>
   );
 };
 
@@ -41,8 +40,10 @@ const styles = StyleSheet.create({
     left: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 12,
+    paddingTop: 10,
+    paddingBottom: 8,
     width: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   item: {
     alignItems: 'center',

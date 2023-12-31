@@ -10,6 +10,6 @@ export const CONSTANTS = {
     bg2: '#00353B',
   },
   spaces: {
-    paddingTop: 40,
+    paddingTop: 50,
   },
 };

@@ -34,11 +34,10 @@ const Navigator = () => {
         screenOptions={{
           header: Header,
         }}
-        initialRouteName={SCREENS.CitiesList}
       >
+        <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
         <Stack.Screen name={SCREENS.Home} component={HomeScreen} />
         <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
-        <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
         <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
         <Stack.Screen
           name={SCREENS.Subscriptions}

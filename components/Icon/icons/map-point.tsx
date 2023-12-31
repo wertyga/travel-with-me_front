@@ -8,7 +8,7 @@ const SvgComponent = props => {
       width={29}
       height={28}
       fill="none"
-      {...props}
+      {...props.style}
     >
       <Path
         fill={props.color}

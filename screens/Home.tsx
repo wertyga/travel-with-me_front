@@ -24,6 +24,7 @@ import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { CONSTANTS } from '@/styles/constants';
+import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 
 const Home = ({ route, navigation }) => {
   const navi = useNavigation();
@@ -114,21 +115,15 @@ const Home = ({ route, navigation }) => {
         onSnapToItem={onChangeCity}
         renderItem={({ item }: any) => {
           return (
-            <ImageBackground
-              key={item}
-              style={styles.cityImage}
-              source={{ uri: item }}
-            >
-              <LinearGradient
-                style={styles.imagePlaceholder}
-                colors={['rgba(0, 0, 0, 0.3)', 'rgba(0, 0, 0, 0.01)']}
-              />
-            </ImageBackground>
+            <Image key={item} style={styles.cityImage} source={{ uri: item }} />
           );
         }}
         sliderWidth={Dimensions.get('screen').width}
         itemWidth={Dimensions.get('screen').width}
       />
+
+      <CityScreenMeta city={city} />
+
       <CityScreenHeader style={styles.header} title={currentCity.title} />
 
       {/*<View className="absolute w-full px-4 pb-4 pt-20">*/}
