@@ -5,6 +5,7 @@ import {
   ViewStyle,
   ImageBackground,
 } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View } from 'react-nativewind';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
@@ -28,29 +29,31 @@ export const MainLayout = ({
 }: Props) => {
   return (
     <SafeAreaView style={cn(containerStyle)}>
-      {bgImage && (
-        <ImageBackground
-          source={typeof bgImage === 'string' ? { uri: bgImage } : bgImage}
-        >
-          <View
-            style={cn(
-              styles.container,
-              styles.fade,
-              { [!noFooter]: styles.withFooter },
-              style
-            )}
+      <GestureHandlerRootView>
+        {bgImage && (
+          <ImageBackground
+            source={typeof bgImage === 'string' ? { uri: bgImage } : bgImage}
           >
-            {children}
-          </View>
-        </ImageBackground>
-      )}
-      {!bgImage && (
-        <BackgroundGradient>
-          <View style={cn(styles.container, style)}>{children}</View>
-        </BackgroundGradient>
-      )}
+            <View
+              style={cn(
+                styles.container,
+                styles.fade,
+                { [!noFooter]: styles.withFooter },
+                style
+              )}
+            >
+              {children}
+            </View>
+          </ImageBackground>
+        )}
+        {!bgImage && (
+          <BackgroundGradient>
+            <View style={cn(styles.container, style)}>{children}</View>
+          </BackgroundGradient>
+        )}
 
-      {!noFooter && <FooterMenu />}
+        {!noFooter && <FooterMenu />}
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 };

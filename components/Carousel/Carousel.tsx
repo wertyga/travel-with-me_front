@@ -1,7 +1,6 @@
 import { View, Image } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import * as React from 'react';
-import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   images: string[];

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import Animated from 'react-native-reanimated';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
@@ -25,7 +26,6 @@ import { useHandleFromError } from '@/hooks';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { CONSTANTS } from '@/styles/constants';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
-import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 
 const Home = ({ route, navigation }) => {
   const navi = useNavigation();
@@ -119,6 +119,14 @@ const Home = ({ route, navigation }) => {
       />
 
       <CityScreenMeta city={city} />
+      {/*<Animated.View style={styles.metaWrapper}>*/}
+      {/*  /!*<View style={styles.dots}>*!/*/}
+      {/*  /!*  <View style={styles.dot} />*!/*/}
+      {/*  /!*  <View style={[styles.dot, styles.dotActive]} />*!/*/}
+      {/*  /!*  <View style={styles.dot} />*!/*/}
+      {/*  /!*</View>*!/*/}
+
+      {/*</Animated.View>*/}
 
       <CityScreenHeader style={styles.header} title={currentCity.title} />
 
