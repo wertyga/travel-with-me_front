@@ -1,4 +1,4 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -13,26 +13,37 @@ import { GuidesSlideList } from '@/components/Guide';
 import { CountryPill } from '@/components/Country';
 import uniq from 'lodash/uniq';
 import flatten from 'lodash/flatten';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { useRef, useState } from 'react';
 
 type Props = {
   city: City;
-  style?: StyleProp<ViewStyle>;
-  opened?: boolean;
 };
 
+const UPPER_CONTENT_HEIGHT = 330;
 const MIN_BOTTOM = 380;
 const ONE_PERCENT = Math.abs(MIN_BOTTOM) / 100;
-const INITIAL_ANIMATED_STATE = {
-  translateY: 0,
-  opacity: 0,
-  zIndex: 0,
-  paddingBottom: 70,
-  opened: false,
-};
 
-export const CityScreenMeta = ({ city, style, opened }: Props) => {
-  const swipeValues = useSharedValue(INITIAL_ANIMATED_STATE);
+export const CityScreenMeta = ({ city }: Props) => {
+  const windowHeight = useRef(Dimensions.get('window').height);
+  const maxTranslate = windowHeight.current - 20;
+
+  const refState = useRef({
+    initialState: {
+      translateY: 0,
+      opacity: 0,
+      zIndex: 0,
+      opened: false,
+    },
+    openedState: {
+      translateY: -maxTranslate + UPPER_CONTENT_HEIGHT,
+      opacity: 1,
+      zIndex: 20,
+      opened: true,
+    },
+  });
+
+  const [opened, setOpened] = useState(false);
+  const swipeValues = useSharedValue(refState.current.initialState);
 
   const animatedWrapperStyles = useAnimatedStyle(() => {
     return {
@@ -45,9 +56,10 @@ export const CityScreenMeta = ({ city, style, opened }: Props) => {
       opacity: swipeValues.value.opacity,
     };
   });
-  const animatedMetaStyles = useAnimatedStyle(() => {
+  const animatedScrollViewStyles = useAnimatedStyle(() => {
     return {
-      paddingBottom: swipeValues.value.paddingBottom,
+      flex: 1,
+      maxHeight: swipeValues.value.opened ? undefined : 110,
     };
   });
 
@@ -61,7 +73,7 @@ export const CityScreenMeta = ({ city, style, opened }: Props) => {
       swipeValues.value = {
         ...swipeValues.value,
         translateY: swipeValues.value.opened
-          ? -MIN_BOTTOM + translationY
+          ? refState.current.openedState.translateY + translationY
           : translationY,
         opacity: translationY > 0 ? 1 : differencePercentY / 100,
       };
@@ -69,26 +81,17 @@ export const CityScreenMeta = ({ city, style, opened }: Props) => {
     .onFinalize(e => {
       const { translationY } = e;
 
-      const wasSwipeUp = translationY < -30;
-      const wasSwipeDown = translationY > 30;
+      const wasSwipeUpAndShouldBeOpened = translationY < -30;
+      const wasSwipeDownAndShouldBeClosed = translationY > 30;
 
-      const openedState = {
-        ...INITIAL_ANIMATED_STATE,
-        translateY: -MIN_BOTTOM,
-        opacity: 1,
-        zIndex: 20,
-        opened: true,
-        paddingBottom: 20,
-      };
-
-      if (wasSwipeUp) {
-        swipeValues.value = openedState;
-      } else if (wasSwipeDown) {
-        swipeValues.value = INITIAL_ANIMATED_STATE;
+      if (wasSwipeUpAndShouldBeOpened) {
+        swipeValues.value = refState.current.openedState;
+      } else if (wasSwipeDownAndShouldBeClosed) {
+        swipeValues.value = refState.current.initialState;
       } else if (swipeValues.value.opened) {
-        swipeValues.value = openedState;
+        swipeValues.value = refState.current.openedState;
       } else {
-        swipeValues.value = INITIAL_ANIMATED_STATE;
+        swipeValues.value = refState.current.initialState;
       }
     });
 
@@ -100,22 +103,36 @@ export const CityScreenMeta = ({ city, style, opened }: Props) => {
 
   return (
     <Animated.View style={[styles.metaWrapper, animatedWrapperStyles]}>
-      <GestureDetector gesture={gesture}>
-        <View style={styles.swiperWrapper}>
-          <View style={styles.swiper} />
-        </View>
-      </GestureDetector>
+      {/*<GestureDetector gesture={gesture}>*/}
+      {/*  <View style={styles.swiperWrapper}>*/}
+      {/*    <View style={styles.swiper} />*/}
+      {/*  </View>*/}
+      {/*</GestureDetector>*/}
       <BackgroundGradient style={[styles.container]}>
-        <Animated.View style={animatedMetaStyles}>
-          <GestureDetector gesture={gesture}>
-            <View style={styles.meta}>
-              <CountryPill title={city.country.title} style={styles.top} />
-              <CText style={styles.aboutText}>About city</CText>
-              <CText style={styles.description} numberOfLines={5}>
-                {city.description}
+        <View
+          style={{
+            justifyContent: 'space-between',
+            flex: 1,
+            paddingBottom: 30,
+          }}
+        >
+          <View style={styles.swiperWrapper}>
+            <View style={styles.swiper} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <GestureDetector gesture={gesture}>
+              <View style={styles.meta}>
+                <CountryPill title={city.country.title} style={styles.top} />
+                <CText style={styles.aboutText}>About city</CText>
+              </View>
+            </GestureDetector>
+
+            <Animated.ScrollView style={animatedScrollViewStyles}>
+              <CText style={styles.description}>
+                {city.description + city.description + city.description}
               </CText>
-            </View>
-          </GestureDetector>
+            </Animated.ScrollView>
+          </View>
 
           <Animated.View style={animatedHidedPartStyles}>
             <CityGuidesCategories
@@ -128,7 +145,7 @@ export const CityScreenMeta = ({ city, style, opened }: Props) => {
               country={city.country.title}
             />
           </Animated.View>
-        </Animated.View>
+        </View>
       </BackgroundGradient>
     </Animated.View>
   );
@@ -138,17 +155,17 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: CONSTANTS.colors.bg2,
     paddingHorizontal: 15,
-    paddingTop: 25,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     width: '100%',
+    height: Dimensions.get('window').height - 20,
   },
   metaWrapper: {
     position: 'absolute',
     left: 0,
     width: '100%',
     paddingTop: 30,
-    bottom: -MIN_BOTTOM,
+    bottom: -Dimensions.get('window').height + UPPER_CONTENT_HEIGHT,
   },
   top: {
     marginBottom: 25,
@@ -164,8 +181,12 @@ const styles = StyleSheet.create({
   },
   description: {
     lineHeight: 22,
+    color: 'white',
+    fontFamily: FONTS.OpenSans,
   },
-  meta: {},
+  meta: {
+    paddingTop: 10,
+  },
   categories: {
     marginBottom: 30,
     marginTop: 30,
@@ -175,6 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     marginBottom: 5,
+    marginTop: 10,
   },
   swiper: {
     width: 100,

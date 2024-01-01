@@ -1,8 +1,8 @@
+import React from 'react';
+import { ViewStyle, View } from 'react-native';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { CONSTANTS } from '@/styles/constants';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { ViewStyle } from 'react-native';
 
 type Props = {
   children: React.ReactNode;
