@@ -92,7 +92,7 @@ const Home = ({ route, navigation }) => {
   useHandleFromError(route, refetchCities, isFetching);
 
   if (!city || !cities.length) {
-    return <SafeLoader />;
+    return <SafeLoader image={currentCity.image} />;
   }
 
   const citiesImages = cities.map(({ image }) => image);
@@ -119,34 +119,8 @@ const Home = ({ route, navigation }) => {
       />
 
       <CityScreenMeta city={city} />
-      {/*<Animated.View style={styles.metaWrapper}>*/}
-      {/*  /!*<View style={styles.dots}>*!/*/}
-      {/*  /!*  <View style={styles.dot} />*!/*/}
-      {/*  /!*  <View style={[styles.dot, styles.dotActive]} />*!/*/}
-      {/*  /!*  <View style={styles.dot} />*!/*/}
-      {/*  /!*</View>*!/*/}
 
-      {/*</Animated.View>*/}
-
-      <CityScreenHeader style={styles.header} title={currentCity.title} />
-
-      {/*<View className="absolute w-full px-4 pb-4 pt-20">*/}
-      {/*  <GuidesCategories*/}
-      {/*    selected={state.filteredCategories}*/}
-      {/*    onChange={onChangeCategory}*/}
-      {/*    categories={allGuidesCityCategories}*/}
-      {/*    key={city.title}*/}
-      {/*  />*/}
-
-      {/*  <Text className="text-white font-bold mt-4">{currentCity.title}</Text>*/}
-      {/*</View>*/}
-
-      {/*<CityFullInfo*/}
-      {/*  key={city.title + state.filteredCategories.join('')}*/}
-      {/*  city={city}*/}
-      {/*  title={currentCity.title}*/}
-      {/*  filteredCategories={state.filteredCategories}*/}
-      {/*/>*/}
+      <CityScreenHeader title={currentCity.title} />
     </MainLayout>
   );
 };
@@ -154,11 +128,6 @@ const Home = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   layout: {
     paddingHorizontal: 0,
-  },
-  header: {
-    position: 'absolute',
-    top: CONSTANTS.spaces.paddingTop,
-    zIndex: 10,
   },
   cityImage: {
     width: '100%',

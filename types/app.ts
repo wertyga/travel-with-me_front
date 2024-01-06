@@ -9,6 +9,7 @@ export enum SCREENS {
   RecoveryPassword = 'RecoveryPassword',
   ChangeEmail = 'ChangeEmail',
   Profile = 'Profile',
+  Place = 'Place',
   Favorite = 'Favorite',
 }
 

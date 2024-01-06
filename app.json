@@ -17,7 +17,12 @@
     "plugins": [],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wertyga.travel-with-me"
+      "bundleIdentifier": "com.wertyga.travel-with-me",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      }
     },
     "experiments": {
       "tsconfigPaths": true

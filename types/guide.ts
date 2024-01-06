@@ -30,6 +30,7 @@ export type Guide = {
   description: string;
   vImage: string;
   hImage: string;
+  travelTime: string;
   slug: string;
   categories: string[];
   owner: User;

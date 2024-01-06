@@ -5,3 +5,4 @@ export * from './guide';
 export * from './user';
 export * from './oauth';
 export * from './subscription';
+export * from './place';

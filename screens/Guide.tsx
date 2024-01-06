@@ -4,9 +4,14 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useGetMySubscriptionQuery, useLazyGetGuideQuery } from '@/api';
+import {
+  useGetMySubscriptionQuery,
+  useLazyGetGuideQuery,
+  useGetGuideQuery,
+} from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts';
 import { RootStackParamList } from '@/app/Navigator';
@@ -15,80 +20,45 @@ import { GuideShallowOverview } from '@/components/Guide/GuideShallowOverview/Gu
 import { CONSTANTS } from '@/styles/constants';
 import { GuideMap } from '@/components/Guide';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useLayoutEffect } from 'react';
 import { useAuth } from '@/context';
+import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
+import { GuideMeta } from '@/components/Guide/GuideMEta/GuideMeta';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
 const GuideScreen = ({ route }: Props) => {
+  const { guideSlug } = route.params || {};
   const navi = useNavigation();
-  const { user } = useAuth();
 
-  const [fetchGuide, { data: guide, isLoading }] = useLazyGetGuideQuery();
-  const { data: { subscription } = {} } = useGetMySubscriptionQuery(undefined, {
-    skip: !user,
-  });
+  const { data: guide, isFetching } = useGetGuideQuery(
+    { slug: guideSlug },
+    { skip: !guideSlug }
+  );
 
   const goToMap = () => {
     navi.navigate('GuideMap', { guideSlug: guide.slug });
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (!route.params?.guideSlug) return;
-      fetchGuide({ slug: route.params?.guideSlug });
-    }, [])
-  );
+  useLayoutEffect(() => {
+    navi.setOptions({
+      headerShown: false,
+    });
+  }, []);
 
-  if (!guide || isLoading) {
+  if (!guide || isFetching) {
     return <SafeLoader />;
   }
 
   return (
-    <MainLayout>
-      <ImageBackground source={{ uri: guide.vImage }} style={styles.bgImage}>
-        <LinearGradient
-          colors={[
-            'rgba(0, 0, 0, 0.1)',
-            'rgba(0, 0, 0, 0.4)',
-            'rgba(0, 0, 0, 0.1)',
-            'rgba(0, 0, 0, 0.01)',
-          ]}
-          locations={[0, 0.7, 0.95, 0.99]}
-          style={styles.gradient}
-        >
-          <GuideShallowOverview guide={guide} />
+    <MainLayout bgImage={guide.vImage}>
+      <CityScreenHeader title={guide.title} />
 
-          {!!subscription && (
-            <TouchableOpacity style={styles.goToMap} onPress={goToMap}>
-              <Text>Go to map</Text>
-            </TouchableOpacity>
-          )}
-        </LinearGradient>
-      </ImageBackground>
+      <GuideMeta guide={guide} />
     </MainLayout>
   );
 };
 
 export default GuideScreen;
 
-const styles = StyleSheet.create({
-  btn: {
-    padding: 10,
-    backgroundColor: CONSTANTS.colors.blue,
-  },
-  btnText: {
-    color: 'white',
-  },
-  gradient: {
-    width: '100%',
-    height: '100%',
-    paddingTop: 80,
-    paddingHorizontal: 20,
-  },
-  bgImage: {},
-  goToMap: {
-    padding: 20,
-    backgroundColor: CONSTANTS.colors.blue,
-  },
-});
+const styles = StyleSheet.create({});

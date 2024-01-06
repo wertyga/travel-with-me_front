@@ -1,6 +1,5 @@
 import {
   View,
-  ScrollView,
   ImageBackground,
   Text,
   TouchableOpacity,
@@ -9,12 +8,9 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FONTS, Guide, SCREENS } from '@/types';
-import { getCurrencyMeta } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
 import DefaultImage from '@/assets/images/default_point_image.png';
 import { CText } from '@/components/CText';
-import Button from '@/components/Button';
-import { Icon } from '@/components/Icon';
 import { CountryPill } from '@/components/Country';
 
 type Props = {

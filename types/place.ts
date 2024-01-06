@@ -1,6 +1,6 @@
 import { User } from '@/types/user';
 import { Like } from '@/types/likes';
-import { Path } from '@/types/guide';
+import { Guide, Path } from '@/types/guide';
 
 export enum PLACE_TAGS {
   Place = 'Place',
@@ -16,4 +16,9 @@ export type Place = {
   coords: Path;
   owner: User;
   likes: Like;
+};
+
+export type GetPlaceResponse = {
+  place: Place;
+  guide: Guide;
 };

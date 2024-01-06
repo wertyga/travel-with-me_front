@@ -4,11 +4,15 @@ import { CText } from '@/components/CText';
 import { FONTS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
-export const SafeLoader = () => {
+type Props = {
+  image?: string;
+};
+
+export const SafeLoader = ({ image }: Props) => {
   return (
     <ImageBackground
       style={[StyleSheet.absoluteFillObject, styles.container]}
-      source={safeLoaderImage}
+      source={image ? { uri: image } : safeLoaderImage}
     >
       <CText style={styles.text}>Loading...</CText>
       <ActivityIndicator size="large" color={CONSTANTS.colors.bg1} />

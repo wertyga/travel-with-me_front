@@ -9,6 +9,7 @@ import {
   ChangeEmailRequest,
   USER_TAGS,
 } from '@/types';
+import { SUBSCRIPTION_VALIDATION_TAGS } from '@/app/query/base-api';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: build => ({
@@ -41,7 +42,9 @@ export const authApi = baseApi.injectEndpoints({
     }),
     signIn: build.mutation<UserResponse, SignInRequest>({
       invalidatesTags: result =>
-        result ? [USER_TAGS.List, USER_TAGS.Self] : [],
+        result
+          ? [USER_TAGS.List, USER_TAGS.Self, ...SUBSCRIPTION_VALIDATION_TAGS]
+          : [],
       query: data => ({
         method: 'post',
         url: '/auth/signin',

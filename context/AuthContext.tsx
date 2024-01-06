@@ -1,5 +1,10 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { useGetSelfQuery, useSignInMutation, useSignUpMutation } from '@/api';
+import {
+  useGetMySubscriptionQuery,
+  useGetSelfQuery,
+  useSignInMutation,
+  useSignUpMutation,
+} from '@/api';
 import { AuthCommonRequest, AuthContextType } from '@/types';
 import { User } from '@/types/user';
 import { Loader } from '@/components/Loader';
@@ -18,6 +23,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<User | undefined>();
   const [token, setToken] = useState(null);
 
+  // TODO: subscription
+  // const { data: { subscription } = {} } = useGetMySubscriptionQuery(undefined, {
+  //   skip: !user,
+  // });
   const [signInFetch, { isLoading: sigInLoading }] = useSignInMutation();
   const [signUpFetch, { isLoading: sigUpLoading }] = useSignUpMutation();
   const {

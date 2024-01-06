@@ -11,6 +11,7 @@ import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
   children: React.ReactNode;
@@ -34,16 +35,19 @@ export const MainLayout = ({
           <ImageBackground
             source={typeof bgImage === 'string' ? { uri: bgImage } : bgImage}
           >
-            <View
-              style={cn(
-                styles.container,
-                styles.fade,
-                { [!noFooter]: styles.withFooter },
-                style
-              )}
+            <LinearGradient
+              colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
             >
-              {children}
-            </View>
+              <View
+                style={cn(
+                  styles.container,
+                  { [!noFooter]: styles.withFooter },
+                  style
+                )}
+              >
+                {children}
+              </View>
+            </LinearGradient>
           </ImageBackground>
         )}
         {!bgImage && (
@@ -66,8 +70,5 @@ const styles = StyleSheet.create({
   },
   withFooter: {
     paddingBottom: 70,
-  },
-  fade: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
