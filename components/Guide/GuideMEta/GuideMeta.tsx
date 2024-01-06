@@ -19,7 +19,6 @@ export const GuideMeta = ({ guide }: Props) => {
 
   const { travelTime } = guide;
 
-  const { height: windowHeight } = Dimensions.get('window');
   return (
     <EntityMeta
       disabled={!user}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { AudioLine } from './AudioLine';
@@ -58,7 +58,15 @@ export const AudioPlayer = ({ audioUrl }: Props) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (state.playedPercent !== 100 || state.isPlaying) return;
+
+    audio.current?.stopAsync();
+    audio.current?.setPositionAsync(0);
+  }, [state.playedPercent, state.isPlaying]);
+
   const { isPlaying, isLoading, isPaused, playedPercent } = state;
+
   return (
     <View style={styles.container}>
       <View style={styles.btns}>
