@@ -8,7 +8,7 @@ export const FOOTER_MENU: {
 }[] = [
   {
     icon: 'map-point',
-    screen: SCREENS.GuideMap,
+    screen: SCREENS.WorldGuidesMap,
     title: 'Map',
   },
   {

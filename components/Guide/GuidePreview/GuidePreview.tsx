@@ -35,7 +35,7 @@ export const GuidePreview = ({ guide, country }: Props) => {
       }
     >
       <LinearGradient
-        colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.3)']}
+        colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.5)']}
         style={styles.content}
       >
         <TouchableOpacity

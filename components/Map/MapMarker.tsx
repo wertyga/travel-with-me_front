@@ -2,38 +2,64 @@ import { Image, View, StyleSheet, Text } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { Path } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+import { getCompressedUrl } from '@/utils';
 
 type Props = {
   coords: Path;
   title: string;
   description?: string;
   isChosen?: boolean;
-  images?: string[];
+  image?: string;
+  markerSize?: number;
+  children?: React.ReactNode;
   onPress: () => void;
 };
 
+const MARKER_SIZE = 50;
+
 export const MapMarker = ({
   coords,
-  images,
+  image,
   title,
+  markerSize = MARKER_SIZE,
   onPress,
   isChosen,
+  children,
 }: Props) => {
+  const rootMarkerSize = {
+    width: markerSize,
+    height: markerSize,
+    borderRadius: markerSize + 2,
+  };
+  const chosenMarkerSize = {
+    width: markerSize - 2,
+    height: markerSize - 2,
+  };
+  const markerInnerSize = {
+    width: markerSize - 4,
+    height: markerSize - 4,
+    top: (markerSize - (markerSize - 4)) / 2,
+    left: (markerSize - (markerSize - 4)) / 2,
+  };
   return (
     <Marker
       coordinate={{ latitude: coords.lat, longitude: coords.lng }}
       onPress={onPress}
       tracksViewChanges={false}
     >
-      <View style={styles.rootMarker}>
-        {isChosen && <View style={styles.chosen}></View>}
-        <View style={styles.marker}>
-          {!!images?.[0] && (
-            <Image source={{ uri: images?.[0] }} style={styles.image} />
+      <View style={{ ...styles.rootMarker, ...rootMarkerSize }}>
+        {isChosen && (
+          <View style={{ ...styles.chosen, ...chosenMarkerSize }}></View>
+        )}
+        <View style={{ ...styles.marker, ...markerInnerSize }}>
+          {!!image && (
+            <Image
+              source={{ uri: getCompressedUrl(image, markerSize) }}
+              style={styles.image}
+            />
           )}
-          {!images?.[0] && (
-            <Text style={styles.markerTitle}>{title.charAt(0)}</Text>
-          )}
+          {/*{!image && <Text style={styles.markerTitle}>{title.charAt(0)}</Text>}*/}
+          {children}
         </View>
       </View>
     </Marker>
@@ -43,58 +69,39 @@ export const MapMarker = ({
 const styles = StyleSheet.create({
   rootMarker: {
     position: 'relative',
-    width: 52,
-    height: 52,
-    borderRadius: 53,
-    // borderStyle: 'solid',
-    // borderColor: CONSTANTS.colors.bgDark,
-    // borderWidth: 1,
+    backgroundColor: 'white',
   },
   chosen: {
-    borderColor: CONSTANTS.colors.bgDark,
     backgroundColor: CONSTANTS.colors.accent,
-    borderWidth: 1,
+    borderRadius: 50,
     position: 'absolute',
-    // ...StyleSheet.absoluteFillObject,
-    width: 50,
-    height: 50,
     top: 0,
     left: 0,
-    borderRadius: 50,
   },
   marker: {
-    width: 42,
-    height: 42,
-    backgroundColor: CONSTANTS.colors.blue,
-    borderRadius: 50,
-    top: 4,
-    left: 4,
     position: 'absolute',
-    borderColor: CONSTANTS.colors.bgDark,
-    borderStyle: 'solid',
-    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    // position: 'relative',
+    borderRadius: 50,
   },
   image: {
-    width: 40,
-    height: 40,
+    width: '100%',
+    height: '100%',
     objectFit: 'cover',
     resizeMode: 'cover',
-    backgroundColor: 'red',
+    backgroundColor: CONSTANTS.colors.blue,
     borderRadius: 50,
   },
-  markerTitle: {
-    display: 'flex',
-    textTransform: 'uppercase',
-    verticalAlign: 'middle',
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 15,
-  },
+  // markerTitle: {
+  //   display: 'flex',
+  //   textTransform: 'uppercase',
+  //   verticalAlign: 'middle',
+  //   color: 'white',
+  //   fontWeight: 'bold',
+  //   textAlign: 'center',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   fontSize: 15,
+  // },
 });

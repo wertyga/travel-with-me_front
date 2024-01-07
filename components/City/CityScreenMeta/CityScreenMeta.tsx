@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { CText } from '@/components/CText';
 import { City, FONTS } from '@/types';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';

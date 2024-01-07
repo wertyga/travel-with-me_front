@@ -14,13 +14,23 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "plugins": [],
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Travel With Me to use your location."
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.wertyga.travel-with-me",
       "infoPlist": {
         "UIBackgroundModes": [
-          "audio"
+          "audio",
+          "location",
+          "fetch",
+          "remote-notification"
         ]
       }
     },
@@ -34,7 +44,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.wertyga.travelwithme"
+      "package": "com.wertyga.travelwithme",
     },
     "web": {
       "favicon": "./assets/favicon.png"

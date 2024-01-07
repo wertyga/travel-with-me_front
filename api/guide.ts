@@ -1,5 +1,5 @@
 import { baseApi } from '@/app/query';
-import { Guide, GUIDE_TAGS } from '@/types';
+import { City, Guide, GUIDE_TAGS } from '@/types';
 
 export const guideApi = baseApi.injectEndpoints({
   endpoints: build => ({
@@ -23,11 +23,20 @@ export const guideApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getGuidesCount: build.query<City[], void>({
+      query: () => {
+        return {
+          method: 'get',
+          url: '/guide/count',
+        };
+      },
+    }),
   }),
 });
 
 export const {
   useGetGuidesCategoriesQuery,
   useGetGuideQuery,
+  useGetGuidesCountQuery,
   useLazyGetGuideQuery,
 } = guideApi;

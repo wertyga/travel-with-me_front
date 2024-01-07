@@ -16,13 +16,20 @@ type Props = {
 export const CityScreenHeader = ({ style, title }: Props) => {
   const navi = useNavigation();
 
+  const isTitleExceed = title?.length > 16;
   return (
     <View style={cn(styles.container, style)}>
       <Button style={styles.btn} onPress={navi.goBack}>
         <FontAwesome name="angle-left" size={30} color="white" />
       </Button>
 
-      <CText style={styles.title} numberOfLines={2}>
+      <CText
+        style={{
+          ...styles.title,
+          lineHeight: isTitleExceed ? 30 : undefined,
+        }}
+        numberOfLines={2}
+      >
         {title}
       </CText>
 
@@ -55,7 +62,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     marginHorizontal: 5,
-    lineHeight: 30,
     width: Dimensions.get('window').width - 120, // 40 + 40 - buttons + paddingHorizontal * 2 * 15 + marginHorizontal * 2 * 10
   },
   hide: {

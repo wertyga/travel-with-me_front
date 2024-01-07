@@ -29,7 +29,7 @@ const PlaceScreen = ({ route }) => {
   if (!place || isFetching) {
     return <SafeLoader />;
   }
-  console.log(place);
+
   return (
     <MainLayout bgImage={place.images[0] || PlaceDefaultImage}>
       <CityScreenHeader title={place.title} />

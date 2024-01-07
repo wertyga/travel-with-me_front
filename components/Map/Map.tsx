@@ -17,7 +17,7 @@ export const Map = ({ points, onPress, region }: Props) => {
     longitudeDelta: 0.2,
     latitudeDelta: 0.2,
   });
-  const middlePoint = getMiddleCoordinates(points);
+  const middlePoint = getMiddleCoordinates(points.map(({ coords }) => coords));
 
   const handlePointPress = (point: Place) => () => {
     onPress(point);
@@ -38,12 +38,12 @@ export const Map = ({ points, onPress, region }: Props) => {
       zoomEnabled
       zoomTapEnabled
       onRegionChange={onRegionChange}
-      // showsUserLocation
-      // showsMyLocationButton
-      // enableZoomControl
+      showsUserLocation
+      showsMyLocationButton
+      enableZoomControl
       initialRegion={{
-        latitude: middlePoint.coords.lat,
-        longitude: middlePoint.coords.lng,
+        latitude: middlePoint.lat,
+        longitude: middlePoint.lng,
         latitudeDelta: 0.2,
         longitudeDelta: 0.2,
       }}

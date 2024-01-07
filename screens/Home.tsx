@@ -1,30 +1,14 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import CarouselEx from 'react-native-snap-carousel';
-import {
-  Dimensions,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Dimensions, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Animated from 'react-native-reanimated';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
 import { navigateToError } from '@/utils';
-import { CityFullInfo } from '@/components/City';
-import uniq from 'lodash/uniq';
-import flatten from 'lodash/flatten';
-import { Carousel } from '@/components/Carousel';
-import { SearchTotal } from '@/components/SearchTotal';
-import { GuidesCategories } from '@/components/Guide';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
-import { CONSTANTS } from '@/styles/constants';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 
 const Home = ({ route, navigation }) => {

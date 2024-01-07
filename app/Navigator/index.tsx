@@ -12,6 +12,7 @@ import SubscriptionsScreen from '@/screens/Subscriptions';
 import CitiesListScreen from '@/screens/CitiesListScreen';
 import PlaceScreen from '@/screens/PlaceScreen';
 import ProfileScreen from '@/screens/Profile';
+import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import { Header } from '@/components/Header';
 import { City, SCREENS } from '@/types';
 
@@ -25,6 +26,7 @@ export type RootStackParamList = {
   [SCREENS.GuideMap]: undefined;
   [SCREENS.Subscriptions]: undefined;
   [SCREENS.Profile]: undefined;
+  [SCREENS.WorldGuidesMap]: undefined;
   [SCREENS.Place]: { placeSlug: string };
   [SCREENS.Error]: { error: string };
 };
@@ -36,7 +38,7 @@ const Navigator = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          header: Header,
+          headerShown: false,
         }}
       >
         <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
@@ -45,6 +47,10 @@ const Navigator = () => {
         <Stack.Screen name={SCREENS.Place} component={PlaceScreen} />
         <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
         <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
+        <Stack.Screen
+          name={SCREENS.WorldGuidesMap}
+          component={WorldGuidesMap}
+        />
         <Stack.Screen
           name={SCREENS.Subscriptions}
           component={SubscriptionsScreen}

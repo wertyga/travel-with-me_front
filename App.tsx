@@ -11,9 +11,10 @@ import {
   OpenSans_400Regular as OpenSans,
   OpenSans_600SemiBold as OpenSansSemiBold,
 } from '@expo-google-fonts/open-sans';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { Toast } from '@/components/Toast';
 import { store } from '@/app/store';
+import Location from '@/app/Location';
 import { AuthProvider } from './context/AuthContext';
 import Navigator from './app/Navigator';
 
@@ -23,7 +24,7 @@ NativeWindStyleSheet.setOutput({
   default: 'native',
 });
 
-export default function App() {
+function App() {
   const [fontsLoaded, fontError] = useFonts({
     Crimson,
     CrimsonSemiBold,
@@ -48,6 +49,9 @@ export default function App() {
         <Navigator />
       </AuthProvider>
       <Toast />
+      <Location />
     </Provider>
   );
 }
+
+export default App;

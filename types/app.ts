@@ -1,3 +1,6 @@
+import { LocationStore } from './location';
+import WorldGuidesMap from '@/screens/WorldGuidesMap';
+
 export enum SCREENS {
   Home = 'Home',
   GuideMap = 'GuideMap',
@@ -11,6 +14,7 @@ export enum SCREENS {
   Profile = 'Profile',
   Place = 'Place',
   Favorite = 'Favorite',
+  WorldGuidesMap = 'WorldGuidesMap',
 }
 
 export enum FONTS {
@@ -20,3 +24,7 @@ export enum FONTS {
   OpenSans = 'OpenSans',
   OpenSansSemiBold = 'OpenSansSemiBold',
 }
+
+export type RootStore = {
+  location: LocationStore;
+};

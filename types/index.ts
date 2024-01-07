@@ -9,3 +9,4 @@ export * from './guide';
 export * from './place';
 export * from './subscription';
 export * from './app';
+export * from './location';

@@ -1,12 +1,9 @@
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { CountryPill } from '@/components/Country';
 import { CText } from '@/components/CText';
-import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
-import { GuidesSlideList } from '@/components/Guide';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
 import { FONTS, Guide } from '@/types';
 import { GuidePointsList } from '@/components/Guide/GuidePointsList/GuidePointsList';
-import { useAuth } from '@/context';
 
 type Props = {
   guide: Guide;
@@ -15,13 +12,10 @@ type Props = {
 const META_HEIGHT = 550;
 
 export const GuideMeta = ({ guide }: Props) => {
-  const { user } = useAuth();
-
   const { travelTime } = guide;
 
   return (
     <EntityMeta
-      disabled={!user}
       wrapperHeight={META_HEIGHT}
       TopContent={
         <>
