@@ -10,8 +10,9 @@ import {
 import {
   OpenSans_400Regular as OpenSans,
   OpenSans_600SemiBold as OpenSansSemiBold,
+  OpenSans_700Bold as OpenSansBold,
 } from '@expo-google-fonts/open-sans';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { Toast } from '@/components/Toast';
 import { store } from '@/app/store';
 import Location from '@/app/Location';
@@ -31,6 +32,7 @@ function App() {
     CrimsonBold,
     OpenSans,
     OpenSansSemiBold,
+    OpenSansBold,
   });
 
   useEffect(() => {

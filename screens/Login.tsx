@@ -1,10 +1,13 @@
-import { SafeAreaView, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { SignUpForm, SignInForm } from '@/components/Auth';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthCommonRequest } from '@/types';
+import { AuthCommonRequest, SCREENS } from '@/types';
+import { MainLayout } from '@/Layouts';
+import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
+import { CText } from '@/components/CText';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
@@ -38,34 +41,50 @@ const Login = ({ navigation }: Props) => {
 
     const { user } = await signIn(data);
     if (user) {
-      navigation.navigate('Home');
+      navigation.navigate(SCREENS.CitiesList);
     }
   };
 
   const { screen } = state;
-
+  const isLogin = screen === 'signin';
   return (
-    <SafeAreaView>
-      <View className="bg-slate-700 px-2 h-full w-full pt-8">
-        <Text
-          className="text-white text-right mt-2 mr-2"
-          onPress={onChangeForm}
-        >
-          {screen === 'signup' ? 'Sign in' : 'Sign up'}
-        </Text>
+    <MainLayout>
+      <CityScreenHeader
+        title={isLogin ? 'Login' : 'Register'}
+        style={styles.header}
+      />
+      <ScrollView style={styles.content}>
+        <TouchableOpacity style={styles.goToText} onPress={onChangeForm}>
+          <CText>{screen === 'signin' ? 'Register' : 'Login'}</CText>
+        </TouchableOpacity>
 
         {screen === 'signup' && <SignUpForm onSubmit={onSubmit} />}
         {screen === 'signin' && <SignInForm onSubmit={onSubmit} />}
 
         <Text
           className="text-white text-right mt-2 mr-2"
-          onPress={() => navigation.navigate('RecoveryPassword')}
+          onPress={() => navigation.navigate(SCREENS.RecoveryPassword)}
         >
           Forgot password?
         </Text>
-      </View>
-    </SafeAreaView>
+      </ScrollView>
+    </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    position: 'relative',
+    paddingHorizontal: 0,
+  },
+  content: {
+    marginTop: 70,
+  },
+  goToText: {
+    alignItems: 'flex-end',
+    width: '100%',
+    marginBottom: 10,
+  },
+});
 
 export default Login;

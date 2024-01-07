@@ -23,6 +23,7 @@ export enum FONTS {
   CrimsonBold = 'CrimsonBold',
   OpenSans = 'OpenSans',
   OpenSansSemiBold = 'OpenSansSemiBold',
+  OpenSansBold = 'OpenSansBold',
 }
 
 export type RootStore = {

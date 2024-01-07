@@ -1,9 +1,9 @@
-import { Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/Input';
-import Button from '@/components/Button';
-import React from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
 import { getRecoveryPasswordSchema } from './RecoveryPasswordForm.utils';
 
 type Props = {
@@ -16,6 +16,7 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
     handleSubmit,
     control,
     setError,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(getRecoveryPasswordSchema(codeSent)),
@@ -26,102 +27,113 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
       setError('code', { message: 'This field is required' });
       return;
     }
-    return onSubmit(data);
+    if (refetch) {
+      reset({
+        code: '',
+        password: '',
+        confirmPassword: '',
+        email: data.email,
+      });
+    }
+
+    return onSubmit({ ...data, refetch });
   };
 
   return (
     <View>
-      <Text className="text-2xl text-white p-4 mt-2 text-center font-bold">
-        Recovery password
-      </Text>
-      <View className="flex flex-col items-center mt-4 w-full">
-        <Controller
-          control={control as any}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <Input
-                className="mb-4"
-                value={value}
-                onChange={onChange}
-                placeholder="E-mail"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                textContentType="emailAddress"
-                error={errors?.email?.message}
-              />
-            );
-          }}
-          name="email"
-        />
-        {codeSent && (
-          <>
-            <Controller
-              control={control as any}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <Input
-                    className="mb-4"
-                    value={value}
-                    onChange={onChange}
-                    placeholder="Your code here"
-                    autoCapitalize="none"
-                    error={errors?.code?.message}
-                  />
-                );
-              }}
-              name="code"
+      <Controller
+        control={control as any}
+        render={({ field: { onChange, value } }) => {
+          return (
+            <Input
+              style={styles.input}
+              value={value}
+              onChange={onChange}
+              placeholder="E-mail"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              error={errors?.email?.message}
             />
-            <Controller
-              control={control as any}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <Input
-                    className="mb-4"
-                    value={value}
-                    onChange={onChange}
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    secureTextEntry
-                    textContentType="password"
-                    error={errors?.password?.message}
-                  />
-                );
-              }}
-              name="password"
-            />
-            <Controller
-              control={control as any}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <Input
-                    className="mb-4"
-                    value={value}
-                    onChange={onChange}
-                    placeholder="Confirm your password"
-                    autoCapitalize="none"
-                    secureTextEntry
-                    textContentType="password"
-                    error={errors?.confirmPassword?.message}
-                  />
-                );
-              }}
-              name="confirmPassword"
-            />
-          </>
-        )}
+          );
+        }}
+        name="email"
+      />
+      {codeSent && (
+        <>
+          <Controller
+            control={control as any}
+            render={({ field: { onChange, value } }) => {
+              return (
+                <Input
+                  style={styles.input}
+                  value={value}
+                  onChange={onChange}
+                  placeholder="Your code here"
+                  autoCapitalize="none"
+                  error={errors?.code?.message}
+                />
+              );
+            }}
+            name="code"
+          />
+          <Controller
+            control={control as any}
+            render={({ field: { onChange, value } }) => {
+              return (
+                <Input
+                  style={styles.input}
+                  value={value}
+                  onChange={onChange}
+                  placeholder="Password"
+                  autoCapitalize="none"
+                  secureTextEntry
+                  textContentType="password"
+                  error={errors?.password?.message}
+                />
+              );
+            }}
+            name="password"
+          />
+          <Controller
+            control={control as any}
+            render={({ field: { onChange, value } }) => {
+              return (
+                <Input
+                  style={styles.input}
+                  value={value}
+                  onChange={onChange}
+                  placeholder="Confirm your password"
+                  autoCapitalize="none"
+                  secureTextEntry
+                  textContentType="password"
+                  error={errors?.confirmPassword?.message}
+                />
+              );
+            }}
+            name="confirmPassword"
+          />
+        </>
+      )}
 
-        <Button className="mt-10" onPress={handleSubmit(goSubmit())}>
-          {codeSent ? 'Change password' : 'Send request'}
-        </Button>
-        {codeSent && (
-          <Text
-            onPress={handleSubmit(goSubmit(true))}
-            className="text-white mt-3 text-right"
-          >
-            Send again
-          </Text>
-        )}
-      </View>
+      <SubmitBtn onPress={handleSubmit(goSubmit())}>
+        {codeSent ? 'Change password' : 'Send request'}
+      </SubmitBtn>
+
+      {codeSent && (
+        <Text
+          onPress={handleSubmit(goSubmit(true))}
+          className="text-white mt-6 text-right"
+        >
+          Send again
+        </Text>
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    marginBottom: 15,
+  },
+});

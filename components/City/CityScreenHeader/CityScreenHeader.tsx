@@ -16,7 +16,7 @@ type Props = {
 export const CityScreenHeader = ({ style, title }: Props) => {
   const navi = useNavigation();
 
-  const isTitleExceed = title?.length > 16;
+  const isTitleExceed = title?.length >= 17;
   return (
     <View style={cn(styles.container, style)}>
       <Button style={styles.btn} onPress={navi.goBack}>

@@ -1,5 +1,5 @@
-import { SafeAreaView, View } from 'react-native';
-import { useLayoutEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
 import { RecoveryPasswordForm } from '@/components/Auth';
 import { Loader } from '@/components/Loader';
 import {
@@ -9,6 +9,10 @@ import {
 import { useAuth } from '@/context';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MainLayout } from '@/Layouts';
+import { CText } from '@/components/CText';
+import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
+import { SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'RecoveryPassword'>;
 
@@ -49,24 +53,54 @@ const RecoveryPassword = ({ navigation }: Props) => {
     if (data?.success) {
       setState(prev => ({ ...prev, codeSent: false }));
       logout();
-      navigation.navigate('Login');
+      navigation.navigate(SCREENS.Login);
     }
+  };
+
+  const onSubmit = ({ refetch, ...data }) => {
+    if (refetch) {
+      onRecoveryInit(data);
+      return;
+    }
+    if (state.codeSent) {
+      onRecovery(data);
+      return;
+    }
+
+    onRecoveryInit(data);
   };
 
   const isLoading = initLoading || changeLoading;
 
   return (
-    <SafeAreaView>
+    <MainLayout>
+      <CityScreenHeader title="Recovery Password" style={styles.header} />
+
       {isLoading && <Loader />}
 
-      <View className="w-screen h-screen bg-slate-700 px-2 h-full w-full pt-8">
-        <RecoveryPasswordForm
-          onSubmit={state.codeSent ? onRecovery : onRecoveryInit}
-          codeSent={state.codeSent}
-        />
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.goToBtn}>
+          <CText>Login</CText>
+        </TouchableOpacity>
+
+        <RecoveryPasswordForm onSubmit={onSubmit} codeSent={state.codeSent} />
       </View>
-    </SafeAreaView>
+    </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 70,
+  },
+  header: {
+    position: 'relative',
+    paddingHorizontal: 0,
+  },
+  goToBtn: {
+    alignItems: 'flex-end',
+    marginBottom: 10,
+  },
+});
 
 export default RecoveryPassword;
