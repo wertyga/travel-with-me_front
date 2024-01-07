@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet, ViewStyle } from 'react-native';
 import { CText } from '@/components/CText';
 import { Icon } from '@/components/Icon';
 import { City, FONTS } from '@/types';
+import { getCompressedUrl } from '@/utils';
 
 type Props = {
   city: City;
@@ -11,7 +12,10 @@ type Props = {
 export const CityPreview = ({ city, style }: Props) => {
   return (
     <View style={style}>
-      <Image source={{ uri: city.image }} style={styles.image} />
+      <Image
+        source={{ uri: getCompressedUrl(city.image, 200) }}
+        style={styles.image}
+      />
       <View>
         <CText style={styles.header}>{city.title}</CText>
         <View style={styles.country}>

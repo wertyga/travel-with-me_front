@@ -12,12 +12,15 @@ import { useNavigation } from '@react-navigation/native';
 import DefaultImage from '@/assets/images/default_point_image.png';
 import { CText } from '@/components/CText';
 import { CountryPill } from '@/components/Country';
+import { getCompressedUrl } from '@/utils';
 
 type Props = {
   guide: Guide;
   containerClassName?: string;
   country: string;
 };
+
+const width = Dimensions.get('screen').width * 0.7;
 
 export const GuidePreview = ({ guide, country }: Props) => {
   const navi = useNavigation();
@@ -29,7 +32,7 @@ export const GuidePreview = ({ guide, country }: Props) => {
       source={
         guide.hImage
           ? {
-              uri: guide.hImage,
+              uri: getCompressedUrl(guide.hImage, width),
             }
           : DefaultImage
       }
@@ -60,8 +63,6 @@ export const GuidePreview = ({ guide, country }: Props) => {
     </ImageBackground>
   );
 };
-
-const width = Dimensions.get('screen').width * 0.7;
 
 const styles = StyleSheet.create({
   container: {

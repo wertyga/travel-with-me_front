@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   View,
+  Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -24,6 +25,7 @@ import { useCallback, useEffect, useLayoutEffect } from 'react';
 import { useAuth } from '@/context';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { GuideMeta } from '@/components/Guide/GuideMEta/GuideMeta';
+import { getCompressedUrl } from '@/utils';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
@@ -51,7 +53,9 @@ const GuideScreen = ({ route }: Props) => {
   }
 
   return (
-    <MainLayout bgImage={guide.vImage}>
+    <MainLayout
+      bgImage={getCompressedUrl(guide.vImage, Dimensions.get('screen').width)}
+    >
       <CityScreenHeader title={guide.title} />
 
       <GuideMeta guide={guide} />

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
-import { navigateToError } from '@/utils';
+import { getCompressedUrl, navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
@@ -95,7 +95,13 @@ const Home = ({ route, navigation }) => {
         onSnapToItem={onChangeCity}
         renderItem={({ item }: any) => {
           return (
-            <Image key={item} style={styles.cityImage} source={{ uri: item }} />
+            <Image
+              key={item}
+              style={styles.cityImage}
+              source={{
+                uri: getCompressedUrl(item, Dimensions.get('screen').width),
+              }}
+            />
           );
         }}
         sliderWidth={Dimensions.get('screen').width}

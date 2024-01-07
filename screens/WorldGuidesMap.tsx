@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { MainLayout } from '@/Layouts';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import MapView, { Marker } from 'react-native-maps';
@@ -31,30 +31,32 @@ const WorldGuidesMap = () => {
     <MainLayout>
       <CityScreenHeader title="World Map" />
       {!!middlePoint && (
-        <MapView
-          style={styles.map}
-          region={EUROPE_REGION}
-          zoomEnabled
-          zoomTapEnabled
-          showsUserLocation
-          showsMyLocationButton
-          enableZoomControl
-        >
-          {cities.map(city => {
-            return (
-              <MapMarker
-                key={city.title}
-                coords={city.coords}
-                image={city.image}
-                title={city.guidesCount}
-                markerSize={42}
-                onPress={navigateToCity(city)}
-              >
-                <CText style={styles.textCount}>{city.guidesCount}</CText>
-              </MapMarker>
-            );
-          })}
-        </MapView>
+        <View style={styles.map}>
+          <MapView
+            style={styles.mapSelf}
+            region={EUROPE_REGION}
+            zoomEnabled
+            zoomTapEnabled
+            showsUserLocation
+            showsMyLocationButton
+            enableZoomControl
+          >
+            {cities.map(city => {
+              return (
+                <MapMarker
+                  key={city.title}
+                  coords={city.coords}
+                  image={city.image}
+                  title={city.guidesCount}
+                  markerSize={42}
+                  onPress={navigateToCity(city)}
+                >
+                  <CText style={styles.textCount}>{city.guidesCount}</CText>
+                </MapMarker>
+              );
+            })}
+          </MapView>
+        </View>
       )}
     </MainLayout>
   );
@@ -67,8 +69,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 15,
     top: 100,
-    borderRadius: 10,
+    borderRadius: 6,
     overflow: 'hidden',
+  },
+  mapSelf: {
+    width: '100%',
+    height: '100%',
   },
   textCount: {
     position: 'absolute',
