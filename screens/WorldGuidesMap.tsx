@@ -35,8 +35,6 @@ const WorldGuidesMap = () => {
             region={EUROPE_REGION}
             zoomEnabled
             zoomTapEnabled
-            showsUserLocation
-            showsMyLocationButton
             enableZoomControl
           >
             {cities.map(city => {

@@ -1,11 +1,10 @@
-import { Image, View, StyleSheet, Text, ImageBackground } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { Path } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
-import { Svg } from 'react-native-svg';
 import { getCompressedUrl } from '@/utils';
 import { useReducer, useState } from 'react';
-import cn from '@/app/classname';
+import { Image } from '@/components/Image';
 
 type Props = {
   coords: Path;
@@ -29,8 +28,7 @@ export const MapMarker = ({
   isChosen,
   children,
 }: Props) => {
-  const [isLoaded, setLoaded] = useState(false);
-  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  const [, setLoaded] = useState(false);
 
   const onLoad = () => {
     setTimeout(() => {
@@ -65,7 +63,8 @@ export const MapMarker = ({
           <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
           {!!image && (
             <Image
-              source={{ uri: getCompressedUrl(image, markerInnerSize.width) }}
+              uri={image}
+              width={markerInnerSize.width}
               style={styles.image}
               key={image}
               onLoad={onLoad}

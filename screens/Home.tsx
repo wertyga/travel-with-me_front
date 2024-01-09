@@ -1,9 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import { useNavigation } from '@react-navigation/native';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
+import { Image } from '@/components/Image';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
 import { getCompressedUrl, navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
@@ -97,11 +98,17 @@ const Home = ({ route, navigation }) => {
           return (
             <Image
               key={item}
+              uri={item}
+              width={windowWidth}
               style={styles.cityImage}
-              source={{
-                uri: getCompressedUrl(item, windowWidth),
-              }}
             />
+            // <Image
+            //   key={item}
+            //   style={styles.cityImage}
+            //   source={{
+            //     uri: getCompressedUrl(item, windowWidth),
+            //   }}
+            // />
           );
         }}
         sliderWidth={windowWidth}
