@@ -1,5 +1,5 @@
-import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, StyleSheet, View, Image } from 'react-native';
 import { MainLayout } from '@/Layouts';
 import MapView from 'react-native-maps';
 import { useGetGuidesCountQuery } from '@/api';

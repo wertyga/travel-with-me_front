@@ -1,8 +1,11 @@
-import { Image, View, StyleSheet, Text } from 'react-native';
+import { Image, View, StyleSheet, Text, ImageBackground } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { Path } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+import { Svg } from 'react-native-svg';
 import { getCompressedUrl } from '@/utils';
+import { useReducer, useState } from 'react';
+import cn from '@/app/classname';
 
 type Props = {
   coords: Path;
@@ -26,6 +29,15 @@ export const MapMarker = ({
   isChosen,
   children,
 }: Props) => {
+  const [isLoaded, setLoaded] = useState(false);
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+  const onLoad = () => {
+    setTimeout(() => {
+      setLoaded(true);
+    }, 300);
+  };
+
   const rootMarkerSize = {
     width: markerSize,
     height: markerSize,
@@ -41,6 +53,7 @@ export const MapMarker = ({
     top: (markerSize - (markerSize - 4)) / 2,
     left: (markerSize - (markerSize - 4)) / 2,
   };
+
   return (
     <Marker
       coordinate={{ latitude: coords.lat, longitude: coords.lng }}
@@ -48,17 +61,16 @@ export const MapMarker = ({
       tracksViewChanges={false}
     >
       <View style={{ ...styles.rootMarker, ...rootMarkerSize }}>
-        {isChosen && (
-          <View style={{ ...styles.chosen, ...chosenMarkerSize }}></View>
-        )}
         <View style={{ ...styles.marker, ...markerInnerSize }}>
+          <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
           {!!image && (
             <Image
-              source={{ uri: getCompressedUrl(image, markerSize) }}
+              source={{ uri: getCompressedUrl(image, markerInnerSize.width) }}
               style={styles.image}
+              key={image}
+              onLoad={onLoad}
             />
           )}
-          {/*{!image && <Text style={styles.markerTitle}>{title.charAt(0)}</Text>}*/}
           {children}
         </View>
       </View>
@@ -84,24 +96,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     borderRadius: 50,
+    backgroundColor: CONSTANTS.colors.blue,
   },
   image: {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
     resizeMode: 'cover',
-    backgroundColor: CONSTANTS.colors.blue,
     borderRadius: 50,
   },
-  // markerTitle: {
-  //   display: 'flex',
-  //   textTransform: 'uppercase',
-  //   verticalAlign: 'middle',
-  //   color: 'white',
-  //   fontWeight: 'bold',
-  //   textAlign: 'center',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   fontSize: 15,
-  // },
 });

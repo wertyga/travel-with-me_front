@@ -114,7 +114,6 @@ export const EntityMeta = ({
         animatedWrapperStyles,
         {
           height: wrapperHeight,
-          // top: 0,
         },
       ]}
     >
