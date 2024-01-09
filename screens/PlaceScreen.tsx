@@ -31,9 +31,10 @@ const PlaceScreen = ({ route }) => {
   }
 
   return (
-    <MainLayout bgImage={place.images[0] || PlaceDefaultImage}>
-      <CityScreenHeader title={place.title} />
-
+    <MainLayout
+      bgImage={place.images[0] || PlaceDefaultImage}
+      headerTitle={place.title}
+    >
       <PointMeta point={place} />
     </MainLayout>
   );

@@ -2,8 +2,10 @@ import { StyleSheet, View } from 'react-native';
 import { CountryPill } from '@/components/Country';
 import { CText } from '@/components/CText';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { FONTS, Guide } from '@/types';
-import { GuidePointsList } from '@/components/Guide/GuidePointsList/GuidePointsList';
+import { FONTS, Guide, SCREENS } from '@/types';
+import { GuidePointsList } from '@/components/Guide';
+import { useSubscription } from '@/hooks';
+import Button from '@/components/Button';
 
 type Props = {
   guide: Guide;
@@ -12,6 +14,7 @@ type Props = {
 const META_HEIGHT = 550;
 
 export const GuideMeta = ({ guide }: Props) => {
+  const { subscription } = useSubscription();
   const { travelTime } = guide;
 
   return (
@@ -31,14 +34,21 @@ export const GuideMeta = ({ guide }: Props) => {
         </>
       }
       BottomContent={
-        !!guide.points && (
-          <>
-            <CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>
-              Guide's points
-            </CText>
-            <GuidePointsList points={guide.points} />
-          </>
-        )
+        <>
+          {!subscription && (
+            <Button high href={SCREENS.Subscriptions}>
+              For more info get subscription
+            </Button>
+          )}
+          {!!guide.points && (
+            <>
+              <CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>
+                Guide's points
+              </CText>
+              <GuidePointsList points={guide.points} />
+            </>
+          )}
+        </>
       }
       description={guide.description}
     />

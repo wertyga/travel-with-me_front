@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { NativeWindStyleSheet } from 'nativewind';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import {
   useFonts,
   CrimsonText_400Regular as Crimson,
@@ -47,6 +48,7 @@ function App() {
 
   return (
     <Provider store={store}>
+      <StatusBar style="light" />
       <AuthProvider>
         <Navigator />
       </AuthProvider>

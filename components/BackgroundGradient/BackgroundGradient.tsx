@@ -5,7 +5,7 @@ import { CONSTANTS } from '@/styles/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 };
 

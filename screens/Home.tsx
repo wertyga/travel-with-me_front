@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
-import { Dimensions, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
@@ -8,7 +8,6 @@ import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
 import { getCompressedUrl, navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 
 const Home = ({ route, navigation }) => {
@@ -81,8 +80,9 @@ const Home = ({ route, navigation }) => {
 
   const citiesImages = cities.map(({ image }) => image);
 
+  const windowWidth = Dimensions.get('window').width;
   return (
-    <MainLayout style={styles.layout}>
+    <MainLayout style={styles.layout} headerTitle={currentCity.title}>
       {cityLoading && <Loader />}
 
       <CarouselEx
@@ -99,18 +99,16 @@ const Home = ({ route, navigation }) => {
               key={item}
               style={styles.cityImage}
               source={{
-                uri: getCompressedUrl(item, Dimensions.get('screen').width),
+                uri: getCompressedUrl(item, windowWidth),
               }}
             />
           );
         }}
-        sliderWidth={Dimensions.get('screen').width}
-        itemWidth={Dimensions.get('screen').width}
+        sliderWidth={windowWidth}
+        itemWidth={windowWidth}
       />
 
       <CityScreenMeta city={city} />
-
-      <CityScreenHeader title={currentCity.title} />
     </MainLayout>
   );
 };
@@ -118,12 +116,13 @@ const Home = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   layout: {
     paddingHorizontal: 0,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
   cityImage: {
-    width: '100%',
-    height: '100%',
-  },
-  imagePlaceholder: {
     width: '100%',
     height: '100%',
   },

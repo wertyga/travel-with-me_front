@@ -11,7 +11,7 @@ import { CText } from '@/components/CText';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
-const Login = ({ navigation }: Props) => {
+const Login = ({ navigation, route }: Props) => {
   const { signIn, signUp } = useAuth();
   const [state, setState] = useState({
     screen: 'signin',
@@ -41,7 +41,9 @@ const Login = ({ navigation }: Props) => {
 
     const { user } = await signIn(data);
     if (user) {
+      console.log({ route });
       navigation.navigate(SCREENS.CitiesList);
+      // navigation.navigate(SCREENS.CitiesList);
     }
   };
 

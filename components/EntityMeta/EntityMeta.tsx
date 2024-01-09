@@ -30,22 +30,26 @@ export const EntityMeta = ({
   description,
   BottomContent,
   disabled,
-  wrapperHeight = windowHeight - 20,
+  wrapperHeight = windowHeight - 40,
 }: Props) => {
-  const wrapperH = Math.min(wrapperHeight as number, windowHeight - 20);
+  // const wrapperH = Math.min(wrapperHeight as number, windowHeight - 20);
   const [opened, setOpened] = useState(false);
 
   const refState = useRef({
     initialState: {
-      translateY: -UPPER_CONTENT_HEIGHT,
+      // translateY: wrapperH - UPPER_CONTENT_HEIGHT,
+      translateY: 0,
+      top: windowHeight - UPPER_CONTENT_HEIGHT,
       opacity: 0,
       zIndex: 0,
       opened: false,
     },
     openedState: {
-      translateY: -wrapperH,
+      // translateY: Dimensions.get('screen').height - wrapperH - 15,
+      translateY: 0,
+      top: windowHeight - wrapperHeight,
       opacity: 1,
-      zIndex: 20,
+      zIndex: 200,
       opened: true,
     },
   });
@@ -54,6 +58,7 @@ export const EntityMeta = ({
   const animatedWrapperStyles = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: swipeValues.value.translateY }],
+      top: swipeValues.value.top,
       zIndex: swipeValues.value.zIndex,
     };
   });
@@ -74,9 +79,10 @@ export const EntityMeta = ({
 
       swipeValues.value = {
         ...swipeValues.value,
-        translateY: swipeValues.value.opened
-          ? refState.current.openedState.translateY + translationY
-          : translationY + refState.current.initialState.translateY,
+        translateY: translationY,
+        // translateY: swipeValues.value.opened
+        //   ? refState.current.openedState.translateY + translationY
+        //   : translationY + refState.current.initialState.translateY,
         opacity: translationY > 0 ? 1 : differencePercentY / 100,
       };
     })
@@ -103,7 +109,14 @@ export const EntityMeta = ({
 
   return (
     <Animated.View
-      style={[styles.metaWrapper, animatedWrapperStyles, { height: wrapperH }]}
+      style={[
+        styles.metaWrapper,
+        animatedWrapperStyles,
+        {
+          height: wrapperHeight,
+          // top: 0,
+        },
+      ]}
     >
       <BackgroundGradient style={styles.container}>
         <View style={{ flexGrow: 1 }}>
@@ -145,7 +158,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     width: windowWidth,
-    top: windowHeight,
+    // top: Math.round(windowHeight - UPPER_CONTENT_HEIGHT + 20),
   },
   container: {
     paddingHorizontal: 15,

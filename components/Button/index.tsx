@@ -7,15 +7,19 @@ import {
 import cn from '@/app/classname';
 import { CText } from '@/components/CText';
 import { CTextProps } from '@/components/CText/CText';
+import { SCREENS } from '@/types';
+import { useNavigation } from '@react-navigation/native';
 
 type CustomButtonProps = {
   children: React.ReactNode;
   style?: TouchableOpacityProps['style'];
   textStyle?: CTextProps['style'];
   onPress?: () => void;
+  href?: SCREENS;
   wide?: boolean;
   fluid?: boolean;
   outlined?: boolean;
+  high?: boolean;
 };
 
 const CustomButton = ({
@@ -26,8 +30,20 @@ const CustomButton = ({
   wide,
   fluid,
   outlined,
+  high,
+  href,
   ...rest
 }: CustomButtonProps) => {
+  const navi = useNavigation();
+
+  const handleOnPress = () => {
+    if (href) {
+      navi.navigate(href as any);
+    } else {
+      onPress?.();
+    }
+  };
+
   return (
     <TouchableOpacity
       style={cn(
@@ -35,9 +51,10 @@ const CustomButton = ({
         { [wide]: styles.wide },
         { [fluid]: styles.fluid },
         { [outlined]: styles.outlined },
+        { [high]: styles.high },
         style
       )}
-      onPress={onPress}
+      onPress={handleOnPress}
       {...rest}
     >
       {typeof children !== 'string' && children}
@@ -74,6 +91,9 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: 'white',
     borderWidth: 1,
+  },
+  high: {
+    height: 42,
   },
 });
 

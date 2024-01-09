@@ -41,7 +41,7 @@ export const LocationComponent = () => {
   };
 
   useEffect(() => {
-    getUserLocation();
+    // getUserLocation();
   }, []);
 
   return null;

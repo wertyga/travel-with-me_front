@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ViewStyle,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View } from 'react-nativewind';
@@ -23,6 +24,8 @@ type Props = {
   headerTitle?: string;
 };
 
+const { height: windowHeight } = Dimensions.get('window');
+
 export const MainLayout = ({
   children,
   style,
@@ -32,31 +35,34 @@ export const MainLayout = ({
   headerTitle,
 }: Props) => {
   return (
-    <SafeAreaView style={cn(containerStyle)}>
-      <GestureHandlerRootView>
+    <SafeAreaView style={cn(styles.main, containerStyle)}>
+      <GestureHandlerRootView style={styles.container}>
+        {!!headerTitle && (
+          <CityScreenHeader title={headerTitle} style={styles.header} />
+        )}
+
         {bgImage && (
           <ImageBackground
             source={typeof bgImage === 'string' ? { uri: bgImage } : bgImage}
+            style={styles.bgImage}
           >
             <LinearGradient
               colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
+              style={cn(
+                styles.content,
+                { [!noFooter]: styles.withFooter },
+                style
+              )}
             >
-              <View
-                style={cn(
-                  styles.container,
-                  { [!noFooter]: styles.withFooter },
-                  style
-                )}
-              >
-                {children}
-              </View>
+              {children}
             </LinearGradient>
           </ImageBackground>
         )}
         {!bgImage && (
-          <BackgroundGradient>
-            <View style={cn(styles.container, style)}>{children}</View>
-          </BackgroundGradient>
+          <>
+            <BackgroundGradient style={styles.bgGradient} />
+            <View style={cn(styles.content, style)}>{children}</View>
+          </>
         )}
 
         {!noFooter && <FooterMenu />}
@@ -66,12 +72,32 @@ export const MainLayout = ({
 };
 
 const styles = StyleSheet.create({
+  main: {},
   container: {
+    height: windowHeight,
+  },
+  bgGradient: {
     height: '100%',
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  content: {
     paddingHorizontal: 15,
-    position: 'relative',
+    height: '100%',
+  },
+  bgImage: {
+    position: 'absolute',
+    width: '100%',
+    top: 0,
+    left: 0,
+    height: windowHeight,
   },
   withFooter: {
     paddingBottom: 70,
+  },
+  header: {
+    marginTop: 50,
   },
 });

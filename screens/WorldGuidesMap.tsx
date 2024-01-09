@@ -1,8 +1,7 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { MainLayout } from '@/Layouts';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import { useGetGuidesCountQuery } from '@/api';
 import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 import { CText } from '@/components/CText';
@@ -28,8 +27,7 @@ const WorldGuidesMap = () => {
   const middlePoint = getMiddleCoordinates(cities.map(({ coords }) => coords));
 
   return (
-    <MainLayout>
-      <CityScreenHeader title="World Map" />
+    <MainLayout headerTitle="World Map">
       {!!middlePoint && (
         <View style={styles.map}>
           <MapView
@@ -66,9 +64,7 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: Dimensions.get('window').height - 180,
-    position: 'absolute',
-    left: 15,
-    top: 100,
+    marginTop: 20,
     borderRadius: 6,
     overflow: 'hidden',
   },

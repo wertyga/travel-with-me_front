@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    position: 'absolute',
+    // position: 'absolute',
     alignItems: 'center',
-    top: CONSTANTS.spaces.paddingTop,
+    // top: CONSTANTS.spaces.paddingTop,
     zIndex: 10,
-    maxWidth: Dimensions.get('window').width,
+    // maxWidth: Dimensions.get('window').width,
   },
   btn: {
     borderRadius: 10,

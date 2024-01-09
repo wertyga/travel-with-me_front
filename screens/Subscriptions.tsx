@@ -13,10 +13,11 @@ import {
 import Toast from 'react-native-toast-message';
 import { useAuth } from '@/context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useAuthGuard } from '@/hooks';
 
 const Subscriptions = () => {
-  const { user } = useAuth();
-  const navi = useNavigation();
+  const user = useAuthGuard();
+
   const [pollingIntervalForRefetchMySubscription, setPollingInterval] =
     useState(0);
 
@@ -30,13 +31,16 @@ const Subscriptions = () => {
     refetch: refetchMySubscription,
   } = useGetMySubscriptionQuery(
     { isActive: true },
-    { pollingInterval: pollingIntervalForRefetchMySubscription }
+    {
+      // pollingInterval: pollingIntervalForRefetchMySubscription,
+      skip: !user,
+    }
   );
 
   const [createSub, { isLoading: fetchLoading }] =
     useCreateSubscriptionPaymentMutation();
   const { data: { subscriptions = [] } = {}, isFetching: refetchLoading } =
-    useGetSubscriptionListQuery();
+    useGetSubscriptionListQuery(undefined, { skip: !user });
 
   const [cancelSubscription, { isLoading: cancelLoading }] =
     useCancelUserSubscriptionMutation();
@@ -67,11 +71,11 @@ const Subscriptions = () => {
     setPollingInterval(0);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      refetchMySubscription();
-    }, [])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     refetchMySubscription();
+  //   }, [])
+  // );
 
   useEffect(() => {
     return stopPolling;
@@ -89,12 +93,6 @@ const Subscriptions = () => {
       });
     }
   };
-
-  useLayoutEffect(() => {
-    if (!user) {
-      navi.navigate('Login');
-    }
-  }, []);
 
   const isLoading = loading || fetchLoading || refetchLoading || cancelLoading;
   const isShowCancelAction = !!mySubscription && !mySubscription.isCanceled;
