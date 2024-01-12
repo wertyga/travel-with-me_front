@@ -1,22 +1,37 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useGetCitiesLightListQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
 import { useNavigation } from '@react-navigation/native';
 import { CText } from '@/components/CText';
-import { CityPreview } from '@/components/City';
+import { CitiesList, CitiesMap } from '@/components/City';
 import Search from '@/components/Search';
 import { Loader } from '@/components/Loader';
 import { navigateToError } from '@/utils';
 import { useHandleFromError } from '@/hooks';
-import { FONTS, SCREENS } from '@/types';
+import cn from '@/app/classname';
+import { FONTS } from '@/types';
 
 import citiesBgImage from '@/assets/images/cities-bg2.png';
 import { CONSTANTS } from '@/styles/constants';
 
+const HEADERS_LIST = [
+  {
+    title: 'Cities',
+    id: 'list',
+  },
+  {
+    title: 'Map',
+    id: 'map',
+  },
+];
+
 const CitiesListScreen = ({ route }) => {
   const navi = useNavigation();
   const [search, setSearch] = useState('');
+  const [state, setState] = useState({
+    tab: 'list',
+  });
 
   const {
     data: { cities = [] } = {},
@@ -24,6 +39,10 @@ const CitiesListScreen = ({ route }) => {
     error,
     refetch: refetchCities,
   } = useGetCitiesLightListQuery();
+
+  const onChangeTab = (tab: string) => () => {
+    setState(prev => ({ ...prev, tab }));
+  };
 
   useLayoutEffect(() => {
     navi.setOptions({
@@ -39,15 +58,6 @@ const CitiesListScreen = ({ route }) => {
 
   useHandleFromError(route, refetchCities, isFetching);
 
-  const filteredCities = search
-    ? cities.filter(({ title, country }) => {
-        return (
-          new RegExp(search, 'i').test(title) ||
-          new RegExp(search, 'i').test(country.title)
-        );
-      })
-    : cities;
-
   return (
     <MainLayout style={styles.layout} bgImage={citiesBgImage}>
       <Search
@@ -57,22 +67,23 @@ const CitiesListScreen = ({ route }) => {
           value: search,
         }}
       />
-      <ScrollView>
-        <CText style={styles.header}>Cities</CText>
-        <View style={styles.list}>
-          {filteredCities.map(city => {
-            return (
-              <TouchableOpacity
-                key={city._id}
-                style={styles.preview}
-                onPress={() => navi.navigate(SCREENS.Home, { city })}
-              >
-                <CityPreview city={city} />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </ScrollView>
+      <View style={styles.headers}>
+        {HEADERS_LIST.map(({ title, id }) => {
+          return (
+            <CText
+              key={id}
+              style={cn(styles.header, {
+                [state.tab === id]: styles.chosenHeader,
+              })}
+              onPress={onChangeTab(id)}
+            >
+              {title}
+            </CText>
+          );
+        })}
+      </View>
+      {state.tab === 'list' && <CitiesList cities={cities} />}
+      {state.tab === 'map' && <CitiesMap />}
 
       {isFetching && <Loader />}
     </MainLayout>
@@ -83,20 +94,19 @@ const styles = StyleSheet.create({
   layout: {
     paddingTop: CONSTANTS.spaces.paddingTop,
   },
+  headers: {
+    flexDirection: 'row',
+  },
   header: {
     fontSize: 30,
     marginBottom: 15,
     marginTop: 20,
     fontFamily: FONTS.CrimsonBold,
+    width: '50%',
+    textAlign: 'center',
   },
-  list: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 20,
-    paddingBottom: 20,
-  },
-  preview: {
-    width: '46%',
+  chosenHeader: {
+    textDecorationLine: 'underline',
   },
 });
 

@@ -1,15 +1,16 @@
 import { ICONS_MAP } from '@/components/Icon/Icon';
+import { FontAwesome } from '@expo/vector-icons';
 import { SCREENS } from '@/types';
 
 export const FOOTER_MENU: {
-  icon: keyof typeof ICONS_MAP;
+  icon: keyof typeof ICONS_MAP | React.ReactNode;
   screen: SCREENS;
   title: string;
 }[] = [
   {
-    icon: 'map-point',
-    screen: SCREENS.WorldGuidesMap,
-    title: 'Map',
+    icon: <FontAwesome name="map-o" size={23} color="white" />,
+    screen: SCREENS.CitiesList,
+    title: 'Cities',
   },
   {
     icon: 'heart',

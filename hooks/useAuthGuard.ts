@@ -11,7 +11,7 @@ export const useAuthGuard = () => {
     if (!user) {
       navi.replace(SCREENS.Login);
     }
-  }, []);
+  }, [user]);
 
   return user;
 };

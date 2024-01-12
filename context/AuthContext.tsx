@@ -1,27 +1,39 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import {
-  useGetMySubscriptionQuery,
+  guideApi,
+  subscriptionApi,
   useGetSelfQuery,
+  userApi,
   useSignInMutation,
   useSignUpMutation,
 } from '@/api';
 import { AuthCommonRequest, AuthContextType } from '@/types';
 import { User } from '@/types/user';
-import { Loader } from '@/components/Loader';
 import Toast from 'react-native-toast-message';
 import { storage } from '@/utils';
 import { SafeLoader } from '@/components/SafeLoader';
+import { useDispatch } from 'react-redux';
+import {
+  baseApi,
+  GUIDE_SIGNINOUT_TAGS,
+  SIGNINOUT_VALIDATION_TAGS,
+  SUBSCRIPTION_SIGNINOUT_TAGS,
+  USER_SIGNINOUT_TAGS,
+} from '@/app/query/base-api';
 
 export const AuthContext = createContext<AuthContextType>({
   setUser: () => {},
   signIn: (() => {}) as any,
   logout: () => {},
   signUp: () => false as any,
+  isLoading: false,
 });
 
 export const AuthProvider = ({ children }) => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState<User | undefined>();
   const [token, setToken] = useState(null);
+  const [stateLoading, setStateLoading] = useState(false);
 
   // TODO: subscription
   // const { data: { subscription } = {} } = useGetMySubscriptionQuery(undefined, {
@@ -37,12 +49,20 @@ export const AuthProvider = ({ children }) => {
     skip: !token,
   });
 
+  const resetSignInOutTags = () => {
+    dispatch(guideApi.util.invalidateTags(GUIDE_SIGNINOUT_TAGS));
+    dispatch(userApi.util.invalidateTags(USER_SIGNINOUT_TAGS));
+    dispatch(subscriptionApi.util.invalidateTags(SUBSCRIPTION_SIGNINOUT_TAGS));
+  };
+
   const signIn = async ({ email, password }: AuthCommonRequest) => {
     const { data, error } = await signInFetch({ email, password });
 
     if (data?.user) {
       storage.set('token', data.user.token);
       setUser(data.user);
+      setToken(data.user.token);
+      resetSignInOutTags();
     }
 
     return { user: data?.user, error };
@@ -61,9 +81,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    storage.delete('token');
-    setToken(null);
-    setUser(null);
+    setStateLoading(true);
+
+    setTimeout(() => {
+      storage.delete('token');
+      setToken(null);
+      setUser(null);
+      setStateLoading(false);
+    });
+    setTimeout(() => {
+      resetSignInOutTags();
+    });
   };
 
   useEffect(() => {
@@ -89,11 +117,13 @@ export const AuthProvider = ({ children }) => {
     return <SafeLoader />;
   }
 
-  const isLoading = sigInLoading || sigUpLoading;
+  const isLoading = sigInLoading || sigUpLoading || stateLoading;
   return (
-    <AuthContext.Provider value={{ user, setUser, signIn, signUp, logout }}>
+    <AuthContext.Provider
+      value={{ user, setUser, signIn, signUp, logout, isLoading }}
+    >
       {children}
-      {isLoading && <Loader />}
+      {/*{isLoading && <Loader />}*/}
     </AuthContext.Provider>
   );
 };

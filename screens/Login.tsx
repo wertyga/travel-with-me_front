@@ -6,7 +6,6 @@ import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthCommonRequest, SCREENS } from '@/types';
 import { MainLayout } from '@/Layouts';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { CText } from '@/components/CText';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
@@ -41,20 +40,14 @@ const Login = ({ navigation, route }: Props) => {
 
     const { user } = await signIn(data);
     if (user) {
-      console.log({ route });
       navigation.navigate(SCREENS.CitiesList);
-      // navigation.navigate(SCREENS.CitiesList);
     }
   };
 
   const { screen } = state;
   const isLogin = screen === 'signin';
   return (
-    <MainLayout>
-      <CityScreenHeader
-        title={isLogin ? 'Login' : 'Register'}
-        style={styles.header}
-      />
+    <MainLayout headerTitle={isLogin ? 'Login' : 'Register'}>
       <ScrollView style={styles.content}>
         <TouchableOpacity style={styles.goToText} onPress={onChangeForm}>
           <CText>{screen === 'signin' ? 'Register' : 'Login'}</CText>
@@ -80,7 +73,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   content: {
-    marginTop: 70,
+    marginTop: 30,
   },
   goToText: {
     alignItems: 'flex-end',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,6 +14,7 @@ import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   children: React.ReactNode;
@@ -34,6 +35,14 @@ export const MainLayout = ({
   noFooter,
   headerTitle,
 }: Props) => {
+  const navi = useNavigation();
+
+  useLayoutEffect(() => {
+    navi.setOptions({
+      headerShown: false,
+    });
+  }, []);
+
   return (
     <SafeAreaView style={cn(styles.main, containerStyle)}>
       <GestureHandlerRootView style={styles.container}>

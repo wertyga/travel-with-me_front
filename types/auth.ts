@@ -21,6 +21,7 @@ export type AuthContextType = {
   }>;
   logout: () => void;
   signUp: (data: AuthCommonRequest) => Promise<boolean>;
+  isLoading: boolean;
 };
 
 export type ChangeEmailRequest = {

@@ -13,8 +13,9 @@ import CitiesListScreen from '@/screens/CitiesListScreen';
 import PlaceScreen from '@/screens/PlaceScreen';
 import ProfileScreen from '@/screens/Profile';
 import WorldGuidesMap from '@/screens/WorldGuidesMap';
-import { Header } from '@/components/Header';
+import TransitionScreen from '@/screens/TransitionScreen';
 import { City, SCREENS } from '@/types';
+import { useAuth } from '@/context';
 
 export type RootStackParamList = {
   [SCREENS.Home]: { city?: City; isFromError?: boolean } | undefined;
@@ -34,6 +35,12 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator = () => {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <TransitionScreen />;
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -56,11 +63,7 @@ const Navigator = () => {
           component={SubscriptionsScreen}
         />
         <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
-        <Stack.Screen
-          name={SCREENS.Login}
-          component={LoginScreen}
-          key="login-screens"
-        />
+        <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
         <Stack.Screen
           name={SCREENS.RecoveryPassword}
           component={RecoveryPasswordScreen}

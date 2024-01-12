@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CText } from '@/components/CText';
-import { Icon } from '@/components/Icon';
+import { Icon, IconNames } from '@/components/Icon';
 import cn from '@/app/classname';
 
 import { FOOTER_MENU } from '@/components/FooterMenu/FooterMenu.utils';
@@ -24,7 +24,11 @@ export const FooterMenu = () => {
             style={cn(styles.item)}
             onPress={redirectTo(screen)}
           >
-            <Icon name={icon} color="white" />
+            {typeof icon === 'string' && (
+              <Icon name={icon as IconNames} color="white" />
+            )}
+            {typeof icon === 'object' && icon}
+
             <CText style={styles.title}>{title}</CText>
           </TouchableOpacity>
         );
