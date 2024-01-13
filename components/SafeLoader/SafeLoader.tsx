@@ -1,6 +1,7 @@
-import { ActivityIndicator, StyleSheet, ImageBackground } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import safeLoaderImage from '@/assets/images/safe_loader.png';
 import { CText } from '@/components/CText';
+import { ImageBackground } from '@/components/Image';
 import { FONTS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 

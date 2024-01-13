@@ -1,1 +1,2 @@
-export { Image } from './Image';
+export { Image, CImageProps } from './Image';
+export { ImageBackground } from './ImageBackground';

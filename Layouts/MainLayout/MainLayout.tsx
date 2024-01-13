@@ -1,16 +1,11 @@
 import React, { useLayoutEffect } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ViewStyle,
-  ImageBackground,
-  Dimensions,
-} from 'react-native';
+import { SafeAreaView, StyleSheet, ViewStyle, Dimensions } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View } from 'react-nativewind';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
+import { ImageBackground, CImageProps } from '@/components/Image';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
@@ -20,7 +15,7 @@ type Props = {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
-  bgImage?: string | any;
+  bgImage?: CImageProps['source'];
   noFooter?: boolean;
   headerTitle?: string;
 };
@@ -52,7 +47,8 @@ export const MainLayout = ({
 
         {bgImage && (
           <ImageBackground
-            source={typeof bgImage === 'string' ? { uri: bgImage } : bgImage}
+            source={bgImage}
+            width={Dimensions.get('window').width}
             style={styles.bgImage}
           >
             <LinearGradient

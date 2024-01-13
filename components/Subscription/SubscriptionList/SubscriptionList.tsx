@@ -29,8 +29,7 @@ export const SubscriptionList = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    gap: 10,
-    paddingHorizontal: 10,
+    marginTop: 20,
+    gap: 20,
   },
 });

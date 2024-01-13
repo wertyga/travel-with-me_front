@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
 import { CText } from '@/components/CText';
-import { City, FONTS } from '@/types';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import { GuidesSlideList } from '@/components/Guide';
 import { CountryPill } from '@/components/Country';
 import uniq from 'lodash/uniq';
 import flatten from 'lodash/flatten';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
+import { City, FONTS } from '@/types';
 
 type Props = {
   city: City;

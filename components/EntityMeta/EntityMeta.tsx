@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View, Dimensions, ScrollView } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   runOnJS,
-  useAnimatedRef,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CText } from '@/components/CText';

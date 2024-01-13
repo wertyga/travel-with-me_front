@@ -1,34 +1,65 @@
-import { TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import { TouchableOpacity, StyleSheet, ScrollView, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { CText } from '@/components/CText';
-import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
+import { Image } from '@/components/Image';
+import cn from '@/app/classname';
 import { Place, SCREENS } from '@/types';
 import { useNavigation } from '@react-navigation/native';
+import { PointDistance } from '@/components/Point';
+import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
+import { usePlayGuide } from '@/context';
+import { useSubscription } from '@/hooks';
 
 type Props = {
-  points: Place[];
+  points: (Place & { distance?: string })[];
 };
+
+const POINT_SIZE = 100;
 
 export const GuidePointsList = ({ points }: Props) => {
   const navi = useNavigation();
+  const { subscription } = useSubscription();
+  const { togglePlay, isWatching } = usePlayGuide();
 
   return (
     <ScrollView contentContainerStyle={styles.points} horizontal>
+      {!!subscription && (
+        <TouchableOpacity style={styles.point} onPress={togglePlay}>
+          <View style={styles.image}>
+            <Ionicons
+              name={isWatching ? 'stop-circle-outline' : 'play-circle-outline'}
+              size={POINT_SIZE / 2}
+              color="white"
+            />
+          </View>
+          <CText style={styles.title}>Start Traveling</CText>
+        </TouchableOpacity>
+      )}
+
       {points.map(point => {
         return (
           <TouchableOpacity
             key={point._id}
-            style={styles.point}
+            style={cn(styles.point)}
             onPress={() =>
               navi.navigate(SCREENS.Place, { placeSlug: point.slug })
             }
           >
-            <Image
-              source={
-                point.images[0] ? { uri: point.images[0] } : GuidePlaceholder
-              }
-              style={styles.image}
-            />
-            <CText style={styles.title} numberOfLines={2}>
+            <View style={cn(styles.imageWrapper, {})}>
+              <Image
+                source={
+                  point.images[0] ? { uri: point.images[0] } : GuidePlaceholder
+                }
+                style={cn(styles.image)}
+              />
+              {!!point.distance && (
+                <PointDistance
+                  distance={point.distance}
+                  style={styles.distance}
+                />
+              )}
+            </View>
+            <CText style={cn(styles.title)} numberOfLines={2}>
               {point.title}
             </CText>
           </TouchableOpacity>
@@ -41,20 +72,48 @@ export const GuidePointsList = ({ points }: Props) => {
 const styles = StyleSheet.create({
   points: {
     flexDirection: 'row',
+    // alignItems: 'center',
     gap: 10,
   },
   point: {
     alignItems: 'center',
   },
+  imageWrapper: {
+    width: POINT_SIZE,
+    height: POINT_SIZE,
+    borderRadius: 50,
+    overflow: 'hidden',
+    position: 'relative',
+  },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 100,
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
     objectFit: 'cover',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     marginTop: 10,
-    maxWidth: 100,
+    maxWidth: POINT_SIZE,
     textAlign: 'center',
   },
+  distance: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: POINT_SIZE,
+    height: POINT_SIZE,
+    borderRadius: 50,
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  },
+  chosen: {
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderColor: 'white',
+    padding: 3,
+  },
+  chosenTitle: {},
 });

@@ -1,8 +1,9 @@
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { SubscriptionList } from '@/components/Subscription';
 import { Loader } from '@/components/Loader';
+import Button from '@/components/Button';
 import { MainLayout } from '@/Layouts';
 import {
   useCreateSubscriptionPaymentMutation,
@@ -13,29 +14,16 @@ import {
 import Toast from 'react-native-toast-message';
 import { useAuth } from '@/context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useAuthGuard } from '@/hooks';
+import { useAuthGuard, useSubscription } from '@/hooks';
 
 const Subscriptions = () => {
   const user = useAuthGuard();
+  const { subscription } = useSubscription();
 
   const [pollingIntervalForRefetchMySubscription, setPollingInterval] =
     useState(0);
 
   const { initPaymentSheet, presentPaymentSheet, loading } = usePaymentSheet();
-
-  const {
-    data: {
-      subscription: mySubscription,
-      disabledSubscriptionsIntervals = [],
-    } = {},
-    refetch: refetchMySubscription,
-  } = useGetMySubscriptionQuery(
-    { isActive: true },
-    {
-      // pollingInterval: pollingIntervalForRefetchMySubscription,
-      skip: !user,
-    }
-  );
 
   const [createSub, { isLoading: fetchLoading }] =
     useCreateSubscriptionPaymentMutation();
@@ -95,9 +83,9 @@ const Subscriptions = () => {
   };
 
   const isLoading = loading || fetchLoading || refetchLoading || cancelLoading;
-  const isShowCancelAction = !!mySubscription && !mySubscription.isCanceled;
+  const isShowCancelAction = !!subscription && !subscription.isCanceled;
   return (
-    <MainLayout>
+    <MainLayout headerTitle="Subscription" style={styles.container}>
       <StripeProvider
         publishableKey={process.env.EXPO_PUBLIC_STRIPE_PK_KEY}
         merchantIdentifier="com.wertyga.travel-with-me"
@@ -106,20 +94,24 @@ const Subscriptions = () => {
         <SubscriptionList
           onBuy={onBuy}
           subscriptions={subscriptions}
-          disabledIntervals={disabledSubscriptionsIntervals}
+          disabledIntervals={[subscription?.interval]}
         />
       </StripeProvider>
 
       {isShowCancelAction && (
-        <TouchableOpacity
-          className={`p-2 mt-2 items-center bg-red-400`}
-          onPress={cancelSubscription}
-        >
-          <Text>Cancel My Subscription</Text>
-        </TouchableOpacity>
+        <Button onPress={cancelSubscription} filled style={styles.cancelBtn}>
+          Cancel My Subscription
+        </Button>
       )}
     </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {},
+  cancelBtn: {
+    marginTop: 50,
+  },
+});
 
 export default Subscriptions;

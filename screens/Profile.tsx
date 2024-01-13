@@ -36,6 +36,14 @@ const ProfileScreen = () => {
           <CText style={styles.edit}>
             {new Date(subscription.validUntil).toLocaleDateString()}
           </CText>
+          <CText
+            style={styles.edit}
+            onPress={() => {
+              navi.navigate(SCREENS.Subscriptions);
+            }}
+          >
+            Edit
+          </CText>
         </View>
       )}
 

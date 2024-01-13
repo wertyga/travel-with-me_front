@@ -32,7 +32,9 @@ const GuideScreen = ({ route, navigation }: Props) => {
 
   return (
     <MainLayout
-      bgImage={getCompressedUrl(guide.vImage, Dimensions.get('screen').width)}
+      bgImage={{
+        uri: guide.vImage,
+      }}
       headerTitle={guide.title}
     >
       <GuideMeta guide={guide} />

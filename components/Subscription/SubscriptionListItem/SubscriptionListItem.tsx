@@ -1,7 +1,9 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { SubscriptionPreview } from '@/types';
+import { View, StyleSheet } from 'react-native';
+import Button from '@/components/Button';
 import { getCurrencyMeta } from '@/utils';
 import { CONSTANTS } from '@/styles/constants';
+import { FONTS, SubscriptionPreview } from '@/types';
+import { CText } from '@/components/CText';
 
 type Props = {
   subscription: SubscriptionPreview;
@@ -18,22 +20,17 @@ export const SubscriptionListItem = ({
     onBuy(id);
   };
 
-  const { name, id, price, description } = subscription;
+  const { name, id, price, description, interval } = subscription;
   return (
     <View style={styles.container}>
-      <Text>{name}</Text>
-      <Text>{description}</Text>
-      <Text>{`${price.amount} ${getCurrencyMeta(price.currency).sign}`}</Text>
-      <TouchableOpacity
-        onPress={handleBuy(id)}
-        style={{
-          ...styles.buyBtn,
-          ...(isDisabled ? styles.buyBtnDisabled : {}),
-        }}
-        disabled={isDisabled}
-      >
-        <Text>Buy</Text>
-      </TouchableOpacity>
+      <CText style={styles.name}>{name}</CText>
+      <CText style={styles.description}>{description}</CText>
+      <CText style={styles.price}>{`${price.amount} ${
+        getCurrencyMeta(price.currency).sign
+      }/${interval.slice(0, 2)}`}</CText>
+      <Button onPress={handleBuy(id)} filled disabled={isDisabled}>
+        {isDisabled ? 'Your subscription' : 'Subscribe'}
+      </Button>
     </View>
   );
 };
@@ -42,15 +39,16 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
-  buyBtn: {
-    marginTop: 10,
-    paddingVertical: 10,
-    width: '100%',
-    textAlign: 'center',
-    alignItems: 'center',
-    backgroundColor: CONSTANTS.colors.blue,
+  price: {
+    color: CONSTANTS.colors.ultramarine,
+    fontSize: 52,
+    fontFamily: FONTS.CrimsonSemiBold,
   },
-  buyBtnDisabled: {
-    backgroundColor: 'grey',
+  name: {
+    fontFamily: FONTS.CrimsonSemiBold,
+    fontSize: 22,
+  },
+  description: {
+    fontSize: 12,
   },
 });

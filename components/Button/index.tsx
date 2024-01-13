@@ -1,18 +1,20 @@
 import React from 'react';
 import {
   StyleSheet,
+  TextProps,
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
 import cn from '@/app/classname';
 import { CText } from '@/components/CText';
 import { CTextProps } from '@/components/CText/CText';
-import { SCREENS } from '@/types';
+import { FONTS, SCREENS } from '@/types';
 import { useNavigation } from '@react-navigation/native';
+import { CONSTANTS } from '@/styles/constants';
 
 type CustomButtonProps = {
   children: React.ReactNode;
-  style?: TouchableOpacityProps['style'];
+  style?: TouchableOpacityProps['style'] | CTextProps['style'];
   textStyle?: CTextProps['style'];
   onPress?: () => void;
   href?: SCREENS;
@@ -20,6 +22,7 @@ type CustomButtonProps = {
   fluid?: boolean;
   outlined?: boolean;
   high?: boolean;
+  filled?: boolean;
 };
 
 const CustomButton = ({
@@ -32,6 +35,8 @@ const CustomButton = ({
   outlined,
   high,
   href,
+  filled,
+  disabled,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
@@ -44,6 +49,13 @@ const CustomButton = ({
     }
   };
 
+  const textSt = {
+    // fontSize: (style as any)?.fontSize,
+    // color: (style as any)?.color,
+    // fontFamily: (style as any)?.fontFamily,
+    // fontWeight: (style as any)?.fontWeight,
+  };
+
   return (
     <TouchableOpacity
       style={cn(
@@ -52,14 +64,27 @@ const CustomButton = ({
         { [fluid]: styles.fluid },
         { [outlined]: styles.outlined },
         { [high]: styles.high },
+        { [filled]: styles.filled },
+        { [!!disabled]: styles.disabled },
         style
       )}
       onPress={handleOnPress}
+      disabled={disabled}
       {...rest}
     >
       {typeof children !== 'string' && children}
       {typeof children === 'string' && (
-        <CText style={cn(styles.text, textStyle)}>{children}</CText>
+        <CText
+          style={cn(
+            styles.text,
+            textSt,
+            { [filled]: styles.textFilled },
+            { [!!disabled]: styles.textDisabled },
+            textStyle
+          )}
+        >
+          {children}
+        </CText>
       )}
     </TouchableOpacity>
   );
@@ -94,6 +119,27 @@ const styles = StyleSheet.create({
   },
   high: {
     height: 42,
+  },
+  filled: {
+    width: '100%',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F6F5F2',
+    borderRadius: 10,
+    marginTop: 20,
+    color: CONSTANTS.colors.bgDark,
+    height: 42,
+  },
+  textFilled: {
+    color: CONSTANTS.colors.bgDark,
+    fontFamily: FONTS.OpenSansBold,
+  },
+  disabled: {
+    backgroundColor: CONSTANTS.colors.disabled,
+  },
+  textDisabled: {
+    color: CONSTANTS.colors.textDisabled,
   },
 });
 

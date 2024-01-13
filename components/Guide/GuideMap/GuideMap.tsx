@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import { Map } from '@/components/Map';
 import { Guide, Place } from '@/types';
 import { useRef, useState } from 'react';
-import { PointPreview } from '@/components/Point';
+import { PointMapMarker } from '@/components/Point';
 import CarouselEx from 'react-native-snap-carousel';
 import * as React from 'react';
 
@@ -67,7 +67,7 @@ export const GuideMap = ({ guide }: Props) => {
           onSnapToItem={onSlidePoint}
           renderItem={({ item: point }: { item: Place }) => {
             return (
-              <PointPreview point={point} onClose={onClose} key={point._id} />
+              <PointMapMarker point={point} onClose={onClose} key={point._id} />
             );
           }}
           sliderWidth={width}

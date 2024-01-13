@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { View } from 'react-native';
 import { useAuthGuard } from '@/hooks';
 import { useGetPlaceQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { SafeLoader } from '@/components/SafeLoader';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { useLayoutEffect } from 'react';
@@ -32,7 +30,7 @@ const PlaceScreen = ({ route }) => {
 
   return (
     <MainLayout
-      bgImage={place.images[0] || PlaceDefaultImage}
+      bgImage={place.images[0] ? { uri: place.images[0] } : PlaceDefaultImage}
       headerTitle={place.title}
     >
       <PointMeta point={place} />

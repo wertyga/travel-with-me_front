@@ -2,8 +2,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { Path } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
-import { getCompressedUrl } from '@/utils';
-import { useReducer, useState } from 'react';
+import { useState } from 'react';
 import { Image } from '@/components/Image';
 
 type Props = {
@@ -63,7 +62,7 @@ export const MapMarker = ({
           <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
           {!!image && (
             <Image
-              uri={image}
+              source={{ uri: image }}
               width={markerInnerSize.width}
               style={styles.image}
               key={image}

@@ -1,11 +1,11 @@
 import {
-  ImageBackground,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { ImageBackground } from '@/components/Image';
 import { Place } from '@/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import DefaultImage from '@/assets/images/default_point_image.png';
@@ -17,7 +17,7 @@ type Props = {
   onClose: () => void;
 };
 
-export const PointPreview = ({ point, onClose }: Props) => {
+export const PointMapMarker = ({ point, onClose }: Props) => {
   const { images, title, coords, description } = point;
 
   return (

@@ -1,12 +1,11 @@
 import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
 import Button from '@/components/Button';
-import { Feather, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { CText } from '@/components/CText';
 import { FONTS } from '@/types';
 import { useNavigation } from '@react-navigation/native';
-import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   style?: StyleProp<ViewStyle>;

@@ -6,7 +6,7 @@ import { SafeLoader } from '@/components/SafeLoader';
 import { Loader } from '@/components/Loader';
 import { Image } from '@/components/Image';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
-import { getCompressedUrl, navigateToError } from '@/utils';
+import { navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
@@ -98,17 +98,10 @@ const Home = ({ route, navigation }) => {
           return (
             <Image
               key={item}
-              uri={item}
+              source={{ uri: item }}
               width={windowWidth}
               style={styles.cityImage}
             />
-            // <Image
-            //   key={item}
-            //   style={styles.cityImage}
-            //   source={{
-            //     uri: getCompressedUrl(item, windowWidth),
-            //   }}
-            // />
           );
         }}
         sliderWidth={windowWidth}

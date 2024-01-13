@@ -17,7 +17,7 @@ import { Provider } from 'react-redux';
 import { Toast } from '@/components/Toast';
 import { store } from '@/app/store';
 import Location from '@/app/Location';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, PlayGuideProvider } from './context';
 import Navigator from './app/Navigator';
 
 SplashScreen.preventAutoHideAsync();
@@ -50,7 +50,9 @@ function App() {
     <Provider store={store}>
       <StatusBar style="light" />
       <AuthProvider>
-        <Navigator />
+        <PlayGuideProvider>
+          <Navigator />
+        </PlayGuideProvider>
       </AuthProvider>
       <Toast />
       <Location />
