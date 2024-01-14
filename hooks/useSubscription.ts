@@ -1,11 +1,52 @@
-import { useGetMySubscriptionQuery } from '@/api';
+import {
+  useCancelMySubscriptionMutation,
+  useCreateSubscriptionPaymentMutation,
+  useGetMySubscriptionQuery,
+  useGetSubscriptionListQuery,
+  useRenewMySubscriptionMutation,
+} from '@/api';
 import { useAuth } from '@/context';
 
-export const useSubscription = () => {
-  const { user } = useAuth();
-  const { data: { subscription } = {} } = useGetMySubscriptionQuery(undefined, {
-    skip: !user,
-  });
+type Props = {
+  withList?: boolean;
+};
 
-  return { subscription };
+export const useSubscription = (props?: Props) => {
+  const { user } = useAuth();
+
+  const [createSubscription, { isLoading: fetchLoading }] =
+    useCreateSubscriptionPaymentMutation();
+
+  const { data: { subscriptions = [] } = {}, isFetching: refetchLoading } =
+    useGetSubscriptionListQuery(undefined, { skip: !user || !props?.withList });
+
+  const [cancelSubscription, { isLoading: cancelLoading }] =
+    useCancelMySubscriptionMutation();
+
+  const { data: { subscription } = {}, isFetching: getMyLoading } =
+    useGetMySubscriptionQuery(undefined, {
+      skip: !user,
+    });
+
+  const [
+    renewMySubscription,
+    {
+      data: { subscription: renewedSubscription } = {},
+      isLoading: renewLoading,
+    },
+  ] = useRenewMySubscriptionMutation();
+
+  return {
+    subscription,
+    subscriptions,
+    cancelSubscription,
+    createSubscription,
+    renewMySubscription,
+    isLoading:
+      fetchLoading ||
+      refetchLoading ||
+      cancelLoading ||
+      getMyLoading ||
+      renewLoading,
+  };
 };

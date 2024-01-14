@@ -10,6 +10,7 @@ import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { useNavigation } from '@react-navigation/native';
+import { Loader } from '@/components/Loader';
 
 type Props = {
   children: React.ReactNode;
@@ -17,6 +18,7 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
   bgImage?: CImageProps['source'];
   noFooter?: boolean;
+  isLoading?: boolean;
   headerTitle?: string;
 };
 
@@ -29,6 +31,7 @@ export const MainLayout = ({
   bgImage,
   noFooter,
   headerTitle,
+  isLoading,
 }: Props) => {
   const navi = useNavigation();
 
@@ -40,6 +43,7 @@ export const MainLayout = ({
 
   return (
     <SafeAreaView style={cn(styles.main, containerStyle)}>
+      {isLoading && <Loader />}
       <GestureHandlerRootView style={styles.container}>
         {!!headerTitle && (
           <CityScreenHeader title={headerTitle} style={styles.header} />

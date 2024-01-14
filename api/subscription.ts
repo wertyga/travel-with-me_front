@@ -6,9 +6,12 @@ import {
   GetSubscriptionListResponse,
   SUBSCRIPTION_TAGS,
   SuccessResponse,
-  UserSubscription,
 } from '@/types';
-import { USER_SIGNINOUT_TAGS } from '@/app/query/base-api';
+import {
+  SIGNINOUT_VALIDATION_TAGS,
+  SUBSCRIPTION_SIGNINOUT_TAGS,
+  USER_SIGNINOUT_TAGS,
+} from '@/app/query/base-api';
 
 export const subscriptionApi = baseApi.injectEndpoints({
   endpoints: build => ({
@@ -41,11 +44,18 @@ export const subscriptionApi = baseApi.injectEndpoints({
         params,
       }),
     }),
-    cancelUserSubscription: build.mutation<SuccessResponse, void>({
-      invalidatesTags: result => (!!result ? USER_SIGNINOUT_TAGS : []),
+    cancelMySubscription: build.mutation<SuccessResponse, void>({
+      invalidatesTags: result => (!!result ? SIGNINOUT_VALIDATION_TAGS : []),
       query: () => ({
         method: 'delete',
         url: '/subscription/',
+      }),
+    }),
+    renewMySubscription: build.mutation<SuccessResponse, void>({
+      invalidatesTags: result => (!!result ? SIGNINOUT_VALIDATION_TAGS : []),
+      query: () => ({
+        method: 'put',
+        url: '/subscription/renew',
       }),
     }),
   }),
@@ -57,5 +67,6 @@ export const {
   useGetMySubscriptionQuery,
   useLazyGetUserSubscriptionQuery,
   useCreateSubscriptionPaymentMutation,
-  useCancelUserSubscriptionMutation,
+  useCancelMySubscriptionMutation,
+  useRenewMySubscriptionMutation,
 } = subscriptionApi;
