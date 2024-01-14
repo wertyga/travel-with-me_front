@@ -21,9 +21,6 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
 
   return (
     <View>
-      <Text className="text-2xl text-white p-4 mt-2 text-center font-bold">
-        Change e-mail
-      </Text>
       <View className="flex flex-col items-center mt-4 w-full">
         <Controller
           control={control as any}

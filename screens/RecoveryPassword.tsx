@@ -1,7 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
 import { RecoveryPasswordForm } from '@/components/Auth';
-import { Loader } from '@/components/Loader';
 import {
   useRecoveryPasswordInitMutation,
   useRecoveryPasswordMutation,
@@ -11,13 +10,12 @@ import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'RecoveryPassword'>;
 
 const RecoveryPassword = ({ navigation }: Props) => {
-  const { logout } = useAuth();
+  const { logout, setBackScreen } = useAuth();
   const [state, setState] = useState({
     codeSent: false,
   });
@@ -52,8 +50,8 @@ const RecoveryPassword = ({ navigation }: Props) => {
     const { data } = await changePassword({ email, token: code, password });
     if (data?.success) {
       setState(prev => ({ ...prev, codeSent: false }));
+      setBackScreen(SCREENS.Login);
       logout();
-      navigation.navigate(SCREENS.Login);
     }
   };
 
@@ -73,11 +71,7 @@ const RecoveryPassword = ({ navigation }: Props) => {
   const isLoading = initLoading || changeLoading;
 
   return (
-    <MainLayout>
-      <CityScreenHeader title="Recovery Password" style={styles.header} />
-
-      {isLoading && <Loader />}
-
+    <MainLayout headerTitle="Recovery Password" isLoading={isLoading}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.goToBtn}>
           <CText>Login</CText>
@@ -91,7 +85,7 @@ const RecoveryPassword = ({ navigation }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 70,
+    marginTop: 30,
   },
   header: {
     position: 'relative',

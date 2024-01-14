@@ -1,5 +1,8 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useRef, useState } from 'react';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '@/screens/Home';
 import ErrorScreen from '@/screens/Error';
@@ -35,14 +38,23 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator = () => {
-  const { isLoading } = useAuth();
+  const navigationRef = useNavigationContainerRef();
+  const { isLoading, backScreen, setBackScreen } = useAuth();
 
   if (isLoading) {
     return <TransitionScreen />;
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        if (backScreen) {
+          navigationRef.navigate(backScreen as any);
+          setBackScreen();
+        }
+      }}
+    >
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

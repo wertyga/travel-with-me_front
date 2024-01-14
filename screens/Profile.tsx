@@ -27,7 +27,14 @@ const ProfileScreen = () => {
       <CText style={styles.item}>{user.username}</CText>
       <View style={styles.item}>
         <CText>{user.email}</CText>
-        <CText style={styles.edit}>Edit</CText>
+        <CText
+          style={styles.edit}
+          onPress={() => {
+            navi.navigate(SCREENS.ChangeEmail);
+          }}
+        >
+          Edit
+        </CText>
       </View>
 
       {!!subscription && (

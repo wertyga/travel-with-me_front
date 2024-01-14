@@ -9,7 +9,6 @@ import {
 } from '@/types';
 import {
   SIGNINOUT_VALIDATION_TAGS,
-  SUBSCRIPTION_SIGNINOUT_TAGS,
   USER_SIGNINOUT_TAGS,
 } from '@/app/query/base-api';
 

@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { CText } from '@/components/CText';
-import { FONTS } from '@/types';
+import { FONTS, SCREENS } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 
 type Props = {
@@ -15,10 +15,18 @@ type Props = {
 export const CityScreenHeader = ({ style, title }: Props) => {
   const navi = useNavigation();
 
+  const goBack = () => {
+    if (navi.canGoBack()) {
+      navi.goBack();
+    } else {
+      navi.navigate(SCREENS.CitiesList);
+    }
+  };
+
   const isTitleExceed = title?.length >= 17;
   return (
     <View style={cn(styles.container, style)}>
-      <Button style={styles.btn} onPress={navi.goBack}>
+      <Button style={styles.btn} onPress={goBack}>
         <FontAwesome name="angle-left" size={30} color="white" />
       </Button>
 

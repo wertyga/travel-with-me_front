@@ -12,18 +12,6 @@ export type AuthCommonRequest = {
   username?: string;
 };
 
-export type AuthContextType = {
-  user?: User;
-  setUser: (user: User) => void;
-  signIn: (data: AuthCommonRequest) => Promise<{
-    user?: User;
-    error?: { message: string; statusCode: number };
-  }>;
-  logout: () => void;
-  signUp: (data: AuthCommonRequest) => Promise<boolean>;
-  isLoading: boolean;
-};
-
 export type ChangeEmailRequest = {
   newEmail: string;
   password: string;

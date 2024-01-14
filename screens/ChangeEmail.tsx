@@ -8,6 +8,8 @@ import { useAuth } from '@/context';
 import Toast from 'react-native-toast-message';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MainLayout } from '@/Layouts';
+import { CText } from '@/components/CText';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChangeEmail'>;
 
@@ -41,19 +43,10 @@ const RecoveryPassword = ({ navigation }: Props) => {
   );
 
   return (
-    <SafeAreaView>
-      {isLoading && <Loader />}
-
-      <View className="w-screen h-screen bg-slate-700 px-2 h-full w-full pt-8">
-        <ChangeEmailForm onSubmit={onSubmit} />
-        <Text
-          onPress={() => navigation.navigate('Home')}
-          className="pt-2 text-white text-right"
-        >
-          Go to home
-        </Text>
-      </View>
-    </SafeAreaView>
+    <MainLayout headerTitle="Change E-mail" isLoading={isLoading}>
+      <CText>Enter confirmation number</CText>
+      <ChangeEmailForm onSubmit={onSubmit} />
+    </MainLayout>
   );
 };
 

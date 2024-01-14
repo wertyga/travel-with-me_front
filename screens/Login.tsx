@@ -11,7 +11,7 @@ import { CText } from '@/components/CText';
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const Login = ({ navigation, route }: Props) => {
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, sigUpLoading, sigInLoading } = useAuth();
   const [state, setState] = useState({
     screen: 'signin',
   });
@@ -29,15 +29,15 @@ const Login = ({ navigation, route }: Props) => {
     }));
   };
 
-  const onSubmit = async (data: AuthCommonRequest) => {
-    if (state.screen === 'signup') {
-      const isSuccess = await signUp(data);
+  const onSignUp = async (data: AuthCommonRequest) => {
+    const isSuccess = await signUp(data);
 
-      if (isSuccess) {
-        setState(prev => ({ ...prev, screen: 'signin' }));
-      }
+    if (isSuccess) {
+      setState(prev => ({ ...prev, screen: 'signin' }));
     }
+  };
 
+  const onSignIn = async (data: AuthCommonRequest) => {
     const { user } = await signIn(data);
     if (user) {
       navigation.navigate(SCREENS.CitiesList);
@@ -46,15 +46,19 @@ const Login = ({ navigation, route }: Props) => {
 
   const { screen } = state;
   const isLogin = screen === 'signin';
+  const isLoading = sigUpLoading || sigInLoading;
   return (
-    <MainLayout headerTitle={isLogin ? 'Login' : 'Register'}>
+    <MainLayout
+      headerTitle={isLogin ? 'Login' : 'Register'}
+      isLoading={isLoading}
+    >
       <ScrollView style={styles.content}>
         <TouchableOpacity style={styles.goToText} onPress={onChangeForm}>
           <CText>{screen === 'signin' ? 'Register' : 'Login'}</CText>
         </TouchableOpacity>
 
-        {screen === 'signup' && <SignUpForm onSubmit={onSubmit} />}
-        {screen === 'signin' && <SignInForm onSubmit={onSubmit} />}
+        {screen === 'signup' && <SignUpForm onSubmit={onSignUp} />}
+        {screen === 'signin' && <SignInForm onSubmit={onSignIn} />}
 
         <Text
           className="text-white text-right mt-2 mr-2"

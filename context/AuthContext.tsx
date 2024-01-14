@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect, useRef } from 'react';
 import {
   guideApi,
   subscriptionApi,
@@ -7,38 +7,53 @@ import {
   useSignInMutation,
   useSignUpMutation,
 } from '@/api';
-import { AuthCommonRequest, AuthContextType } from '@/types';
+import { AuthCommonRequest, SCREENS } from '@/types';
 import { User } from '@/types/user';
 import Toast from 'react-native-toast-message';
 import { storage } from '@/utils';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useDispatch } from 'react-redux';
 import {
-  baseApi,
   GUIDE_SIGNINOUT_TAGS,
-  SIGNINOUT_VALIDATION_TAGS,
   SUBSCRIPTION_SIGNINOUT_TAGS,
   USER_SIGNINOUT_TAGS,
 } from '@/app/query/base-api';
 
+export type AuthContextType = {
+  user?: User;
+  signIn: (data: AuthCommonRequest) => Promise<{
+    user?: User;
+    error?: { message: string; statusCode: number };
+  }>;
+  logout: (backScreen?: SCREENS) => void;
+  signUp: (data: AuthCommonRequest) => Promise<boolean>;
+  isLoading: boolean;
+  sigUpLoading: boolean;
+  sigInLoading: boolean;
+  backScreen?: SCREENS;
+  setBackScreen: (screen?: SCREENS) => void;
+};
+
 export const AuthContext = createContext<AuthContextType>({
-  setUser: () => {},
   signIn: (() => {}) as any,
   logout: () => {},
+  setBackScreen: () => {},
   signUp: () => false as any,
   isLoading: false,
+  sigUpLoading: false,
+  sigInLoading: false,
 });
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const [user, setUser] = useState<User | undefined>();
-  const [token, setToken] = useState(null);
-  const [stateLoading, setStateLoading] = useState(false);
+  const backScreen = useRef<SCREENS>();
+  const [state, setState] = useState({
+    user: undefined,
+    token: null,
+    loading: false,
+    backScreen: undefined,
+  });
 
-  // TODO: subscription
-  // const { data: { subscription } = {} } = useGetMySubscriptionQuery(undefined, {
-  //   skip: !user,
-  // });
   const [signInFetch, { isLoading: sigInLoading }] = useSignInMutation();
   const [signUpFetch, { isLoading: sigUpLoading }] = useSignUpMutation();
   const {
@@ -46,8 +61,14 @@ export const AuthProvider = ({ children }) => {
     isFetching: selfFetching,
     error: fetchSelfError,
   } = useGetSelfQuery(undefined, {
-    skip: !token,
+    skip: !state.token,
   });
+
+  const isLoading = selfFetching || state.loading;
+
+  const setBackScreen = (screen?: SCREENS) => {
+    setState(prev => ({ ...prev, backScreen: screen as any }));
+  };
 
   const resetSignInOutTags = () => {
     dispatch(guideApi.util.invalidateTags(GUIDE_SIGNINOUT_TAGS));
@@ -60,8 +81,7 @@ export const AuthProvider = ({ children }) => {
 
     if (data?.user) {
       storage.set('token', data.user.token);
-      setUser(data.user);
-      setToken(data.user.token);
+      setState(prev => ({ ...prev, user: data.user, token: data.user.token }));
       resetSignInOutTags();
     }
 
@@ -81,13 +101,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    setStateLoading(true);
+    setState(prev => ({ ...prev, loading: true }));
 
     setTimeout(() => {
       storage.delete('token');
-      setToken(null);
-      setUser(null);
-      setStateLoading(false);
+      setState(prev => ({
+        ...prev,
+        user: undefined,
+        token: null,
+        loading: false,
+      }));
     });
     setTimeout(() => {
       resetSignInOutTags();
@@ -97,14 +120,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     storage.get('token').then(token => {
       if (!token) return;
-      setToken(token);
+      setState(prev => ({ ...prev, token }));
     });
   }, []);
 
   useEffect(() => {
     if (!userSelf) return;
 
-    setUser(userSelf);
+    setState(prev => ({ ...prev, user: userSelf }));
   }, [userSelf]);
 
   useEffect(() => {
@@ -113,17 +136,21 @@ export const AuthProvider = ({ children }) => {
     logout();
   }, [fetchSelfError]);
 
-  if (selfFetching) {
-    return <SafeLoader />;
-  }
-
-  const isLoading = sigInLoading || sigUpLoading || stateLoading;
   return (
     <AuthContext.Provider
-      value={{ user, setUser, signIn, signUp, logout, isLoading }}
+      value={{
+        user: state.user,
+        signIn,
+        signUp,
+        logout,
+        isLoading,
+        sigUpLoading,
+        sigInLoading,
+        backScreen: state.backScreen,
+        setBackScreen,
+      }}
     >
       {children}
-      {/*{isLoading && <Loader />}*/}
     </AuthContext.Provider>
   );
 };

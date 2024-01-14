@@ -25,8 +25,6 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     recoveryPassword: build.mutation<UserResponse, RecoveryPasswordRequest>({
-      invalidatesTags: result =>
-        result ? [USER_TAGS.List, USER_TAGS.Self] : [],
       query: data => ({
         method: 'post',
         url: '/auth/change-password',
