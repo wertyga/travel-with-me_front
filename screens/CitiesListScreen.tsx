@@ -7,6 +7,7 @@ import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
 import Search from '@/components/Search';
 import { Loader } from '@/components/Loader';
+import { GlobalSearch } from '@/components/GlobalSearch';
 import { navigateToError } from '@/utils';
 import { useHandleFromError } from '@/hooks';
 import cn from '@/app/classname';
@@ -28,7 +29,6 @@ const HEADERS_LIST = [
 
 const CitiesListScreen = ({ route }) => {
   const navi = useNavigation();
-  const [search, setSearch] = useState('');
   const [state, setState] = useState({
     tab: 'list',
   });
@@ -60,13 +60,7 @@ const CitiesListScreen = ({ route }) => {
 
   return (
     <MainLayout style={styles.layout} bgImage={citiesBgImage}>
-      <Search
-        inputProps={{
-          placeholder: "I'm looking for...",
-          onChangeText: setSearch,
-          value: search,
-        }}
-      />
+      <GlobalSearch />
       <View style={styles.headers}>
         {HEADERS_LIST.map(({ title, id }) => {
           return (

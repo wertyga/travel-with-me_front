@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useGetGuideQuery } from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GuideMap, GuideMeta } from '@/components/Guide';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback, useEffect, useLayoutEffect } from 'react';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
-import { getCompressedUrl } from '@/utils';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
-const GuideScreen = ({ route, navigation }: Props) => {
+const GuideScreen = ({ route }: Props) => {
   const { guideSlug } = route.params || {};
   const navi = useNavigation();
 

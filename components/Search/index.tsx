@@ -1,3 +1,4 @@
+import { ReactNode, useState } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -7,18 +8,16 @@ import {
   ViewStyle,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { ReactNode, useState } from 'react';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { FONTS } from '@/types';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
-import { TextInputTextInputEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 
-type Props = TextInputProps & {
+type Props = {
   icon?: ReactNode;
   style?: StyleProp<ViewStyle>;
   inputProps?: TextInputProps;
-  onSearch?: (data: NativeSyntheticEvent<TextInputTextInputEventData>) => void;
+  onSearch?: (search: string) => void;
+  disabled?: boolean;
 };
 
 const Search = ({
@@ -26,13 +25,12 @@ const Search = ({
   style,
   inputProps: { style: inputStyles, ...inputProps } = {},
   onSearch,
+  disabled,
 }: Props) => {
   const [search, setSearch] = useState('');
 
   const handleConfirm = () => {
-    onSearch?.({
-      value: (inputProps as TextInputProps)?.value || search,
-    } as NativeSyntheticEvent<TextInputTextInputEventData>);
+    onSearch?.((inputProps as TextInputProps)?.value || search);
   };
 
   return (
@@ -40,6 +38,7 @@ const Search = ({
       <TextInput
         style={cn(styles.input, inputStyles)}
         value={search}
+        onEndEditing={handleConfirm}
         onChangeText={setSearch}
         placeholderTextColor="rgba(0, 53, 59, 0.60)"
         {...inputProps}
@@ -47,6 +46,7 @@ const Search = ({
       <TouchableOpacity style={styles.search} onPress={handleConfirm}>
         {icon || <Feather name="search" size={20} color="black" />}
       </TouchableOpacity>
+      {disabled && <View style={styles.placeholder} />}
     </View>
   );
 };
@@ -54,11 +54,12 @@ const Search = ({
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
+    overflow: 'hidden',
+    borderRadius: 10,
   },
   input: {
     backgroundColor: 'white',
     height: 40,
-    borderRadius: 10,
     paddingHorizontal: 15,
     paddingRight: 45,
     color: 'rgba(0, 53, 59, 0.60)',
@@ -72,6 +73,12 @@ const styles = StyleSheet.create({
     width: 40,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  placeholder: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
 });
 

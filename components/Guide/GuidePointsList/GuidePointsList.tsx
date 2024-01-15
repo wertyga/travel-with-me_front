@@ -72,7 +72,6 @@ export const GuidePointsList = ({ points }: Props) => {
 const styles = StyleSheet.create({
   points: {
     flexDirection: 'row',
-    // alignItems: 'center',
     gap: 10,
   },
   point: {

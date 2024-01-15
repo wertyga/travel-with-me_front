@@ -6,3 +6,4 @@ export * from './user';
 export * from './oauth';
 export * from './subscription';
 export * from './place';
+export * from './search';
