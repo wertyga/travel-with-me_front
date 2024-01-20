@@ -1,11 +1,22 @@
-import { createContext, useContext, useRef, useState } from 'react';
-import { startWatchToLiveLocation } from '@/utils/map';
-import { Path } from '@/types';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
+import {
+  calculateDistance,
+  getNearestPoint,
+  startWatchToLiveLocation,
+} from '@/utils/map';
+import { Guide, Path, Place, SCREENS } from '@/types';
+import { useNavigation } from '@react-navigation/native';
 
 const PlayGuideContext = createContext<{
-  onPlay: () => void;
+  onPlay: (guide: Guide) => void;
   onStop: () => void;
-  togglePlay: () => void;
+  togglePlay: (guide: Guide) => void;
   currentLocation?: Path;
   isWatching?: boolean;
 }>({
@@ -15,8 +26,12 @@ const PlayGuideContext = createContext<{
   isWatching: false,
 });
 
+const MIN_DISTANCE_TO_POINT = 0.01; // 10m
+
 export const PlayGuideProvider = ({ children }) => {
+  const navi = useNavigation();
   const location = useRef<any>(null);
+  const currentGuide = useRef<Guide | null>(null);
   const [state, setState] = useState<{
     currentLocation?: Path;
     isWatching: boolean;
@@ -25,20 +40,40 @@ export const PlayGuideProvider = ({ children }) => {
     isWatching: false,
   });
 
-  const watchCallback = (coords: Path) => {
-    setState(prev => ({ ...prev, currentLocation: coords }));
-  };
+  const watchCallback = useCallback(
+    (coords: Path) => {
+      const nearestPoint = getNearestPoint(
+        currentGuide.current?.points as Place[],
+        coords
+      );
+      const distanceToNearestPoint = calculateDistance(
+        nearestPoint?.coords,
+        coords,
+        true
+      );
 
-  const onPlay = async () => {
+      const { name: currentRouteName } = navi.getCurrentRoute();
+      const isGuideMapScreen = currentRouteName === SCREENS.GuideMap;
+      const isPlaceScreen = currentRouteName === SCREENS.Place;
+      console.log({ distanceToNearestPoint, isGuideMapScreen });
+
+      setState(prev => ({ ...prev, currentLocation: coords }));
+    },
+    [navi]
+  );
+
+  const onPlay = async (guide: Guide) => {
     if (location.current) return;
 
     location.current = await startWatchToLiveLocation(watchCallback);
+    currentGuide.current = guide;
     setState(prev => ({ ...prev, isWatching: true }));
   };
 
   const onStop = () => {
     location.current?.remove();
     location.current = null;
+    currentGuide.current = null;
     setState(prev => ({
       ...prev,
       isWatching: false,
@@ -46,12 +81,12 @@ export const PlayGuideProvider = ({ children }) => {
     }));
   };
 
-  const togglePlay = () => {
+  const togglePlay = (guide: Guide) => {
     if (state.isWatching) {
       return onStop();
     }
 
-    return onPlay();
+    return onPlay(guide);
   };
 
   return (

@@ -42,3 +42,9 @@ export type Guide = {
   createdAt: string;
   pointsCount?: number;
 };
+
+export type GuideStore = {
+  chosenPoint?: Place;
+  nearestPoint?: Place;
+  choosePointType?: 'manual' | 'auto';
+};

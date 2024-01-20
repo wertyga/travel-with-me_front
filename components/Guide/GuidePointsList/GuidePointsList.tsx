@@ -3,38 +3,42 @@ import { Ionicons } from '@expo/vector-icons';
 import { CText } from '@/components/CText';
 import { Image } from '@/components/Image';
 import cn from '@/app/classname';
-import { Place, SCREENS } from '@/types';
+import { Guide, Place, SCREENS } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import { PointDistance } from '@/components/Point';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
-import { usePlayGuide } from '@/context';
 import { useSubscription } from '@/hooks';
 
 type Props = {
   points: (Place & { distance?: string })[];
+  guide: Guide;
 };
 
 const POINT_SIZE = 100;
 
-export const GuidePointsList = ({ points }: Props) => {
+export const GuidePointsList = ({ points, guide }: Props) => {
   const navi = useNavigation();
   const { subscription } = useSubscription();
-  const { togglePlay, isWatching } = usePlayGuide();
 
   return (
     <ScrollView contentContainerStyle={styles.points} horizontal>
-      {!!subscription && (
-        <TouchableOpacity style={styles.point} onPress={togglePlay}>
-          <View style={styles.image}>
-            <Ionicons
-              name={isWatching ? 'stop-circle-outline' : 'play-circle-outline'}
-              size={POINT_SIZE / 2}
-              color="white"
-            />
-          </View>
-          <CText style={styles.title}>Start Traveling</CText>
-        </TouchableOpacity>
-      )}
+      {/*{!!subscription && (*/}
+      {/*  <TouchableOpacity*/}
+      {/*    style={styles.point}*/}
+      {/*    onPress={() => {*/}
+      {/*      navi.navigate(SCREENS.GuideMap, { guideSlug: guide.slug });*/}
+      {/*    }}*/}
+      {/*  >*/}
+      {/*    <View style={styles.image}>*/}
+      {/*      <Ionicons*/}
+      {/*        name="play-circle-outline"*/}
+      {/*        size={POINT_SIZE / 2}*/}
+      {/*        color="white"*/}
+      {/*      />*/}
+      {/*    </View>*/}
+      {/*    <CText style={styles.title}>Start Traveling</CText>*/}
+      {/*  </TouchableOpacity>*/}
+      {/*)}*/}
 
       {points.map(point => {
         return (

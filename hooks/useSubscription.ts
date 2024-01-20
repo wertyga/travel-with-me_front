@@ -18,7 +18,7 @@ export const useSubscription = (props?: Props) => {
     useCreateSubscriptionPaymentMutation();
 
   const { data: { subscriptions = [] } = {}, isFetching: refetchLoading } =
-    useGetSubscriptionListQuery(undefined, { skip: !user || !props?.withList });
+    useGetSubscriptionListQuery(undefined, { skip: !props?.withList });
 
   const [cancelSubscription, { isLoading: cancelLoading }] =
     useCancelMySubscriptionMutation();

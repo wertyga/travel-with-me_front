@@ -3,68 +3,91 @@ import { Place } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { StyleSheet } from 'react-native';
 import { getMiddleCoordinates } from '@/components/Map/Map.utils';
-import { useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { LatLng } from 'react-native-maps/lib/sharedTypes';
 
 type Props = {
   points: Place[];
+  chosenPoint?: Place;
   onPress: (point: Place & { isChosen?: boolean }) => void;
-  region?: LatLng & { latitudeDelta?: number; longitudeDelta?: number };
+  mapMarkerSize?: number;
 };
 
-export const Map = ({ points, onPress, region }: Props) => {
-  const [state, setState] = useState({
-    longitudeDelta: 0.2,
-    latitudeDelta: 0.2,
-  });
-  const middlePoint = getMiddleCoordinates(points.map(({ coords }) => coords));
+export const Map = React.memo(
+  ({ points, onPress, mapMarkerSize, chosenPoint }: Props) => {
+    const delta = useRef({ latitudeDelta: 0.2, longitudeDelta: 0.2 });
 
-  const handlePointPress = (point: Place) => () => {
-    onPress(point);
-  };
+    const handlePointPress = useCallback(
+      (point: Place) => () => {
+        onPress(point);
+      },
+      []
+    );
 
-  const onRegionChange = ({ longitudeDelta, latitudeDelta }) => {
-    setState(prev => ({ ...prev, longitudeDelta, latitudeDelta }));
-  };
+    const onRegionChange = useCallback(({ latitudeDelta, longitudeDelta }) => {
+      delta.current = { latitudeDelta, longitudeDelta };
+    }, []);
 
-  const { longitudeDelta, latitudeDelta } = state;
-  const currentRegion = region
-    ? { longitudeDelta, latitudeDelta, ...region }
-    : undefined;
-  return (
-    <MapView
-      style={styles.container}
-      region={currentRegion}
-      zoomEnabled
-      zoomTapEnabled
-      onRegionChange={onRegionChange}
-      showsUserLocation
-      showsMyLocationButton
-      enableZoomControl
-      initialRegion={{
-        latitude: middlePoint.lat,
-        longitude: middlePoint.lng,
-        latitudeDelta: 0.2,
-        longitudeDelta: 0.2,
-      }}
-    >
-      {points.map((point, index) => {
-        const { coords, title, description, images, isChosen } = point;
-        return (
-          <MapMarker
-            key={index}
-            onPress={handlePointPress(point)}
-            {...{ coords, title, description, images, isChosen }}
-          />
-        );
-      })}
-    </MapView>
-  );
-};
+    const region = useMemo(() => {
+      return chosenPoint
+        ? {
+            latitude: chosenPoint.coords.lat,
+            longitude: chosenPoint.coords.lng,
+          }
+        : undefined;
+    }, [chosenPoint]);
+
+    const { middlePoint, formattedPoints } = useMemo(() => {
+      return {
+        middlePoint: getMiddleCoordinates(points.map(({ coords }) => coords)),
+        formattedPoints: points.map(point => ({
+          ...point,
+          isChosen: point._id === chosenPoint?._id,
+        })),
+      };
+    }, [points, chosenPoint]);
+
+    const { latitudeDelta, longitudeDelta } = delta.current;
+    const currentRegion = useMemo(() => {
+      return region ? { latitudeDelta, longitudeDelta, ...region } : undefined;
+    }, [region]);
+
+    return (
+      <MapView
+        style={styles.container}
+        zoomEnabled
+        zoomTapEnabled
+        region={currentRegion}
+        onRegionChange={onRegionChange}
+        showsUserLocation
+        showsMyLocationButton
+        enableZoomControl
+        initialRegion={{
+          latitude: middlePoint.lat,
+          longitude: middlePoint.lng,
+          latitudeDelta,
+          longitudeDelta,
+        }}
+      >
+        {formattedPoints.map((point, index) => {
+          const { coords, title, description, images, isChosen } = point;
+          return (
+            <MapMarker
+              key={index}
+              onPress={handlePointPress(point)}
+              markerSize={mapMarkerSize}
+              isChosenExists={!!chosenPoint}
+              {...{ coords, title, description, images, isChosen }}
+            />
+          );
+        })}
+      </MapView>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    ...StyleSheet.absoluteFillObject,
   },
 });

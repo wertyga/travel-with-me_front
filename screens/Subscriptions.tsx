@@ -5,8 +5,12 @@ import Button from '@/components/Button';
 import { MainLayout } from '@/Layouts';
 import Toast from 'react-native-toast-message';
 import { useSubscription } from '@/hooks';
+import { useAuth } from '@/context';
+import { useNavigation } from '@react-navigation/native';
+import { SCREENS } from '@/types';
 
 const Subscriptions = () => {
+  const navi = useNavigation();
   const {
     subscription,
     subscriptions,
@@ -15,6 +19,7 @@ const Subscriptions = () => {
     renewMySubscription,
     isLoading: subLoading,
   } = useSubscription({ withList: true });
+  const { user, setBackScreen } = useAuth();
 
   const {
     initPaymentSheet,
@@ -45,6 +50,12 @@ const Subscriptions = () => {
   };
 
   const onBuy = async (subscriptionId: string) => {
+    if (!user) {
+      setBackScreen(SCREENS.Subscriptions);
+      navi.navigate(SCREENS.Login);
+      return;
+    }
+
     try {
       await initializePaymentSheet(subscriptionId);
       await presentPaymentSheet();

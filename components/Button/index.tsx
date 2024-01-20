@@ -41,19 +41,14 @@ const CustomButton = ({
 }: CustomButtonProps) => {
   const navi = useNavigation();
 
+  const { fontSize, color, fontFamily, fontWeight, ...btnStyle } = style || {};
+
   const handleOnPress = () => {
     if (href) {
       navi.navigate(href as any);
     } else {
       onPress?.();
     }
-  };
-
-  const textSt = {
-    // fontSize: (style as any)?.fontSize,
-    // color: (style as any)?.color,
-    // fontFamily: (style as any)?.fontFamily,
-    // fontWeight: (style as any)?.fontWeight,
   };
 
   return (
@@ -66,7 +61,7 @@ const CustomButton = ({
         { [high]: styles.high },
         { [filled]: styles.filled },
         { [!!disabled]: styles.disabled },
-        style
+        btnStyle
       )}
       onPress={handleOnPress}
       disabled={disabled}
@@ -77,10 +72,9 @@ const CustomButton = ({
         <CText
           style={cn(
             styles.text,
-            textSt,
+            { fontSize, color, fontFamily, fontWeight },
             { [filled]: styles.textFilled },
-            { [!!disabled]: styles.textDisabled },
-            textStyle
+            { [!!disabled]: styles.textDisabled }
           )}
         >
           {children}
@@ -121,14 +115,11 @@ const styles = StyleSheet.create({
     height: 42,
   },
   filled: {
-    width: '100%',
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F6F5F2',
     borderRadius: 10,
-    marginTop: 20,
-    color: CONSTANTS.colors.bgDark,
     height: 42,
   },
   textFilled: {

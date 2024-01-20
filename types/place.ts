@@ -17,6 +17,7 @@ export type Place = {
   coords: Path;
   owner: User;
   likes: Like;
+  isChosen?: boolean;
 };
 
 export type GetPlaceResponse = {

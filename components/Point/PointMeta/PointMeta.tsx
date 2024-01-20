@@ -9,6 +9,7 @@ import { FONTS, Place } from '@/types';
 
 type Props = {
   point: Place;
+  autoplay?: boolean;
 };
 
 const META_HEIGHT = 600;
@@ -22,7 +23,7 @@ const META_TEXT = {
   },
 };
 
-export const PointMeta = ({ point }: Props) => {
+export const PointMeta = ({ point, autoplay }: Props) => {
   const [state, setState] = useState({
     chosen: 'description' as keyof typeof META_TEXT,
   });
@@ -76,7 +77,7 @@ export const PointMeta = ({ point }: Props) => {
         !!audioStory && (
           <>
             <CText style={styles.aboutText}>Audio play of the story</CText>
-            <AudioPlayer audioUrl={audioStory} />
+            <AudioPlayer audioUrl={audioStory} autoplay={autoplay} />
           </>
         )
       }

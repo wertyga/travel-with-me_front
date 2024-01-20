@@ -3,5 +3,3 @@ import { rootReducer } from './root-reducer';
 import { middlewares } from './middlewares';
 
 export const store = createStore(rootReducer, middlewares);
-
-export type AppStore = ReturnType<typeof store>;

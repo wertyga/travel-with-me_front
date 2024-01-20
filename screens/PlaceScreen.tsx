@@ -11,7 +11,7 @@ import PlaceDefaultImage from '@/assets/images/guide_placeholder.png';
 const PlaceScreen = ({ route }) => {
   const navi = useNavigation();
   useAuthGuard();
-  const { params: { placeSlug } = {} } = route;
+  const { params: { placeSlug, autoplay } = {} } = route;
 
   const { data: { place } = {}, isFetching } = useGetPlaceQuery(
     { slug: placeSlug },
@@ -33,7 +33,7 @@ const PlaceScreen = ({ route }) => {
       bgImage={place.images[0] ? { uri: place.images[0] } : PlaceDefaultImage}
       headerTitle={place.title}
     >
-      <PointMeta point={place} />
+      <PointMeta point={place} autoplay={autoplay} />
     </MainLayout>
   );
 };

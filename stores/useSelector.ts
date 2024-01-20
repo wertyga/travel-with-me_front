@@ -6,11 +6,3 @@ export const useSelector = <OUTPUT = any>(
 ) => {
   return useReduxSelector<RootStore, OUTPUT>(selector);
 };
-
-// const { isInBasket } = useSelector<RootStore, { isInBasket: boolean }>(
-// 	({ basket }) => {
-// 		return {
-// 			isInBasket: !!basket.products.find(product => product.id === productId),
-// 		};
-// 	},
-// );

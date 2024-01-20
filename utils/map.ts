@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import { Path } from '@/types';
+import { Path, Place } from '@/types';
 import { LocationAccuracy } from 'expo-location';
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -21,7 +21,11 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
-export const calculateDistance = (point1?: Path, point2?: Path) => {
+export const calculateDistance = (
+  point1?: Path,
+  point2?: Path,
+  onlyNumber?: boolean
+) => {
   if (!point1 || !point2) return undefined;
 
   const kmDistance = getDistanceFromLatLonInKm(
@@ -31,35 +35,57 @@ export const calculateDistance = (point1?: Path, point2?: Path) => {
     point2.lng
   );
   const roundedDistance = kmDistance.toFixed(kmDistance > 100 ? 0 : 2);
+  if (onlyNumber) {
+    return kmDistance;
+  }
 
   return `${roundedDistance} km`;
 };
 
-export const getNearestCoords = (coordsList: Path[], coords2: Path) => {
-  if (!coordsList.length) return;
+export const getNearestPoint = (pointsList: Place[], coords2: Path) => {
+  if (!pointsList.length) return;
 
-  return coordsList.reduce((acc, { lat, lng }) => {
-    const lngDelta = lng - coords2.lng;
-    const latDelta = lat - coords2.lat;
-    if (lngDelta < acc.lng && latDelta < acc.lat) {
-      return { lat, lng };
+  let closestDistance;
+  return pointsList.reduce((acc, point) => {
+    const distance = calculateDistance(coords2, point.coords, true);
+
+    if (!closestDistance || distance < closestDistance) {
+      closestDistance = distance;
+      return point;
     }
 
     return acc;
-  }, coordsList[0]);
+  }, pointsList[0]);
+};
+
+export const getLocationPermission = async () => {
+  let { status } = await Location.getForegroundPermissionsAsync();
+
+  if (status === 'undetermined') {
+    const data = await Location.requestForegroundPermissionsAsync();
+    status = data.status;
+  }
+
+  return status;
 };
 
 export const startWatchToLiveLocation = async (
-  callback: (coords: Path) => void
+  callback: (coords: Path) => void,
+  minDistance?: number
 ) => {
-  const { status } = await Location.getForegroundPermissionsAsync();
+  let status = await getLocationPermission();
+
+  if (status !== 'granted') {
+    const data = await Location.requestForegroundPermissionsAsync();
+    status = data.status;
+  }
 
   if (status !== 'granted') return;
 
   return Location.watchPositionAsync(
     {
       accuracy: LocationAccuracy.BestForNavigation,
-      // distanceInterval: 10,
+      distanceInterval: minDistance,
       timeInterval: 1000,
     },
     newLocation => {

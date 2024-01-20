@@ -1,42 +1,39 @@
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { CountryPill } from '@/components/Country';
 import { CText } from '@/components/CText';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { FONTS, Guide, Place, SCREENS } from '@/types';
+import { FONTS, Guide, SCREENS } from '@/types';
 import { useSubscription } from '@/hooks';
 import Button from '@/components/Button';
-import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
-import { GuidePlayBtn } from '@/components/Guide/GuidePlayBtn/GuidePlayBtn';
-import { useState } from 'react';
-import { calculateDistance, getNearestCoords } from '@/utils/map';
+import { calculateDistance } from '@/utils/map';
 import { usePlayGuide } from '@/context';
+
+import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
+import { Ionicons } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   guide: Guide;
 };
 
-const META_HEIGHT = 550;
-
-const MY_LOC = {
-  lat: 52.308684,
-  lng: 21.058919,
-};
+const { height } = Dimensions.get('window');
+const META_HEIGHT = height - 120;
 
 export const GuideMeta = ({ guide }: Props) => {
-  const { currentLocation } = usePlayGuide();
-  const [state, setState] = useState<{ nearestPoint?: Place }>({});
+  const navi = useNavigation();
+  // const { currentLocation } = usePlayGuide();
   const { subscription } = useSubscription();
 
-  const guidesWithDistanceDelta = guide.points?.map(point => {
-    return {
-      ...point,
-      distance: calculateDistance(point.coords, currentLocation),
-    };
-  });
+  // const pointsWithDistanceDelta = guide.points?.map(point => {
+  //   return {
+  //     ...point,
+  //     distance: calculateDistance(point.coords, currentLocation),
+  //   };
+  // });
 
   const { travelTime } = guide;
-  const isRenderPointsList =
-    !!guidesWithDistanceDelta?.length && !!subscription;
+  const isRenderPointsList = !!guide.points?.length && !!subscription;
 
   return (
     <EntityMeta
@@ -51,7 +48,27 @@ export const GuideMeta = ({ guide }: Props) => {
             />
           </View>
 
-          <CText style={styles.aboutText}>About the guide</CText>
+          <View style={styles.title}>
+            <CText style={styles.aboutText}>About the guide</CText>
+            <View style={styles.actions}>
+              <Ionicons
+                name="play-circle-outline"
+                size={24}
+                color="white"
+                onPress={() =>
+                  navi.navigate(SCREENS.GuideMap, { guideSlug: guide.slug })
+                }
+              />
+              <SimpleLineIcons
+                name="map"
+                size={24}
+                color="white"
+                onPress={() =>
+                  navi.navigate(SCREENS.GuideMap, { guideSlug: guide.slug })
+                }
+              />
+            </View>
+          </View>
         </>
       }
       BottomContent={
@@ -65,15 +82,12 @@ export const GuideMeta = ({ guide }: Props) => {
               For more info get subscription
             </Button>
           )}
-          {/*{!!subscription && (*/}
-          {/*  <GuidePlayBtn guide={guide} style={styles.playBtn} />*/}
-          {/*)}*/}
           {isRenderPointsList && (
             <>
               <CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>
                 Guide's points
               </CText>
-              <GuidePointsList points={guidesWithDistanceDelta as any} />
+              <GuidePointsList points={guide.points} guide={guide} />
             </>
           )}
         </>
@@ -87,10 +101,20 @@ const styles = StyleSheet.create({
   meta: {
     flexDirection: 'row',
   },
+  title: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   aboutText: {
     fontFamily: FONTS.CrimsonSemiBold,
     fontSize: 22,
-    marginBottom: 15,
+    marginRight: 15,
   },
   pointsTitle: {
     marginTop: 10,

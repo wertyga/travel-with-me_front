@@ -1,5 +1,6 @@
 import { LocationStore } from './location';
 import WorldGuidesMap from '@/screens/WorldGuidesMap';
+import { GuideStore } from '@/types/guide';
 
 export enum SCREENS {
   Home = 'Home',
@@ -27,5 +28,6 @@ export enum FONTS {
 }
 
 export type RootStore = {
-  location: LocationStore;
+  locationStore: LocationStore;
+  guideStore: GuideStore;
 };

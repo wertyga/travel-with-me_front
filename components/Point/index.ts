@@ -1,2 +1,2 @@
-export { PointMapMarker } from './PointMapMarker/PointMapMarker';
+export { PointMapMarkerPreview } from './PointMapMarkerPreview/PointMapMarkerPreview';
 export { PointDistance } from './PointDistance/PointDistance';

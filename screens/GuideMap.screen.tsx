@@ -5,19 +5,25 @@ import { MainLayout } from '@/Layouts';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GuideMap } from '@/components/Guide';
-import { useNavigation } from '@react-navigation/native';
-import { useLayoutEffect } from 'react';
-import { useAuth } from '@/context';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect, useLayoutEffect } from 'react';
 import Toast from 'react-native-toast-message';
+import { useAuthGuard } from '@/hooks';
+import {
+  onStopWatchLocation,
+  dropGuideStoreStateAction,
+  onStartWatchingAction,
+} from '@/stores';
+import { useDispatch } from 'react-redux';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
-const GuideScreen = ({ route }: Props) => {
-  const { user } = useAuth();
+const GuideMapScreen = ({ route }: Props) => {
+  useAuthGuard();
   const navi = useNavigation();
 
   const { data: guide, isLoading } = useGetGuideQuery(
-    { slug: route.params?.guideSlug },
+    { slug: route.params?.guideSlug, withStory: true },
     { skip: !route.params?.guideSlug }
   );
 
@@ -27,21 +33,38 @@ const GuideScreen = ({ route }: Props) => {
         type: 'error',
         text1: 'No guide slug was provided',
       });
-    }
-    if (!user) {
-      navi.navigate('Login');
+      navi.goBack();
     }
   }, []);
+
+  useEffect(() => {
+    if (guide) {
+      onStartWatchingAction(guide);
+    }
+  }, [guide]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        onStopWatchLocation();
+        dropGuideStoreStateAction();
+      };
+    }, [])
+  );
 
   if (!guide || isLoading) {
     return <SafeLoader />;
   }
 
   return (
-    <MainLayout>
+    <MainLayout
+      headerTitle={guide.title}
+      bgImage={!!guide.vImage ? { uri: guide.vImage } : undefined}
+      noFooter
+    >
       <GuideMap guide={guide} />
     </MainLayout>
   );
 };
 
-export default GuideScreen;
+export default GuideMapScreen;

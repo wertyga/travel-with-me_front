@@ -3,13 +3,17 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { AudioLine } from './AudioLine';
+import { Sound } from 'expo-av/src/Audio/Sound';
 
 type Props = {
   audioUrl: string;
+  autoplay?: boolean;
 };
 
-export const AudioPlayer = ({ audioUrl }: Props) => {
-  const audio = useRef<any>();
+let commonAudio: Sound | null = null;
+
+export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
+  const audio = useRef<Sound | null>(null);
   const [state, setState] = useState({
     isPlaying: false,
     isLoading: false,
@@ -27,13 +31,18 @@ export const AudioPlayer = ({ audioUrl }: Props) => {
   };
 
   async function playSound() {
+    if (commonAudio) {
+      await commonAudio.stopAsync();
+      commonAudio = null;
+    }
+
     if (audio.current) {
-      const { isPlaying } = await audio.current.getStatusAsync();
+      const { isPlaying } = await audio.current?.getStatusAsync();
       if (isPlaying) {
-        audio.current.pauseAsync();
+        audio.current?.pauseAsync();
         setState(prev => ({ ...prev, isPaused: true }));
       } else {
-        audio.current.playAsync();
+        audio.current?.playAsync();
         setState(prev => ({ ...prev, isPaused: false }));
       }
       return;
@@ -45,18 +54,30 @@ export const AudioPlayer = ({ audioUrl }: Props) => {
       onPlaybackStatusUpdate
     );
 
-    audio.current = sound;
+    audio.current = sound as Sound;
+    commonAudio = sound as Sound;
 
     setState(prev => ({ ...prev, isLoading: false }));
     await sound.playAsync();
   }
 
+  const dropState = () => {
+    audio.current?.unloadAsync();
+    audio.current = null;
+    commonAudio = null;
+  };
+
   useEffect(() => {
+    if (autoplay) {
+      playSound();
+    } else if (state.isPlaying || state.isLoading) {
+      dropState();
+    }
+
     return () => {
-      audio.current?.unloadAsync();
-      audio.current = null;
+      dropState();
     };
-  }, []);
+  }, [autoplay]);
 
   useEffect(() => {
     if (state.playedPercent !== 100 || state.isPlaying) return;

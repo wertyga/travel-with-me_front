@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import {
   NavigationContainer,
+  NavigationContainerRefWithCurrent,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,8 +9,8 @@ import HomeScreen from '@/screens/Home';
 import ErrorScreen from '@/screens/Error';
 import LoginScreen from '@/screens/Login';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
-import GuideScreen from '@/screens/Guide';
-import GuideMapScreen from '@/screens/GuideMapScreen';
+import GuideScreen from '@/screens/Guide.screen';
+import GuideMapScreen from '@/screens/GuideMap.screen';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import SubscriptionsScreen from '@/screens/Subscriptions';
 import CitiesListScreen from '@/screens/CitiesListScreen';
@@ -18,7 +19,7 @@ import ProfileScreen from '@/screens/Profile';
 import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import TransitionScreen from '@/screens/TransitionScreen';
 import { City, SCREENS } from '@/types';
-import { useAuth } from '@/context';
+import { useAuth, PlayGuideProvider } from '@/context';
 
 export type RootStackParamList = {
   [SCREENS.Home]: { city?: City; isFromError?: boolean } | undefined;
@@ -27,15 +28,16 @@ export type RootStackParamList = {
   [SCREENS.Login]: undefined;
   [SCREENS.Guide]: { guideSlug: string };
   [SCREENS.CitiesList]: undefined;
-  [SCREENS.GuideMap]: undefined;
+  [SCREENS.GuideMap]: { guideSlug: string };
   [SCREENS.Subscriptions]: undefined;
   [SCREENS.Profile]: undefined;
   [SCREENS.WorldGuidesMap]: undefined;
-  [SCREENS.Place]: { placeSlug: string };
+  [SCREENS.Place]: { placeSlug: string; autoplay?: boolean };
   [SCREENS.Error]: { error: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+export let navigation: NavigationContainerRefWithCurrent<any> | undefined;
 
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
@@ -49,42 +51,49 @@ const Navigator = () => {
     <NavigationContainer
       ref={navigationRef}
       onReady={() => {
+        navigation = navigationRef;
+
         if (backScreen) {
           navigationRef.navigate(backScreen as any);
           setBackScreen();
         }
       }}
     >
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
-        <Stack.Screen name={SCREENS.Home} component={HomeScreen} />
-        <Stack.Screen name={SCREENS.Profile} component={ProfileScreen} />
-        <Stack.Screen name={SCREENS.Place} component={PlaceScreen} />
-        <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
-        <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
-        <Stack.Screen
-          name={SCREENS.WorldGuidesMap}
-          component={WorldGuidesMap}
-        />
-        <Stack.Screen
-          name={SCREENS.Subscriptions}
-          component={SubscriptionsScreen}
-        />
-        <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
-        <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
-        <Stack.Screen
-          name={SCREENS.RecoveryPassword}
-          component={RecoveryPasswordScreen}
-        />
-        <Stack.Screen
-          name={SCREENS.ChangeEmail}
-          component={ChangeEmailScreen}
-        />
-      </Stack.Navigator>
+      <PlayGuideProvider>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen
+            name={SCREENS.CitiesList}
+            component={CitiesListScreen}
+          />
+          <Stack.Screen name={SCREENS.Home} component={HomeScreen} />
+          <Stack.Screen name={SCREENS.Profile} component={ProfileScreen} />
+          <Stack.Screen name={SCREENS.Place} component={PlaceScreen} />
+          <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
+          <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
+          <Stack.Screen
+            name={SCREENS.WorldGuidesMap}
+            component={WorldGuidesMap}
+          />
+          <Stack.Screen
+            name={SCREENS.Subscriptions}
+            component={SubscriptionsScreen}
+          />
+          <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
+          <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
+          <Stack.Screen
+            name={SCREENS.RecoveryPassword}
+            component={RecoveryPasswordScreen}
+          />
+          <Stack.Screen
+            name={SCREENS.ChangeEmail}
+            component={ChangeEmailScreen}
+          />
+        </Stack.Navigator>
+      </PlayGuideProvider>
     </NavigationContainer>
   );
 };

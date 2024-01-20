@@ -1,8 +1,8 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useGetCitiesLightListQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
 import Search from '@/components/Search';
@@ -49,6 +49,14 @@ const CitiesListScreen = ({ route }) => {
       headerShown: false,
     });
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setState(prev => ({ ...prev, tab: 'list' }));
+      };
+    }, [])
+  );
 
   useEffect(() => {
     if (!error) return;

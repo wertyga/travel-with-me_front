@@ -15,9 +15,8 @@ import {
 } from '@expo-google-fonts/open-sans';
 import { Provider } from 'react-redux';
 import { Toast } from '@/components/Toast';
-import { store } from '@/app/store';
-import Location from '@/app/Location';
-import { AuthProvider, PlayGuideProvider } from './context';
+import { store } from '@/app/store/create-isomorphic-store';
+import { AuthProvider } from './context';
 import Navigator from './app/Navigator';
 
 SplashScreen.preventAutoHideAsync();
@@ -50,12 +49,10 @@ function App() {
     <Provider store={store}>
       <StatusBar style="light" />
       <AuthProvider>
-        <PlayGuideProvider>
-          <Navigator />
-        </PlayGuideProvider>
+        <Navigator />
       </AuthProvider>
       <Toast />
-      <Location />
+      {/*<Location />*/}
     </Provider>
   );
 }
