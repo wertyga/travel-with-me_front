@@ -44,9 +44,14 @@ const PlaceScreen = ({ route }) => {
       bgImage={place.images[0] ? { uri: place.images[0] } : PlaceDefaultImage}
       headerTitle={place.title}
     >
-      <TouchableOpacity style={styles.galleryBtn} onPress={onToggleShowGallery}>
-        <Ionicons name="images-outline" size={30} color="white" />
-      </TouchableOpacity>
+      {!!place.images.length && (
+        <TouchableOpacity
+          style={styles.galleryBtn}
+          onPress={onToggleShowGallery}
+        >
+          <Ionicons name="images-outline" size={30} color="white" />
+        </TouchableOpacity>
+      )}
       <PointMeta point={place} autoplay={autoplay} />
 
       {isShowGalley && (
