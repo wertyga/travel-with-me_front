@@ -47,7 +47,7 @@ export const EntityMeta = ({
       translateY: 0,
       top: windowHeight - wrapperHeight,
       opacity: 1,
-      zIndex: 200,
+      zIndex: 2000,
       opened: true,
     },
   });
