@@ -48,7 +48,7 @@ export const GuideActions = ({ guide, isWithPreviewOpened }: Props) => {
 
   return (
     <ScrollView
-      style={cn({ ...styles.container, top: isWithPreviewOpened ? 35 : 10 })}
+      style={cn({ ...styles.container, top: isWithPreviewOpened ? 45 : 10 })}
       contentContainerStyle={styles.actions}
       horizontal
     >
@@ -134,9 +134,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 30,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: 'black',
   },
   activeBtn: {
     backgroundColor: CONSTANTS.colors.bg1,
+    borderColor: CONSTANTS.colors.bg1,
   },
   pointBtn: {
     marginLeft: 5,

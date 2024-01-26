@@ -10,6 +10,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { FONTS, Place } from '@/types';
+import { useLayout } from '@/context';
 
 type Props = {
   point: Place;
@@ -20,6 +21,7 @@ const TRANSLATION_Y_OFFSET = 150;
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 export const PointImagesCarousel = ({ point, onClose }: Props) => {
+  const { height: windowHeight } = useLayout();
   const swipeTopValue = useSharedValue({
     translateX: 0,
     translateY: 0,

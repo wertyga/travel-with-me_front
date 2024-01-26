@@ -10,17 +10,20 @@ import { StatusBar } from 'expo-status-bar';
 import { useSelector } from '@/stores';
 import { GuideActions } from '@/components/Guide/GuideMap/GuideActions';
 import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
+import { useLayout } from '@/context';
 
 type Props = {
   guide: Guide;
 };
 
-const { height: windowHeight, width: windowWidth } = Dimensions.get('window');
+const { width: windowWidth } = Dimensions.get('window');
 const PREVIEW_HEIGHT = 350;
 const EXPANDED_TOP_MAP = 25;
 
 export const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
+  const { height: windowHeight } = useLayout();
+
   const visiblePoint = useSelector(
     ({ guideStore }) => guideStore?.visiblePoint
   );
@@ -64,6 +67,7 @@ export const GuideMap = ({ guide }: Props) => {
       ...prev,
       pointShowing: chosenPoint,
       pointChosenType: 'manual',
+      isShowCarouselImages: false,
     }));
   };
 
