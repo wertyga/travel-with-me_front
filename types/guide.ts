@@ -44,7 +44,10 @@ export type Guide = {
 };
 
 export type GuideStore = {
-  chosenPoint?: Place;
-  nearestPoint?: Place;
-  choosePointType?: 'manual' | 'auto';
+  visiblePoint?: Place;
+  nearestPoint?: {
+    point: Place;
+    distance: number;
+  };
+  isGuideMuted?: boolean;
 };

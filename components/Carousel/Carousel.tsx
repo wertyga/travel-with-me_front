@@ -1,6 +1,7 @@
+import * as React from 'react';
 import { View, Image } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
-import * as React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
   images: string[];

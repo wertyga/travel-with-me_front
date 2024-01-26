@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { CText } from '@/components/CText';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import { GuidesSlideList } from '@/components/Guide';
@@ -7,12 +7,15 @@ import uniq from 'lodash/uniq';
 import flatten from 'lodash/flatten';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
 import { City, FONTS } from '@/types';
+import { useLayout } from '@/context';
 
 type Props = {
   city: City;
 };
 
 export const CityScreenMeta = ({ city }: Props) => {
+  const { height } = useLayout();
+
   const allGuidesCityCategories = uniq(
     flatten(city.guides?.map(({ categories }) => categories)).filter(
       im => !!im
@@ -21,6 +24,7 @@ export const CityScreenMeta = ({ city }: Props) => {
 
   return (
     <EntityMeta
+      wrapperHeight={height - 40}
       TopContent={
         <>
           <CountryPill title={city.country.title} style={styles.top} />

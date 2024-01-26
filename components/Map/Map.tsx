@@ -1,4 +1,4 @@
-import MapView, { Region } from 'react-native-maps';
+import MapView, { Region, MapViewProps } from 'react-native-maps';
 import { Place } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { StyleSheet } from 'react-native';
@@ -6,7 +6,7 @@ import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { LatLng } from 'react-native-maps/lib/sharedTypes';
 
-type Props = {
+type Props = MapViewProps & {
   points: Place[];
   chosenPoint?: Place;
   onPress: (point: Place & { isChosen?: boolean }) => void;
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const Map = React.memo(
-  ({ points, onPress, mapMarkerSize, chosenPoint }: Props) => {
+  ({ points, onPress, mapMarkerSize, chosenPoint, ...mapViewProps }: Props) => {
     const delta = useRef({ latitudeDelta: 0.2, longitudeDelta: 0.2 });
 
     const handlePointPress = useCallback(
@@ -62,12 +62,14 @@ export const Map = React.memo(
         showsUserLocation
         showsMyLocationButton
         enableZoomControl
+        toolbarEnabled={false}
         initialRegion={{
           latitude: middlePoint.lat,
           longitude: middlePoint.lng,
           latitudeDelta,
           longitudeDelta,
         }}
+        {...mapViewProps}
       >
         {formattedPoints.map((point, index) => {
           const { coords, title, description, images, isChosen } = point;

@@ -28,7 +28,7 @@ export type RootStackParamList = {
   [SCREENS.Login]: undefined;
   [SCREENS.Guide]: { guideSlug: string };
   [SCREENS.CitiesList]: undefined;
-  [SCREENS.GuideMap]: { guideSlug: string };
+  [SCREENS.GuideMap]: { guideSlug: string; isOnlyMap?: boolean };
   [SCREENS.Subscriptions]: undefined;
   [SCREENS.Profile]: undefined;
   [SCREENS.WorldGuidesMap]: undefined;

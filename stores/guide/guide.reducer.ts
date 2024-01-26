@@ -3,9 +3,9 @@ import { GuideStore } from '@/types';
 import { calculateDistance, getNearestPoint } from '@/utils/map';
 
 const INITIAL_STATE: GuideStore = {
-  choosePointType: 'auto',
-  chosenPoint: undefined,
+  visiblePoint: undefined,
   nearestPoint: undefined,
+  isGuideMuted: true,
 };
 
 const MIN_CLOSE_DISTANCE = 0.01; // In km
@@ -14,18 +14,17 @@ export const guideSlice = createSlice({
   name: 'guideStore',
   initialState: INITIAL_STATE,
   reducers: {
-    updateChosenPoint(state, { payload }) {
-      return {
-        ...state,
-        chosenPoint: payload?.chosenPoint,
-        choosePointType: payload?.choosePointType,
-      };
+    updateVisiblePoint(state, { payload }) {
+      state.visiblePoint = payload;
     },
     dropState(state) {
       return {
         ...state,
         ...INITIAL_STATE,
       };
+    },
+    changeMuteGuide(state, { payload }) {
+      state.isGuideMuted = payload;
     },
     updateGuidePointWithLiveCoords(state, { payload }) {
       const { guide, liveCoords } = payload;
@@ -36,17 +35,25 @@ export const guideSlice = createSlice({
         liveCoords,
         true
       );
-      const isPointTheSame = nearestPoint?._id === state.chosenPoint?._id;
 
-      if (!isPointTheSame) {
-        state.nearestPoint = nearestPoint;
+      const isNearestPointTheSame =
+        nearestPoint?._id === state.nearestPoint?.point._id &&
+        state.nearestPoint?.distance.toFixed(2) ===
+          (distanceToNearestPoint as number)?.toFixed(2);
+      const isVisiblePointTheSame =
+        nearestPoint?._id === state.visiblePoint?._id;
+
+      if (!isNearestPointTheSame) {
+        state.nearestPoint = {
+          point: nearestPoint,
+          distance: distanceToNearestPoint,
+        };
       }
       if (
-        !isPointTheSame &&
-        distanceToNearestPoint <= MIN_CLOSE_DISTANCE &&
-        state.choosePointType === 'auto'
+        !isVisiblePointTheSame &&
+        distanceToNearestPoint >= MIN_CLOSE_DISTANCE
       ) {
-        state.chosenPoint = nearestPoint;
+        state.visiblePoint = nearestPoint;
       }
     },
   },

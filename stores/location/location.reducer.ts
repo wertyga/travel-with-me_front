@@ -12,11 +12,12 @@ const INITIAL_STATE: LocationStore = {
   liveCoords: undefined,
   pointChooseType: undefined,
   isWatching: false,
+  isLoading: false,
   status: PermissionStatus.UNDETERMINED,
 };
 
 export const onStartWatchingLocation = createAsyncThunk(
-  'locationStore/onStartWatchingAction',
+  'locationStore/onStartWatchingLocation',
   async (guide: Guide, { dispatch }) => {
     if (watchLocationHandler) return;
 
@@ -53,5 +54,16 @@ export const locationSlice = createSlice({
 
       return { ...state, ...INITIAL_STATE };
     },
+  },
+  extraReducers: builder => {
+    builder.addCase(onStartWatchingLocation.pending, state => {
+      state.isLoading = true;
+    });
+    builder.addCase(onStartWatchingLocation.fulfilled, state => {
+      state.isLoading = false;
+    });
+    builder.addCase(onStartWatchingLocation.rejected, state => {
+      state.isLoading = false;
+    });
   },
 });

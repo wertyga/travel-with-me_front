@@ -95,6 +95,7 @@ const CitiesListScreen = ({ route }) => {
 const styles = StyleSheet.create({
   layout: {
     paddingTop: CONSTANTS.spaces.paddingTop,
+    // paddingHorizontal: 0,
   },
   headers: {
     flexDirection: 'row',

@@ -8,6 +8,7 @@ export type LocationStore = {
   nearestPoint?: Place;
   chosenPoint?: Place;
   isWatching?: boolean;
+  isLoading?: boolean;
   liveCoords?: Path;
   pointChooseType?: 'manually' | 'auto';
 };

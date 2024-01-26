@@ -13,8 +13,9 @@ import {
   onStopWatchLocation,
   dropGuideStoreStateAction,
   onStartWatchingAction,
+  toggleGuideMute,
 } from '@/stores';
-import { useDispatch } from 'react-redux';
+import { StyleSheet } from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
@@ -35,10 +36,14 @@ const GuideMapScreen = ({ route }: Props) => {
       });
       navi.goBack();
     }
+
+    if (route.params?.isOnlyMap) {
+      toggleGuideMute(true);
+    }
   }, []);
 
   useEffect(() => {
-    if (guide) {
+    if (guide && !route.params?.isOnlyMap) {
       onStartWatchingAction(guide);
     }
   }, [guide]);
@@ -59,6 +64,7 @@ const GuideMapScreen = ({ route }: Props) => {
   return (
     <MainLayout
       headerTitle={guide.title}
+      style={styles.container}
       bgImage={!!guide.vImage ? { uri: guide.vImage } : undefined}
       noFooter
     >
@@ -66,5 +72,14 @@ const GuideMapScreen = ({ route }: Props) => {
     </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+});
 
 export default GuideMapScreen;

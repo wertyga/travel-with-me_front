@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { SafeAreaView, StyleSheet, ViewStyle, Dimensions } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View } from 'react-nativewind';
@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { useNavigation } from '@react-navigation/native';
 import { Loader } from '@/components/Loader';
+import { useLayout } from '@/context';
 
 type Props = {
   children: React.ReactNode;
@@ -22,8 +23,6 @@ type Props = {
   headerTitle?: string;
 };
 
-const { height: windowHeight } = Dimensions.get('window');
-
 export const MainLayout = ({
   children,
   style,
@@ -34,6 +33,7 @@ export const MainLayout = ({
   isLoading,
 }: Props) => {
   const navi = useNavigation();
+  const { setHeight } = useLayout();
 
   useLayoutEffect(() => {
     navi.setOptions({
@@ -44,37 +44,44 @@ export const MainLayout = ({
   return (
     <SafeAreaView style={cn(styles.main, containerStyle)}>
       {isLoading && <Loader />}
-      <GestureHandlerRootView style={styles.container}>
-        {!!headerTitle && (
-          <CityScreenHeader title={headerTitle} style={styles.header} />
-        )}
+      <GestureHandlerRootView>
+        <View
+          style={styles.container}
+          onLayout={e => {
+            setHeight(e.nativeEvent.layout.height);
+          }}
+        >
+          {!!headerTitle && (
+            <CityScreenHeader title={headerTitle} style={styles.header} />
+          )}
 
-        {bgImage && (
-          <ImageBackground
-            source={bgImage}
-            width={Dimensions.get('window').width}
-            style={styles.bgImage}
-          >
-            <LinearGradient
-              colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
-              style={cn(
-                styles.content,
-                { [!noFooter]: styles.withFooter },
-                style
-              )}
+          {bgImage && (
+            <ImageBackground
+              source={bgImage}
+              width={Dimensions.get('window').width}
+              style={styles.bgImage}
             >
-              {children}
-            </LinearGradient>
-          </ImageBackground>
-        )}
-        {!bgImage && (
-          <>
-            <BackgroundGradient style={styles.bgGradient} />
-            <View style={cn(styles.content, style)}>{children}</View>
-          </>
-        )}
+              <LinearGradient
+                colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
+                style={cn(
+                  styles.content,
+                  { [!noFooter]: styles.withFooter },
+                  style
+                )}
+              >
+                {children}
+              </LinearGradient>
+            </ImageBackground>
+          )}
+          {!bgImage && (
+            <>
+              <BackgroundGradient style={styles.bgGradient} />
+              <View style={cn(styles.content, style)}>{children}</View>
+            </>
+          )}
 
-        {!noFooter && <FooterMenu />}
+          {!noFooter && <FooterMenu />}
+        </View>
       </GestureHandlerRootView>
     </SafeAreaView>
   );
@@ -83,7 +90,7 @@ export const MainLayout = ({
 const styles = StyleSheet.create({
   main: {},
   container: {
-    height: windowHeight,
+    height: '100%',
   },
   bgGradient: {
     height: '100%',
@@ -97,11 +104,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   bgImage: {
-    position: 'absolute',
-    width: '100%',
-    top: 0,
-    left: 0,
-    height: windowHeight,
+    ...StyleSheet.absoluteFillObject,
   },
   withFooter: {
     paddingBottom: 70,

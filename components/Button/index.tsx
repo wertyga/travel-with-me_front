@@ -11,8 +11,9 @@ import { CTextProps } from '@/components/CText/CText';
 import { FONTS, SCREENS } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import { CONSTANTS } from '@/styles/constants';
+import { getTruthlyValues } from '@/utils';
 
-type CustomButtonProps = {
+type CustomButtonProps = TouchableOpacityProps & {
   children: React.ReactNode;
   style?: TouchableOpacityProps['style'] | CTextProps['style'];
   textStyle?: CTextProps['style'];
@@ -23,6 +24,7 @@ type CustomButtonProps = {
   outlined?: boolean;
   high?: boolean;
   filled?: boolean;
+  rectangle?: boolean;
 };
 
 const CustomButton = ({
@@ -37,6 +39,7 @@ const CustomButton = ({
   href,
   filled,
   disabled,
+  rectangle,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
@@ -60,6 +63,7 @@ const CustomButton = ({
         { [outlined]: styles.outlined },
         { [high]: styles.high },
         { [filled]: styles.filled },
+        { [rectangle]: styles.rectangle },
         { [!!disabled]: styles.disabled },
         btnStyle
       )}
@@ -72,7 +76,7 @@ const CustomButton = ({
         <CText
           style={cn(
             styles.text,
-            { fontSize, color, fontFamily, fontWeight },
+            getTruthlyValues({ fontSize, color, fontFamily, fontWeight }),
             { [filled]: styles.textFilled },
             { [!!disabled]: styles.textDisabled }
           )}
@@ -119,8 +123,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F6F5F2',
+  },
+  rectangle: {
     borderRadius: 10,
-    height: 42,
   },
   textFilled: {
     color: CONSTANTS.colors.bgDark,

@@ -9,6 +9,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CText } from '@/components/CText';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { FONTS } from '@/types';
+import { useLayout } from '@/context';
 
 const UPPER_CONTENT_HEIGHT = 300;
 const MIN_BOTTOM = 380;
@@ -19,24 +20,23 @@ type Props = {
   BottomContent?: React.ReactNode;
   description?: string;
   disabled?: boolean;
-  wrapperHeight?: number;
+  wrapperHeight: number;
 };
 
-const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
+const { width: windowWidth } = Dimensions.get('window');
 
 export const EntityMeta = ({
   TopContent,
   description,
   BottomContent,
   disabled,
-  wrapperHeight = windowHeight - 40,
+  wrapperHeight,
 }: Props) => {
-  // const wrapperH = Math.min(wrapperHeight as number, windowHeight - 20);
   const [opened, setOpened] = useState(false);
+  const { height: windowHeight } = useLayout();
 
   const refState = useRef({
     initialState: {
-      // translateY: wrapperH - UPPER_CONTENT_HEIGHT,
       translateY: 0,
       top: windowHeight - UPPER_CONTENT_HEIGHT,
       opacity: 0,
@@ -44,7 +44,6 @@ export const EntityMeta = ({
       opened: false,
     },
     openedState: {
-      // translateY: Dimensions.get('screen').height - wrapperH - 15,
       translateY: 0,
       top: windowHeight - wrapperHeight,
       opacity: 1,
@@ -79,9 +78,6 @@ export const EntityMeta = ({
       swipeValues.value = {
         ...swipeValues.value,
         translateY: translationY,
-        // translateY: swipeValues.value.opened
-        //   ? refState.current.openedState.translateY + translationY
-        //   : translationY + refState.current.initialState.translateY,
         opacity: translationY > 0 ? 1 : differencePercentY / 100,
       };
     })
@@ -156,7 +152,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     width: windowWidth,
-    // top: Math.round(windowHeight - UPPER_CONTENT_HEIGHT + 20),
   },
   container: {
     paddingHorizontal: 15,

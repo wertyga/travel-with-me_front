@@ -5,13 +5,11 @@ import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
 import { FONTS, Guide, SCREENS } from '@/types';
 import { useSubscription } from '@/hooks';
 import Button from '@/components/Button';
-import { calculateDistance } from '@/utils/map';
-import { usePlayGuide } from '@/context';
-
-import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 import { Ionicons } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+
+import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 
 type Props = {
   guide: Guide;
@@ -22,15 +20,7 @@ const META_HEIGHT = height - 120;
 
 export const GuideMeta = ({ guide }: Props) => {
   const navi = useNavigation();
-  // const { currentLocation } = usePlayGuide();
   const { subscription } = useSubscription();
-
-  // const pointsWithDistanceDelta = guide.points?.map(point => {
-  //   return {
-  //     ...point,
-  //     distance: calculateDistance(point.coords, currentLocation),
-  //   };
-  // });
 
   const { travelTime } = guide;
   const isRenderPointsList = !!guide.points?.length && !!subscription;
@@ -50,24 +40,34 @@ export const GuideMeta = ({ guide }: Props) => {
 
           <View style={styles.title}>
             <CText style={styles.aboutText}>About the guide</CText>
-            <View style={styles.actions}>
-              <Ionicons
-                name="play-circle-outline"
-                size={24}
-                color="white"
-                onPress={() =>
-                  navi.navigate(SCREENS.GuideMap, { guideSlug: guide.slug })
-                }
-              />
-              <SimpleLineIcons
-                name="map"
-                size={24}
-                color="white"
-                onPress={() =>
-                  navi.navigate(SCREENS.GuideMap, { guideSlug: guide.slug })
-                }
-              />
-            </View>
+            {!!subscription && (
+              <View style={styles.actions}>
+                <Ionicons
+                  name="play-circle-outline"
+                  size={24}
+                  color="white"
+                  onPress={() =>
+                    navi.navigate(
+                      SCREENS.GuideMap as any,
+                      {
+                        guideSlug: guide.slug,
+                      } as any
+                    )
+                  }
+                />
+                <SimpleLineIcons
+                  name="map"
+                  size={24}
+                  color="white"
+                  onPress={() =>
+                    navi.navigate(
+                      SCREENS.GuideMap as any,
+                      { guideSlug: guide.slug, isOnlyMap: true } as any
+                    )
+                  }
+                />
+              </View>
+            )}
           </View>
         </>
       }

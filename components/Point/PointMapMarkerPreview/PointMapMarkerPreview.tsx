@@ -11,11 +11,13 @@ import { openGoogleMap } from '@/components/Map/Map.utils';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import React from 'react';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { useSelector } from '@/stores';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 type Props = {
   point: Place;
   onClose: () => void;
+  onOpenGallery: () => void;
   autoplayAudio?: boolean;
 };
 
@@ -23,6 +25,7 @@ export const PointMapMarkerPreview = ({
   point,
   onClose,
   autoplayAudio,
+  onOpenGallery,
 }: Props) => {
   // const chosenPoint = useSelector(({ location }) => location?.chosenPoint);
 
@@ -35,13 +38,18 @@ export const PointMapMarkerPreview = ({
         <AntDesign name="close" size={24} color="white" />
       </TouchableOpacity>
 
-      <View className="flex-row items-center mb-3 pr-20">
+      <View className="flex-row items-start mb-3 pr-20">
         <TouchableOpacity
           onPress={() => openGoogleMap(coords)}
           className="mr-3"
         >
           <FontAwesome5 name="directions" size={30} color="white" />
         </TouchableOpacity>
+        {!!images.length && (
+          <TouchableOpacity className="mr-3" onPress={onOpenGallery}>
+            <Ionicons name="images-outline" size={30} color="white" />
+          </TouchableOpacity>
+        )}
         <Text style={styles.title}>{title}</Text>
       </View>
 

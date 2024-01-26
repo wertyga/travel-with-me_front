@@ -59,14 +59,12 @@ export const CitiesMap = () => {
 
 const styles = StyleSheet.create({
   map: {
-    width: '100%',
-    height: Dimensions.get('window').height - 235,
+    height: Dimensions.get('window').height - 200,
     borderRadius: 6,
     overflow: 'hidden',
   },
   mapSelf: {
-    width: '100%',
-    height: '100%',
+    ...StyleSheet.absoluteFillObject,
   },
   textCount: {
     position: 'absolute',

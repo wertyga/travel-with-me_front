@@ -25,29 +25,30 @@ export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
     const { positionMillis, durationMillis, isPlaying } = status;
     setState(prev => ({
       ...prev,
-      isPlaying: isPlaying,
+      isPlaying,
       playedPercent: Math.round(positionMillis / ((durationMillis || 1) / 100)),
     }));
   };
 
   async function playSound() {
+    setState(prev => ({ ...prev, isLoading: true }));
+
     if (commonAudio) {
       await commonAudio.stopAsync();
       commonAudio = null;
     }
 
     if (audio.current) {
-      const { isPlaying } = await audio.current?.getStatusAsync();
-      if (isPlaying) {
+      if (state.isPlaying) {
         audio.current?.pauseAsync();
-        setState(prev => ({ ...prev, isPaused: true }));
+        setState(prev => ({ ...prev, isPaused: true, isLoading: false }));
       } else {
         audio.current?.playAsync();
-        setState(prev => ({ ...prev, isPaused: false }));
+        setState(prev => ({ ...prev, isPaused: false, isLoading: false }));
       }
       return;
     }
-    setState(prev => ({ ...prev, isLoading: true }));
+
     const { sound } = await Audio.Sound.createAsync(
       { uri: audioUrl },
       undefined,
@@ -64,6 +65,7 @@ export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
   const dropState = () => {
     audio.current?.unloadAsync();
     audio.current = null;
+    commonAudio?.unloadAsync();
     commonAudio = null;
   };
 
@@ -87,7 +89,6 @@ export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
   }, [state.playedPercent, state.isPlaying]);
 
   const { isPlaying, isLoading, isPaused, playedPercent } = state;
-
   return (
     <View style={styles.container}>
       <View style={styles.btns}>
