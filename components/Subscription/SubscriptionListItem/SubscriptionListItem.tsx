@@ -28,7 +28,7 @@ export const SubscriptionListItem = ({
       <CText style={styles.price}>{`${price.amount} ${
         getCurrencyMeta(price.currency).sign
       }/${interval.slice(0, 2)}`}</CText>
-      <Button onPress={handleBuy(id)} filled disabled={isDisabled}>
+      <Button onPress={handleBuy(id)} filled high disabled={isDisabled}>
         {isDisabled ? 'Your subscription' : 'Subscribe'}
       </Button>
     </View>

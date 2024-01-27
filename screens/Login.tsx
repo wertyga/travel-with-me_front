@@ -61,7 +61,7 @@ const Login = ({ navigation, route }: Props) => {
         {screen === 'signin' && <SignInForm onSubmit={onSignIn} />}
 
         <Text
-          className="text-white text-right mt-2 mr-2"
+          className="text-white text-right mt-4 mr-2"
           onPress={() => navigation.navigate(SCREENS.RecoveryPassword)}
         >
           Forgot password?
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   goToText: {
     alignItems: 'flex-end',
     width: '100%',
-    marginBottom: 10,
+    marginBottom: 20,
   },
 });
 

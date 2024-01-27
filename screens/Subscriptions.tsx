@@ -88,12 +88,24 @@ const Subscriptions = () => {
       </StripeProvider>
 
       {isShowCancelAction && (
-        <Button onPress={cancelSubscription} filled style={styles.cancelBtn}>
+        <Button
+          onPress={cancelSubscription}
+          filled
+          high
+          rectangle
+          style={styles.cancelBtn}
+        >
           Cancel My Subscription
         </Button>
       )}
       {isSubscriptionCanceled && (
-        <Button onPress={renewMySubscription} filled style={styles.cancelBtn}>
+        <Button
+          onPress={renewMySubscription}
+          filled
+          high
+          rectangle
+          style={styles.cancelBtn}
+        >
           Renew My Subscription
         </Button>
       )}

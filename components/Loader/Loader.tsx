@@ -2,11 +2,15 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { CONSTANTS } from '@/styles/constants';
 import { CText } from '@/components/CText';
 
-export const Loader = () => {
+type Props = {
+  textColor?: string;
+};
+
+export const Loader = ({ textColor }: Props) => {
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.container]}>
       <ActivityIndicator size="large" color={CONSTANTS.colors.accent} />
-      <CText style={styles.text}>Loading...</CText>
+      <CText style={{ ...styles.text, color: textColor }}>Loading...</CText>
     </View>
   );
 };

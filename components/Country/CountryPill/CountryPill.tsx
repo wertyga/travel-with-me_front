@@ -10,17 +10,22 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   title: string;
   icon?: IconNames;
+  customIcon?: React.ReactNode; // Size - 22
+  onPress?: () => void;
 };
 
 export const CountryPill = ({
   style,
   title,
-  icon = 'map-point-small',
+  customIcon,
+  icon,
+  onPress,
 }: Props) => {
   return (
     <View style={cn(styles.container, style)}>
-      <Button>
-        <Icon name={icon as IconNames} />
+      <Button onPress={onPress}>
+        {!!icon && <Icon name={icon as IconNames} />}
+        {customIcon}
         <CText style={styles.title}>{title}</CText>
       </Button>
     </View>

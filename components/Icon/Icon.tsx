@@ -2,6 +2,7 @@ import MapPoint from './icons/map-point';
 import MapPointSmall from './icons/map-point-small';
 import Profile from './icons/profile';
 import Heart from './icons/heart';
+import HeartFilled from './icons/heart-filled';
 import Clock from './icons/clock';
 import NoAccess from './icons/no-access';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -11,6 +12,7 @@ export const ICONS_MAP = {
   'map-point': MapPoint,
   'map-point-small': MapPointSmall,
   'no-access': NoAccess,
+  'heart-filled': HeartFilled,
   profile: Profile,
   heart: Heart,
   clock: Clock,

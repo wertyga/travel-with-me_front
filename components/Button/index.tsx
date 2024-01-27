@@ -19,12 +19,15 @@ type CustomButtonProps = TouchableOpacityProps & {
   textStyle?: CTextProps['style'];
   onPress?: () => void;
   href?: SCREENS;
+  hrefParams?: Record<string, any>;
   wide?: boolean;
   fluid?: boolean;
   outlined?: boolean;
   high?: boolean;
   filled?: boolean;
   rectangle?: boolean;
+  textable?: boolean;
+  noPaddings?: boolean;
 };
 
 const CustomButton = ({
@@ -37,18 +40,22 @@ const CustomButton = ({
   outlined,
   high,
   href,
+  hrefParams,
   filled,
   disabled,
+  textable,
   rectangle,
+  noPaddings,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
 
-  const { fontSize, color, fontFamily, fontWeight, ...btnStyle } = style || {};
+  const { fontSize, color, fontFamily, fontWeight, textAlign, ...btnStyle } =
+    style || {};
 
   const handleOnPress = () => {
     if (href) {
-      navi.navigate(href as any);
+      navi.navigate(href as any, hrefParams as any);
     } else {
       onPress?.();
     }
@@ -64,6 +71,8 @@ const CustomButton = ({
         { [high]: styles.high },
         { [filled]: styles.filled },
         { [rectangle]: styles.rectangle },
+        { [textable]: styles.textable },
+        { [noPaddings]: styles.noPaddings },
         { [!!disabled]: styles.disabled },
         btnStyle
       )}
@@ -76,7 +85,13 @@ const CustomButton = ({
         <CText
           style={cn(
             styles.text,
-            getTruthlyValues({ fontSize, color, fontFamily, fontWeight }),
+            getTruthlyValues({
+              fontSize,
+              color,
+              fontFamily,
+              fontWeight,
+              textAlign,
+            }),
             { [filled]: styles.textFilled },
             { [!!disabled]: styles.textDisabled }
           )}
@@ -130,6 +145,16 @@ const styles = StyleSheet.create({
   textFilled: {
     color: CONSTANTS.colors.bgDark,
     fontFamily: FONTS.OpenSansBold,
+  },
+  textable: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderRadius: 0,
+  },
+  noPaddings: {
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   },
   disabled: {
     backgroundColor: CONSTANTS.colors.disabled,

@@ -37,9 +37,7 @@ const GuideMapScreen = ({ route }: Props) => {
       navi.goBack();
     }
 
-    if (route.params?.isOnlyMap) {
-      toggleGuideMute(true);
-    }
+    toggleGuideMute(!!route.params?.isOnlyMap);
   }, []);
 
   useEffect(() => {

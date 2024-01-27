@@ -1,4 +1,6 @@
 import { Like } from './likes';
+import { Guide } from '@/types/guide';
+import { Place } from '@/types/place';
 
 export enum USER_TAGS {
   User = 'User',
@@ -28,4 +30,9 @@ export type User = {
   status: USER_TYPES;
   slug: string;
   story: string;
+};
+
+export type UserFavoritesResponse = {
+  guides: Guide[];
+  places: Place[];
 };

@@ -5,11 +5,13 @@ import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
 import { CountryPill } from '@/components/Country';
 import { CText } from '@/components/CText';
 import { AudioPlayer } from '@/components/AudioPlayer';
-import { FONTS, Place } from '@/types';
+import { FONTS, Place, SOCIAL_MODELS } from '@/types';
+import { LikeAction } from '@/components/LikeAction';
 
 type Props = {
   point: Place;
   autoplay?: boolean;
+  isFetching?: boolean;
 };
 
 const META_HEIGHT = 600;
@@ -23,7 +25,7 @@ const META_TEXT = {
   },
 };
 
-export const PointMeta = ({ point, autoplay }: Props) => {
+export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
   const [state, setState] = useState({
     chosen: 'description' as keyof typeof META_TEXT,
   });
@@ -36,10 +38,17 @@ export const PointMeta = ({ point, autoplay }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={META_HEIGHT}
+      collapsedHeight={320}
       TopContent={
         <>
           <View style={styles.top}>
             <CountryPill title={cityTitle} icon="map-point-small" />
+            <LikeAction
+              modelType={SOCIAL_MODELS.Place}
+              _id={point._id}
+              initialLike={point.likes}
+              parentFetching={isFetching}
+            />
           </View>
 
           <View style={styles.titles}>
@@ -94,6 +103,8 @@ const styles = StyleSheet.create({
   },
   top: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 25,
     gap: 10,
   },

@@ -1,13 +1,14 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import { GuidesSlideList } from '@/components/Guide';
 import { CountryPill } from '@/components/Country';
-import uniq from 'lodash/uniq';
-import flatten from 'lodash/flatten';
+import { LikeAction } from '@/components/LikeAction';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { City, FONTS } from '@/types';
+import { City, FONTS, SOCIAL_MODELS } from '@/types';
 import { useLayout } from '@/context';
+import { getGuidesCategories } from '@/components/City/CityScreenMeta/CityScreenMeta.utils';
+import { useState } from 'react';
 
 type Props = {
   city: City;
@@ -15,30 +16,44 @@ type Props = {
 
 export const CityScreenMeta = ({ city }: Props) => {
   const { height } = useLayout();
+  const [state, setState] = useState({
+    filterByCategory: '',
+  });
 
-  const allGuidesCityCategories = uniq(
-    flatten(city.guides?.map(({ categories }) => categories)).filter(
-      im => !!im
-    ) || []
-  ).map(category => ({ title: category, count: 1 }));
+  const onChangeFilterByCategory = (filterByCategory: string) => () => {
+    setState(prev => ({ ...prev, filterByCategory }));
+  };
 
+  const guidesCityCategories = getGuidesCategories(city.guides);
+  const filteredGuides = !state.filterByCategory
+    ? city.guides
+    : city.guides.filter(({ categories }) =>
+        categories.includes(state.filterByCategory)
+      );
   return (
     <EntityMeta
       wrapperHeight={height - 40}
       TopContent={
         <>
-          <CountryPill title={city.country.title} style={styles.top} />
+          <View style={styles.top}>
+            <CountryPill title={city.country.title} />
+          </View>
           <CText style={styles.aboutText}>About city</CText>
         </>
       }
       BottomContent={
         <>
           <CityGuidesCategories
-            categories={allGuidesCityCategories}
+            categories={guidesCityCategories}
+            onCategoryPress={onChangeFilterByCategory}
+            chosenCategory={state.filterByCategory}
             style={styles.categories}
           />
 
-          <GuidesSlideList guides={city.guides} country={city.country.title} />
+          <GuidesSlideList
+            guides={filteredGuides}
+            country={city.country.title}
+          />
         </>
       }
       description={city.description}
@@ -49,6 +64,9 @@ export const CityScreenMeta = ({ city }: Props) => {
 const styles = StyleSheet.create({
   top: {
     marginBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   country: {
     fontFamily: FONTS.OpenSansSemiBold,

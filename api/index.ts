@@ -7,3 +7,4 @@ export * from './oauth';
 export * from './subscription';
 export * from './place';
 export * from './search';
+export * from './like';

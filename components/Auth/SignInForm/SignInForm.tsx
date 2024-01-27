@@ -20,7 +20,7 @@ export const SignInForm = ({ onSubmit }: Props) => {
   });
 
   return (
-    <View className="flex flex-col items-center mt-4 w-full">
+    <View className="flex flex-col items-center w-full">
       <Controller
         control={control as any}
         render={({ field: { onChange, value } }) => {

@@ -21,6 +21,7 @@ type Props = {
   description?: string;
   disabled?: boolean;
   wrapperHeight: number;
+  collapsedHeight?: number;
 };
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -31,6 +32,7 @@ export const EntityMeta = ({
   BottomContent,
   disabled,
   wrapperHeight,
+  collapsedHeight = UPPER_CONTENT_HEIGHT,
 }: Props) => {
   const [opened, setOpened] = useState(false);
   const { height: windowHeight } = useLayout();
@@ -38,7 +40,7 @@ export const EntityMeta = ({
   const refState = useRef({
     initialState: {
       translateY: 0,
-      top: windowHeight - UPPER_CONTENT_HEIGHT,
+      top: windowHeight - collapsedHeight,
       opacity: 0,
       zIndex: 0,
       opened: false,

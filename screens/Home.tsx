@@ -1,9 +1,8 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import { useNavigation } from '@react-navigation/native';
 import { SafeLoader } from '@/components/SafeLoader';
-import { Loader } from '@/components/Loader';
 import { Image } from '@/components/Image';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
 import { navigateToError } from '@/utils';
@@ -11,13 +10,9 @@ import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 
-const Home = ({ route, navigation }) => {
+const Home = ({ route }) => {
   const navi = useNavigation();
-  const carouselRef = useRef(null);
-  const [state, setState] = useState({
-    filteredCategories: [],
-    cityIndex: 0,
-  });
+  const carouselRef = useRef<CarouselEx<any> | null>(null);
 
   const {
     data: { cities = [] } = {},
@@ -35,15 +30,6 @@ const Home = ({ route, navigation }) => {
     { slug: currentCity?.slug },
     { skip: !currentCity?.slug }
   );
-
-  const onChangeCategory = (category: string) => {
-    setState(prev => ({
-      ...prev,
-      filteredCategories: prev.filteredCategories.includes(category)
-        ? prev.filteredCategories.filter(cat => cat !== category)
-        : [...prev.filteredCategories, category],
-    }));
-  };
 
   useLayoutEffect(() => {
     navi.setOptions({
@@ -76,16 +62,19 @@ const Home = ({ route, navigation }) => {
   useHandleFromError(route, refetchCities, isFetching);
 
   if (!city || !cities.length) {
-    return <SafeLoader image={currentCity.image} />;
+    return <SafeLoader image={currentCity.image} textColor="white" />;
   }
 
   const citiesImages = cities.map(({ image }) => image);
-
   const windowWidth = Dimensions.get('window').width;
-  return (
-    <MainLayout style={styles.layout} headerTitle={currentCity.title}>
-      {cityLoading && <Loader />}
 
+  return (
+    <MainLayout
+      style={styles.layout}
+      headerTitle={currentCity.title}
+      isLoading={cityLoading}
+      loaderTextColor="white"
+    >
       <CarouselEx
         layout="tinder"
         ref={c => {
@@ -108,7 +97,7 @@ const Home = ({ route, navigation }) => {
         itemWidth={windowWidth}
       />
 
-      <CityScreenMeta city={city} />
+      {!cityLoading && <CityScreenMeta city={city} />}
     </MainLayout>
   );
 };

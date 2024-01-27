@@ -7,15 +7,16 @@ import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   image?: string;
+  textColor?: string;
 };
 
-export const SafeLoader = ({ image }: Props) => {
+export const SafeLoader = ({ image, textColor = 'black' }: Props) => {
   return (
     <ImageBackground
       style={[StyleSheet.absoluteFillObject, styles.container]}
       source={image ? { uri: image } : safeLoaderImage}
     >
-      <CText style={styles.text}>Loading...</CText>
+      <CText style={{ ...styles.text, color: textColor }}>Loading...</CText>
       <ActivityIndicator size="large" color={CONSTANTS.colors.bg1} />
     </ImageBackground>
   );
@@ -34,7 +35,6 @@ const styles = StyleSheet.create({
     left: 0,
   },
   text: {
-    color: 'black',
     fontFamily: FONTS.OpenSansSemiBold,
     marginBottom: 10,
   },

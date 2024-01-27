@@ -1,5 +1,6 @@
 import { baseApi } from '@/app/query';
 import { USER_TAGS, UserResponse } from '@/types';
+import { UserFavoritesResponse } from '@/types/user';
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: build => ({
@@ -11,7 +12,14 @@ export const userApi = baseApi.injectEndpoints({
         silentError: true,
       }),
     }),
+    getFavorites: build.query<UserFavoritesResponse, void>({
+      providesTags: [USER_TAGS.Favorites],
+      query: () => ({
+        method: 'get',
+        url: '/users/favorites',
+      }),
+    }),
   }),
 });
 
-export const { useGetSelfQuery } = userApi;
+export const { useGetSelfQuery, useGetFavoritesQuery } = userApi;

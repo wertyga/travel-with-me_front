@@ -21,6 +21,7 @@ type Props = {
   noFooter?: boolean;
   isLoading?: boolean;
   headerTitle?: string;
+  loaderTextColor?: string;
 };
 
 export const MainLayout = ({
@@ -31,6 +32,7 @@ export const MainLayout = ({
   noFooter,
   headerTitle,
   isLoading,
+  loaderTextColor,
 }: Props) => {
   const navi = useNavigation();
   const { setHeight } = useLayout();
@@ -43,7 +45,7 @@ export const MainLayout = ({
 
   return (
     <SafeAreaView style={cn(styles.main, containerStyle)}>
-      {isLoading && <Loader />}
+      {isLoading && <Loader textColor={loaderTextColor} />}
       <GestureHandlerRootView>
         <View
           style={styles.container}

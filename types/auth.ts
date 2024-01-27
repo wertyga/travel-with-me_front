@@ -4,6 +4,7 @@ export enum USER_TAGS {
   List = 'User.List',
   User = 'User',
   Self = 'Self',
+  Favorites = 'Favorites',
 }
 
 export type AuthCommonRequest = {

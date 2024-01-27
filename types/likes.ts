@@ -9,14 +9,15 @@ export enum SOCIAL_TYPES {
 }
 
 export enum SOCIAL_MODELS {
-  User = 'User',
-  Country = 'Country',
-  City = 'City',
+  Guide = 'Guide',
+  Place = 'Place',
 }
 
-export type LikeSetRequest = {
-  actionType: SOCIAL_TYPES;
+export type SetLikeRequest = {
   modelType: SOCIAL_MODELS;
   _id: string;
 };
-export type LikeSetResponse = Like & {};
+export type SetLikeResponse = {
+  count: number;
+  isInteracted: boolean;
+};

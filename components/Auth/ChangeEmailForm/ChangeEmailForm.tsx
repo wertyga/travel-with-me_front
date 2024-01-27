@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/Input';
 import Button from '@/components/Button';
@@ -58,10 +58,16 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
           name="password"
         />
 
-        <Button className="mt-10" onPress={handleSubmit(onSubmit)}>
+        <Button className="mt-10" high fluid onPress={handleSubmit(onSubmit)}>
           Change E-mail
         </Button>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+  },
+});

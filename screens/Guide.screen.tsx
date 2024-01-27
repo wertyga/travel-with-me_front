@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
 import { useGetGuideQuery } from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts';
@@ -7,28 +6,35 @@ import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GuideMeta } from '@/components/Guide';
 
+import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
 const GuideScreen = ({ route }: Props) => {
   const { guideSlug } = route.params || {};
 
-  const { data: guide, isFetching } = useGetGuideQuery(
-    { slug: guideSlug },
-    { skip: !guideSlug }
-  );
+  const {
+    data: guide,
+    isLoading,
+    isFetching,
+  } = useGetGuideQuery({ slug: guideSlug }, { skip: !guideSlug });
 
-  if (!guide || isFetching) {
+  if (!guide || isLoading) {
     return <SafeLoader />;
   }
 
   return (
     <MainLayout
-      bgImage={{
-        uri: guide.vImage,
-      }}
+      bgImage={
+        guide.vImage
+          ? {
+              uri: guide.vImage,
+            }
+          : DefaultGuideImage
+      }
       headerTitle={guide.title}
     >
-      <GuideMeta guide={guide} />
+      <GuideMeta guide={guide} isFetching={isFetching} />
     </MainLayout>
   );
 };

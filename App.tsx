@@ -54,7 +54,6 @@ function App() {
         </LayoutProvider>
       </AuthProvider>
       <Toast />
-      {/*<Location />*/}
     </Provider>
   );
 }

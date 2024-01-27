@@ -2,25 +2,26 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import { CountryPill } from '@/components/Country';
 import { CText } from '@/components/CText';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { FONTS, Guide, SCREENS } from '@/types';
+import { FONTS, Guide, SCREENS, SOCIAL_MODELS } from '@/types';
 import { useSubscription } from '@/hooks';
 import Button from '@/components/Button';
-import { Ionicons } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
+import { LikeAction } from '@/components/LikeAction';
 
 type Props = {
   guide: Guide;
+  isFetching: boolean;
 };
 
 const { height } = Dimensions.get('window');
 const META_HEIGHT = height - 120;
 
-export const GuideMeta = ({ guide }: Props) => {
+export const GuideMeta = ({ guide, isFetching }: Props) => {
   const navi = useNavigation();
-  const { subscription } = useSubscription();
+  const { subscription, user } = useSubscription();
 
   const { travelTime } = guide;
   const isRenderPointsList = !!guide.points?.length && !!subscription;
@@ -28,13 +29,22 @@ export const GuideMeta = ({ guide }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={META_HEIGHT}
+      collapsedHeight={320}
       TopContent={
         <>
           <View style={styles.top}>
-            {!!travelTime && <CountryPill title={travelTime} icon="clock" />}
-            <CountryPill
-              title={`${guide.pointsCount} points`}
-              icon="map-point-small"
+            <View style={styles.topLeft}>
+              {!!travelTime && <CountryPill title={travelTime} icon="clock" />}
+              <CountryPill
+                title={`${guide.pointsCount} points`}
+                icon="map-point-small"
+              />
+            </View>
+            <LikeAction
+              modelType={SOCIAL_MODELS.Guide}
+              _id={guide._id}
+              initialLike={guide.likes}
+              parentFetching={isFetching}
             />
           </View>
 
@@ -42,10 +52,8 @@ export const GuideMeta = ({ guide }: Props) => {
             <CText style={styles.aboutText}>About the guide</CText>
             {!!subscription && (
               <View style={styles.actions}>
-                <Ionicons
-                  name="play-circle-outline"
-                  size={24}
-                  color="white"
+                <CountryPill
+                  title="Follow"
                   onPress={() =>
                     navi.navigate(
                       SCREENS.GuideMap as any,
@@ -54,16 +62,24 @@ export const GuideMeta = ({ guide }: Props) => {
                       } as any
                     )
                   }
+                  customIcon={
+                    <Ionicons
+                      name="play-circle-outline"
+                      size={22}
+                      color="white"
+                    />
+                  }
                 />
-                <SimpleLineIcons
-                  name="map"
-                  size={24}
-                  color="white"
+                <CountryPill
+                  title="Open map"
                   onPress={() =>
                     navi.navigate(
                       SCREENS.GuideMap as any,
                       { guideSlug: guide.slug, isOnlyMap: true } as any
                     )
+                  }
+                  customIcon={
+                    <SimpleLineIcons name="map" size={22} color="white" />
                   }
                 />
               </View>
@@ -76,7 +92,7 @@ export const GuideMeta = ({ guide }: Props) => {
           {!subscription && (
             <Button
               high
-              href={SCREENS.Subscriptions}
+              href={user ? SCREENS.Subscriptions : SCREENS.Login}
               style={{ marginBottom: 50 }}
             >
               For more info get subscription
@@ -102,14 +118,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   title: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 15,
   },
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    marginTop: 5,
   },
   aboutText: {
     fontFamily: FONTS.CrimsonSemiBold,
@@ -121,7 +136,13 @@ const styles = StyleSheet.create({
   },
   top: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 25,
+    gap: 10,
+  },
+  topLeft: {
+    flexDirection: 'row',
     gap: 10,
   },
   playBtn: {

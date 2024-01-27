@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { useCallback, useLayoutEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { ChangeEmailForm } from '@/components/Auth';
@@ -10,6 +10,7 @@ import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
+import { SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChangeEmail'>;
 
@@ -37,17 +38,23 @@ const RecoveryPassword = ({ navigation }: Props) => {
   useFocusEffect(
     useCallback(() => {
       if (!user) {
-        navigation.navigate('Login');
+        navigation.navigate(SCREENS.Login);
       }
     }, [user])
   );
 
   return (
     <MainLayout headerTitle="Change E-mail" isLoading={isLoading}>
-      <CText>Enter confirmation number</CText>
+      <CText style={styles.title}>Enter confirmation number</CText>
       <ChangeEmailForm onSubmit={onSubmit} />
     </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    marginTop: 15,
+  },
+});
 
 export default RecoveryPassword;

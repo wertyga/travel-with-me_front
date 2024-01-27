@@ -19,10 +19,11 @@ const PlaceScreen = ({ route }) => {
     isShowGallery: false,
   });
 
-  const { data: { place } = {}, isFetching } = useGetPlaceQuery(
-    { slug: placeSlug },
-    { skip: !placeSlug }
-  );
+  const {
+    data: { place } = {},
+    isFetching,
+    isLoading,
+  } = useGetPlaceQuery({ slug: placeSlug }, { skip: !placeSlug });
 
   const onToggleShowGallery = () => {
     setState(prev => ({ ...prev, isShowGallery: !prev.isShowGallery }));
@@ -34,7 +35,7 @@ const PlaceScreen = ({ route }) => {
     });
   }, []);
 
-  if (!place || isFetching) {
+  if (!place || isLoading) {
     return <SafeLoader />;
   }
 
@@ -52,7 +53,7 @@ const PlaceScreen = ({ route }) => {
           <Ionicons name="images-outline" size={30} color="white" />
         </TouchableOpacity>
       )}
-      <PointMeta point={place} autoplay={autoplay} />
+      <PointMeta point={place} autoplay={autoplay} isFetching={isFetching} />
 
       {isShowGalley && (
         <PointImagesCarousel point={place} onClose={onToggleShowGallery} />

@@ -1,0 +1,1 @@
+export { LikeAction } from './LikeAction';

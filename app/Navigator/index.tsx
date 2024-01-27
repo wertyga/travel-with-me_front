@@ -18,6 +18,7 @@ import PlaceScreen from '@/screens/PlaceScreen';
 import ProfileScreen from '@/screens/Profile';
 import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import TransitionScreen from '@/screens/TransitionScreen';
+import FavoritesScreen from '@/screens/Favorites.screen';
 import { City, SCREENS } from '@/types';
 import { useAuth, PlayGuideProvider } from '@/context';
 
@@ -30,6 +31,7 @@ export type RootStackParamList = {
   [SCREENS.CitiesList]: undefined;
   [SCREENS.GuideMap]: { guideSlug: string; isOnlyMap?: boolean };
   [SCREENS.Subscriptions]: undefined;
+  [SCREENS.Favorite]: undefined;
   [SCREENS.Profile]: undefined;
   [SCREENS.WorldGuidesMap]: undefined;
   [SCREENS.Place]: { placeSlug: string; autoplay?: boolean };
@@ -84,6 +86,7 @@ const Navigator = () => {
           />
           <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
           <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
+          <Stack.Screen name={SCREENS.Favorite} component={FavoritesScreen} />
           <Stack.Screen
             name={SCREENS.RecoveryPassword}
             component={RecoveryPasswordScreen}

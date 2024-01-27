@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
 import { RecoveryPasswordForm } from '@/components/Auth';
 import {
@@ -9,7 +9,7 @@ import { useAuth } from '@/context';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainLayout } from '@/Layouts';
-import { CText } from '@/components/CText';
+import Button from '@/components/Button';
 import { SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'RecoveryPassword'>;
@@ -73,9 +73,9 @@ const RecoveryPassword = ({ navigation }: Props) => {
   return (
     <MainLayout headerTitle="Recovery Password" isLoading={isLoading}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.goToBtn}>
-          <CText>Login</CText>
-        </TouchableOpacity>
+        <Button fluid textable style={styles.goToBtn} href={SCREENS.Login}>
+          Login
+        </Button>
 
         <RecoveryPasswordForm onSubmit={onSubmit} codeSent={state.codeSent} />
       </View>
@@ -92,8 +92,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   goToBtn: {
-    alignItems: 'flex-end',
-    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 20,
   },
 });
 

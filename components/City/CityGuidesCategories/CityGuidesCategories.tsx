@@ -5,20 +5,30 @@ import { FONTS } from '@/types';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  categories: { title: string; count: number }[];
+  categories: Record<string, number>;
+  chosenCategory?: string;
   style?: StyleProp<ViewStyle>;
+  onCategoryPress: (category: string) => () => void;
 };
 
-export const CityGuidesCategories = ({ categories, style }: Props) => {
+export const CityGuidesCategories = ({
+  categories,
+  style,
+  onCategoryPress = () => () => {},
+  chosenCategory,
+}: Props) => {
   return (
     <View style={style}>
       <CText style={styles.title}>Guide categories</CText>
       <ScrollView contentContainerStyle={styles.list} horizontal>
-        {categories.map(({ title, count }) => {
+        {Object.entries(categories).map(([title, count]) => {
           return (
-            <Button key={title} outlined style={styles.category}>{`${title}${
-              count ? `(${count})` : ''
-            }`}</Button>
+            <Button
+              key={title}
+              outlined={title !== chosenCategory}
+              style={styles.category}
+              onPress={onCategoryPress(title)}
+            >{`${title}${count ? ` (${count})` : ''}`}</Button>
           );
         })}
       </ScrollView>
@@ -27,9 +37,7 @@ export const CityGuidesCategories = ({ categories, style }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  list: {
-    // flexDirection: 'row',
-  },
+  list: {},
   category: {
     marginRight: 10,
   },

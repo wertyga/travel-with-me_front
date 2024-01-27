@@ -37,6 +37,7 @@ export const useSubscription = (props?: Props) => {
   ] = useRenewMySubscriptionMutation();
 
   return {
+    user,
     subscription,
     subscriptions,
     cancelSubscription,
