@@ -14,6 +14,7 @@ import {
   dropGuideStoreStateAction,
   onStartWatchingAction,
   toggleGuideMute,
+  updateFollowingGuideState,
 } from '@/stores';
 import { StyleSheet } from 'react-native';
 
@@ -41,8 +42,12 @@ const GuideMapScreen = ({ route }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (guide && !route.params?.isOnlyMap) {
+    if (guide) {
       onStartWatchingAction(guide);
+
+      if (guide && !route.params?.isOnlyMap) {
+        updateFollowingGuideState(true);
+      }
     }
   }, [guide]);
 

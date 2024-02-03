@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import Button from '@/components/Button';
 import cn from '@/app/classname';
-import { CText } from '@/components/CText';
 import { Feather } from '@expo/vector-icons';
-import { SCREENS } from '@/types';
 
 export type MenuItem = {
   title: React.ReactNode;
@@ -56,7 +54,6 @@ const styles = StyleSheet.create({
   btn: {
     width: 40,
     height: 40,
-    backgroundColor: 'rgba(12, 85, 91, 0.7)',
   },
   openedMenu: {},
   menu: {
@@ -66,7 +63,7 @@ const styles = StyleSheet.create({
     gap: 10,
     width: Dimensions.get('window').width - 30,
     transform: [{ translateY: 40 }],
-    backgroundColor: 'rgba(12, 85, 91, 0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
     paddingVertical: 20,
     paddingHorizontal: 10,
     borderRadius: 6,

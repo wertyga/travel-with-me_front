@@ -6,13 +6,19 @@ import { FavoritesList } from '@/components/User';
 import { CText } from '@/components/CText';
 import { Loader } from '@/components/Loader';
 import { StyleSheet } from 'react-native';
+import { useAuthGuard } from '@/hooks';
 
 const FavoritesScreen = () => {
-  const { data: { guides, places } = {}, isFetching } = useGetFavoritesQuery();
+  const user = useAuthGuard();
+
+  const { data: { guides, places } = {}, isFetching } = useGetFavoritesQuery(
+    undefined,
+    { skip: !user }
+  );
 
   const isRenderList = !!guides || !!places;
   const isEmptyList = isRenderList && !guides.length && !places.length;
-  console.log({ isRenderList, isEmptyList });
+
   return (
     <>
       {isFetching && <Loader />}

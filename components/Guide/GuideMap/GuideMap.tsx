@@ -7,48 +7,50 @@ import { PointMapMarkerPreview } from '@/components/Point';
 import CarouselEx from 'react-native-snap-carousel';
 import cn from '@/app/classname';
 import { StatusBar } from 'expo-status-bar';
-import { useSelector } from '@/stores';
+import { updateDomAction, useSelector } from '@/stores';
 import { GuideActions } from '@/components/Guide/GuideMap/GuideActions';
+import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
-import { useLayout } from '@/context';
 
 type Props = {
   guide: Guide;
 };
 
-const { width: windowWidth } = Dimensions.get('window');
-const PREVIEW_HEIGHT = 350;
-const EXPANDED_TOP_MAP = 25;
+const { width: windowWidth, height } = Dimensions.get('window');
+const PREVIEW_HEIGHT = height / 3;
 
 export const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
-  const { height: windowHeight } = useLayout();
 
+  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const visiblePoint = useSelector(
     ({ guideStore }) => guideStore?.visiblePoint
   );
   const isGuideMuted = useSelector(
     ({ guideStore }) => guideStore?.isGuideMuted
   );
-  const isWatchingLocation = useSelector(
-    ({ locationStore }) => locationStore?.isWatching
+  const isFollowingToGuide = useSelector(
+    ({ guideStore }) => guideStore?.isFollowingToGuide
   );
 
   const [state, setState] = useState({
     pointShowing: undefined as Place | undefined,
-    pointChosenType: 'manual',
-    isShowCarouselImages: true,
+    isShowCarouselImages: false,
   });
 
-  const onPointChoose = (point: Place) => {
+  const onPointChoose = (point: Place, forceUpdate?: boolean) => {
     const pointIndex = guide.points.findIndex(p => p._id === point._id);
     carouselRef.current?.snapToItem(pointIndex, false);
 
-    if (state.pointShowing?._id !== point._id) {
+    if (forceUpdate) {
+      setState(prev => ({
+        ...prev,
+        pointShowing: { ...point },
+      }));
+    } else if (state.pointShowing?._id !== point._id) {
       setState(prev => ({
         ...prev,
         pointShowing: point,
-        pointChosenType: 'manual',
       }));
     }
   };
@@ -57,7 +59,6 @@ export const GuideMap = ({ guide }: Props) => {
     setState(prev => ({
       ...prev,
       pointShowing: undefined,
-      pointChosenType: 'manual',
     }));
   };
 
@@ -66,7 +67,6 @@ export const GuideMap = ({ guide }: Props) => {
     setState(prev => ({
       ...prev,
       pointShowing: chosenPoint,
-      pointChosenType: 'manual',
       isShowCarouselImages: false,
     }));
   };
@@ -84,26 +84,29 @@ export const GuideMap = ({ guide }: Props) => {
   };
 
   useEffect(() => {
-    if (!visiblePoint || !isWatchingLocation) return;
+    if (!visiblePoint || !isFollowingToGuide) return;
 
     setState(prev => ({
       ...prev,
       pointShowing: visiblePoint,
       isShowCarouselImages: true,
-      pointChosenType: 'auto',
     }));
     handleSlideToPoint(visiblePoint);
-  }, [visiblePoint, isWatchingLocation]);
+  }, [visiblePoint, isFollowingToGuide]);
+
+  useEffect(() => {
+    updateDomAction({
+      header: {
+        display: state.pointShowing ? 'none' : 'flex',
+      },
+    });
+  }, [state.pointShowing]);
 
   const pointsWithChosen = guide.points.map(point => ({
     ...point,
-    isChosen: point._id === state.pointShowing?._id,
+    isChosen: point._id === visiblePoint?._id,
   }));
 
-  const isShowGallery =
-    !!state.pointShowing &&
-    !!state.pointShowing.images.length &&
-    state.isShowCarouselImages;
   const mapHeight = !!state.pointShowing
     ? windowHeight - PREVIEW_HEIGHT
     : windowHeight - 110;
@@ -111,27 +114,32 @@ export const GuideMap = ({ guide }: Props) => {
   return (
     <>
       {!!state.pointShowing && <StatusBar style="black" />}
-
-      <View
-        style={cn(
+      <Map
+        points={guide.points}
+        chosenPoint={state.pointShowing}
+        onPress={onPointChoose}
+        mapMarkerSize={30}
+        mapStyles={cn(
           { ...styles.map, height: mapHeight },
           {
             [!!state.pointShowing]: styles.mapWithChosenPoint,
           }
         )}
       >
-        <Map
-          points={guide.points}
-          chosenPoint={state.pointShowing}
-          onPress={onPointChoose}
-          mapMarkerSize={30}
-          mapPadding={{ top: mapHeight - 60, right: 0, bottom: 0, left: 0 }}
-        />
         <GuideActions
           guide={guide}
           isWithPreviewOpened={!!state.pointShowing}
         />
-      </View>
+        {!!state.pointShowing && (
+          <View style={styles.pointActions}>
+            <GuideMapPointActions
+              point={state.pointShowing}
+              onOpenGallery={onToggleCarouselShow}
+              navigateToPoint={() => onPointChoose(state.pointShowing!, true)}
+            />
+          </View>
+        )}
+      </Map>
 
       <View
         style={cn(styles.pointPreview, {
@@ -152,12 +160,7 @@ export const GuideMap = ({ guide }: Props) => {
                 point={point}
                 onClose={onClose}
                 key={point._id}
-                autoplayAudio={
-                  point.isChosen &&
-                  !isGuideMuted &&
-                  state.pointChosenType === 'auto'
-                }
-                onOpenGallery={onToggleCarouselShow}
+                autoplayAudio={point.isChosen && !isGuideMuted}
               />
             );
           }}
@@ -166,9 +169,9 @@ export const GuideMap = ({ guide }: Props) => {
         />
       </View>
 
-      {isShowGallery && (
+      {state.isShowCarouselImages && !!state.pointShowing && (
         <PointImagesCarousel
-          point={state.pointShowing!}
+          point={state.pointShowing}
           onClose={onToggleCarouselShow}
         />
       )}
@@ -185,6 +188,11 @@ const styles = StyleSheet.create({
     zIndex: 10,
     borderRadius: 6,
     overflow: 'hidden',
+  },
+  pointActions: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
   },
   mapWithChosenPoint: {
     top: 0,

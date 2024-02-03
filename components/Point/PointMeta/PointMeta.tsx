@@ -7,14 +7,13 @@ import { CText } from '@/components/CText';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { FONTS, Place, SOCIAL_MODELS } from '@/types';
 import { LikeAction } from '@/components/LikeAction';
+import { useSelector } from '@/stores';
 
 type Props = {
   point: Place;
   autoplay?: boolean;
   isFetching?: boolean;
 };
-
-const META_HEIGHT = 600;
 
 const META_TEXT = {
   description: {
@@ -26,6 +25,7 @@ const META_TEXT = {
 };
 
 export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
+  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [state, setState] = useState({
     chosen: 'description' as keyof typeof META_TEXT,
   });
@@ -37,7 +37,7 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
 
   return (
     <EntityMeta
-      wrapperHeight={META_HEIGHT}
+      wrapperHeight={windowHeight - 120}
       collapsedHeight={320}
       TopContent={
         <>

@@ -1,15 +1,15 @@
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View, ScrollView } from 'react-native';
 import { CountryPill } from '@/components/Country';
 import { CText } from '@/components/CText';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
 import { FONTS, Guide, SCREENS, SOCIAL_MODELS } from '@/types';
 import { useSubscription } from '@/hooks';
 import Button from '@/components/Button';
+import { LikeAction } from '@/components/LikeAction';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
-import { LikeAction } from '@/components/LikeAction';
 
 type Props = {
   guide: Guide;
@@ -33,12 +33,50 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
       TopContent={
         <>
           <View style={styles.top}>
-            <View style={styles.topLeft}>
-              {!!travelTime && <CountryPill title={travelTime} icon="clock" />}
-              <CountryPill
-                title={`${guide.pointsCount} points`}
-                icon="map-point-small"
-              />
+            <View>
+              <View style={styles.topLeft}>
+                {!!travelTime && (
+                  <CountryPill title={travelTime} icon="clock" />
+                )}
+                <CountryPill
+                  title={`${guide.pointsCount} points`}
+                  icon="map-point-small"
+                />
+              </View>
+              {!!subscription && (
+                <View style={styles.actions}>
+                  <CountryPill
+                    title="Follow"
+                    onPress={() =>
+                      navi.navigate(
+                        SCREENS.GuideMap as any,
+                        {
+                          guideSlug: guide.slug,
+                        } as any
+                      )
+                    }
+                    customIcon={
+                      <Ionicons
+                        name="play-circle-outline"
+                        size={22}
+                        color="white"
+                      />
+                    }
+                  />
+                  <CountryPill
+                    title="Open map"
+                    onPress={() =>
+                      navi.navigate(
+                        SCREENS.GuideMap as any,
+                        { guideSlug: guide.slug, isOnlyMap: true } as any
+                      )
+                    }
+                    customIcon={
+                      <SimpleLineIcons name="map" size={20} color="white" />
+                    }
+                  />
+                </View>
+              )}
             </View>
             <LikeAction
               modelType={SOCIAL_MODELS.Guide}
@@ -50,40 +88,6 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
 
           <View style={styles.title}>
             <CText style={styles.aboutText}>About the guide</CText>
-            {!!subscription && (
-              <View style={styles.actions}>
-                <CountryPill
-                  title="Follow"
-                  onPress={() =>
-                    navi.navigate(
-                      SCREENS.GuideMap as any,
-                      {
-                        guideSlug: guide.slug,
-                      } as any
-                    )
-                  }
-                  customIcon={
-                    <Ionicons
-                      name="play-circle-outline"
-                      size={22}
-                      color="white"
-                    />
-                  }
-                />
-                <CountryPill
-                  title="Open map"
-                  onPress={() =>
-                    navi.navigate(
-                      SCREENS.GuideMap as any,
-                      { guideSlug: guide.slug, isOnlyMap: true } as any
-                    )
-                  }
-                  customIcon={
-                    <SimpleLineIcons name="map" size={22} color="white" />
-                  }
-                />
-              </View>
-            )}
           </View>
         </>
       }
@@ -136,9 +140,8 @@ const styles = StyleSheet.create({
   },
   top: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 25,
+    marginBottom: 10,
     gap: 10,
   },
   topLeft: {

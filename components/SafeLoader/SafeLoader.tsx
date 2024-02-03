@@ -1,23 +1,31 @@
-import { ActivityIndicator, StyleSheet } from 'react-native';
-import safeLoaderImage from '@/assets/images/safe_loader.png';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { ImageBackground } from '@/components/Image';
-import { FONTS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+import { FONTS } from '@/types';
+
+import safeLoaderImage from '@/assets/splash.png';
 
 type Props = {
   image?: string;
   textColor?: string;
+  indicatorColor?: string;
 };
 
-export const SafeLoader = ({ image, textColor = 'black' }: Props) => {
+export const SafeLoader = ({
+  image,
+  textColor = CONSTANTS.colors.bg2,
+  indicatorColor = CONSTANTS.colors.bg2,
+}: Props) => {
   return (
     <ImageBackground
       style={[StyleSheet.absoluteFillObject, styles.container]}
       source={image ? { uri: image } : safeLoaderImage}
     >
-      <CText style={{ ...styles.text, color: textColor }}>Loading...</CText>
-      <ActivityIndicator size="large" color={CONSTANTS.colors.bg1} />
+      <View style={{ ...styles.loadingContent }}>
+        <ActivityIndicator size="small" color={indicatorColor} />
+        <CText style={{ ...styles.text, color: textColor }}>Loading...</CText>
+      </View>
     </ImageBackground>
   );
 };
@@ -26,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
+    zIndex: 100,
     backgroundColor: 'white',
     width: '100%',
     height: '100%',
@@ -36,6 +44,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: FONTS.OpenSansSemiBold,
-    marginBottom: 10,
+    marginLeft: 10,
+  },
+  loadingContent: {
+    position: 'absolute',
+    bottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

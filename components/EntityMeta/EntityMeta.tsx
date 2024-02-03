@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Dimensions, ScrollView } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -9,7 +9,8 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CText } from '@/components/CText';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { FONTS } from '@/types';
-import { useLayout } from '@/context';
+import { updateDomAction, useSelector } from '@/stores';
+import { useFocusEffect } from '@react-navigation/native';
 
 const UPPER_CONTENT_HEIGHT = 300;
 const MIN_BOTTOM = 380;
@@ -20,6 +21,7 @@ type Props = {
   BottomContent?: React.ReactNode;
   description?: string;
   disabled?: boolean;
+  withHeaderHide?: boolean;
   wrapperHeight: number;
   collapsedHeight?: number;
 };
@@ -31,25 +33,24 @@ export const EntityMeta = ({
   description,
   BottomContent,
   disabled,
+  withHeaderHide,
   wrapperHeight,
   collapsedHeight = UPPER_CONTENT_HEIGHT,
 }: Props) => {
   const [opened, setOpened] = useState(false);
-  const { height: windowHeight } = useLayout();
+  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
 
   const refState = useRef({
     initialState: {
       translateY: 0,
       top: windowHeight - collapsedHeight,
       opacity: 0,
-      zIndex: 0,
       opened: false,
     },
     openedState: {
       translateY: 0,
       top: windowHeight - wrapperHeight,
       opacity: 1,
-      zIndex: 2000,
       opened: true,
     },
   });
@@ -59,7 +60,6 @@ export const EntityMeta = ({
     return {
       transform: [{ translateY: swipeValues.value.translateY }],
       top: swipeValues.value.top,
-      zIndex: swipeValues.value.zIndex,
     };
   });
   const animatedHidedPartStyles = useAnimatedStyle(() => {
@@ -76,11 +76,12 @@ export const EntityMeta = ({
       const differencePercentY = Math.round(
         Math.abs(translationY) / ONE_PERCENT
       );
+      const opacity = translationY > 0 ? 1 : differencePercentY / 100;
 
       swipeValues.value = {
         ...swipeValues.value,
         translateY: translationY,
-        opacity: translationY > 0 ? 1 : differencePercentY / 100,
+        opacity,
       };
     })
     .onFinalize(e => {
@@ -103,6 +104,29 @@ export const EntityMeta = ({
         swipeValues.value = refState.current.initialState;
       }
     });
+
+  useEffect(() => {
+    if (opened) {
+      updateDomAction({
+        footer: { display: 'none' },
+        header: withHeaderHide ? { display: 'none' } : {},
+      });
+    } else {
+      updateDomAction({
+        footer: { display: 'flex' },
+        header: { display: 'flex' },
+      });
+    }
+  }, [opened]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        swipeValues.value = refState.current.initialState;
+        setOpened(false);
+      };
+    }, [])
+  );
 
   return (
     <Animated.View

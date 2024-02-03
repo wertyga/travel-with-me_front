@@ -1,4 +1,10 @@
-import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import Button from '@/components/Button';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -6,43 +12,58 @@ import cn from '@/app/classname';
 import { CText } from '@/components/CText';
 import { FONTS, SCREENS } from '@/types';
 import { useNavigation } from '@react-navigation/native';
+import {
+  HeaderMenu,
+  HeaderMenuProps,
+} from '@/components/City/CityScreenHeader/HeaderMenu';
+import { useSelector } from '@/stores';
 
 type Props = {
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle | TextStyle>;
   title: string;
+  isDark?: boolean;
+  menu?: HeaderMenuProps['menu'];
 };
 
-export const CityScreenHeader = ({ style, title }: Props) => {
+export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
   const navi = useNavigation();
+  const headerStyles = useSelector(({ domStore }) => domStore?.header);
 
   const goBack = () => {
     if (navi.canGoBack()) {
       navi.goBack();
     } else {
-      navi.navigate(SCREENS.CitiesList);
+      navi.navigate(SCREENS.CitiesList as any);
     }
   };
 
   const isTitleExceed = title?.length >= 17;
+  const { color, ...viewStyle } = style || {};
+
   return (
-    <View style={cn(styles.container, style)}>
+    <View style={cn(styles.container, headerStyles, viewStyle)}>
       <Button style={styles.btn} onPress={goBack}>
-        <FontAwesome name="angle-left" size={30} color="white" />
+        <FontAwesome
+          name="angle-left"
+          size={30}
+          color={isDark ? 'black' : 'white'}
+        />
       </Button>
 
       <CText
-        style={{
-          ...styles.title,
-          lineHeight: isTitleExceed ? 30 : undefined,
-        }}
+        style={cn(
+          {
+            ...styles.title,
+            lineHeight: isTitleExceed ? 30 : undefined,
+          },
+          { [isDark]: styles.dark }
+        )}
         numberOfLines={2}
       >
         {title}
       </CText>
 
-      {/*<Button style={cn(styles.btn, styles.hide)}>*/}
-      {/*  <Feather name="search" size={22} color="white" />*/}
-      {/*</Button>*/}
+      {!!menu && <HeaderMenu items={menu} />}
     </View>
   );
 };
@@ -51,11 +72,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    // position: 'absolute',
     alignItems: 'center',
-    // top: CONSTANTS.spaces.paddingTop,
     zIndex: 10,
-    // maxWidth: Dimensions.get('window').width,
   },
   btn: {
     borderRadius: 10,
@@ -70,6 +88,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 5,
     width: Dimensions.get('window').width - 120, // 40 + 40 - buttons + paddingHorizontal * 2 * 15 + marginHorizontal * 2 * 10
+  },
+  dark: {
+    color: 'black',
   },
   hide: {
     opacity: 0,

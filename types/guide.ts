@@ -50,4 +50,6 @@ export type GuideStore = {
     distance: number;
   };
   isGuideMuted?: boolean;
+  isFollowingToGuide?: boolean;
+  _followingGuide?: Guide;
 };

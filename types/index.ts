@@ -11,3 +11,4 @@ export * from './subscription';
 export * from './app';
 export * from './location';
 export * from './search';
+export * from './dom';

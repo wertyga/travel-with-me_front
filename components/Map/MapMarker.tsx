@@ -62,17 +62,15 @@ export const MapMarker = React.memo(
       };
     }, [markerSize, isChosen]);
 
+    const opacity = isChosenExists && !isChosen ? 0.6 : 1;
     return (
       <Marker
         coordinate={{ latitude: coords.lat, longitude: coords.lng }}
         onPress={onPress}
         tracksViewChanges={false}
         tracksInfoWindowChanges={false}
-        style={cn(
-          { ...mainMarkerSize },
-          { [isChosenExists && !isChosen]: { opacity: 0.6 } },
-          { [isChosen]: { zIndex: 5, opacity: 1 } }
-        )}
+        opacity={opacity}
+        style={cn(mainMarkerSize, { [isChosen]: { zIndex: 5 } })}
       >
         <View
           style={cn(

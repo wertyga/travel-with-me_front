@@ -95,3 +95,9 @@ export const startWatchToLiveLocation = async (
     }
   );
 };
+
+export const getMyLocation = async () => {
+  const location = await Location.getCurrentPositionAsync();
+
+  return location.coords;
+};

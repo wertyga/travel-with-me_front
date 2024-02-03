@@ -6,7 +6,7 @@ type Props = {
   textColor?: string;
 };
 
-export const Loader = ({ textColor }: Props) => {
+export const Loader = ({ textColor = 'white' }: Props) => {
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.container]}>
       <ActivityIndicator size="large" color={CONSTANTS.colors.accent} />

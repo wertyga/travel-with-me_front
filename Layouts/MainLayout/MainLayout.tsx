@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { SafeAreaView, StyleSheet, ViewStyle, Dimensions } from 'react-native';
+import { StyleSheet, ViewStyle, Dimensions, TextStyle } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View } from 'react-nativewind';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -11,17 +11,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { useNavigation } from '@react-navigation/native';
 import { Loader } from '@/components/Loader';
-import { useLayout } from '@/context';
+import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
+import { updateDomAction } from '@/stores';
 
 type Props = {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
+  isHeaderDark?: boolean;
   bgImage?: CImageProps['source'];
   noFooter?: boolean;
   isLoading?: boolean;
   headerTitle?: string;
   loaderTextColor?: string;
+  menu?: HeaderMenuProps['menu'];
 };
 
 export const MainLayout = ({
@@ -33,9 +36,10 @@ export const MainLayout = ({
   headerTitle,
   isLoading,
   loaderTextColor,
+  menu,
+  isHeaderDark,
 }: Props) => {
   const navi = useNavigation();
-  const { setHeight } = useLayout();
 
   useLayoutEffect(() => {
     navi.setOptions({
@@ -44,17 +48,24 @@ export const MainLayout = ({
   }, []);
 
   return (
-    <SafeAreaView style={cn(styles.main, containerStyle)}>
+    <View style={cn(styles.main, containerStyle)}>
       {isLoading && <Loader textColor={loaderTextColor} />}
       <GestureHandlerRootView>
         <View
           style={styles.container}
           onLayout={e => {
-            setHeight(e.nativeEvent.layout.height);
+            updateDomAction({
+              layout: { height: e.nativeEvent.layout.height },
+            });
           }}
         >
           {!!headerTitle && (
-            <CityScreenHeader title={headerTitle} style={styles.header} />
+            <CityScreenHeader
+              title={headerTitle}
+              style={styles.header}
+              isDark={isHeaderDark}
+              menu={menu}
+            />
           )}
 
           {bgImage && (
@@ -85,7 +96,7 @@ export const MainLayout = ({
           {!noFooter && <FooterMenu />}
         </View>
       </GestureHandlerRootView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -100,6 +111,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
+    zIndex: -1,
   },
   content: {
     paddingHorizontal: 15,

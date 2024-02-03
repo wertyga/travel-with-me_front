@@ -3,20 +3,20 @@ import { useNavigation } from '@react-navigation/native';
 import { CText } from '@/components/CText';
 import { Icon, IconNames } from '@/components/Icon';
 import cn from '@/app/classname';
-
 import { FOOTER_MENU } from '@/components/FooterMenu/FooterMenu.utils';
-
 import { SCREENS } from '@/types';
+import { useSelector } from '@/stores';
 
 export const FooterMenu = () => {
   const navi = useNavigation();
+  const footerStyles = useSelector(({ domStore }) => domStore?.footer);
 
   const redirectTo = (screen: SCREENS) => () => {
-    navi.navigate(screen);
+    navi.navigate(screen as any);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, ...(footerStyles || {}) }}>
       {FOOTER_MENU.map(({ icon, screen, title }) => {
         return (
           <TouchableOpacity

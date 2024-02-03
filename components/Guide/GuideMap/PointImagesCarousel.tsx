@@ -1,8 +1,12 @@
-import * as React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from '@/components/Image';
 import { CText } from '@/components/CText';
+import Button from '@/components/Button';
+import { CarouselDots } from '@/components/Carousel';
+import { AntDesign } from '@expo/vector-icons';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -10,7 +14,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { FONTS, Place } from '@/types';
-import { useLayout } from '@/context';
+import { useSelector } from '@/stores';
 
 type Props = {
   point: Place;
@@ -21,7 +25,8 @@ const TRANSLATION_Y_OFFSET = 150;
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 export const PointImagesCarousel = ({ point, onClose }: Props) => {
-  const { height: windowHeight } = useLayout();
+  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const swipeTopValue = useSharedValue({
     translateX: 0,
     translateY: 0,
@@ -108,6 +113,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
           translateY: 0,
           translateX: windowWidth * -index,
         };
+        runOnJS(setCurrentIndex)(index);
       }
     });
 
@@ -127,6 +133,20 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
         </Animated.View>
       </GestureDetector>
       <CText style={styles.title}>{point.title}</CText>
+
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
+        style={styles.actionsContainer}
+      >
+        <Button filled style={styles.scrollToCloseBtn} onPress={onClose}>
+          <AntDesign name="up" size={24} color="black" />
+        </Button>
+        <CarouselDots
+          style={styles.dots}
+          totalCount={point.images.length}
+          currentIndex={currentIndex}
+        />
+      </LinearGradient>
     </>
   );
 };
@@ -137,11 +157,11 @@ const styles = StyleSheet.create({
     height: windowHeight,
     top: 0,
     left: 0,
-    zIndex: 10,
+    zIndex: 200,
     flexDirection: 'row',
   },
   title: {
-    zIndex: 25,
+    zIndex: 1125,
     position: 'absolute',
     top: 40,
     left: 10,
@@ -150,5 +170,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 25,
     fontFamily: FONTS.CrimsonBold,
+  },
+  actionsContainer: {
+    position: 'absolute',
+    zIndex: 1000,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    height: 70,
+  },
+  scrollToCloseBtn: {
+    position: 'absolute',
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    bottom: 20,
+    right: 20,
+  },
+  dots: {
+    position: 'absolute',
+    bottom: 10,
+    left: Dimensions.get('window').width / 2 - 55,
   },
 });

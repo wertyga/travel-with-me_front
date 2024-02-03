@@ -7,6 +7,8 @@ import { CText } from '@/components/CText';
 import { useNavigation } from '@react-navigation/native';
 import { City, FONTS, SCREENS } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
+import { useLayout } from '@/context';
+import { useSelector } from '@/stores';
 
 const EUROPE_REGION = {
   latitude: 43.13591618938807,
@@ -17,6 +19,8 @@ const EUROPE_REGION = {
 
 export const CitiesMap = () => {
   const navi = useNavigation();
+  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+
   const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
 
   const navigateToCity = (city: City) => () => {
@@ -30,7 +34,7 @@ export const CitiesMap = () => {
   }
 
   return (
-    <View style={styles.map}>
+    <View style={{ ...styles.map, height: windowHeight - 230 }}>
       <MapView
         style={styles.mapSelf}
         region={EUROPE_REGION}
@@ -59,7 +63,6 @@ export const CitiesMap = () => {
 
 const styles = StyleSheet.create({
   map: {
-    height: Dimensions.get('window').height - 200,
     borderRadius: 6,
     overflow: 'hidden',
   },

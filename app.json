@@ -4,7 +4,7 @@
     "slug": "travel-with-me",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -41,10 +41,10 @@
     "android": {
       "bundleIdentifier": "com.wertyga.travel-with-me",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.wertyga.travelwithme",
+      "package": "com.wertyga.travelwithme"
     },
     "web": {
       "favicon": "./assets/favicon.png"

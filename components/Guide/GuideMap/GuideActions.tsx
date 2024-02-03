@@ -1,17 +1,16 @@
 import * as React from 'react';
 import {
   dropGuideStoreStateAction,
-  onStartWatchingAction,
-  onStopWatchLocation,
   toggleGuideMute,
+  updateFollowingGuideState,
   useSelector,
 } from '@/stores';
 import Button from '@/components/Button';
+import { CText } from '@/components/CText';
 import cn from '@/app/classname';
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { Icon } from '@/components/Icon';
-import { ScrollView, StyleSheet, Text } from 'react-native';
-import { FONTS, Guide } from '@/types';
+import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Guide } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -29,91 +28,62 @@ export const GuideActions = ({ guide, isWithPreviewOpened }: Props) => {
   const nearestPoint = useSelector(
     ({ guideStore }) => guideStore?.nearestPoint
   );
-  const isWatchingLocation = useSelector(
-    ({ locationStore }) => locationStore?.isWatching
+  const isFollowingToGuide = useSelector(
+    ({ guideStore }) => guideStore?.isFollowingToGuide
   );
 
   const onToggleFollowGuide = () => {
-    if (isWatchingLocation) {
-      onStopWatchLocation();
+    if (isFollowingToGuide) {
       dropGuideStoreStateAction();
     } else {
-      onStartWatchingAction(guide);
+      updateFollowingGuideState(true);
     }
   };
 
   const volumeIcon = isGuideMuted
-    ? 'volume-mute-outline'
-    : 'volume-medium-outline';
+    ? 'volume-medium-outline'
+    : 'volume-mute-outline';
 
   return (
     <ScrollView
-      style={cn({ ...styles.container, top: isWithPreviewOpened ? 45 : 10 })}
+      style={cn(styles.container, { [isWithPreviewOpened]: { top: 30 } })}
       contentContainerStyle={styles.actions}
       horizontal
     >
       <Button
-        style={cn(styles.actionBtn, { [!isGuideMuted]: styles.activeBtn })}
-        filled={isGuideMuted}
+        style={cn(styles.actionBtn)}
         disabled={isLoadingLocation}
         onPress={toggleGuideMute}
       >
-        <Ionicons
-          name={volumeIcon}
-          size={18}
-          color={isGuideMuted ? 'black' : 'white'}
-        />
-        <Text
-          style={{
-            marginLeft: 5,
-            marginBottom: 1,
-            color: isGuideMuted ? 'black' : 'white',
-          }}
-        >
-          {isGuideMuted ? 'Enable sound' : 'Mute'}
-        </Text>
+        <Ionicons name={volumeIcon} size={18} color="white" />
       </Button>
       <Button
-        style={cn(styles.actionBtn, { [isWatchingLocation]: styles.activeBtn })}
-        filled={!isWatchingLocation}
+        style={cn(styles.actionBtn, { [isFollowingToGuide]: styles.activeBtn })}
         onPress={onToggleFollowGuide}
         disabled={isLoadingLocation}
       >
-        {isWatchingLocation && (
+        {!isFollowingToGuide && (
           <FontAwesome5 name="walking" size={18} color="white" />
         )}
-        {!isWatchingLocation && (
-          <Icon
-            name="no-access"
-            size={24}
-            color="black"
-            style={{ marginTop: 5 }}
-          />
+        {isFollowingToGuide && (
+          <>
+            <Octicons
+              name="stop"
+              size={22}
+              color="white"
+              style={{ marginRight: 10 }}
+            />
+          </>
         )}
-        <Text
-          style={{
-            marginLeft: 5,
-            marginBottom: 1,
-            color: !isWatchingLocation ? 'black' : 'white',
-          }}
-        >
-          {isWatchingLocation ? 'Stop' : 'Follow'}
-          {!!nearestPoint &&
-            `: ${nearestPoint.point?.title}: ${nearestPoint.distance.toFixed(
-              2
-            )} km`}
-        </Text>
+        {!!nearestPoint && (
+          <CText>
+            {!!nearestPoint &&
+              `${nearestPoint.point?.title}: ${nearestPoint.distance.toFixed(
+                2
+              )} km`}
+          </CText>
+        )}
       </Button>
-      {/*{!!nearestPoint && (*/}
-      {/*  <Button style={styles.activeBtn}>*/}
-      {/*    <Icon name="map-point-small" />*/}
-      {/*    <Text style={styles.pointBtn}>*/}
-      {/*      {`${nearestPoint.point?.title}: ${nearestPoint.distance.toFixed(*/}
-      {/*        2*/}
-      {/*      )} km`}*/}
-      {/*    </Text>*/}
-      {/*  </Button>*/}
-      {/*)}*/}
     </ScrollView>
   );
 };
@@ -122,6 +92,7 @@ const styles = StyleSheet.create({
   container: {
     left: 10,
     right: 10,
+    top: 10,
     position: 'absolute',
     zIndex: 5,
   },
@@ -133,14 +104,14 @@ const styles = StyleSheet.create({
   actionBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 30,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: 'black',
+    height: 40,
+    width: 40,
+    backgroundColor: CONSTANTS.colors.bg1,
   },
   activeBtn: {
     backgroundColor: CONSTANTS.colors.bg1,
     borderColor: CONSTANTS.colors.bg1,
+    width: undefined,
   },
   pointBtn: {
     marginLeft: 5,

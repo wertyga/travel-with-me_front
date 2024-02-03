@@ -12,30 +12,27 @@ import { SCREENS } from '@/types';
 export const GlobalSearch = () => {
   const [state, setState] = useState({});
   const [search, setSearch] = useState('');
-  const [fetchForSearch, { data, isLoading }] = useLazyGlobalSearchQuery();
+  const [fetchForSearch, { isLoading }] = useLazyGlobalSearchQuery();
 
   const onClose = () => {
     setState({});
     setSearch('');
   };
 
-  const onSearch = () => {
+  const onSearch = async () => {
     if (!search) {
       onClose();
       return;
     }
-    fetchForSearch({ search });
-  };
-
-  useEffect(() => {
+    const { data } = await fetchForSearch({ search });
     setState(data || {});
-  }, [data]);
+  };
 
   const { cities = [], guides = [], places = [] } = state;
   const isRenderList = !!cities.length || !!guides.length || !!places.length;
 
   return (
-    <View style={styles.container}>
+    <>
       <Search
         onSearch={onSearch}
         disabled={isLoading}
@@ -113,17 +110,19 @@ export const GlobalSearch = () => {
           </ScrollView>
         </View>
       )}
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
+    // position: 'relative',
+    // zIndex: 20,
   },
   list: {
     position: 'absolute',
-    top: '100%',
+    top: 90,
+    left: 15,
     width: '100%',
     height: 300,
     backgroundColor: 'white',

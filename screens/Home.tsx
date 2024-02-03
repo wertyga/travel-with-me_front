@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import { useNavigation } from '@react-navigation/native';
 import { SafeLoader } from '@/components/SafeLoader';
@@ -61,8 +61,15 @@ const Home = ({ route }) => {
 
   useHandleFromError(route, refetchCities, isFetching);
 
+  // if (true) {
   if (!city || !cities.length) {
-    return <SafeLoader image={currentCity.image} textColor="white" />;
+    return (
+      <SafeLoader
+        image={currentCity.image}
+        textColor="white"
+        indicatorColor="white"
+      />
+    );
   }
 
   const citiesImages = cities.map(({ image }) => image);
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('screen').width,
     height: Dimensions.get('window').height,
   },
   cityImage: {

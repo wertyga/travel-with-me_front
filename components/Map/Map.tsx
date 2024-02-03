@@ -1,21 +1,54 @@
-import MapView, { Region, MapViewProps } from 'react-native-maps';
-import { Place } from '@/types';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
+import MapView, { MapViewProps, Region, Marker } from 'react-native-maps';
+import { Path, Place } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
-import { StyleSheet } from 'react-native';
 import { getMiddleCoordinates } from '@/components/Map/Map.utils';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { LatLng } from 'react-native-maps/lib/sharedTypes';
+import Button from '@/components/Button';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { CONSTANTS } from '@/styles/constants';
+import { getMyLocation } from '@/utils/map';
+import { useSelector } from '@/stores';
 
 type Props = MapViewProps & {
   points: Place[];
   chosenPoint?: Place;
+  chosenRegion?: Path;
   onPress: (point: Place & { isChosen?: boolean }) => void;
   mapMarkerSize?: number;
+  children?: React.ReactNode;
+  mapStyles?: StyleProp<ViewStyle>;
 };
 
 export const Map = React.memo(
-  ({ points, onPress, mapMarkerSize, chosenPoint, ...mapViewProps }: Props) => {
-    const delta = useRef({ latitudeDelta: 0.2, longitudeDelta: 0.2 });
+  ({
+    points,
+    onPress,
+    mapMarkerSize,
+    chosenPoint,
+    chosenRegion,
+    children,
+    mapStyles,
+    ...mapViewProps
+  }: Props) => {
+    const liveCoords = useSelector(
+      ({ locationStore }) => locationStore?.liveCoords
+    );
+    const mapRef = useRef();
+    const delta = useRef({
+      latitudeDelta: 0.2,
+      longitudeDelta: 0.2,
+      latitude: 0,
+      longitude: 0,
+    });
+    const [currentRegion, setCurrentRegion] = useState<Region>();
 
     const handlePointPress = useCallback(
       (point: Place) => () => {
@@ -24,17 +57,35 @@ export const Map = React.memo(
       []
     );
 
-    const onRegionChange = useCallback(({ latitudeDelta, longitudeDelta }) => {
-      delta.current = { latitudeDelta, longitudeDelta };
-    }, []);
+    const onRegionChange = useCallback(
+      ({ latitudeDelta, longitudeDelta, latitude, longitude }) => {
+        delta.current = { latitudeDelta, longitudeDelta, latitude, longitude };
+      },
+      []
+    );
 
-    const region = useMemo(() => {
-      return chosenPoint
-        ? {
-            latitude: chosenPoint.coords.lat,
-            longitude: chosenPoint.coords.lng,
-          }
-        : undefined;
+    const updateCurrentRegion = ({ longitude, latitude }) => {
+      setCurrentRegion({
+        latitudeDelta: delta.current.latitudeDelta,
+        longitudeDelta: delta.current.longitudeDelta,
+        longitude,
+        latitude,
+      });
+    };
+
+    const onGetMyLocationClick = async () => {
+      const { longitude, latitude } = await getMyLocation();
+
+      updateCurrentRegion({ longitude, latitude });
+    };
+
+    useEffect(() => {
+      if (!chosenPoint) return;
+
+      updateCurrentRegion({
+        longitude: chosenPoint.coords.lng,
+        latitude: chosenPoint.coords.lat,
+      });
     }, [chosenPoint]);
 
     const { middlePoint, formattedPoints } = useMemo(() => {
@@ -47,49 +98,95 @@ export const Map = React.memo(
       };
     }, [points, chosenPoint]);
 
-    const { latitudeDelta, longitudeDelta } = delta.current;
-    const currentRegion = useMemo(() => {
-      return region ? { latitudeDelta, longitudeDelta, ...region } : undefined;
-    }, [region]);
-
     return (
-      <MapView
-        style={styles.container}
-        zoomEnabled
-        zoomTapEnabled
-        region={currentRegion}
-        onRegionChange={onRegionChange}
-        showsUserLocation
-        showsMyLocationButton
-        enableZoomControl
-        toolbarEnabled={false}
-        initialRegion={{
-          latitude: middlePoint.lat,
-          longitude: middlePoint.lng,
-          latitudeDelta,
-          longitudeDelta,
-        }}
-        {...mapViewProps}
-      >
-        {formattedPoints.map((point, index) => {
-          const { coords, title, description, images, isChosen } = point;
-          return (
-            <MapMarker
-              key={index}
-              onPress={handlePointPress(point)}
-              markerSize={mapMarkerSize}
-              isChosenExists={!!chosenPoint}
-              {...{ coords, title, description, images, isChosen }}
-            />
-          );
-        })}
-      </MapView>
+      <View style={{ ...styles.container, ...mapStyles }}>
+        <MapView
+          ref={marker => {
+            mapRef.current = marker;
+          }}
+          style={styles.map}
+          zoomEnabled
+          zoomTapEnabled
+          enableZoomControl
+          region={currentRegion}
+          onRegionChange={onRegionChange}
+          toolbarEnabled={false}
+          initialRegion={{
+            latitude: middlePoint.lat,
+            longitude: middlePoint.lng,
+            latitudeDelta: delta.current.latitudeDelta,
+            longitudeDelta: delta.current.longitudeDelta,
+          }}
+          {...mapViewProps}
+        >
+          {!!liveCoords && (
+            <Marker
+              coordinate={{
+                latitude: liveCoords.lat,
+                longitude: liveCoords.lng,
+              }}
+            >
+              <View
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 50,
+                  backgroundColor: CONSTANTS.colors.bg1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  top: 15,
+                }}
+              >
+                <FontAwesome5 name="walking" size={18} color="white" />
+              </View>
+            </Marker>
+          )}
+          {formattedPoints.map((point, index) => {
+            const { coords, title, description, images, isChosen } = point;
+            return (
+              <MapMarker
+                key={title}
+                onPress={handlePointPress(point)}
+                markerSize={mapMarkerSize}
+                isChosenExists={!!chosenPoint}
+                {...{ coords, title, description, images, isChosen }}
+              />
+            );
+          })}
+        </MapView>
+        <Button
+          style={styles.showMyLocationBtn}
+          onPress={onGetMyLocationClick}
+          noPaddings
+        >
+          <Ionicons
+            name="man-sharp"
+            size={24}
+            color="white"
+            style={{ marginLeft: 3 }}
+          />
+        </Button>
+        {children}
+      </View>
     );
   }
 );
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
+    height: Dimensions.get('window').height,
+  },
+  map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  showMyLocationBtn: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    backgroundColor: CONSTANTS.colors.bg1,
   },
 });

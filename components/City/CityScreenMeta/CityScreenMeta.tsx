@@ -3,19 +3,18 @@ import { CText } from '@/components/CText';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import { GuidesSlideList } from '@/components/Guide';
 import { CountryPill } from '@/components/Country';
-import { LikeAction } from '@/components/LikeAction';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { City, FONTS, SOCIAL_MODELS } from '@/types';
-import { useLayout } from '@/context';
+import { City, FONTS } from '@/types';
 import { getGuidesCategories } from '@/components/City/CityScreenMeta/CityScreenMeta.utils';
 import { useState } from 'react';
+import { useSelector } from '@/stores';
 
 type Props = {
   city: City;
 };
 
 export const CityScreenMeta = ({ city }: Props) => {
-  const { height } = useLayout();
+  const height = useSelector(({ domStore }) => domStore?.layout?.height);
   const [state, setState] = useState({
     filterByCategory: '',
   });
@@ -33,6 +32,7 @@ export const CityScreenMeta = ({ city }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={height - 40}
+      withHeaderHide
       TopContent={
         <>
           <View style={styles.top}>
