@@ -16,6 +16,7 @@ import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { CONSTANTS } from '@/styles/constants';
 import { getMyLocation } from '@/utils/map';
 import { useSelector } from '@/stores';
+import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
 
 type Props = MapViewProps & {
   points: Place[];
@@ -119,28 +120,8 @@ export const Map = React.memo(
           }}
           {...mapViewProps}
         >
-          {!!liveCoords && (
-            <Marker
-              coordinate={{
-                latitude: liveCoords.lat,
-                longitude: liveCoords.lng,
-              }}
-            >
-              <View
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 50,
-                  backgroundColor: CONSTANTS.colors.bg1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  top: 15,
-                }}
-              >
-                <FontAwesome5 name="walking" size={18} color="white" />
-              </View>
-            </Marker>
-          )}
+          {!!liveCoords && <MyLocationMarker liveCoords={liveCoords} />}
+
           {formattedPoints.map((point, index) => {
             const { coords, title, description, images, isChosen } = point;
             return (
@@ -159,12 +140,7 @@ export const Map = React.memo(
           onPress={onGetMyLocationClick}
           noPaddings
         >
-          <Ionicons
-            name="man-sharp"
-            size={24}
-            color="white"
-            style={{ marginLeft: 3 }}
-          />
+          <Ionicons name="man-sharp" size={24} color="white" />
         </Button>
         {children}
       </View>

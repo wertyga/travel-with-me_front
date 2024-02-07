@@ -11,6 +11,13 @@
       "android": {
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://b039-2a02-a31a-803b-7380-182-1260-1b3e-e830.ngrok-free.app",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "277624245533-j7egokd8dd6la4olkjts8h3uumnvkkma.apps.googleusercontent.com",
+        "EXPO_PUBLIC_IOS_CLIENT_ID": "277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr.apps.googleusercontent.com",
+        "EXPO_PUBLIC_ANDROID_CLIENT_ID": "277624245533-94uro3ff03us5gd1qu048aq9kcc5nr45.apps.googleusercontent.com",
+        "EXPO_PUBLIC_STRIPE_PK_KEY": "pk_test_51NjctuLjIKbGVNPBwCRLtDko6G5xS4Ze7N42K6GsM5IkAnOQZn3skLD5kfzgKxXQuFl3watT7Xgo84A9HTwtWSST00CnF8tcSN"
       }
     },
     "production": {
