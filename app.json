@@ -39,15 +39,30 @@
     },
     "scheme": "travel-with-me",
     "android": {
-      "bundleIdentifier": "com.wertyga.travel-with-me",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.wertyga.travelwithme"
+      "package": "com.wertyga.travelwithme",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a4baaa78-7e41-475d-882f-f9add4d911c3"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a4baaa78-7e41-475d-882f-f9add4d911c3"
     }
   }
 }

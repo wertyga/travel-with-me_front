@@ -1,7 +1,6 @@
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet, ViewStyle, Dimensions, TextStyle } from 'react-native';
+import { StyleSheet, ViewStyle, Dimensions, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { View } from 'react-nativewind';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';

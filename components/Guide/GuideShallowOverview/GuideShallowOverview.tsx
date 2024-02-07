@@ -1,6 +1,5 @@
-import { View, Text } from 'react-nativewind';
 import { Guide } from '@/types';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 type Props = {
   guide: Guide;
