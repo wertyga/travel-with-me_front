@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useGetCitiesLightListQuery } from '@/api';
 import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 import { CText } from '@/components/CText';
@@ -36,6 +36,7 @@ export const CitiesMap = () => {
   return (
     <View style={{ ...styles.map, height: windowHeight - 230 }}>
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={styles.mapSelf}
         region={EUROPE_REGION}
         zoomEnabled

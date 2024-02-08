@@ -6,12 +6,16 @@ import React, {
   useState,
 } from 'react';
 import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
-import MapView, { MapViewProps, Region, Marker } from 'react-native-maps';
+import MapView, {
+  MapViewProps,
+  Region,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 import { Path, Place } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 import Button from '@/components/Button';
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { CONSTANTS } from '@/styles/constants';
 import { getMyLocation } from '@/utils/map';
@@ -102,6 +106,7 @@ export const Map = React.memo(
     return (
       <View style={{ ...styles.container, ...mapStyles }}>
         <MapView
+          provider={PROVIDER_GOOGLE}
           ref={marker => {
             mapRef.current = marker;
           }}

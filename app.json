@@ -23,8 +23,11 @@
       ]
     ],
     "ios": {
+      "config": {
+        "googleMapsApiKey": "AIzaSyArka4q6xcDTR9O4NKwLCsMOjI2D3eP_g8"
+      },
       "supportsTablet": true,
-      "bundleIdentifier": "com.wertyga.travel-with-me",
+      "bundleIdentifier": "com.wertyga.travelwithme",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio",
@@ -39,6 +42,11 @@
     },
     "scheme": "travel-with-me",
     "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
