@@ -4,7 +4,7 @@
     "slug": "travel-with-me",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/logo2.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -49,7 +49,7 @@
         }
       },
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/logo2.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.wertyga.travelwithme",
