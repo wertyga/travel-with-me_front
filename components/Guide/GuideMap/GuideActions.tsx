@@ -9,7 +9,7 @@ import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import cn from '@/app/classname';
 import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { Guide } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 

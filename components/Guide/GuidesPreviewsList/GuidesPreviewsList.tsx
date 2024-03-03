@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { GuidePreview } from '@/components/Guide/GuidePreview/GuidePreview';
 import { Guide } from '@/types';
 import CarouselEx from 'react-native-snap-carousel';
 import { LinearGradient } from 'expo-linear-gradient';
+import { GuidePreview } from '../GuidePreview/GuidePreview';
 
 type Props = {
   guides: Guide[];

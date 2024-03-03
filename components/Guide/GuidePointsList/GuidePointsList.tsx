@@ -1,5 +1,4 @@
 import { TouchableOpacity, StyleSheet, ScrollView, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { CText } from '@/components/CText';
 import { Image } from '@/components/Image';
 import cn from '@/app/classname';

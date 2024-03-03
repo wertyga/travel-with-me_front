@@ -4,9 +4,9 @@ import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
 import { FONTS, Guide, SCREENS } from '@/types';
 import { useSubscription } from '@/hooks';
 import Button from '@/components/Button';
-import { GuidePointsList } from '@/components/Guide/GuidePointsList/GuidePointsList';
-import { GuideMetaActions } from '@/components/Guide/GuideMeta/GuideMetaActions';
-import { GuideMetaTitle } from '@/components/Guide/GuideMeta/GuideMetaTitle';
+import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
+import { GuideMetaActions } from './GuideMetaActions';
+import { GuideMetaTitle } from './GuideMetaTitle';
 
 type Props = {
   guide: Guide;

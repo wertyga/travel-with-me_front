@@ -1,21 +1,16 @@
+import React from 'react';
 import {
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   View,
-  Dimensions,
 } from 'react-native';
 import { Place } from '@/types';
-import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
-import { openGoogleMap } from '@/components/Map/Map.utils';
+import { AntDesign } from '@expo/vector-icons';
 import { AudioPlayer } from '@/components/AudioPlayer';
-import React from 'react';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { GuideMapPointActions } from '@/components/Guide';
-import { CarouselDots } from '@/components/Carousel';
+import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 
 type Props = {
   point: Place;

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import Button from '@/components/Button';
-import { Ionicons, MaterialIcons, Octicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 import React from 'react';

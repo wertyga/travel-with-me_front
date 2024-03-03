@@ -2,22 +2,17 @@ import * as React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Map } from '@/components/Map';
 import { Guide, Place } from '@/types';
-import { FontAwesome6 } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
-import { PointMapMarkerPreview } from '@/components/Point';
+import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import CarouselEx from 'react-native-snap-carousel';
 import cn from '@/app/classname';
 import { StatusBar } from 'expo-status-bar';
 import { updateDomAction, useSelector } from '@/stores';
-import { GuideActions } from '@/components/Guide/GuideMap/GuideActions';
-import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
-import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
-import Button from '@/components/Button';
-import { CONSTANTS } from '@/styles/constants';
-import { getNearestPoint } from '@/utils/map';
-import { GuideMapGoToNearestPointBtn } from '@/components/Guide/GuideMap/GuideMapGoToNearestPointBtn';
 import { CarouselDots } from '@/components/Carousel';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
+import { GuideActions } from './GuideActions';
+import { PointImagesCarousel } from './PointImagesCarousel';
+import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
 
 type Props = {
   guide: Guide;
