@@ -1,15 +1,18 @@
 import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 export const useHandleFromError = (
-  route,
   refetch: () => void,
   isFetching?: boolean
 ) => {
+  const { params } = useRoute();
+
   useFocusEffect(
     useCallback(() => {
-      if (!route.params?.isFromError || isFetching) return;
+      if (!(params as any)?.isFromError || isFetching) return;
+
       refetch();
-    }, [route.params?.isFromError])
+    }, [(params as any)?.isFromError])
   );
 };

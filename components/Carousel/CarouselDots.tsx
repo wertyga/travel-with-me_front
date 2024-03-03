@@ -56,6 +56,7 @@ export const CarouselDots = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    justifyContent: 'center',
     gap: 10,
   },
   item: {
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
     height: 4,
     transform: [{ scaleX: 0.5 }],
     opacity: 0.7,
+    borderRadius: 6,
   },
   activeItem: {
     transform: [{ scaleX: 1 }],

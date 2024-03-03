@@ -132,14 +132,20 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
           })}
         </Animated.View>
       </GestureDetector>
-      <CText style={styles.title}>{point.title}</CText>
+
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']}
+        style={styles.titleGradient}
+      >
+        <CText style={styles.title}>{point.title}</CText>
+      </LinearGradient>
 
       <LinearGradient
         colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
         style={styles.actionsContainer}
       >
-        <Button filled style={styles.scrollToCloseBtn} onPress={onClose}>
-          <AntDesign name="up" size={24} color="black" />
+        <Button style={styles.scrollToCloseBtn} onPress={onClose} noPaddings>
+          <AntDesign name="up" size={24} color="white" />
         </Button>
         <CarouselDots
           style={styles.dots}
@@ -152,6 +158,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
 };
 
 const styles = StyleSheet.create({
+  mainView: { zIndex: 20000 },
   container: {
     position: 'absolute',
     height: windowHeight,
@@ -160,11 +167,16 @@ const styles = StyleSheet.create({
     zIndex: 200,
     flexDirection: 'row',
   },
-  title: {
-    zIndex: 1125,
+  titleGradient: {
+    zIndex: 200,
+    top: 0,
+    left: 0,
+    right: 0,
     position: 'absolute',
-    top: 40,
-    left: 10,
+    paddingTop: 40,
+    paddingBottom: 40,
+  },
+  title: {
     flex: 1,
     width: Dimensions.get('window').width - 20,
     textAlign: 'center',
@@ -173,7 +185,7 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     position: 'absolute',
-    zIndex: 1000,
+    zIndex: 10000,
     right: 0,
     left: 0,
     bottom: 0,
@@ -190,6 +202,7 @@ const styles = StyleSheet.create({
   dots: {
     position: 'absolute',
     bottom: 10,
-    left: Dimensions.get('window').width / 2 - 55,
+    left: 0,
+    width: Dimensions.get('window').width,
   },
 });

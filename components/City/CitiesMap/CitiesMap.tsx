@@ -1,14 +1,13 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useGetCitiesLightListQuery } from '@/api';
 import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 import { CText } from '@/components/CText';
-import { useNavigation } from '@react-navigation/native';
 import { City, FONTS, SCREENS } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
-import { useLayout } from '@/context';
 import { useSelector } from '@/stores';
+import { useNavigation } from '@/hooks';
 
 const EUROPE_REGION = {
   latitude: 43.13591618938807,
@@ -24,7 +23,7 @@ export const CitiesMap = () => {
   const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
 
   const navigateToCity = (city: City) => () => {
-    navi.navigate(SCREENS.Home, { city });
+    navi.navigate(SCREENS.City, { city });
   };
 
   const middlePoint = getMiddleCoordinates(cities.map(({ coords }) => coords));

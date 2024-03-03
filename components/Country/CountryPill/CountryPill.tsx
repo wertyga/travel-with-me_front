@@ -23,7 +23,7 @@ export const CountryPill = ({
 }: Props) => {
   return (
     <View style={cn(styles.container, style)}>
-      <Button onPress={onPress}>
+      <Button onPress={onPress} style={styles.content}>
         {!!icon && <Icon name={icon as IconNames} />}
         {customIcon}
         <CText style={styles.title}>{title}</CText>
@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  content: {
+    height: 30,
   },
   title: {
     marginLeft: 7,

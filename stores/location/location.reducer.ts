@@ -7,10 +7,7 @@ export let watchLocationHandler: LocationSubscription | undefined = undefined;
 
 const INITIAL_STATE: LocationStore = {
   distanceToNearestPoint: undefined,
-  nearestPoint: undefined,
-  chosenPoint: undefined,
   liveCoords: undefined,
-  pointChooseType: undefined,
   isWatching: false,
   isLoading: false,
   status: PermissionStatus.UNDETERMINED,

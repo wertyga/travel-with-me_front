@@ -93,9 +93,9 @@ export const Map = React.memo(
       });
     }, [chosenPoint]);
 
-    const { middlePoint, formattedPoints } = useMemo(() => {
+    const { formattedPoints } = useMemo(() => {
       return {
-        middlePoint: getMiddleCoordinates(points.map(({ coords }) => coords)),
+        // middlePoint: getMiddleCoordinates(points.map(({ coords }) => coords)),
         formattedPoints: points.map(point => ({
           ...point,
           isChosen: point._id === chosenPoint?._id,
@@ -118,8 +118,8 @@ export const Map = React.memo(
           onRegionChange={onRegionChange}
           toolbarEnabled={false}
           initialRegion={{
-            latitude: middlePoint.lat,
-            longitude: middlePoint.lng,
+            latitude: points[0].coords.lat,
+            longitude: points[0].coords.lng,
             latitudeDelta: delta.current.latitudeDelta,
             longitudeDelta: delta.current.longitudeDelta,
           }}
@@ -145,7 +145,7 @@ export const Map = React.memo(
           onPress={onGetMyLocationClick}
           noPaddings
         >
-          <Ionicons name="man-sharp" size={24} color="white" />
+          <Ionicons name="man-sharp" size={18} color="white" />
         </Button>
         {children}
       </View>
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 50,
     backgroundColor: CONSTANTS.colors.bg1,
   },

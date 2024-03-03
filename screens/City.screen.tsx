@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@/hooks';
 import { SafeLoader } from '@/components/SafeLoader';
 import { Image } from '@/components/Image';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
@@ -10,7 +10,7 @@ import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 
-const Home = ({ route }) => {
+const CityScreen = ({ route: { params } }) => {
   const navi = useNavigation();
   const carouselRef = useRef<CarouselEx<any> | null>(null);
 
@@ -20,52 +20,40 @@ const Home = ({ route }) => {
     isFetching,
     refetch: refetchCities,
   } = useGetCitiesLightListQuery();
-
-  const currentCity = route.params?.city || cities[0];
   const {
     data: { city } = {},
     isFetching: cityLoading,
     error: getCityError,
-  } = useGetCityQuery(
-    { slug: currentCity?.slug },
-    { skip: !currentCity?.slug }
-  );
-
-  useLayoutEffect(() => {
-    navi.setOptions({
-      headerShown: false,
-    });
-  }, []);
+  } = useGetCityQuery({ slug: params?.city.slug });
 
   useEffect(() => {
     if (!getLightListError && !getCityError) return;
 
-    navigateToError(navi, getLightListError || getCityError);
+    navigateToError(getLightListError || getCityError);
   }, [getLightListError, getCityError]);
 
   const onChangeCity = async (index: number) => {
     if (!cities[index]) return;
 
-    //@ts-ignore
-    navi.navigate('Home', { city: cities[index] });
+    navi.setParams({ city: cities[index] });
   };
 
   useEffect(() => {
-    const cityIndex = cities.findIndex(city => city._id === currentCity._id);
-    if (cityIndex && city?.slug === currentCity?.slug) {
+    const cityIndex = cities.findIndex(city => city._id === params?.city._id);
+
+    if (cityIndex && city?._id === params?.city._id) {
       setTimeout(() => {
         carouselRef.current?.snapToItem?.(cityIndex, false, false);
-      }, 100);
+      });
     }
-  }, [currentCity, cities, city]);
+  }, [cities, city]);
 
-  useHandleFromError(route, refetchCities, isFetching);
+  useHandleFromError(refetchCities, isFetching);
 
-  // if (true) {
-  if (!city || !cities.length) {
+  if (params?.city._id !== city?._id) {
     return (
       <SafeLoader
-        image={currentCity.image}
+        image={params.city.image}
         textColor="white"
         indicatorColor="white"
       />
@@ -78,7 +66,7 @@ const Home = ({ route }) => {
   return (
     <MainLayout
       style={styles.layout}
-      headerTitle={currentCity.title}
+      headerTitle={city.title}
       isLoading={cityLoading}
       loaderTextColor="white"
     >
@@ -124,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default CityScreen;

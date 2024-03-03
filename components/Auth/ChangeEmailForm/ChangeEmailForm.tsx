@@ -20,8 +20,8 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
   });
 
   return (
-    <View>
-      <View className="flex flex-col items-center mt-4 w-full">
+    <View style={styles.container}>
+      <View style={styles.form}>
         <Controller
           control={control as any}
           render={({ field: { onChange, value } }) => {
@@ -57,17 +57,21 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
           }}
           name="password"
         />
-
-        <Button className="mt-10" high fluid onPress={handleSubmit(onSubmit)}>
-          Change E-mail
-        </Button>
       </View>
+      <Button high fluid onPress={handleSubmit(onSubmit)}>
+        Change E-mail
+      </Button>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    gap: 10,
+  },
+  form: {
+    gap: 10,
     marginTop: 20,
+    marginBottom: 20,
   },
 });

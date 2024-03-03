@@ -32,8 +32,6 @@ export const baseQuery = async ({
       });
     }
 
-    return {
-      error: e.response?.data || { message: e.message },
-    };
+    throw e;
   }
 };

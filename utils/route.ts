@@ -1,8 +1,8 @@
-import { NavigationProp } from '@react-navigation/core/src/types';
+import { router } from 'expo-router';
 
-export const navigateToError = (
-  navi: NavigationProp<ReactNavigation.RootParamList>,
-  error: any
-) => {
-  navi.navigate('Error', { error: error.message });
+export const navigateToError = (error: any) => {
+  router.navigate({
+    params: { error: error.message },
+    pathname: '/error',
+  });
 };

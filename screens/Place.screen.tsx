@@ -1,15 +1,16 @@
 import * as React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuthGuard } from '@/hooks';
 import { useGetPlaceQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
 import { SafeLoader } from '@/components/SafeLoader';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import PlaceDefaultImage from '@/assets/images/guide_placeholder.png';
 import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
+import { updateDomAction } from '@/stores';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, TouchableOpacity } from 'react-native';
 
 const PlaceScreen = ({ route }) => {
   const navi = useNavigation();
@@ -26,6 +27,11 @@ const PlaceScreen = ({ route }) => {
   } = useGetPlaceQuery({ slug: placeSlug }, { skip: !placeSlug });
 
   const onToggleShowGallery = () => {
+    if (!place?.images?.length) {
+      setState(prev => ({ ...prev, isShowGallery: false }));
+      return;
+    }
+
     setState(prev => ({ ...prev, isShowGallery: !prev.isShowGallery }));
   };
 
@@ -34,6 +40,20 @@ const PlaceScreen = ({ route }) => {
       headerShown: false,
     });
   }, []);
+
+  useEffect(() => {
+    if (state.isShowGallery) {
+      updateDomAction({
+        footer: { display: 'none' },
+        header: { display: 'none' },
+      });
+    } else {
+      updateDomAction({
+        footer: { display: 'flex' },
+        header: { display: 'flex' },
+      });
+    }
+  }, [state.isShowGallery]);
 
   if (!place || isLoading) {
     return <SafeLoader />;
@@ -45,15 +65,12 @@ const PlaceScreen = ({ route }) => {
       bgImage={place.images[0] ? { uri: place.images[0] } : PlaceDefaultImage}
       headerTitle={place.title}
     >
-      {!!place.images.length && (
-        <TouchableOpacity
-          style={styles.galleryBtn}
-          onPress={onToggleShowGallery}
-        >
-          <Ionicons name="images-outline" size={30} color="white" />
-        </TouchableOpacity>
-      )}
-      <PointMeta point={place} autoplay={autoplay} isFetching={isFetching} />
+      <PointMeta
+        point={place}
+        autoplay={autoplay}
+        isFetching={isFetching}
+        toggleGallery={onToggleShowGallery}
+      />
 
       {isShowGalley && (
         <PointImagesCarousel point={place} onClose={onToggleShowGallery} />

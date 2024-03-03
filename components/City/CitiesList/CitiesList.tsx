@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { City, SCREENS } from '@/types';
-import { useNavigation } from '@react-navigation/native';
 import { CityPreview } from '../CityPreview/CityPreview';
+import { City, SCREENS } from '@/types';
+import { useNavigation } from '@/hooks';
 
 type Props = {
   cities: City[];
@@ -17,7 +17,11 @@ export const CitiesList = ({ cities }: Props) => {
           <TouchableOpacity
             key={city._id}
             style={styles.preview}
-            onPress={() => navi.navigate(SCREENS.Home, { city })}
+            onPress={() =>
+              navi.navigate(SCREENS.City, {
+                city,
+              })
+            }
           >
             <CityPreview city={city} />
           </TouchableOpacity>

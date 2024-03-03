@@ -1,9 +1,14 @@
-import { LocationStore } from './location';
+import { AppStateStatus } from 'react-native';
 import { GuideStore } from '@/types/guide';
 import { DomStore } from '@/types/dom';
+import { LocationStore } from './location';
+
+export type AppStateStore = {
+  state: AppStateStatus;
+};
 
 export enum SCREENS {
-  Home = 'Home',
+  City = 'City',
   GuideMap = 'GuideMap',
   CitiesList = 'CitiesList',
   Guide = 'Guide',
@@ -31,4 +36,5 @@ export type RootStore = {
   locationStore: LocationStore;
   guideStore: GuideStore;
   domStore: DomStore;
+  appStateStore: AppStateStore;
 };

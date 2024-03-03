@@ -62,13 +62,13 @@ export const guideSlice = createSlice({
       }
       if (
         !isVisiblePointTheSame &&
-        // distanceToNearestPoint <= MIN_CLOSE_DISTANCE // True
-        distanceToNearestPoint >= MIN_CLOSE_DISTANCE // For Test
+        distanceToNearestPoint <= MIN_CLOSE_DISTANCE // True
+        // distanceToNearestPoint >= MIN_CLOSE_DISTANCE // For Test
       ) {
         state.visiblePoint = nearestPoint;
       } else if (
-        // distanceToNearestPoint > MIN_CLOSE_DISTANCE // True
-        distanceToNearestPoint <= MIN_CLOSE_DISTANCE && // For Test
+        distanceToNearestPoint > MIN_CLOSE_DISTANCE && // True
+        // distanceToNearestPoint <= MIN_CLOSE_DISTANCE && // For Test
         state.visiblePoint
       ) {
         state.visiblePoint = undefined;

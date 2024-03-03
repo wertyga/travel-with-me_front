@@ -5,7 +5,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '@/screens/Home';
+import CityScreen from '@/screens/City.screen';
 import ErrorScreen from '@/screens/Error';
 import LoginScreen from '@/screens/Login';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
@@ -13,17 +13,17 @@ import GuideScreen from '@/screens/Guide.screen';
 import GuideMapScreen from '@/screens/GuideMap.screen';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import SubscriptionsScreen from '@/screens/Subscriptions';
-import CitiesListScreen from '@/screens/CitiesListScreen';
-import PlaceScreen from '@/screens/PlaceScreen';
+import CitiesListScreen from '@/screens/CitiesList.screen';
+import PlaceScreen from '@/screens/Place.screen';
 import ProfileScreen from '@/screens/Profile';
 import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import TransitionScreen from '@/screens/TransitionScreen';
 import FavoritesScreen from '@/screens/Favorites.screen';
+import { useAuth } from '@/context';
 import { City, SCREENS } from '@/types';
-import { useAuth, PlayGuideProvider } from '@/context';
 
 export type RootStackParamList = {
-  [SCREENS.Home]: { city?: City; isFromError?: boolean } | undefined;
+  [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;
   [SCREENS.ChangeEmail]: undefined;
   [SCREENS.RecoveryPassword]: undefined;
   [SCREENS.Login]: undefined;
@@ -61,42 +61,37 @@ const Navigator = () => {
         }
       }}
     >
-      <PlayGuideProvider>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name={SCREENS.CitiesList}
-            component={CitiesListScreen}
-          />
-          <Stack.Screen name={SCREENS.Home} component={HomeScreen} />
-          <Stack.Screen name={SCREENS.Profile} component={ProfileScreen} />
-          <Stack.Screen name={SCREENS.Place} component={PlaceScreen} />
-          <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
-          <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
-          <Stack.Screen
-            name={SCREENS.WorldGuidesMap}
-            component={WorldGuidesMap}
-          />
-          <Stack.Screen
-            name={SCREENS.Subscriptions}
-            component={SubscriptionsScreen}
-          />
-          <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
-          <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
-          <Stack.Screen name={SCREENS.Favorite} component={FavoritesScreen} />
-          <Stack.Screen
-            name={SCREENS.RecoveryPassword}
-            component={RecoveryPasswordScreen}
-          />
-          <Stack.Screen
-            name={SCREENS.ChangeEmail}
-            component={ChangeEmailScreen}
-          />
-        </Stack.Navigator>
-      </PlayGuideProvider>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
+        <Stack.Screen name={SCREENS.City} component={CityScreen} />
+        <Stack.Screen name={SCREENS.Profile} component={ProfileScreen} />
+        <Stack.Screen name={SCREENS.Place} component={PlaceScreen} />
+        <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
+        <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
+        <Stack.Screen
+          name={SCREENS.WorldGuidesMap}
+          component={WorldGuidesMap}
+        />
+        <Stack.Screen
+          name={SCREENS.Subscriptions}
+          component={SubscriptionsScreen}
+        />
+        <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
+        <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
+        <Stack.Screen name={SCREENS.Favorite} component={FavoritesScreen} />
+        <Stack.Screen
+          name={SCREENS.RecoveryPassword}
+          component={RecoveryPasswordScreen}
+        />
+        <Stack.Screen
+          name={SCREENS.ChangeEmail}
+          component={ChangeEmailScreen}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

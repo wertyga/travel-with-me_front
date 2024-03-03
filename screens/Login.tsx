@@ -7,20 +7,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthCommonRequest, SCREENS } from '@/types';
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
+import { useNavigation } from '@/hooks';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
-
-const Login = ({ navigation, route }: Props) => {
+const Login = () => {
+  const navigation = useNavigation();
   const { signIn, signUp, sigUpLoading, sigInLoading } = useAuth();
   const [state, setState] = useState({
     screen: 'signin',
   });
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
 
   const onChangeForm = () => {
     setState(prev => ({

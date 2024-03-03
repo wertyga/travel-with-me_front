@@ -7,12 +7,16 @@ import { CText } from '@/components/CText';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { FONTS, Place, SOCIAL_MODELS } from '@/types';
 import { LikeAction } from '@/components/LikeAction';
+import Button from '@/components/Button';
 import { useSelector } from '@/stores';
+import { Ionicons } from '@expo/vector-icons';
+import * as React from 'react';
 
 type Props = {
   point: Place;
   autoplay?: boolean;
   isFetching?: boolean;
+  toggleGallery: () => void;
 };
 
 const META_TEXT = {
@@ -24,7 +28,12 @@ const META_TEXT = {
   },
 };
 
-export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
+export const PointMeta = ({
+  point,
+  autoplay,
+  isFetching,
+  toggleGallery,
+}: Props) => {
   const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [state, setState] = useState({
     chosen: 'description' as keyof typeof META_TEXT,
@@ -42,7 +51,16 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
       TopContent={
         <>
           <View style={styles.top}>
-            <CountryPill title={cityTitle} icon="map-point-small" />
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              <CountryPill title={cityTitle} icon="map-point-small" />
+              <Button
+                style={styles.galleryAction}
+                noPaddings
+                onPress={toggleGallery}
+              >
+                <Ionicons name="images-outline" size={20} color="white" />
+              </Button>
+            </View>
             <LikeAction
               modelType={SOCIAL_MODELS.Place}
               _id={point._id}
@@ -96,6 +114,10 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
 
 const styles = StyleSheet.create({
   description: {},
+  galleryAction: {
+    width: 35,
+    height: 35,
+  },
   aboutText: {
     fontFamily: FONTS.CrimsonSemiBold,
     fontSize: 22,

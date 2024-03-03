@@ -1,5 +1,11 @@
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet, ViewStyle, Dimensions, View } from 'react-native';
+import {
+  StyleSheet,
+  ViewStyle,
+  Dimensions,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
@@ -40,11 +46,11 @@ export const MainLayout = ({
 }: Props) => {
   const navi = useNavigation();
 
-  useLayoutEffect(() => {
-    navi.setOptions({
-      headerShown: false,
-    });
-  }, []);
+  // useLayoutEffect(() => {
+  //   navi.setOptions({
+  //     headerShown: false,
+  //   });
+  // }, []);
 
   return (
     <View style={cn(styles.main, containerStyle)}>

@@ -14,7 +14,7 @@ const ProfileScreen = () => {
   const navi = useNavigation();
   const { logout, user } = useAuth();
   const { subscription } = useSubscription();
-
+  console.log({ subscription });
   const handleLogout = () => {
     navi.navigate(SCREENS.CitiesList);
     logout();

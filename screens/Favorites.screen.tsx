@@ -4,7 +4,6 @@ import { useGetFavoritesQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
 import { FavoritesList } from '@/components/User';
 import { CText } from '@/components/CText';
-import { Loader } from '@/components/Loader';
 import { StyleSheet } from 'react-native';
 import { useAuthGuard } from '@/hooks';
 
@@ -20,22 +19,23 @@ const FavoritesScreen = () => {
   const isEmptyList = isRenderList && !guides.length && !places.length;
 
   return (
-    <>
-      {isFetching && <Loader />}
-      <MainLayout headerTitle="Favorites" style={styles.container}>
-        {isRenderList && !isEmptyList && (
-          <FavoritesList guides={guides} places={places} />
-        )}
-        {isEmptyList && (
-          <View style={styles.emptyText}>
-            <CText style={{ textAlign: 'center', fontSize: 14 }}>
-              This page is empty for now, but as soon as you select the guide or
-              place you like, it will be displayed here
-            </CText>
-          </View>
-        )}
-      </MainLayout>
-    </>
+    <MainLayout
+      headerTitle="Favorites"
+      style={styles.container}
+      isLoading={isFetching}
+    >
+      {isRenderList && !isEmptyList && (
+        <FavoritesList guides={guides} places={places} />
+      )}
+      {isEmptyList && (
+        <View style={styles.emptyText}>
+          <CText style={{ textAlign: 'center', fontSize: 14 }}>
+            This page is empty for now, but as soon as you select the guide or
+            place you like, it will be displayed here
+          </CText>
+        </View>
+      )}
+    </MainLayout>
   );
 };
 

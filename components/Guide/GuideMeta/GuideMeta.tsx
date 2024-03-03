@@ -1,15 +1,12 @@
-import { Dimensions, StyleSheet, View, ScrollView } from 'react-native';
-import { CountryPill } from '@/components/Country';
+import { Dimensions, StyleSheet } from 'react-native';
 import { CText } from '@/components/CText';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { FONTS, Guide, SCREENS, SOCIAL_MODELS } from '@/types';
+import { FONTS, Guide, SCREENS } from '@/types';
 import { useSubscription } from '@/hooks';
 import Button from '@/components/Button';
-import { LikeAction } from '@/components/LikeAction';
-import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-
-import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
+import { GuidePointsList } from '@/components/Guide/GuidePointsList/GuidePointsList';
+import { GuideMetaActions } from '@/components/Guide/GuideMeta/GuideMetaActions';
+import { GuideMetaTitle } from '@/components/Guide/GuideMeta/GuideMetaTitle';
 
 type Props = {
   guide: Guide;
@@ -20,7 +17,6 @@ const { height } = Dimensions.get('window');
 const META_HEIGHT = height - 120;
 
 export const GuideMeta = ({ guide, isFetching }: Props) => {
-  const navi = useNavigation();
   const { subscription, user } = useSubscription();
 
   const { travelTime } = guide;
@@ -29,68 +25,11 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={META_HEIGHT}
-      collapsedHeight={320}
-      TopContent={
-        <>
-          <View style={styles.top}>
-            <View>
-              <View style={styles.topLeft}>
-                {!!travelTime && (
-                  <CountryPill title={travelTime} icon="clock" />
-                )}
-                <CountryPill
-                  title={`${guide.pointsCount} points`}
-                  icon="map-point-small"
-                />
-              </View>
-              {!!subscription && (
-                <View style={styles.actions}>
-                  <CountryPill
-                    title="Follow"
-                    onPress={() =>
-                      navi.navigate(
-                        SCREENS.GuideMap as any,
-                        {
-                          guideSlug: guide.slug,
-                        } as any
-                      )
-                    }
-                    customIcon={
-                      <Ionicons
-                        name="play-circle-outline"
-                        size={22}
-                        color="white"
-                      />
-                    }
-                  />
-                  <CountryPill
-                    title="Open map"
-                    onPress={() =>
-                      navi.navigate(
-                        SCREENS.GuideMap as any,
-                        { guideSlug: guide.slug, isOnlyMap: true } as any
-                      )
-                    }
-                    customIcon={
-                      <SimpleLineIcons name="map" size={20} color="white" />
-                    }
-                  />
-                </View>
-              )}
-            </View>
-            <LikeAction
-              modelType={SOCIAL_MODELS.Guide}
-              _id={guide._id}
-              initialLike={guide.likes}
-              parentFetching={isFetching}
-            />
-          </View>
-
-          <View style={styles.title}>
-            <CText style={styles.aboutText}>About the guide</CText>
-          </View>
-        </>
+      collapsedHeight={300}
+      underTopContentSlot={
+        <GuideMetaActions travelTime={travelTime} guide={guide} />
       }
+      TopContent={<GuideMetaTitle guide={guide} isFetching={isFetching} />}
       BottomContent={
         <>
           {!subscription && (
@@ -118,37 +57,12 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  meta: {
-    flexDirection: 'row',
-  },
-  title: {
-    marginBottom: 15,
-  },
-  actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginTop: 5,
-  },
   aboutText: {
     fontFamily: FONTS.CrimsonSemiBold,
     fontSize: 22,
     marginRight: 15,
   },
   pointsTitle: {
-    marginTop: 10,
-  },
-  top: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-    gap: 10,
-  },
-  topLeft: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  playBtn: {
     marginTop: 10,
   },
 });

@@ -20,7 +20,8 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow Travel With Me to use your location."
         }
-      ]
+      ],
+      "expo-router"
     ],
     "ios": {
       "config": {

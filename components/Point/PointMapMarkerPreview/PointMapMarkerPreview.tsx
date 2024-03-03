@@ -4,6 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
 import { Place } from '@/types';
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
@@ -14,20 +15,22 @@ import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { GuideMapPointActions } from '@/components/Guide';
+import { CarouselDots } from '@/components/Carousel';
 
 type Props = {
   point: Place;
   onClose: () => void;
+  onToggleCarouselShow: () => void;
   autoplayAudio?: boolean;
 };
 
 export const PointMapMarkerPreview = ({
   point,
   onClose,
+  onToggleCarouselShow,
   autoplayAudio,
-  onOpenGallery,
 }: Props) => {
-  const { images, story, title, coords, audioStory } = point;
+  const { story, title, audioStory } = point;
 
   return (
     <BackgroundGradient style={styles.container}>
@@ -36,6 +39,13 @@ export const PointMapMarkerPreview = ({
       </TouchableOpacity>
 
       <Text style={styles.title}>{title}</Text>
+
+      <View style={styles.pointActions}>
+        <GuideMapPointActions
+          point={point}
+          onOpenGallery={onToggleCarouselShow}
+        />
+      </View>
 
       <ScrollView style={styles.descriptionContainer}>
         <Text style={styles.description}>{story}</Text>
@@ -63,11 +73,15 @@ const styles = StyleSheet.create({
     top: 13,
     zIndex: 10,
   },
+  pointActions: {
+    marginVertical: 5,
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 10,
+    marginRight: 10,
+    width: '90%',
   },
   descriptionContainer: {
     paddingBottom: 20,

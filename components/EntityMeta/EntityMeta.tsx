@@ -24,6 +24,7 @@ type Props = {
   withHeaderHide?: boolean;
   wrapperHeight: number;
   collapsedHeight?: number;
+  underTopContentSlot?: React.ReactNode;
 };
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -35,6 +36,7 @@ export const EntityMeta = ({
   disabled,
   withHeaderHide,
   wrapperHeight,
+  underTopContentSlot,
   collapsedHeight = UPPER_CONTENT_HEIGHT,
 }: Props) => {
   const [opened, setOpened] = useState(false);
@@ -150,6 +152,8 @@ export const EntityMeta = ({
               {TopContent}
             </View>
           </GestureDetector>
+
+          {underTopContentSlot}
 
           {!!description && (
             <ScrollView style={styles.scrollDescription}>

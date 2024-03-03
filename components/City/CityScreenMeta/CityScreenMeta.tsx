@@ -20,7 +20,13 @@ export const CityScreenMeta = ({ city }: Props) => {
   });
 
   const onChangeFilterByCategory = (filterByCategory: string) => () => {
-    setState(prev => ({ ...prev, filterByCategory }));
+    setState(prev => {
+      return {
+        ...prev,
+        filterByCategory:
+          prev.filterByCategory === filterByCategory ? '' : filterByCategory,
+      };
+    });
   };
 
   const guidesCityCategories = getGuidesCategories(city.guides);

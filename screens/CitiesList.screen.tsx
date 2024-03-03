@@ -5,7 +5,6 @@ import { MainLayout } from '@/Layouts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
-import Search from '@/components/Search';
 import { Loader } from '@/components/Loader';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { navigateToError } from '@/utils';
@@ -27,7 +26,7 @@ const HEADERS_LIST = [
   },
 ];
 
-const CitiesListScreen = ({ route }) => {
+const CitiesListScreen = () => {
   const navi = useNavigation();
   const [state, setState] = useState({
     tab: 'list',
@@ -61,10 +60,10 @@ const CitiesListScreen = ({ route }) => {
   useEffect(() => {
     if (!error) return;
 
-    navigateToError(navi, error);
+    navigateToError(error);
   }, [error, cities]);
 
-  useHandleFromError(route, refetchCities, isFetching);
+  useHandleFromError(refetchCities, isFetching);
 
   return (
     <MainLayout style={styles.layout} bgImage={citiesBgImage}>

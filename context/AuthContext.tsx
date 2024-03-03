@@ -46,7 +46,6 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const backScreen = useRef<SCREENS>();
   const [state, setState] = useState({
     user: undefined,
     token: null,

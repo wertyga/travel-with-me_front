@@ -9,17 +9,16 @@ import { openGoogleMap } from '@/components/Map/Map.utils';
 type Props = {
   point: Place;
   onOpenGallery: () => void;
-  navigateToPoint: () => void;
 };
 
-export const GuideMapPointActions = ({
-  point,
-  onOpenGallery,
-  navigateToPoint,
-}: Props) => {
+export const GuideMapPointActions = ({ point, onOpenGallery }: Props) => {
   return (
     <View style={styles.container}>
-      <Button style={styles.btn} onPress={() => openGoogleMap(point.coords)}>
+      <Button
+        style={styles.btn}
+        onPress={() => openGoogleMap(point.coords)}
+        noPaddings
+      >
         <MaterialIcons name="directions" size={24} color="white" />
       </Button>
       {!!point.images.length && (
@@ -27,9 +26,6 @@ export const GuideMapPointActions = ({
           <Ionicons name="images-outline" size={20} color="white" />
         </Button>
       )}
-      <Button filled style={styles.btn} onPress={navigateToPoint} noPaddings>
-        <Octicons name="dot" size={24} color="white" />
-      </Button>
     </View>
   );
 };
