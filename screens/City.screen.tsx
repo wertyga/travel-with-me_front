@@ -29,7 +29,7 @@ const CityScreen = ({ route: { params } }) => {
   useEffect(() => {
     if (!getLightListError && !getCityError) return;
 
-    navigateToError(getLightListError || getCityError);
+    navigateToError(navi, getLightListError || getCityError);
   }, [getLightListError, getCityError]);
 
   const onChangeCity = async (index: number) => {

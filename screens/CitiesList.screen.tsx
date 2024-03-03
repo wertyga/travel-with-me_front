@@ -60,7 +60,7 @@ const CitiesListScreen = () => {
   useEffect(() => {
     if (!error) return;
 
-    navigateToError(error);
+    navigateToError(navi, error);
   }, [error, cities]);
 
   useHandleFromError(refetchCities, isFetching);

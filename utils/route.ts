@@ -1,8 +1,5 @@
-import { router } from 'expo-router';
+import { SCREENS } from '@/types';
 
-export const navigateToError = (error: any) => {
-  router.navigate({
-    params: { error: error.message },
-    pathname: '/error',
-  });
+export const navigateToError = (navi: any, error: any) => {
+  navi.navigate(SCREENS.Error, { error: error.message });
 };
