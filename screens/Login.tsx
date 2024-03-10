@@ -1,9 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { SignUpForm, SignInForm } from '@/components/Auth';
-import { RootStackParamList } from '@/app/Navigator';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthCommonRequest, SCREENS } from '@/types';
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';

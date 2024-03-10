@@ -62,7 +62,7 @@ export const EntityMeta = ({
     return {
       transform: [{ translateY: swipeValues.value.translateY }],
       top: swipeValues.value.top,
-    };
+    } as any;
   });
   const animatedHidedPartStyles = useAnimatedStyle(() => {
     return {
@@ -110,13 +110,13 @@ export const EntityMeta = ({
   useEffect(() => {
     if (opened) {
       updateDomAction({
-        footer: { display: 'none' },
-        header: withHeaderHide ? { display: 'none' } : {},
+        footer: { hidden: true },
+        header: withHeaderHide ? { hidden: true } : {},
       });
     } else {
       updateDomAction({
-        footer: { display: 'flex' },
-        header: { display: 'flex' },
+        footer: { hidden: false },
+        header: { hidden: false },
       });
     }
   }, [opened]);
@@ -140,6 +140,7 @@ export const EntityMeta = ({
         },
       ]}
     >
+      {/*<View style={styles.container}>*/}
       <BackgroundGradient style={styles.container}>
         <View style={{ flexGrow: 1 }}>
           <GestureDetector gesture={gesture}>
@@ -192,6 +193,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
     paddingBottom: 20,
+    //
+    // backgroundColor: CONSTANTS.colors.bg3,
   },
   scrollDescription: {
     position: 'relative',

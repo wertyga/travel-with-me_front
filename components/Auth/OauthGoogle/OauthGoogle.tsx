@@ -28,7 +28,6 @@ export const OauthGoogle = () => {
   const [fetchForGoogleUser, { isLoading }] = useOauthGoogleMutation();
 
   useEffect(() => {
-    console.log({ response });
     if (response?.type === 'success') {
       setAccessToken(response.authentication?.accessToken || '');
     }

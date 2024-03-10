@@ -10,13 +10,19 @@ import { FontAwesome } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { CText } from '@/components/CText';
+import { useNavigation } from '@/hooks';
 import { FONTS, SCREENS } from '@/types';
-import { useNavigation } from '@react-navigation/native';
 import {
   HeaderMenu,
   HeaderMenuProps,
 } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { useSelector } from '@/stores';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { useEffect } from 'react';
 
 type Props = {
   style?: StyleProp<ViewStyle | TextStyle>;
@@ -28,12 +34,22 @@ type Props = {
 export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
   const navi = useNavigation();
   const headerStyles = useSelector(({ domStore }) => domStore?.header);
+  const translateY = useSharedValue(0);
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+    } as any;
+  });
+
+  useEffect(() => {
+    translateY.value = withTiming(headerStyles?.hidden ? -100 : 0);
+  }, [headerStyles?.hidden]);
 
   const goBack = () => {
     if (navi.canGoBack()) {
       navi.goBack();
     } else {
-      navi.navigate(SCREENS.CitiesList as any);
+      navi.navigate(SCREENS.CitiesList);
     }
   };
 
@@ -41,7 +57,7 @@ export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
   const { color, ...viewStyle } = style || {};
 
   return (
-    <View style={cn(styles.container, headerStyles, viewStyle)}>
+    <Animated.View style={[styles.container, viewStyle, animatedStyles]}>
       <Button style={styles.btn} onPress={goBack}>
         <FontAwesome
           name="angle-left"
@@ -64,7 +80,7 @@ export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
       </CText>
 
       {!!menu && <HeaderMenu items={menu} />}
-    </View>
+    </Animated.View>
   );
 };
 

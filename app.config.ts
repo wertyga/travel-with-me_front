@@ -1,0 +1,76 @@
+import { ExpoConfig, ConfigContext } from 'expo/config';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+export default ({ config }: ConfigContext): ExpoConfig => ({
+  name: 'Travel With Me',
+  slug: 'travel-with-me',
+  version: '1.0.0',
+  orientation: 'portrait',
+  icon: './assets/logo2.png',
+  userInterfaceStyle: 'light',
+  splash: {
+    image: './assets/splash.png',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
+  },
+  assetBundlePatterns: ['**/*'],
+  plugins: [
+    [
+      'expo-location',
+      {
+        locationAlwaysAndWhenInUsePermission:
+          'Allow Travel With Me to use your location.',
+      },
+    ],
+  ],
+  ios: {
+    config: {
+      googleMapsApiKey: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
+      // googleMapsApiKey: 'AIzaSyArka4q6xcDTR9O4NKwLCsMOjI2D3eP_g8',
+    },
+    supportsTablet: true,
+    bundleIdentifier: 'com.wertyga.travelwithme',
+    infoPlist: {
+      UIBackgroundModes: ['audio', 'location', 'fetch', 'remote-notification'],
+    },
+  },
+  experiments: {
+    tsconfigPaths: true,
+  },
+  scheme: 'travel-with-me',
+  android: {
+    config: {
+      googleMaps: {
+        // apiKey: process.env.GOOGLE_MAPS_API_KEY,
+        apiKey: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
+      },
+    },
+    adaptiveIcon: {
+      foregroundImage: './assets/logo2.png',
+      backgroundColor: '#ffffff',
+    },
+    package: 'com.wertyga.travelwithme',
+    permissions: [
+      'android.permission.ACCESS_COARSE_LOCATION',
+      'android.permission.ACCESS_FINE_LOCATION',
+      'android.permission.FOREGROUND_SERVICE',
+    ],
+  },
+  extra: {
+    eas: {
+      projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
+    },
+    API_BASE_URL: isProduction
+      ? 'http://138.68.93.188:6001'
+      : 'https://deb6-2a02-a31a-803b-7380-25fd-e6f6-c5d5-e676.ngrok-free.app',
+    PUBLIC_STRIPE_PK_KEY:
+      'pk_test_51NjctuLjIKbGVNPBwCRLtDko6G5xS4Ze7N42K6GsM5IkAnOQZn3skLD5kfzgKxXQuFl3watT7Xgo84A9HTwtWSST00CnF8tcSN',
+  },
+  runtimeVersion: {
+    policy: 'appVersion',
+  },
+  updates: {
+    url: 'https://u.expo.dev/a4baaa78-7e41-475d-882f-f9add4d911c3',
+  },
+});

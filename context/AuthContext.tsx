@@ -30,14 +30,20 @@ export type AuthContextType = {
   isLoading: boolean;
   sigUpLoading: boolean;
   sigInLoading: boolean;
-  backScreen?: SCREENS;
-  setBackScreen: (screen?: SCREENS) => void;
+  getBackScreenData: () => BackScreenType | null;
+  setBackScreenData: (data: BackScreenType | null) => void;
+};
+
+export type BackScreenType = {
+  href: SCREENS;
+  params?: Record<string, string>;
 };
 
 export const AuthContext = createContext<AuthContextType>({
   signIn: (() => {}) as any,
   logout: () => {},
-  setBackScreen: () => {},
+  getBackScreenData: () => null,
+  setBackScreenData: () => {},
   signUp: () => false as any,
   isLoading: false,
   sigUpLoading: false,
@@ -46,6 +52,7 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
+  const backScreenData = useRef<BackScreenType | null>(null);
   const [state, setState] = useState({
     user: undefined,
     token: null,
@@ -65,8 +72,11 @@ export const AuthProvider = ({ children }) => {
 
   const isLoading = selfFetching || state.loading;
 
-  const setBackScreen = (screen?: SCREENS) => {
-    setState(prev => ({ ...prev, backScreen: screen as any }));
+  const getBackScreenData = () => {
+    return backScreenData.current;
+  };
+  const setBackScreenData = (data: BackScreenType) => {
+    backScreenData.current = data;
   };
 
   const resetSignInOutTags = () => {
@@ -145,8 +155,8 @@ export const AuthProvider = ({ children }) => {
         isLoading,
         sigUpLoading,
         sigInLoading,
-        backScreen: state.backScreen,
-        setBackScreen,
+        getBackScreenData,
+        setBackScreenData,
       }}
     >
       {children}

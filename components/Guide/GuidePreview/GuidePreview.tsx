@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FONTS, Guide, SCREENS } from '@/types';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@/hooks';
 import DefaultImage from '@/assets/images/default_point_image.png';
 import { CText } from '@/components/CText';
 import { CountryPill } from '@/components/Country';
@@ -24,6 +24,13 @@ const width = Dimensions.get('screen').width * 0.7;
 
 export const GuidePreview = ({ guide, country }: Props) => {
   const navi = useNavigation();
+
+  const navigateToGuide = () => {
+    navi.navigate(SCREENS.Guide, {
+      guideSlug: guide.slug,
+      image: guide.vImage,
+    });
+  };
 
   return (
     <ImageBackground
@@ -42,9 +49,7 @@ export const GuidePreview = ({ guide, country }: Props) => {
         style={styles.content}
       >
         <TouchableOpacity
-          onPress={() =>
-            navi.navigate(SCREENS.Guide, { guideSlug: guide.slug })
-          }
+          onPress={navigateToGuide}
           activeOpacity={1}
           style={styles.guide}
         >

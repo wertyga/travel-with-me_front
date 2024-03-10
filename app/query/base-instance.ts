@@ -1,5 +1,7 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+import Config from '../../babel.config';
 
 export const baseInstance = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_BASE_URL,
+  baseURL: Constants.expoConfig?.extra?.API_BASE_URL,
 });

@@ -11,7 +11,7 @@ import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
 const GuideScreen = ({ route }: Props) => {
-  const { guideSlug } = route.params || {};
+  const { guideSlug, image } = route.params || {};
 
   const {
     data: guide,
@@ -20,7 +20,9 @@ const GuideScreen = ({ route }: Props) => {
   } = useGetGuideQuery({ slug: guideSlug }, { skip: !guideSlug });
 
   if (!guide || isLoading) {
-    return <SafeLoader />;
+    return (
+      <SafeLoader image={image} textColor="white" indicatorColor="white" />
+    );
   }
 
   const bgImageSource = guide.vImage

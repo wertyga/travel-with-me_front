@@ -1,7 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
 import Toast from 'react-native-toast-message';
 import { storage } from '@/utils';
-import { baseInstance } from './base-instance';
+import Constants from 'expo-constants';
+import axios from 'axios/index';
 
 export const baseQuery = async ({
   headers,
@@ -15,11 +16,12 @@ export const baseQuery = async ({
       authHeader['Authorization'] = `Bearer ${token}`;
     }
 
-    const data = await baseInstance.request({
+    const data = await axios.request({
       headers: {
         ...authHeader,
         ...headers,
       },
+      baseURL: 'https://api.fhills.com',
       ...config,
     } as AxiosRequestConfig);
 
@@ -32,6 +34,8 @@ export const baseQuery = async ({
       });
     }
 
-    throw e;
+    return {
+      error: e.response?.data || { message: JSON.stringify(e, null, 2) },
+    };
   }
 };

@@ -1,11 +1,5 @@
-import React, { useLayoutEffect } from 'react';
-import {
-  StyleSheet,
-  ViewStyle,
-  Dimensions,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, ViewStyle, Dimensions, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
@@ -14,7 +8,6 @@ import { ImageBackground, CImageProps } from '@/components/Image';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
-import { useNavigation } from '@react-navigation/native';
 import { Loader } from '@/components/Loader';
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { updateDomAction } from '@/stores';
@@ -44,14 +37,6 @@ export const MainLayout = ({
   menu,
   isHeaderDark,
 }: Props) => {
-  const navi = useNavigation();
-
-  // useLayoutEffect(() => {
-  //   navi.setOptions({
-  //     headerShown: false,
-  //   });
-  // }, []);
-
   return (
     <View style={cn(styles.main, containerStyle)}>
       {isLoading && <Loader textColor={loaderTextColor} />}

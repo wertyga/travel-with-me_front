@@ -11,6 +11,8 @@ export const CONSTANTS = {
     ultramarine: '#30D5C8',
     bg1: '#036068',
     bg2: '#00353B',
+    bg3: '#04242B',
+    bg4: '#0A3539',
   },
   spaces: {
     paddingTop: 50,

@@ -43,7 +43,7 @@ export let navigation: NavigationContainerRefWithCurrent<any> | undefined;
 
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
-  const { isLoading, backScreen, setBackScreen } = useAuth();
+  const { isLoading, getBackScreenData, setBackScreenData } = useAuth();
 
   if (isLoading) {
     return <TransitionScreen />;
@@ -54,10 +54,14 @@ const Navigator = () => {
       ref={navigationRef}
       onReady={() => {
         navigation = navigationRef;
+        const backScreen = getBackScreenData();
 
         if (backScreen) {
-          navigationRef.navigate(backScreen as any);
-          setBackScreen();
+          navigationRef.navigate(
+            backScreen.href as any,
+            backScreen.params as any
+          );
+          setBackScreenData(null);
         }
       }}
     >

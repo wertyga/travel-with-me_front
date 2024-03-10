@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
 import { SubscriptionList } from '@/components/Subscription';
 import Button from '@/components/Button';
 import { MainLayout } from '@/Layouts';
 import Toast from 'react-native-toast-message';
-import { useSubscription } from '@/hooks';
+import { useSubscription, useNavigation } from '@/hooks';
 import { useAuth } from '@/context';
-import { useNavigation } from '@react-navigation/native';
 import { SCREENS } from '@/types';
 
 const Subscriptions = () => {
@@ -77,7 +77,7 @@ const Subscriptions = () => {
       isLoading={isLoading}
     >
       <StripeProvider
-        publishableKey={process.env.EXPO_PUBLIC_STRIPE_PK_KEY}
+        publishableKey={Constants.expoConfig?.extra.PUBLIC_STRIPE_PK_KEY}
         merchantIdentifier="com.wertyga.travel-with-me"
       >
         <SubscriptionList

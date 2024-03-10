@@ -13,7 +13,6 @@ import MapView, {
 } from 'react-native-maps';
 import { Path, Place } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
-import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 import Button from '@/components/Button';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';

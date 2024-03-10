@@ -1,19 +1,18 @@
 import React from 'react';
 import {
   StyleSheet,
-  TextProps,
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
 import cn from '@/app/classname';
+import { useNavigation } from '@/hooks';
 import { CText } from '@/components/CText';
 import { CTextProps } from '@/components/CText/CText';
 import { FONTS, SCREENS } from '@/types';
-import { useNavigation } from '@react-navigation/native';
 import { CONSTANTS } from '@/styles/constants';
 import { getTruthlyValues } from '@/utils';
 
-type CustomButtonProps = TouchableOpacityProps & {
+export type CustomButtonProps = TouchableOpacityProps & {
   children: React.ReactNode;
   style?: TouchableOpacityProps['style'] | CTextProps['style'];
   textStyle?: CTextProps['style'];
@@ -55,7 +54,7 @@ const CustomButton = ({
 
   const handleOnPress = () => {
     if (href) {
-      navi.navigate(href as any, hrefParams as any);
+      navi.navigate(href, hrefParams);
     } else {
       onPress?.();
     }

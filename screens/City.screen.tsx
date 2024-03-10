@@ -43,7 +43,7 @@ const CityScreen = ({ route: { params } }) => {
 
     if (cityIndex && city?._id === params?.city._id) {
       setTimeout(() => {
-        carouselRef.current?.snapToItem?.(cityIndex, false, false);
+        carouselRef.current?.snapToItem?.(cityIndex, false, false, false);
       });
     }
   }, [cities, city]);

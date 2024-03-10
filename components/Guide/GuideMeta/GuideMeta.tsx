@@ -3,7 +3,7 @@ import { CText } from '@/components/CText';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
 import { FONTS, Guide, SCREENS } from '@/types';
 import { useSubscription } from '@/hooks';
-import Button from '@/components/Button';
+import { GoToPayContentLink } from '@/components/GoToPayContentLink';
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 import { GuideMetaActions } from './GuideMetaActions';
 import { GuideMetaTitle } from './GuideMetaTitle';
@@ -17,7 +17,7 @@ const { height } = Dimensions.get('window');
 const META_HEIGHT = height - 120;
 
 export const GuideMeta = ({ guide, isFetching }: Props) => {
-  const { subscription, user } = useSubscription();
+  const { subscription } = useSubscription();
 
   const { travelTime } = guide;
   const isRenderPointsList = !!guide.points?.length && !!subscription;
@@ -33,13 +33,9 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
       BottomContent={
         <>
           {!subscription && (
-            <Button
-              high
-              href={user ? SCREENS.Subscriptions : SCREENS.Login}
-              style={{ marginBottom: 50 }}
-            >
+            <GoToPayContentLink high style={{ marginTop: 50 }}>
               For more info get subscription
-            </Button>
+            </GoToPayContentLink>
           )}
           {isRenderPointsList && (
             <>
