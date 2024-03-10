@@ -14,6 +14,7 @@ import { FONTS } from '@/types';
 
 import citiesBgImage from '@/assets/images/cities-bg-3.png';
 import { CONSTANTS } from '@/styles/constants';
+import { SafeLoader } from '@/components/SafeLoader';
 
 const HEADERS_LIST = [
   {
@@ -64,6 +65,10 @@ const CitiesListScreen = () => {
   }, [error, cities]);
 
   useHandleFromError(refetchCities, isFetching);
+
+  if (!cities.length) {
+    return <SafeLoader />;
+  }
 
   return (
     <MainLayout style={styles.layout} bgImage={citiesBgImage}>

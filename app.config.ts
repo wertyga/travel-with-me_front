@@ -61,7 +61,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     API_BASE_URL: isProduction
       ? 'http://138.68.93.188:6001'
-      : 'https://deb6-2a02-a31a-803b-7380-25fd-e6f6-c5d5-e676.ngrok-free.app',
+      : 'https://eeba-213-134-190-75.ngrok-free.app',
     PUBLIC_STRIPE_PK_KEY:
       'pk_test_51NjctuLjIKbGVNPBwCRLtDko6G5xS4Ze7N42K6GsM5IkAnOQZn3skLD5kfzgKxXQuFl3watT7Xgo84A9HTwtWSST00CnF8tcSN',
   },

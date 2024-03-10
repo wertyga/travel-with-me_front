@@ -71,11 +71,7 @@ const Subscriptions = () => {
   const isSubscriptionCanceled = !!subscription && subscription.isCanceled;
   const isShowCancelAction = !!subscription && !subscription.isCanceled;
   return (
-    <MainLayout
-      headerTitle="Subscription"
-      style={styles.container}
-      isLoading={isLoading}
-    >
+    <MainLayout headerTitle="Subscription" isLoading={isLoading}>
       <StripeProvider
         publishableKey={Constants.expoConfig?.extra.PUBLIC_STRIPE_PK_KEY}
         merchantIdentifier="com.wertyga.travel-with-me"
@@ -114,7 +110,6 @@ const Subscriptions = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
   cancelBtn: {
     marginTop: 50,
   },

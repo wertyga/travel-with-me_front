@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import { GuidesSlideList } from '@/components/Guide';
@@ -15,6 +15,7 @@ type Props = {
 
 export const CityScreenMeta = ({ city }: Props) => {
   const height = useSelector(({ domStore }) => domStore?.layout?.height);
+
   const [state, setState] = useState({
     filterByCategory: '',
   });
@@ -35,7 +36,7 @@ export const CityScreenMeta = ({ city }: Props) => {
     : city.guides.filter(({ categories }) =>
         categories.includes(state.filterByCategory)
       );
-  console.log({ WRAPPER_HEIGHT: height - 40 });
+
   return (
     <EntityMeta
       wrapperHeight={height - 40}

@@ -69,7 +69,7 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 40,
+    paddingBottom: 40,
   },
   item: {
     marginBottom: 25,

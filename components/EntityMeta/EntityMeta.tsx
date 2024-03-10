@@ -26,6 +26,7 @@ type Props = {
   wrapperHeight: number;
   collapsedHeight?: number;
   underTopContentSlot?: React.ReactNode;
+  onOpenStateChange?: (state: boolean) => void;
 };
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -39,28 +40,29 @@ export const EntityMeta = ({
   wrapperHeight,
   underTopContentSlot,
   collapsedHeight = UPPER_CONTENT_HEIGHT,
+  onOpenStateChange,
 }: Props) => {
   const [opened, setOpened] = useState(false);
-  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
 
   const refState = useRef({
     initialState: {
-      top: windowHeight - collapsedHeight,
+      top: layoutHeight - collapsedHeight,
       opacity: 0,
       opened: false,
     },
     openedState: {
-      top: windowHeight - wrapperHeight,
+      top: layoutHeight - wrapperHeight,
       opacity: 1,
       opened: true,
     },
   });
   const swipeValues = useSharedValue(refState.current.initialState);
 
-  const animatedWrapperStyles = useAnimatedStyle(() => {
+  const animatedWrapperStyles = useAnimatedStyle<any>(() => {
     return {
       top: swipeValues.value.top,
-    } as any;
+    };
   });
   const animatedHidedPartStyles = useAnimatedStyle(() => {
     return {
@@ -119,6 +121,8 @@ export const EntityMeta = ({
         header: { hidden: false },
       });
     }
+
+    onOpenStateChange?.(opened);
   }, [opened]);
 
   useFocusEffect(
@@ -140,6 +144,7 @@ export const EntityMeta = ({
         styles.metaWrapper,
         animatedWrapperStyles,
         {
+          // top: 0,
           height: wrapperHeight,
         },
       ]}

@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import { useNavigation } from '@/hooks';
 import { SafeLoader } from '@/components/SafeLoader';
@@ -9,6 +9,7 @@ import { navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const CityScreen = ({ route: { params } }) => {
   const navi = useNavigation();
@@ -65,32 +66,34 @@ const CityScreen = ({ route: { params } }) => {
 
   return (
     <MainLayout
-      style={styles.layout}
+      style={{ paddingHorizontal: 0 }}
       headerTitle={city.title}
       isLoading={cityLoading}
       loaderTextColor="white"
     >
-      <CarouselEx
-        layout="tinder"
-        ref={c => {
-          carouselRef.current = c;
-        }}
-        data={citiesImages}
-        disableIntervalMomentum
-        onSnapToItem={onChangeCity}
-        renderItem={({ item }: any) => {
-          return (
-            <Image
-              key={item}
-              source={{ uri: item }}
-              width={windowWidth}
-              style={styles.cityImage}
-            />
-          );
-        }}
-        sliderWidth={windowWidth}
-        itemWidth={windowWidth}
-      />
+      <View style={styles.layout}>
+        <CarouselEx
+          layout="tinder"
+          ref={c => {
+            carouselRef.current = c;
+          }}
+          data={citiesImages}
+          disableIntervalMomentum
+          onSnapToItem={onChangeCity}
+          renderItem={({ item }: any) => {
+            return (
+              <Image
+                key={item}
+                source={{ uri: item }}
+                width={windowWidth}
+                style={styles.cityImage}
+              />
+            );
+          }}
+          sliderWidth={windowWidth}
+          itemWidth={windowWidth}
+        />
+      </View>
 
       {!cityLoading && <CityScreenMeta city={city} />}
     </MainLayout>
@@ -99,7 +102,6 @@ const CityScreen = ({ route: { params } }) => {
 
 const styles = StyleSheet.create({
   layout: {
-    paddingHorizontal: 0,
     position: 'absolute',
     top: 0,
     left: 0,

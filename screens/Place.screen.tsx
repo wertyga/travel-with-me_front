@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
 import { useAuthGuard } from '@/hooks';
 import { useGetPlaceQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
@@ -17,6 +16,7 @@ const PlaceScreen = ({ route }) => {
   const { params: { placeSlug, autoplay } = {} } = route;
   const [state, setState] = useState({
     isShowGallery: false,
+    isMetaOpened: false,
   });
 
   const {
@@ -34,6 +34,10 @@ const PlaceScreen = ({ route }) => {
     setState(prev => ({ ...prev, isShowGallery: !prev.isShowGallery }));
   };
 
+  const onOpenStateChange = (state: boolean) => {
+    setState(prev => ({ ...prev, isMetaOpened: state }));
+  };
+
   useLayoutEffect(() => {
     navi.setOptions({
       headerShown: false,
@@ -46,9 +50,13 @@ const PlaceScreen = ({ route }) => {
         footer: { hidden: true },
         header: { hidden: true },
       });
-    } else {
+    } else if (!state.isMetaOpened) {
       updateDomAction({
         footer: { hidden: false },
+        header: { hidden: false },
+      });
+    } else {
+      updateDomAction({
         header: { hidden: false },
       });
     }
@@ -63,12 +71,14 @@ const PlaceScreen = ({ route }) => {
     <MainLayout
       bgImage={place.images[0] ? { uri: place.images[0] } : PlaceDefaultImage}
       headerTitle={place.title}
+      onBgPress={onToggleShowGallery}
     >
       <PointMeta
         point={place}
         autoplay={autoplay}
         isFetching={isFetching}
         toggleGallery={onToggleShowGallery}
+        onOpenStateChange={onOpenStateChange}
       />
 
       {isShowGalley && (
@@ -77,13 +87,5 @@ const PlaceScreen = ({ route }) => {
     </MainLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  galleryBtn: {
-    position: 'absolute',
-    right: 10,
-    bottom: 310,
-  },
-});
 
 export default PlaceScreen;
