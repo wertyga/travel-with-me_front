@@ -11,8 +11,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: 'light',
   splash: {
     image: './assets/splash.png',
-    resizeMode: 'contain',
-    backgroundColor: '#ffffff',
+    resizeMode: 'cover',
+    backgroundColor: '#C7D3C9',
   },
   assetBundlePatterns: ['**/*'],
   plugins: [
@@ -27,7 +27,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     config: {
       googleMapsApiKey: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-      // googleMapsApiKey: 'AIzaSyArka4q6xcDTR9O4NKwLCsMOjI2D3eP_g8',
     },
     supportsTablet: true,
     bundleIdentifier: 'com.wertyga.travelwithme',
@@ -42,7 +41,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     config: {
       googleMaps: {
-        // apiKey: process.env.GOOGLE_MAPS_API_KEY,
         apiKey: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
       },
     },

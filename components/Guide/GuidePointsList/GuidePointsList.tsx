@@ -3,10 +3,9 @@ import { CText } from '@/components/CText';
 import { Image } from '@/components/Image';
 import cn from '@/app/classname';
 import { Guide, Place, SCREENS } from '@/types';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@/hooks';
 import { PointDistance } from '@/components/Point';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
-import { useSubscription } from '@/hooks';
 
 type Props = {
   points: (Place & { distance?: string })[];
@@ -15,30 +14,11 @@ type Props = {
 
 const POINT_SIZE = 100;
 
-export const GuidePointsList = ({ points, guide }: Props) => {
+export const GuidePointsList = ({ points }: Props) => {
   const navi = useNavigation();
-  const { subscription } = useSubscription();
 
   return (
     <ScrollView contentContainerStyle={styles.points} horizontal>
-      {/*{!!subscription && (*/}
-      {/*  <TouchableOpacity*/}
-      {/*    style={styles.point}*/}
-      {/*    onPress={() => {*/}
-      {/*      navi.navigate(SCREENS.GuideMap, { guideSlug: guide.slug });*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <View style={styles.image}>*/}
-      {/*      <Ionicons*/}
-      {/*        name="play-circle-outline"*/}
-      {/*        size={POINT_SIZE / 2}*/}
-      {/*        color="white"*/}
-      {/*      />*/}
-      {/*    </View>*/}
-      {/*    <CText style={styles.title}>Start Traveling</CText>*/}
-      {/*  </TouchableOpacity>*/}
-      {/*)}*/}
-
       {points.map(point => {
         return (
           <TouchableOpacity
@@ -53,7 +33,7 @@ export const GuidePointsList = ({ points, guide }: Props) => {
                 source={
                   point.images[0] ? { uri: point.images[0] } : GuidePlaceholder
                 }
-                style={cn(styles.image)}
+                style={styles.image}
               />
               {!!point.distance && (
                 <PointDistance

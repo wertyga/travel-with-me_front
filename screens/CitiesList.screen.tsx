@@ -12,7 +12,7 @@ import { useHandleFromError } from '@/hooks';
 import cn from '@/app/classname';
 import { FONTS } from '@/types';
 
-import citiesBgImage from '@/assets/images/cities-bg2.png';
+import citiesBgImage from '@/assets/images/cities-bg-3.png';
 import { CONSTANTS } from '@/styles/constants';
 
 const HEADERS_LIST = [

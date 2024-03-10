@@ -12,7 +12,7 @@ type Props = {
 export const BackgroundGradient = ({ children, style }: Props) => {
   return (
     <LinearGradient
-      colors={[CONSTANTS.colors.bg1, CONSTANTS.colors.bg2]}
+      colors={[CONSTANTS.colors.bg4, CONSTANTS.colors.bg3]}
       start={{ x: 0, y: 0.2 }}
       style={style}
     >

@@ -39,9 +39,9 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
           )}
           {isRenderPointsList && (
             <>
-              <CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>
-                Guide's points
-              </CText>
+              {/*<CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>*/}
+              {/*  Guide's points*/}
+              {/*</CText>*/}
               <GuidePointsList points={guide.points} guide={guide} />
             </>
           )}
