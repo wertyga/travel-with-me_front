@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useAuthGuard } from '@/hooks';
 import { useGetPlaceQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 import PlaceDefaultImage from '@/assets/images/guide_placeholder.png';
 import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
 import { updateDomAction } from '@/stores';
-import { Ionicons } from '@expo/vector-icons';
 
 const PlaceScreen = ({ route }) => {
   const navi = useNavigation();
@@ -44,13 +43,13 @@ const PlaceScreen = ({ route }) => {
   useEffect(() => {
     if (state.isShowGallery) {
       updateDomAction({
-        footer: { display: 'none' },
-        header: { display: 'none' },
+        footer: { hidden: true },
+        header: { hidden: true },
       });
     } else {
       updateDomAction({
-        footer: { display: 'flex' },
-        header: { display: 'flex' },
+        footer: { hidden: false },
+        header: { hidden: false },
       });
     }
   }, [state.isShowGallery]);

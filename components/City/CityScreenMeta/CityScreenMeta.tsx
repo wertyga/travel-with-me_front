@@ -35,6 +35,7 @@ export const CityScreenMeta = ({ city }: Props) => {
     : city.guides.filter(({ categories }) =>
         categories.includes(state.filterByCategory)
       );
+  console.log({ WRAPPER_HEIGHT: height - 40 });
   return (
     <EntityMeta
       wrapperHeight={height - 40}

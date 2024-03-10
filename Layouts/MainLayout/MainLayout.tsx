@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, ViewStyle, Dimensions, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
@@ -40,52 +39,51 @@ export const MainLayout = ({
   return (
     <View style={cn(styles.main, containerStyle)}>
       {isLoading && <Loader textColor={loaderTextColor} />}
-      <GestureHandlerRootView>
-        <View
-          style={styles.container}
-          onLayout={e => {
-            updateDomAction({
-              layout: { height: e.nativeEvent.layout.height },
-            });
-          }}
-        >
-          {!!headerTitle && (
-            <CityScreenHeader
-              title={headerTitle}
-              style={styles.header}
-              isDark={isHeaderDark}
-              menu={menu}
-            />
-          )}
 
-          {bgImage && (
-            <ImageBackground
-              source={bgImage}
-              width={Dimensions.get('window').width}
-              style={styles.bgImage}
+      <View
+        style={styles.container}
+        onLayout={e => {
+          updateDomAction({
+            layout: { height: e.nativeEvent.layout.height },
+          });
+        }}
+      >
+        {!!headerTitle && (
+          <CityScreenHeader
+            title={headerTitle}
+            style={styles.header}
+            isDark={isHeaderDark}
+            menu={menu}
+          />
+        )}
+
+        {bgImage && (
+          <ImageBackground
+            source={bgImage}
+            width={Dimensions.get('window').width}
+            style={styles.bgImage}
+          >
+            <LinearGradient
+              colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
+              style={cn(
+                styles.content,
+                { [!noFooter]: styles.withFooter },
+                style
+              )}
             >
-              <LinearGradient
-                colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
-                style={cn(
-                  styles.content,
-                  { [!noFooter]: styles.withFooter },
-                  style
-                )}
-              >
-                {children}
-              </LinearGradient>
-            </ImageBackground>
-          )}
-          {!bgImage && (
-            <>
-              <BackgroundGradient style={styles.bgGradient} />
-              <View style={cn(styles.content, style)}>{children}</View>
-            </>
-          )}
+              {children}
+            </LinearGradient>
+          </ImageBackground>
+        )}
+        {!bgImage && (
+          <>
+            <BackgroundGradient style={styles.bgGradient} />
+            <View style={cn(styles.content, style)}>{children}</View>
+          </>
+        )}
 
-          {!noFooter && <FooterMenu />}
-        </View>
-      </GestureHandlerRootView>
+        {!noFooter && <FooterMenu />}
+      </View>
     </View>
   );
 };
@@ -114,6 +112,6 @@ const styles = StyleSheet.create({
     paddingBottom: 70,
   },
   header: {
-    marginTop: 50,
+    marginTop: 40,
   },
 });
