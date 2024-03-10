@@ -126,6 +126,10 @@ export const EntityMeta = ({
       return () => {
         swipeValues.value = refState.current.initialState;
         setOpened(false);
+        updateDomAction({
+          footer: { hidden: false },
+          header: { hidden: false },
+        });
       };
     }, [])
   );
