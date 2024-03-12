@@ -4,3 +4,4 @@ export * from './array';
 export * from './image';
 export * from './object';
 export * from './route';
+export * from './cache';
