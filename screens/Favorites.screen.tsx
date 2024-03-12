@@ -41,7 +41,7 @@ const FavoritesScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 35,
+    // paddingTop: 35,
   },
   emptyText: {
     height: '100%',

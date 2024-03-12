@@ -1,6 +1,12 @@
-import React from 'react';
-import { StyleSheet, ViewStyle, Dimensions, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React, { ReactNode } from 'react';
+import {
+  StyleSheet,
+  ViewStyle,
+  Dimensions,
+  View,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
@@ -23,6 +29,8 @@ type Props = {
   headerTitle?: string;
   loaderTextColor?: string;
   menu?: HeaderMenuProps['menu'];
+  onBgPress?: () => void;
+  bgContent?: ReactNode;
 };
 
 export const MainLayout = ({
@@ -36,64 +44,65 @@ export const MainLayout = ({
   loaderTextColor,
   menu,
   isHeaderDark,
+  onBgPress,
+  bgContent,
 }: Props) => {
   return (
-    <View style={cn(styles.main, containerStyle)}>
+    <View
+      style={cn(styles.main, containerStyle)}
+      onLayout={e => {
+        updateDomAction({
+          layout: { height: e.nativeEvent.layout.height },
+        });
+      }}
+    >
       {isLoading && <Loader textColor={loaderTextColor} />}
-      <GestureHandlerRootView>
-        <View
-          style={styles.container}
-          onLayout={e => {
-            updateDomAction({
-              layout: { height: e.nativeEvent.layout.height },
-            });
-          }}
+
+      {!!headerTitle && (
+        <CityScreenHeader
+          title={headerTitle}
+          style={styles.header}
+          isDark={isHeaderDark}
+          menu={menu}
+        />
+      )}
+
+      {!!bgContent && <View style={styles.bgImage}>{bgContent}</View>}
+
+      {bgImage && (
+        <TouchableOpacity
+          onPress={onBgPress}
+          style={styles.bgImage}
+          activeOpacity={1}
         >
-          {!!headerTitle && (
-            <CityScreenHeader
-              title={headerTitle}
-              style={styles.header}
-              isDark={isHeaderDark}
-              menu={menu}
-            />
-          )}
+          <Image source={bgImage} style={styles.bgImage} />
+          <LinearGradient
+            colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
+            style={[StyleSheet.absoluteFillObject]}
+          />
+        </TouchableOpacity>
+      )}
+      {!bgImage && <BackgroundGradient style={styles.bgGradient} />}
 
-          {bgImage && (
-            <ImageBackground
-              source={bgImage}
-              width={Dimensions.get('window').width}
-              style={styles.bgImage}
-            >
-              <LinearGradient
-                colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
-                style={cn(
-                  styles.content,
-                  { [!noFooter]: styles.withFooter },
-                  style
-                )}
-              >
-                {children}
-              </LinearGradient>
-            </ImageBackground>
-          )}
-          {!bgImage && (
-            <>
-              <BackgroundGradient style={styles.bgGradient} />
-              <View style={cn(styles.content, style)}>{children}</View>
-            </>
-          )}
+      <View
+        style={cn(styles.content, style, { [!noFooter]: styles.withFooter })}
+      >
+        {children}
+      </View>
 
-          {!noFooter && <FooterMenu />}
-        </View>
-      </GestureHandlerRootView>
+      {!noFooter && <FooterMenu />}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {},
+  main: {
+    // position: 'relative',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
   container: {
-    height: '100%',
+    // height: '100%',
   },
   bgGradient: {
     height: '100%',
@@ -105,15 +114,25 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 15,
-    height: '100%',
+    flex: 1,
+    paddingTop: 100,
+    // height: '90%',
+    // backgroundColor: 'blue',
   },
   bgImage: {
+    objectFit: 'cover',
+    width: '100%',
+    height: '100%',
     ...StyleSheet.absoluteFillObject,
   },
   withFooter: {
     paddingBottom: 70,
   },
   header: {
-    marginTop: 50,
+    // marginTop: 40,
+    top: 40,
+    left: 0,
+    position: 'absolute',
+    width: '100%',
   },
 });

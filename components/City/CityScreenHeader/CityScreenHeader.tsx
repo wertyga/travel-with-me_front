@@ -42,7 +42,7 @@ export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
   });
 
   useEffect(() => {
-    translateY.value = withTiming(headerStyles?.hidden ? -100 : 0);
+    translateY.value = withTiming(headerStyles?.hidden ? -150 : 0);
   }, [headerStyles?.hidden]);
 
   const goBack = () => {
@@ -70,7 +70,7 @@ export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
         style={cn(
           {
             ...styles.title,
-            lineHeight: isTitleExceed ? 30 : undefined,
+            // lineHeight: isTitleExceed ? 30 : undefined,
           },
           { [isDark]: styles.dark }
         )}

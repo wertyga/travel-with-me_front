@@ -4,13 +4,14 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   runOnJS,
+  withTiming,
 } from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CText } from '@/components/CText';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { FONTS } from '@/types';
 import { updateDomAction, useSelector } from '@/stores';
 import { useFocusEffect } from '@react-navigation/native';
+import { GesturesContainer } from '@/components/Gestures/Gestures';
 
 const UPPER_CONTENT_HEIGHT = 300;
 const MIN_BOTTOM = 380;
@@ -25,6 +26,7 @@ type Props = {
   wrapperHeight: number;
   collapsedHeight?: number;
   underTopContentSlot?: React.ReactNode;
+  onOpenStateChange?: (state: boolean) => void;
 };
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -38,74 +40,74 @@ export const EntityMeta = ({
   wrapperHeight,
   underTopContentSlot,
   collapsedHeight = UPPER_CONTENT_HEIGHT,
+  onOpenStateChange,
 }: Props) => {
   const [opened, setOpened] = useState(false);
-  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
 
   const refState = useRef({
     initialState: {
-      translateY: 0,
-      top: windowHeight - collapsedHeight,
+      top: layoutHeight - collapsedHeight,
       opacity: 0,
       opened: false,
     },
     openedState: {
-      translateY: 0,
-      top: windowHeight - wrapperHeight,
+      top: layoutHeight - wrapperHeight,
       opacity: 1,
       opened: true,
     },
   });
   const swipeValues = useSharedValue(refState.current.initialState);
 
-  const animatedWrapperStyles = useAnimatedStyle(() => {
+  const animatedWrapperStyles = useAnimatedStyle<any>(() => {
     return {
-      transform: [{ translateY: swipeValues.value.translateY }],
       top: swipeValues.value.top,
-    } as any;
+    };
   });
   const animatedHidedPartStyles = useAnimatedStyle(() => {
     return {
-      opacity: swipeValues.value.opacity,
+      opacity: withTiming(swipeValues.value.opacity),
     };
   });
 
-  const gesture = Gesture.Pan()
-    .onUpdate(e => {
-      if (disabled) return;
+  const onUpdate = e => {
+    if (disabled) return;
 
-      const { translationY } = e;
-      const differencePercentY = Math.round(
-        Math.abs(translationY) / ONE_PERCENT
-      );
-      const opacity = translationY > 0 ? 1 : differencePercentY / 100;
+    const { translationY, absoluteY } = e;
 
-      swipeValues.value = {
-        ...swipeValues.value,
-        translateY: translationY,
-        opacity,
-      };
-    })
-    .onFinalize(e => {
-      if (disabled) return;
+    const differencePercentY = Math.round(Math.abs(translationY) / ONE_PERCENT);
+    const opacity = translationY > 0 ? 1 : differencePercentY / 100;
 
-      const { translationY } = e;
+    swipeValues.value = {
+      ...swipeValues.value,
+      top: absoluteY,
+      opacity,
+    };
+  };
 
-      const wasSwipeUpAndShouldBeOpened = translationY < -30;
-      const wasSwipeDownAndShouldBeClosed = translationY > 30;
+  const onFinalize = e => {
+    if (disabled) return;
 
-      if (wasSwipeUpAndShouldBeOpened) {
-        swipeValues.value = refState.current.openedState;
-        runOnJS(setOpened)(true);
-      } else if (wasSwipeDownAndShouldBeClosed) {
-        swipeValues.value = refState.current.initialState;
-        runOnJS(setOpened)(false);
-      } else if (swipeValues.value.opened) {
-        swipeValues.value = refState.current.openedState;
-      } else {
-        swipeValues.value = refState.current.initialState;
-      }
-    });
+    const { absoluteY } = e;
+    const difference = !opened
+      ? refState.current.initialState.top - absoluteY
+      : absoluteY - refState.current.openedState.top;
+
+    const wasSwipeUpAndShouldBeOpened = !opened && difference > 30;
+    const wasSwipeDownAndShouldBeClosed = opened && difference > 30;
+
+    if (wasSwipeUpAndShouldBeOpened) {
+      swipeValues.value = refState.current.openedState;
+      runOnJS(setOpened)(true);
+    } else if (wasSwipeDownAndShouldBeClosed) {
+      swipeValues.value = refState.current.initialState;
+      runOnJS(setOpened)(false);
+    } else if (swipeValues.value.opened) {
+      swipeValues.value = refState.current.openedState;
+    } else {
+      swipeValues.value = refState.current.initialState;
+    }
+  };
 
   useEffect(() => {
     if (opened) {
@@ -119,6 +121,8 @@ export const EntityMeta = ({
         header: { hidden: false },
       });
     }
+
+    onOpenStateChange?.(opened);
   }, [opened]);
 
   useFocusEffect(
@@ -140,23 +144,23 @@ export const EntityMeta = ({
         styles.metaWrapper,
         animatedWrapperStyles,
         {
+          // top: 0,
           height: wrapperHeight,
         },
       ]}
     >
-      {/*<View style={styles.container}>*/}
       <BackgroundGradient style={styles.container}>
         <View style={{ flexGrow: 1 }}>
-          <GestureDetector gesture={gesture}>
-            <View style={styles.meta}>
-              {!disabled && (
+          <View style={styles.meta}>
+            {!disabled && (
+              <GesturesContainer onUpdate={onUpdate} onFinalize={onFinalize}>
                 <View style={styles.swiperWrapper}>
                   <View style={styles.swiper} />
                 </View>
-              )}
-              {TopContent}
-            </View>
-          </GestureDetector>
+              </GesturesContainer>
+            )}
+            {TopContent}
+          </View>
 
           {underTopContentSlot}
 
@@ -197,8 +201,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
     paddingBottom: 20,
-    //
-    // backgroundColor: CONSTANTS.colors.bg3,
   },
   scrollDescription: {
     position: 'relative',
@@ -211,13 +213,13 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.OpenSans,
   },
   meta: {
-    paddingTop: 10,
+    // paddingTop: 10,
   },
   swiperWrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
     width: '100%',
-    marginBottom: 10,
+    paddingVertical: 10,
   },
   swiper: {
     width: 100,

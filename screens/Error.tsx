@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@/hooks';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -38,17 +38,28 @@ const Error = ({ route, navigation }: Props) => {
 
   return (
     <MainLayout>
-      <ScrollView className="items-center justify-center h-screen px-6">
-        <CText>{`Constants.EXPO_PUBLIC_API_BASE_URL: ${JSON.stringify(Constants.expoConfig?.extra, null, 2)}`}</CText>
-        <CText>Oops... Something went wrong</CText>
-        <CText>{route.params.error}</CText>
+      <View style={styles.scrollView}>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <CText>Oops... Something went wrong</CText>
+          <CText>{route.params.error}</CText>
+        </View>
 
         <Button onPress={goBack} fluid>
           Go Back
         </Button>
-      </ScrollView>
+      </View>
     </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    gap: 10,
+  },
+});
 
 export default Error;

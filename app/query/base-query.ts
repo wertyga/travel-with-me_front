@@ -21,7 +21,7 @@ export const baseQuery = async ({
         ...authHeader,
         ...headers,
       },
-      baseURL: 'https://api.fhills.com',
+      baseURL: Constants.expoConfig?.extra.API_BASE_URL,
       ...config,
     } as AxiosRequestConfig);
 
@@ -35,7 +35,7 @@ export const baseQuery = async ({
     }
 
     return {
-      error: e.response?.data || { message: JSON.stringify(e, null, 2) },
+      error: e.response?.data || { message: e.message },
     };
   }
 };

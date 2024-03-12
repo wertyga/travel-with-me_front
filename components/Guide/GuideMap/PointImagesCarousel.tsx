@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from '@/components/Image';
 import { CText } from '@/components/CText';
@@ -15,6 +14,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { FONTS, Place } from '@/types';
 import { useSelector } from '@/stores';
+import { GesturesContainer } from '@/components/Gestures/Gestures';
 
 type Props = {
   point: Place;
@@ -51,76 +51,78 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
         { translateY: withTiming(translateY, { duration: 100 }) },
         { translateX: valueX },
       ],
-    };
+    } as any;
   });
 
-  const gesture = Gesture.Pan()
-    .onUpdate(e => {
-      const { translationY, translationX } = e;
-      const isByY = Math.abs(translationY) > Math.abs(translationX);
-      const { currentIndex } = swipeTopValue.value;
-      const currentTranslateX = currentIndex * -windowWidth;
+  const onUpdate = e => {
+    const { translationY, translationX } = e;
+    const isByY = Math.abs(translationY) > Math.abs(translationX);
+    const { currentIndex } = swipeTopValue.value;
+    const currentTranslateX = currentIndex * -windowWidth;
+
+    swipeTopValue.value = {
+      ...swipeTopValue.value,
+      imageSlide: true,
+      translateY: isByY ? translationY : 0,
+      translateX: !isByY ? currentTranslateX + translationX : currentTranslateX,
+    };
+  };
+
+  const onFinalize = e => {
+    const { translationY, translationX } = e;
+    const isByY = Math.abs(translationY) > Math.abs(translationX);
+    const { currentIndex } = swipeTopValue.value;
+    const currentTranslateX = currentIndex * -windowWidth;
+
+    if (isByY) {
+      // translationY - negative, slide to top
+      if (translationY <= -TRANSLATION_Y_OFFSET) {
+        swipeTopValue.value = {
+          ...swipeTopValue.value,
+          imageSlide: false,
+          translateX: currentTranslateX,
+          translateY: -windowHeight - 100,
+        };
+      } else {
+        swipeTopValue.value = {
+          ...swipeTopValue.value,
+          imageSlide: false,
+          translateX: currentTranslateX,
+          translateY: 0,
+        };
+      }
+    } else {
+      const isLeft = translationX <= -30;
+      const isRight = translationX >= 30;
+      let index = currentIndex;
+
+      if (isLeft) {
+        index =
+          currentIndex + 1 > point.images.length - 1
+            ? point.images.length - 1
+            : currentIndex + 1;
+      } else if (isRight) {
+        index = currentIndex - 1 < 0 ? 0 : currentIndex - 1;
+      }
 
       swipeTopValue.value = {
-        ...swipeTopValue.value,
-        imageSlide: true,
-        translateY: isByY ? translationY : 0,
-        translateX: !isByY
-          ? currentTranslateX + translationX
-          : currentTranslateX,
+        currentIndex: index,
+        imageSlide: false,
+        translateY: 0,
+        translateX: windowWidth * -index,
       };
-    })
-    .onFinalize(e => {
-      const { translationY, translationX } = e;
-      const isByY = Math.abs(translationY) > Math.abs(translationX);
-      const { currentIndex } = swipeTopValue.value;
-      const currentTranslateX = currentIndex * -windowWidth;
-
-      if (isByY) {
-        // translationY - negative, slide to top
-        if (translationY <= -TRANSLATION_Y_OFFSET) {
-          swipeTopValue.value = {
-            ...swipeTopValue.value,
-            imageSlide: false,
-            translateX: currentTranslateX,
-            translateY: -windowHeight - 100,
-          };
-        } else {
-          swipeTopValue.value = {
-            ...swipeTopValue.value,
-            imageSlide: false,
-            translateX: currentTranslateX,
-            translateY: 0,
-          };
-        }
-      } else {
-        const isLeft = translationX <= -30;
-        const isRight = translationX >= 30;
-        let index = currentIndex;
-
-        if (isLeft) {
-          index =
-            currentIndex + 1 > point.images.length - 1
-              ? point.images.length - 1
-              : currentIndex + 1;
-        } else if (isRight) {
-          index = currentIndex - 1 < 0 ? 0 : currentIndex - 1;
-        }
-
-        swipeTopValue.value = {
-          currentIndex: index,
-          imageSlide: false,
-          translateY: 0,
-          translateX: windowWidth * -index,
-        };
-        runOnJS(setCurrentIndex)(index);
-      }
-    });
+      runOnJS(setCurrentIndex)(index);
+    }
+  };
 
   return (
     <>
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.container, animatedWrapperStyles]}>
+      <GesturesContainer
+        onFinalize={onFinalize}
+        onUpdate={onUpdate}
+        style={styles.container}
+      >
+        <Animated.View style={[styles.gallery, animatedWrapperStyles]}>
           {point.images.map(image => {
             return (
               <Image
@@ -131,7 +133,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
             );
           })}
         </Animated.View>
-      </GestureDetector>
+      </GesturesContainer>
 
       <LinearGradient
         colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']}
@@ -158,14 +160,13 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  mainView: { zIndex: 20000 },
   container: {
-    position: 'absolute',
-    height: windowHeight,
-    top: 0,
-    left: 0,
     zIndex: 200,
+    ...StyleSheet.absoluteFillObject,
+  },
+  gallery: {
     flexDirection: 'row',
+    ...StyleSheet.absoluteFillObject,
   },
   titleGradient: {
     zIndex: 200,

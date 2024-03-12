@@ -7,25 +7,27 @@ import { GoToPayContentLink } from '@/components/GoToPayContentLink';
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 import { GuideMetaActions } from './GuideMetaActions';
 import { GuideMetaTitle } from './GuideMetaTitle';
+import { useSelector } from '@/stores';
 
 type Props = {
   guide: Guide;
   isFetching: boolean;
 };
 
-const { height } = Dimensions.get('window');
-const META_HEIGHT = height - 120;
+// const { height } = Dimensions.get('window');
+// const META_HEIGHT = height - 120;
 
 export const GuideMeta = ({ guide, isFetching }: Props) => {
   const { subscription } = useSubscription();
+  const height = useSelector(({ domStore }) => domStore?.layout?.height);
 
   const { travelTime } = guide;
   const isRenderPointsList = !!guide.points?.length && !!subscription;
 
   return (
     <EntityMeta
-      wrapperHeight={META_HEIGHT}
-      collapsedHeight={300}
+      wrapperHeight={height - 120}
+      // collapsedHeight={300}
       underTopContentSlot={
         <GuideMetaActions travelTime={travelTime} guide={guide} />
       }
@@ -39,15 +41,15 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
           )}
           {isRenderPointsList && (
             <>
-              <CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>
-                Guide's points
-              </CText>
+              {/*<CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>*/}
+              {/*  Guide's points*/}
+              {/*</CText>*/}
               <GuidePointsList points={guide.points} guide={guide} />
             </>
           )}
         </>
       }
-      description={guide.description + guide.description}
+      description={guide.description}
     />
   );
 };

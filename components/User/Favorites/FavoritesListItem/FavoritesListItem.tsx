@@ -3,6 +3,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   runOnJS,
+  withTiming,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Image } from '@/components/Image';
@@ -10,6 +11,7 @@ import { CText } from '@/components/CText';
 import Button from '@/components/Button';
 import { useSetLikeMutation } from '@/api';
 import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
+import { GesturesContainer } from '@/components/Gestures/Gestures';
 
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
@@ -25,6 +27,8 @@ type Props = {
 
 const { width: windowWidth } = Dimensions.get('window');
 
+const TRANSLATE_FOR_DELETE = -1000;
+
 export const FavoritesListItem = ({
   title,
   subtitle,
@@ -39,11 +43,46 @@ export const FavoritesListItem = ({
     translateX: 0,
   });
 
-  const animatedStyles = useAnimatedStyle(() => {
+  const animatedStyles = useAnimatedStyle<any>(() => {
+    const { translateX } = swipeValues.value;
+    const isWithTiming =
+      translateX === TRANSLATE_FOR_DELETE || translateX === 0;
+
     return {
-      translateX: swipeValues.value.translateX,
+      transform: [
+        {
+          translateX: isWithTiming
+            ? withTiming(swipeValues.value.translateX)
+            : translateX,
+        },
+      ],
     };
   });
+
+  const onUpdate = e => {
+    const { translationX } = e;
+
+    swipeValues.value = {
+      translateX: translationX,
+    };
+  };
+
+  const onFinalize = e => {
+    const { translationX } = e;
+    const isNotDelete = translationX > 0 || Math.abs(translationX) < 100;
+
+    if (isNotDelete) {
+      swipeValues.value = {
+        translateX: 0,
+      };
+      return;
+    }
+
+    swipeValues.value = {
+      translateX: TRANSLATE_FOR_DELETE,
+    };
+    runOnJS(setLike)({ modelType, _id });
+  };
 
   const gesture = Gesture.Pan()
     .onUpdate(e => {
@@ -79,7 +118,7 @@ export const FavoritesListItem = ({
     modelType === SOCIAL_MODELS.Guide ? DefaultGuideImage : DefaultPlaceImage;
 
   return (
-    <GestureDetector gesture={gesture}>
+    <GesturesContainer onUpdate={onUpdate} onFinalize={onFinalize}>
       <Animated.View style={animatedStyles}>
         <Button
           href={href}
@@ -104,7 +143,7 @@ export const FavoritesListItem = ({
           </View>
         </Button>
       </Animated.View>
-    </GestureDetector>
+    </GesturesContainer>
   );
 };
 

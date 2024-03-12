@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuthGuard } from '@/hooks';
 import { useGetPlaceQuery } from '@/api';
 import { MainLayout } from '@/Layouts';
@@ -10,7 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 import PlaceDefaultImage from '@/assets/images/guide_placeholder.png';
 import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
 import { updateDomAction } from '@/stores';
-import { Ionicons } from '@expo/vector-icons';
 
 const PlaceScreen = ({ route }) => {
   const navi = useNavigation();
@@ -18,6 +16,7 @@ const PlaceScreen = ({ route }) => {
   const { params: { placeSlug, autoplay } = {} } = route;
   const [state, setState] = useState({
     isShowGallery: false,
+    isMetaOpened: false,
   });
 
   const {
@@ -35,6 +34,10 @@ const PlaceScreen = ({ route }) => {
     setState(prev => ({ ...prev, isShowGallery: !prev.isShowGallery }));
   };
 
+  const onOpenStateChange = (state: boolean) => {
+    setState(prev => ({ ...prev, isMetaOpened: state }));
+  };
+
   useLayoutEffect(() => {
     navi.setOptions({
       headerShown: false,
@@ -44,13 +47,17 @@ const PlaceScreen = ({ route }) => {
   useEffect(() => {
     if (state.isShowGallery) {
       updateDomAction({
-        footer: { display: 'none' },
-        header: { display: 'none' },
+        footer: { hidden: true },
+        header: { hidden: true },
+      });
+    } else if (!state.isMetaOpened) {
+      updateDomAction({
+        footer: { hidden: false },
+        header: { hidden: false },
       });
     } else {
       updateDomAction({
-        footer: { display: 'flex' },
-        header: { display: 'flex' },
+        header: { hidden: false },
       });
     }
   }, [state.isShowGallery]);
@@ -64,12 +71,14 @@ const PlaceScreen = ({ route }) => {
     <MainLayout
       bgImage={place.images[0] ? { uri: place.images[0] } : PlaceDefaultImage}
       headerTitle={place.title}
+      onBgPress={onToggleShowGallery}
     >
       <PointMeta
         point={place}
         autoplay={autoplay}
         isFetching={isFetching}
         toggleGallery={onToggleShowGallery}
+        onOpenStateChange={onOpenStateChange}
       />
 
       {isShowGalley && (
@@ -78,13 +87,5 @@ const PlaceScreen = ({ route }) => {
     </MainLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  galleryBtn: {
-    position: 'absolute',
-    right: 10,
-    bottom: 310,
-  },
-});
 
 export default PlaceScreen;

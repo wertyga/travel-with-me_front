@@ -20,6 +20,7 @@ import { CONSTANTS } from '@/styles/constants';
 import { getMyLocation } from '@/utils/map';
 import { useSelector } from '@/stores';
 import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
+import { customMapStyles } from '@/components/Map/Map.utils';
 
 type Props = MapViewProps & {
   points: Place[];
@@ -94,7 +95,6 @@ export const Map = React.memo(
 
     const { formattedPoints } = useMemo(() => {
       return {
-        // middlePoint: getMiddleCoordinates(points.map(({ coords }) => coords)),
         formattedPoints: points.map(point => ({
           ...point,
           isChosen: point._id === chosenPoint?._id,
@@ -109,6 +109,7 @@ export const Map = React.memo(
           ref={marker => {
             mapRef.current = marker;
           }}
+          customMapStyle={customMapStyles}
           style={styles.map}
           zoomEnabled
           zoomTapEnabled

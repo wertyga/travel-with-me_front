@@ -17,6 +17,7 @@ type Props = {
   autoplay?: boolean;
   isFetching?: boolean;
   toggleGallery: () => void;
+  onOpenStateChange: (state: boolean) => void;
 };
 
 const META_TEXT = {
@@ -33,6 +34,7 @@ export const PointMeta = ({
   autoplay,
   isFetching,
   toggleGallery,
+  onOpenStateChange,
 }: Props) => {
   const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [state, setState] = useState({
@@ -48,6 +50,7 @@ export const PointMeta = ({
     <EntityMeta
       wrapperHeight={windowHeight - 120}
       collapsedHeight={320}
+      onOpenStateChange={onOpenStateChange}
       TopContent={
         <>
           <View style={styles.top}>
