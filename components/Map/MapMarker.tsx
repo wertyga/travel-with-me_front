@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { CONSTANTS } from '@/styles/constants';
-import { Image } from '@/components/Image';
+import { FastImage } from '@/components/Image';
 import cn from '@/app/classname';
 import { Path } from '@/types';
 
@@ -85,8 +85,8 @@ export const MapMarker = React.memo(
             )}
           >
             <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
-            <Image
-              source={image ? { uri: image } : DefaultPointImage}
+            <FastImage
+              uri={image || DefaultPointImage}
               width={markerInnerSize.width}
               style={styles.image}
               key={image}

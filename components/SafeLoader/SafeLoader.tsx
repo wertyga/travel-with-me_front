@@ -1,10 +1,15 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  ImageBackground,
+} from 'react-native';
 import { CText } from '@/components/CText';
-import { ImageBackground } from '@/components/Image';
+import { FastImageBackground } from '@/components/Image';
 import { CONSTANTS } from '@/styles/constants';
 import { FONTS } from '@/types';
 
-import safeLoaderImage from '@/assets/splash.png';
+import safeLoaderImage from '@/assets/splash-2.png';
 
 type Props = {
   image?: string;
@@ -12,20 +17,37 @@ type Props = {
   indicatorColor?: string;
 };
 
+const Children = ({ textColor, indicatorColor }) => {
+  return (
+    <View style={{ ...styles.loadingContent }}>
+      <ActivityIndicator size="small" color={indicatorColor} />
+      <CText style={{ ...styles.text, color: textColor }}>Loading...</CText>
+    </View>
+  );
+};
+
 export const SafeLoader = ({
   image,
-  textColor = CONSTANTS.colors.bg2,
-  indicatorColor = CONSTANTS.colors.bg2,
+  textColor = 'white',
+  indicatorColor = 'white',
 }: Props) => {
+  if (image) {
+    return (
+      <FastImageBackground
+        uri={image}
+        style={[StyleSheet.absoluteFillObject, styles.container]}
+      >
+        <Children textColor={textColor} indicatorColor={indicatorColor} />
+      </FastImageBackground>
+    );
+  }
+
   return (
     <ImageBackground
       style={[StyleSheet.absoluteFillObject, styles.container]}
-      source={image ? { uri: image } : safeLoaderImage}
+      source={safeLoaderImage}
     >
-      <View style={{ ...styles.loadingContent }}>
-        <ActivityIndicator size="small" color={indicatorColor} />
-        <CText style={{ ...styles.text, color: textColor }}>Loading...</CText>
-      </View>
+      <Children textColor={textColor} indicatorColor={indicatorColor} />
     </ImageBackground>
   );
 };

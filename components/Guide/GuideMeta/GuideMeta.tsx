@@ -27,7 +27,6 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={height - 120}
-      // collapsedHeight={300}
       underTopContentSlot={
         <GuideMetaActions travelTime={travelTime} guide={guide} />
       }
@@ -41,9 +40,6 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
           )}
           {isRenderPointsList && (
             <>
-              {/*<CText style={{ ...styles.aboutText, ...styles.pointsTitle }}>*/}
-              {/*  Guide's points*/}
-              {/*</CText>*/}
               <GuidePointsList points={guide.points} guide={guide} />
             </>
           )}

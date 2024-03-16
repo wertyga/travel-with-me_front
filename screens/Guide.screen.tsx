@@ -7,6 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GuideMeta } from '@/components/Guide';
 
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
+import { defaultGuideImage } from '@/utils';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
@@ -25,12 +26,11 @@ const GuideScreen = ({ route }: Props) => {
     );
   }
 
-  const bgImageSource = guide.vImage
-    ? { uri: guide.vImage }
-    : DefaultGuideImage;
-
   return (
-    <MainLayout bgImage={bgImageSource} headerTitle={guide.title}>
+    <MainLayout
+      bgImage={guide.vImage || defaultGuideImage}
+      headerTitle={guide.title}
+    >
       <GuideMeta guide={guide} isFetching={isFetching} />
     </MainLayout>
   );

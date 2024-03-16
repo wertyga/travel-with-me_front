@@ -20,6 +20,7 @@ type Props = {
 
 const { width: windowWidth, height } = Dimensions.get('window');
 const PREVIEW_HEIGHT = height / 2;
+const MAP_TOP = 120;
 
 export const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
@@ -116,7 +117,7 @@ export const GuideMap = ({ guide }: Props) => {
 
   const mapHeight = !!state.pointShowing
     ? windowHeight - PREVIEW_HEIGHT
-    : windowHeight - 110;
+    : windowHeight - MAP_TOP - 5;
 
   return (
     <>
@@ -145,9 +146,12 @@ export const GuideMap = ({ guide }: Props) => {
       </Map>
 
       <View
-        style={cn(styles.pointPreview, {
-          [!!state.pointShowing]: { bottom: 0 },
-        })}
+        style={[
+          styles.pointPreview,
+          !!state.pointShowing && {
+            top: Dimensions.get('window').height - PREVIEW_HEIGHT,
+          },
+        ]}
       >
         <BackgroundGradient style={styles.carouselWrapper}>
           <CarouselDots
@@ -199,7 +203,7 @@ export const GuideMap = ({ guide }: Props) => {
 const styles = StyleSheet.create({
   map: {
     position: 'absolute',
-    top: 110,
+    top: MAP_TOP,
     left: 5,
     right: 5,
     zIndex: 10,
@@ -226,8 +230,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: PREVIEW_HEIGHT,
     left: 0,
+    top: Dimensions.get('window').height,
     backgroundColor: 'grey',
-    bottom: '-100%',
+    // bottom: '-100%',
     zIndex: 10,
   },
 });

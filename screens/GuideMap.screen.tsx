@@ -68,7 +68,7 @@ const GuideMapScreen = ({ route }: Props) => {
     <MainLayout
       headerTitle={guide.title}
       style={styles.container}
-      bgImage={!!guide.vImage ? { uri: guide.vImage } : undefined}
+      bgImage={guide.vImage}
       noFooter
     >
       <GuideMap guide={guide} />
