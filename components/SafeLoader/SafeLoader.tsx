@@ -9,7 +9,7 @@ import { FastImageBackground } from '@/components/Image';
 import { CONSTANTS } from '@/styles/constants';
 import { FONTS } from '@/types';
 
-import safeLoaderImage from '@/assets/splash.png';
+import safeLoaderImage from '@/assets/splash-2.png';
 
 type Props = {
   image?: string;
@@ -28,8 +28,8 @@ const Children = ({ textColor, indicatorColor }) => {
 
 export const SafeLoader = ({
   image,
-  textColor = CONSTANTS.colors.bg2,
-  indicatorColor = CONSTANTS.colors.bg2,
+  textColor = 'white',
+  indicatorColor = 'white',
 }: Props) => {
   if (image) {
     return (

@@ -30,9 +30,7 @@ export const GuidePointsList = ({ points }: Props) => {
           >
             <View style={cn(styles.imageWrapper, {})}>
               <FastImage
-                source={
-                  point.images[0] ? { uri: point.images[0] } : GuidePlaceholder
-                }
+                uri={point.images[0] || GuidePlaceholder}
                 style={styles.image}
               />
               {!!point.distance && (

@@ -1,6 +1,5 @@
 import {
   View,
-  ImageBackground,
   Text,
   TouchableOpacity,
   StyleSheet,
@@ -9,10 +8,10 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { FONTS, Guide, SCREENS } from '@/types';
 import { useNavigation } from '@/hooks';
-import DefaultImage from '@/assets/images/default_point_image.png';
 import { CText } from '@/components/CText';
+import { FastImageBackground } from '@/components/Image';
 import { CountryPill } from '@/components/Country';
-import { getCompressedUrl } from '@/utils';
+import { defaultGuideImageUri, defaultGuideImage } from '@/utils';
 
 type Props = {
   guide: Guide;
@@ -33,16 +32,10 @@ export const GuidePreview = ({ guide, country }: Props) => {
   };
 
   return (
-    <ImageBackground
+    <FastImageBackground
       resizeMode="cover"
       style={styles.container}
-      source={
-        guide.hImage
-          ? {
-              uri: getCompressedUrl(guide.hImage, width),
-            }
-          : DefaultImage
-      }
+      uri={guide.hImage || defaultGuideImage}
     >
       <LinearGradient
         colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.5)']}
@@ -65,7 +58,7 @@ export const GuidePreview = ({ guide, country }: Props) => {
           </View>
         </TouchableOpacity>
       </LinearGradient>
-    </ImageBackground>
+    </FastImageBackground>
   );
 };
 

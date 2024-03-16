@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { cacheImage, findImageInCache } from '@/utils';
 
 type Props = Omit<ImageBackgroundProps, 'source'> & {
-  uri: string;
+  uri: string | number;
 };
 
 export const FastImageBackground = ({
@@ -19,10 +19,12 @@ export const FastImageBackground = ({
   children,
   ...imageProps
 }: Props) => {
-  const [imgUri, setImgUri] = useState('');
+  const [imgUri, setImgUri] = useState(typeof uri === 'number' ? uri : '');
 
   useEffect(() => {
     async function handleCache() {
+      if (typeof uri === 'number' || !uri) return;
+
       const cachedUri = await findImageInCache(uri);
 
       if (cachedUri.uri) {
@@ -37,10 +39,11 @@ export const FastImageBackground = ({
     handleCache();
   }, [uri]);
 
+  const source: any = typeof uri === 'number' ? uri : { uri: imgUri };
   return (
     <>
       {imgUri ? (
-        <ImageBackground source={{ uri: imgUri }} style={style} {...imageProps}>
+        <ImageBackground source={source} style={style} {...imageProps}>
           {children}
         </ImageBackground>
       ) : (

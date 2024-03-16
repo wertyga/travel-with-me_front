@@ -86,7 +86,7 @@ export const MapMarker = React.memo(
           >
             <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
             <FastImage
-              source={image ? { uri: image } : DefaultPointImage}
+              uri={image || DefaultPointImage}
               width={markerInnerSize.width}
               style={styles.image}
               key={image}

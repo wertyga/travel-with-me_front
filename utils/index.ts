@@ -5,3 +5,4 @@ export * from './image';
 export * from './object';
 export * from './route';
 export * from './cache';
+export * from './guide';

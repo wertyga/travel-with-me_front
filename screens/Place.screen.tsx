@@ -69,7 +69,7 @@ const PlaceScreen = ({ route }) => {
   const isShowGalley = state.isShowGallery && !!place.images.length;
   return (
     <MainLayout
-      bgImage={place.images[0] ? { uri: place.images[0] } : PlaceDefaultImage}
+      bgImage={place.images[0] || PlaceDefaultImage}
       headerTitle={place.title}
       onBgPress={onToggleShowGallery}
     >
