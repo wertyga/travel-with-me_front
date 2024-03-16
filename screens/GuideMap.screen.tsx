@@ -65,24 +65,12 @@ const GuideMapScreen = ({ route }: Props) => {
   }
 
   return (
-    <MainLayout
-      headerTitle={guide.title}
-      style={styles.container}
-      bgImage={guide.vImage}
-      noFooter
-    >
+    <MainLayout headerTitle={guide.title} bgImage={guide.vImage} noFooter>
       <GuideMap guide={guide} />
     </MainLayout>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default GuideMapScreen;

@@ -25,6 +25,7 @@ type Props = {
   withHeaderHide?: boolean;
   wrapperHeight: number;
   collapsedHeight?: number;
+  descriptionTextCutLines?: number;
   underTopContentSlot?: React.ReactNode;
   onOpenStateChange?: (state: boolean) => void;
 };
@@ -41,6 +42,7 @@ export const EntityMeta = ({
   underTopContentSlot,
   collapsedHeight = UPPER_CONTENT_HEIGHT,
   onOpenStateChange,
+  descriptionTextCutLines = 5,
 }: Props) => {
   const [opened, setOpened] = useState(false);
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
@@ -144,7 +146,6 @@ export const EntityMeta = ({
         styles.metaWrapper,
         animatedWrapperStyles,
         {
-          // top: 0,
           height: wrapperHeight,
         },
       ]}
@@ -168,7 +169,7 @@ export const EntityMeta = ({
             <ScrollView style={styles.scrollDescription}>
               <CText
                 style={styles.description}
-                numberOfLines={opened ? undefined : 5}
+                numberOfLines={opened ? undefined : descriptionTextCutLines}
               >
                 {description}
               </CText>
@@ -212,14 +213,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: FONTS.OpenSans,
   },
-  meta: {
-    // paddingTop: 10,
-  },
+  meta: {},
   swiperWrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
     width: '100%',
-    paddingVertical: 10,
+    paddingVertical: 20,
   },
   swiper: {
     width: 100,

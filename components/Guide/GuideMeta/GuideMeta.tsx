@@ -14,19 +14,18 @@ type Props = {
   isFetching: boolean;
 };
 
-// const { height } = Dimensions.get('window');
-// const META_HEIGHT = height - 120;
-
 export const GuideMeta = ({ guide, isFetching }: Props) => {
   const { subscription } = useSubscription();
-  const height = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
 
   const { travelTime } = guide;
   const isRenderPointsList = !!guide.points?.length && !!subscription;
 
   return (
     <EntityMeta
-      wrapperHeight={height - 120}
+      wrapperHeight={layoutHeight - 120}
+      collapsedHeight={layoutHeight / 2.1}
+      descriptionTextCutLines={10}
       underTopContentSlot={
         <GuideMetaActions travelTime={travelTime} guide={guide} />
       }

@@ -100,13 +100,10 @@ export const MainLayout = ({
 
 const styles = StyleSheet.create({
   main: {
-    // position: 'relative',
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    flex: 1,
   },
-  container: {
-    // height: '100%',
-  },
+  container: {},
   bgGradient: {
     height: '100%',
     width: '100%',
@@ -119,20 +116,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     flex: 1,
     paddingTop: 100,
-    // height: '90%',
-    // backgroundColor: 'blue',
   },
   bgImage: {
     objectFit: 'cover',
-    width: '100%',
-    height: '100%',
     ...StyleSheet.absoluteFillObject,
   },
   withFooter: {
     paddingBottom: 70,
   },
   header: {
-    // marginTop: 40,
     top: 40,
     left: 0,
     position: 'absolute',

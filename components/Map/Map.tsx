@@ -103,7 +103,7 @@ export const Map = React.memo(
     }, [points, chosenPoint]);
 
     return (
-      <View style={{ ...styles.container, ...mapStyles }}>
+      <View style={[styles.container, mapStyles]}>
         <MapView
           provider={PROVIDER_GOOGLE}
           ref={marker => {

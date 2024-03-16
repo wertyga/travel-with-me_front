@@ -36,7 +36,7 @@ export const PointMeta = ({
   toggleGallery,
   onOpenStateChange,
 }: Props) => {
-  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [state, setState] = useState({
     chosen: 'description' as keyof typeof META_TEXT,
   });
@@ -44,25 +44,30 @@ export const PointMeta = ({
   const {
     city: { title: cityTitle },
     audioStory,
+    images,
   } = point;
 
+  const hasImages = !!images?.length;
   return (
     <EntityMeta
-      wrapperHeight={windowHeight - 120}
-      collapsedHeight={320}
+      wrapperHeight={layoutHeight - 120}
+      collapsedHeight={layoutHeight / 2.1}
+      descriptionTextCutLines={9}
       onOpenStateChange={onOpenStateChange}
       TopContent={
         <>
           <View style={styles.top}>
             <View style={{ flexDirection: 'row', gap: 10 }}>
               <CountryPill title={cityTitle} icon="map-point-small" />
-              <Button
-                style={styles.galleryAction}
-                noPaddings
-                onPress={toggleGallery}
-              >
-                <Ionicons name="images-outline" size={20} color="white" />
-              </Button>
+              {hasImages && (
+                <Button
+                  style={styles.galleryAction}
+                  noPaddings
+                  onPress={toggleGallery}
+                >
+                  <Ionicons name="images-outline" size={20} color="white" />
+                </Button>
+              )}
             </View>
             <LikeAction
               modelType={SOCIAL_MODELS.Place}

@@ -9,7 +9,6 @@ import { navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
-import { LinearGradient } from 'expo-linear-gradient';
 
 const CityScreen = ({ route: { params } }) => {
   const navi = useNavigation();

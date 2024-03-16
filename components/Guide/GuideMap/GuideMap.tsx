@@ -19,13 +19,14 @@ type Props = {
 };
 
 const { width: windowWidth, height } = Dimensions.get('window');
-const PREVIEW_HEIGHT = height / 2;
+// const PREVIEW_HEIGHT = height / 2;
 const MAP_TOP = 120;
 
 export const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
-  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+
   const visiblePoint = useSelector(
     ({ guideStore }) => guideStore?.visiblePoint
   );
@@ -115,9 +116,10 @@ export const GuideMap = ({ guide }: Props) => {
     isChosen: point._id === visiblePoint?._id,
   }));
 
+  const PREVIEW_HEIGHT = layoutHeight / 2;
   const mapHeight = !!state.pointShowing
-    ? windowHeight - PREVIEW_HEIGHT
-    : windowHeight - MAP_TOP - 5;
+    ? layoutHeight - PREVIEW_HEIGHT
+    : layoutHeight - MAP_TOP - 5;
 
   return (
     <>
@@ -127,12 +129,10 @@ export const GuideMap = ({ guide }: Props) => {
         chosenPoint={state.pointShowing}
         onPress={onPointChoose}
         mapMarkerSize={30}
-        mapStyles={cn(
+        mapStyles={[
           { ...styles.map, height: mapHeight },
-          {
-            [!!state.pointShowing]: styles.mapWithChosenPoint,
-          }
-        )}
+          !!state.pointShowing && styles.mapWithChosenPoint,
+        ]}
       >
         <GuideActions
           guide={guide}
@@ -148,8 +148,9 @@ export const GuideMap = ({ guide }: Props) => {
       <View
         style={[
           styles.pointPreview,
+          { height: PREVIEW_HEIGHT },
           !!state.pointShowing && {
-            top: Dimensions.get('window').height - PREVIEW_HEIGHT,
+            top: layoutHeight - PREVIEW_HEIGHT,
           },
         ]}
       >
@@ -227,12 +228,9 @@ const styles = StyleSheet.create({
   },
   pointPreview: {
     position: 'absolute',
-    width: '100%',
-    height: PREVIEW_HEIGHT,
     left: 0,
-    top: Dimensions.get('window').height,
+    top: Dimensions.get('screen').height,
     backgroundColor: 'grey',
-    // bottom: '-100%',
     zIndex: 10,
   },
 });

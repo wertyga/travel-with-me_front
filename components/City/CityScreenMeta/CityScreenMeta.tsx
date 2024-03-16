@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const CityScreenMeta = ({ city }: Props) => {
-  const height = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
 
   const [state, setState] = useState({
     filterByCategory: '',
@@ -39,7 +39,9 @@ export const CityScreenMeta = ({ city }: Props) => {
 
   return (
     <EntityMeta
-      wrapperHeight={height - 40}
+      wrapperHeight={layoutHeight - 40}
+      collapsedHeight={layoutHeight / 2.1}
+      descriptionTextCutLines={10}
       withHeaderHide
       TopContent={
         <>

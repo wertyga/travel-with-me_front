@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dimensions, StyleSheet, Image } from 'react-native';
+import { Dimensions, StyleSheet, Image, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CText } from '@/components/CText';
 import Button from '@/components/Button';
@@ -22,32 +22,37 @@ type Props = {
 
 const TRANSLATION_Y_OFFSET = 150;
 
-const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
+const { width: windowWidth } = Dimensions.get('window');
 export const PointImagesCarousel = ({ point, onClose }: Props) => {
-  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeTopValue = useSharedValue({
     translateX: 0,
     translateY: 0,
     imageSlide: false,
     currentIndex: 0,
+    isFinished: false,
   });
 
   const animatedWrapperStyles = useAnimatedStyle(() => {
-    const translateY = swipeTopValue.value.translateY;
-    const translateX = swipeTopValue.value.translateX;
+    const { translateY, translateX, imageSlide, isFinished } =
+      swipeTopValue.value;
 
-    if (Math.abs(translateY) >= windowHeight) {
+    if (Math.abs(translateY) >= layoutHeight) {
       runOnJS(onClose)();
     }
 
-    const valueX = swipeTopValue.value.imageSlide
+    const valueX = imageSlide
       ? translateX
       : withTiming(translateX, { duration: 100 });
 
     return {
       transform: [
-        { translateY: withTiming(translateY, { duration: 100 }) },
+        {
+          translateY: isFinished
+            ? withTiming(translateY, { duration: 100 })
+            : translateY,
+        },
         { translateX: valueX },
       ],
     } as any;
@@ -64,6 +69,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
       imageSlide: true,
       translateY: isByY ? translationY : 0,
       translateX: !isByY ? currentTranslateX + translationX : currentTranslateX,
+      isFinished: false,
     };
   };
 
@@ -80,7 +86,8 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
           ...swipeTopValue.value,
           imageSlide: false,
           translateX: currentTranslateX,
-          translateY: -windowHeight - 100,
+          translateY: -layoutHeight - 100,
+          isFinished: true,
         };
       } else {
         swipeTopValue.value = {
@@ -88,6 +95,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
           imageSlide: false,
           translateX: currentTranslateX,
           translateY: 0,
+          isFinished: true,
         };
       }
     } else {
@@ -109,6 +117,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
         imageSlide: false,
         translateY: 0,
         translateX: windowWidth * -index,
+        isFinished: true,
       };
       runOnJS(setCurrentIndex)(index);
     }
@@ -119,15 +128,26 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
       <GesturesContainer
         onFinalize={onFinalize}
         onUpdate={onUpdate}
-        style={styles.container}
+        style={[
+          styles.container,
+          {
+            height: layoutHeight,
+          },
+        ]}
       >
-        <Animated.View style={[styles.gallery, animatedWrapperStyles]}>
+        <Animated.View
+          style={[
+            styles.gallery,
+            { height: layoutHeight, width: point.images.length * windowWidth },
+            animatedWrapperStyles,
+          ]}
+        >
           {point.images.map(image => {
             return (
               <Image
                 source={{ uri: image }}
                 key={image}
-                style={{ width: windowWidth, height: windowHeight }}
+                style={{ width: windowWidth }}
               />
             );
           })}
@@ -165,7 +185,6 @@ const styles = StyleSheet.create({
   },
   gallery: {
     flexDirection: 'row',
-    ...StyleSheet.absoluteFillObject,
   },
   titleGradient: {
     zIndex: 200,
