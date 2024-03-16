@@ -28,17 +28,18 @@ export async function cacheImage(uri) {
     const cacheUri = getCacheDirectoryForUri(uri);
     const downloadImage = FileSystem.createDownloadResumable(uri, cacheUri, {});
     const downloaded = await downloadImage.downloadAsync();
-    console.log({ downloaded });
+
     return {
       cached: true,
       err: false,
-      path: downloaded?.uri,
+      uri: downloaded?.uri || '',
     };
   } catch (error) {
     return {
       cached: false,
       err: true,
       msg: error,
+      uri: '',
     };
   }
 }

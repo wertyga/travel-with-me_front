@@ -1,2 +1,2 @@
-export { Image, CImageProps } from './Image';
-export { ImageBackground } from './ImageBackground';
+export { FastImage, FastImageProps } from './FastImage';
+export { FastImageBackground } from './FastImageBackground';

@@ -1,7 +1,7 @@
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { CText } from '@/components/CText';
 import { Icon } from '@/components/Icon';
-import { Image } from '@/components/Image';
+import { FastImage } from '@/components/Image';
 import { City, FONTS } from '@/types';
 
 type Props = {
@@ -12,7 +12,11 @@ type Props = {
 export const CityPreview = ({ city, style }: Props) => {
   return (
     <View style={style}>
-      <Image source={{ uri: city.image }} width={200} style={styles.image} />
+      <FastImage
+        uri={city.image}
+        // width={200}
+        style={styles.image}
+      />
       <View>
         <CText style={styles.header}>{city.title}</CText>
         <View style={styles.country}>

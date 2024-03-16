@@ -15,7 +15,6 @@ export const baseQuery = async ({
     if (token) {
       authHeader['Authorization'] = `Bearer ${token}`;
     }
-
     const data = await axios.request({
       headers: {
         ...authHeader,

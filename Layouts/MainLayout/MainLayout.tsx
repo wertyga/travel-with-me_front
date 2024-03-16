@@ -6,11 +6,11 @@ import {
   View,
   TouchableOpacity,
   Image,
+  ImageProps,
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
-import { ImageBackground, CImageProps } from '@/components/Image';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
@@ -23,7 +23,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   isHeaderDark?: boolean;
-  bgImage?: CImageProps['source'];
+  bgImage?: ImageProps['source'];
   noFooter?: boolean;
   isLoading?: boolean;
   headerTitle?: string;

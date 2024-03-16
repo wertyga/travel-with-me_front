@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Image } from '@/components/Image';
+import { FastImage } from '@/components/Image';
 import { CText } from '@/components/CText';
 import Button from '@/components/Button';
 import { CarouselDots } from '@/components/Carousel';
@@ -125,7 +125,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
         <Animated.View style={[styles.gallery, animatedWrapperStyles]}>
           {point.images.map(image => {
             return (
-              <Image
+              <FastImage
                 source={{ uri: image }}
                 key={image}
                 style={{ width: windowWidth, height: windowHeight }}

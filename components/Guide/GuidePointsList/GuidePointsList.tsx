@@ -1,6 +1,6 @@
 import { TouchableOpacity, StyleSheet, ScrollView, View } from 'react-native';
 import { CText } from '@/components/CText';
-import { Image } from '@/components/Image';
+import { FastImage } from '@/components/Image';
 import cn from '@/app/classname';
 import { Guide, Place, SCREENS } from '@/types';
 import { useNavigation } from '@/hooks';
@@ -29,7 +29,7 @@ export const GuidePointsList = ({ points }: Props) => {
             }
           >
             <View style={cn(styles.imageWrapper, {})}>
-              <Image
+              <FastImage
                 source={
                   point.images[0] ? { uri: point.images[0] } : GuidePlaceholder
                 }

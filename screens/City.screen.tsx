@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
 import { useNavigation } from '@/hooks';
 import { SafeLoader } from '@/components/SafeLoader';
-import { Image } from '@/components/Image';
+import { FastImage } from '@/components/Image';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
 import { navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
@@ -81,14 +81,7 @@ const CityScreen = ({ route: { params } }) => {
           disableIntervalMomentum
           onSnapToItem={onChangeCity}
           renderItem={({ item }: any) => {
-            return (
-              <Image
-                key={item}
-                source={{ uri: item }}
-                width={windowWidth}
-                style={styles.cityImage}
-              />
-            );
+            return <FastImage key={item} uri={item} style={styles.cityImage} />;
           }}
           sliderWidth={windowWidth}
           itemWidth={windowWidth}

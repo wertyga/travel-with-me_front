@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { Image } from '@/components/Image';
+import { FastImage } from '@/components/Image';
 import { CText } from '@/components/CText';
 import Button from '@/components/Button';
 import { useSetLikeMutation } from '@/api';
@@ -127,7 +127,7 @@ export const FavoritesListItem = ({
           activeOpacity={1}
           rectangle
         >
-          <Image
+          <FastImage
             source={image ? { uri: image } : defaultImage}
             style={styles.image}
           />
