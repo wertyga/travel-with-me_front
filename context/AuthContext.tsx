@@ -31,6 +31,7 @@ export type AuthContextType = {
   sigUpLoading: boolean;
   sigInLoading: boolean;
   getBackScreenData: () => BackScreenType | null;
+  resetSignInOutTags: () => void;
   setBackScreenData: (data: BackScreenType | null) => void;
 };
 
@@ -44,6 +45,7 @@ export const AuthContext = createContext<AuthContextType>({
   logout: () => {},
   getBackScreenData: () => null,
   setBackScreenData: () => {},
+  resetSignInOutTags: () => {},
   signUp: () => false as any,
   isLoading: false,
   sigUpLoading: false,
@@ -157,6 +159,7 @@ export const AuthProvider = ({ children }) => {
         sigInLoading,
         getBackScreenData,
         setBackScreenData,
+        resetSignInOutTags,
       }}
     >
       {children}

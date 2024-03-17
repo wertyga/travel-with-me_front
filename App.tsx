@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 import { NativeWindStyleSheet } from 'nativewind';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -16,7 +17,7 @@ import {
 import { Provider } from 'react-redux';
 import { Toast } from '@/components/Toast';
 import { store } from '@/app/store/create-isomorphic-store';
-import { AuthProvider, LayoutProvider } from './context';
+import { AuthProvider, LayoutProvider, AppStateProvider } from './context';
 import Navigator from './app/Navigator';
 
 SplashScreen.preventAutoHideAsync();
@@ -49,9 +50,11 @@ function App() {
     <Provider store={store}>
       <StatusBar style="light" />
       <AuthProvider>
-        <LayoutProvider>
-          <Navigator />
-        </LayoutProvider>
+        <AppStateProvider>
+          <LayoutProvider>
+            <Navigator />
+          </LayoutProvider>
+        </AppStateProvider>
       </AuthProvider>
       <Toast />
     </Provider>

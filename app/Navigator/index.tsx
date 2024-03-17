@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   NavigationContainer,
   NavigationContainerRefWithCurrent,
@@ -21,6 +21,7 @@ import TransitionScreen from '@/screens/TransitionScreen';
 import FavoritesScreen from '@/screens/Favorites.screen';
 import { useAuth } from '@/context';
 import { City, Guide, SCREENS } from '@/types';
+import { AppState } from 'react-native';
 
 export type RootStackParamList = {
   [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;
