@@ -31,6 +31,21 @@ export const guideApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getGuidesList: build.query<
+      { guides: Guide[]; total: number },
+      { city?: string }
+    >({
+      query: params => {
+        return {
+          method: 'get',
+          url: '/guide/list',
+          params: {
+            ...params,
+            limit: 1000,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -38,5 +53,6 @@ export const {
   useGetGuidesCategoriesQuery,
   useGetGuideQuery,
   useGetGuidesCountQuery,
+  useGetGuidesListQuery,
   useLazyGetGuideQuery,
 } = guideApi;

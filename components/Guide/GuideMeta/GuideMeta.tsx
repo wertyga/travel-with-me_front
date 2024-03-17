@@ -1,7 +1,5 @@
-import { Dimensions, StyleSheet } from 'react-native';
-import { CText } from '@/components/CText';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { FONTS, Guide, SCREENS } from '@/types';
+import { Guide } from '@/types';
 import { useSubscription } from '@/hooks';
 import { GoToPayContentLink } from '@/components/GoToPayContentLink';
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
@@ -24,8 +22,8 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={layoutHeight - 120}
-      collapsedHeight={300}
-      descriptionTextCutLines={4}
+      collapsedHeight={400}
+      descriptionTextCutLines={8}
       underTopContentSlot={
         <GuideMetaActions travelTime={travelTime} guide={guide} />
       }
@@ -48,14 +46,3 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  aboutText: {
-    fontFamily: FONTS.CrimsonSemiBold,
-    fontSize: 22,
-    marginRight: 15,
-  },
-  pointsTitle: {
-    marginTop: 10,
-  },
-});

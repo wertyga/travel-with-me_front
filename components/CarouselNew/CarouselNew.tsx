@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
+import React, { useEffect } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { State as GestureState } from 'react-native-gesture-handler';
 import Animated, {
@@ -8,7 +8,6 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props<T = any> = {
   data: T[];
@@ -70,12 +69,6 @@ export const CarouselNew = <T,>({
 
     const { currentIndex, windowWidth } = swipeTopValue.value;
     const currentTranslateX = currentIndex * -windowWidth;
-    const isBlockedLast = currentIndex === data.length - 1 && translationX < 0;
-    const isBlockedByFirst = currentIndex === 0 && translationX > 0;
-
-    if (isBlockedLast || isBlockedByFirst) {
-      return;
-    }
 
     swipeTopValue.value = {
       ...swipeTopValue.value,

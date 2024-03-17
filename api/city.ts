@@ -27,7 +27,7 @@ export const cityApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getCity: build.query<{ city: City }, { slug: string }>({
+    getCity: build.query<{ city: City }, { slug?: string; _id?: string }>({
       providesTags: result =>
         result ? [{ type: CITY_TAGS.City, id: result.city._id }] : [],
       query: params => {

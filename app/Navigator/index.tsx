@@ -20,14 +20,14 @@ import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import TransitionScreen from '@/screens/TransitionScreen';
 import FavoritesScreen from '@/screens/Favorites.screen';
 import { useAuth } from '@/context';
-import { City, SCREENS } from '@/types';
+import { City, Guide, SCREENS } from '@/types';
 
 export type RootStackParamList = {
   [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;
   [SCREENS.ChangeEmail]: undefined;
   [SCREENS.RecoveryPassword]: undefined;
   [SCREENS.Login]: undefined;
-  [SCREENS.Guide]: { guideSlug: string };
+  [SCREENS.Guide]: { guide: Guide };
   [SCREENS.CitiesList]: undefined;
   [SCREENS.GuideMap]: { guideSlug: string; isOnlyMap?: boolean };
   [SCREENS.Subscriptions]: undefined;

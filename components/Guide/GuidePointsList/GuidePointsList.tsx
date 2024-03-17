@@ -18,7 +18,7 @@ type Props = {
   guide: Guide;
 };
 
-const POINT_SIZE = Dimensions.get('window').width * 0.3;
+const POINT_SIZE = Dimensions.get('window').height * 0.25;
 
 export const GuidePointsList = ({ points }: Props) => {
   const navi = useNavigation();
