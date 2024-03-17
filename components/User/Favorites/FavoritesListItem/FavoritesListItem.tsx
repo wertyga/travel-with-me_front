@@ -23,6 +23,7 @@ type Props = {
   modelType: SOCIAL_MODELS;
   slug: string;
   _id: string;
+  city?: string;
 };
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -36,6 +37,7 @@ export const FavoritesListItem = ({
   modelType,
   _id,
   slug,
+  city,
 }: Props) => {
   const [setLike] = useSetLikeMutation();
 
@@ -84,35 +86,19 @@ export const FavoritesListItem = ({
     runOnJS(setLike)({ modelType, _id });
   };
 
-  const gesture = Gesture.Pan()
-    .onUpdate(e => {
-      const { translationX } = e;
-
-      swipeValues.value = {
-        translateX: translationX,
-      };
-    })
-    .onFinalize(e => {
-      const { translationX } = e;
-
-      if (translationX > -windowWidth / 1.5) {
-        swipeValues.value = {
-          translateX: 0,
-        };
-        return;
-      }
-
-      swipeValues.value = {
-        translateX: -1000,
-      };
-      runOnJS(setLike)({ modelType, _id });
-    });
-
   const href =
     modelType === SOCIAL_MODELS.Guide ? SCREENS.Guide : SCREENS.Place;
   const hrefParams =
     modelType === SOCIAL_MODELS.Guide
-      ? { guideSlug: slug }
+      ? {
+          guide: {
+            title,
+            image,
+            _id,
+            slug,
+            city,
+          },
+        }
       : { placeSlug: slug };
   const defaultImage =
     modelType === SOCIAL_MODELS.Guide ? DefaultGuideImage : DefaultPlaceImage;

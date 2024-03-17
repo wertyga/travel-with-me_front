@@ -5,17 +5,12 @@ import { MainLayout } from '@/Layouts';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GuideMeta } from '@/components/Guide';
-
-import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
 import { defaultGuideImage, navigateToError } from '@/utils';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
-import { City, Guide } from '@/types';
-import { CitiesCarouselImage } from '@/components/City/CitiesCarouselImage/CitiesCarouselImage';
+import { Guide } from '@/types';
 import { StyleSheet, View } from 'react-native';
 import { useSelector } from '@/stores';
 import { FastImage } from '@/components/Image';
-import { useAuth } from '@/context';
-import { useUser } from 'expo-dev-launcher/bundle/providers/UserContextProvider';
 import { useHandleFromError, useNavigation } from '@/hooks';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
@@ -26,7 +21,7 @@ const GuideScreen = ({ route }: Props) => {
   const [defaultGuide, setDefaultGuide] = useState<Guide>(
     route.params?.guide as Guide
   );
-
+  console.log({ defaultGuide });
   const cityId =
     typeof defaultGuide?.city === 'string'
       ? defaultGuide.city
