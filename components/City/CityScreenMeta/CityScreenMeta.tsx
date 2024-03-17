@@ -40,8 +40,8 @@ export const CityScreenMeta = ({ city }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={layoutHeight - 40}
-      collapsedHeight={layoutHeight / 2.1}
-      descriptionTextCutLines={10}
+      collapsedHeight={300}
+      descriptionTextCutLines={4}
       withHeaderHide
       TopContent={
         <>

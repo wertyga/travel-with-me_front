@@ -51,8 +51,8 @@ export const PointMeta = ({
   return (
     <EntityMeta
       wrapperHeight={layoutHeight - 120}
-      collapsedHeight={layoutHeight / 2.1}
-      descriptionTextCutLines={9}
+      collapsedHeight={300}
+      descriptionTextCutLines={4}
       onOpenStateChange={onOpenStateChange}
       TopContent={
         <>

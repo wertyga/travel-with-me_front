@@ -69,6 +69,7 @@ export const EntityMeta = ({
   const animatedHidedPartStyles = useAnimatedStyle(() => {
     return {
       opacity: withTiming(swipeValues.value.opacity),
+      display: swipeValues.value.opacity === 0 ? 'none' : 'flex',
     };
   });
 
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'space-between',
     flex: 1,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   scrollDescription: {
     position: 'relative',

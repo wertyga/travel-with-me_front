@@ -1,4 +1,10 @@
-import { TouchableOpacity, StyleSheet, ScrollView, View } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  View,
+  Dimensions,
+} from 'react-native';
 import { CText } from '@/components/CText';
 import { FastImage } from '@/components/Image';
 import cn from '@/app/classname';
@@ -12,7 +18,7 @@ type Props = {
   guide: Guide;
 };
 
-const POINT_SIZE = 100;
+const POINT_SIZE = Dimensions.get('window').width * 0.3;
 
 export const GuidePointsList = ({ points }: Props) => {
   const navi = useNavigation();
@@ -23,7 +29,7 @@ export const GuidePointsList = ({ points }: Props) => {
         return (
           <TouchableOpacity
             key={point._id}
-            style={cn(styles.point)}
+            style={styles.point}
             onPress={() =>
               navi.navigate(SCREENS.Place, { placeSlug: point.slug })
             }
@@ -54,6 +60,7 @@ const styles = StyleSheet.create({
   points: {
     flexDirection: 'row',
     gap: 10,
+    marginTop: 10,
   },
   point: {
     alignItems: 'center',
@@ -61,7 +68,7 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: POINT_SIZE,
     height: POINT_SIZE,
-    borderRadius: 50,
+    borderRadius: 200,
     overflow: 'hidden',
     position: 'relative',
   },

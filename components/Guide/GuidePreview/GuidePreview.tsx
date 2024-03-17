@@ -19,7 +19,7 @@ type Props = {
   country: string;
 };
 
-const width = Dimensions.get('screen').width * 0.7;
+const width = Dimensions.get('window').width * 0.7;
 
 export const GuidePreview = ({ guide, country }: Props) => {
   const navi = useNavigation();

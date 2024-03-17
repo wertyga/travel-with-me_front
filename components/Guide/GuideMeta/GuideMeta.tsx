@@ -24,8 +24,8 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={layoutHeight - 120}
-      collapsedHeight={layoutHeight / 2.1}
-      descriptionTextCutLines={10}
+      collapsedHeight={300}
+      descriptionTextCutLines={4}
       underTopContentSlot={
         <GuideMetaActions travelTime={travelTime} guide={guide} />
       }

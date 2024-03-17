@@ -1,6 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
-import CarouselEx from 'react-native-snap-carousel';
+import React, { useEffect, useRef, useState } from 'react';
+import Animated, {
+  withTiming,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import { StyleSheet, View, Image } from 'react-native';
 import { useNavigation } from '@/hooks';
 import { SafeLoader } from '@/components/SafeLoader';
 import { FastImage } from '@/components/Image';
@@ -9,10 +13,16 @@ import { navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useHandleFromError } from '@/hooks';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
+import { City } from '@/types';
+import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
+import { useSelector } from '@/stores';
+import { CitiesCarouselImage } from '@/components/City/CitiesCarouselImage/CitiesCarouselImage';
 
 const CityScreen = ({ route: { params } }) => {
   const navi = useNavigation();
-  const carouselRef = useRef<CarouselEx<any> | null>(null);
+  const slider = useRef();
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const [defaultCity, setDefaultCity] = useState<City>(params?.city);
 
   const {
     data: { cities = [] } = {},
@@ -24,7 +34,7 @@ const CityScreen = ({ route: { params } }) => {
     data: { city } = {},
     isFetching: cityLoading,
     error: getCityError,
-  } = useGetCityQuery({ slug: params?.city.slug });
+  } = useGetCityQuery({ slug: defaultCity.slug });
 
   useEffect(() => {
     if (!getLightListError && !getCityError) return;
@@ -32,58 +42,56 @@ const CityScreen = ({ route: { params } }) => {
     navigateToError(navi, getLightListError || getCityError);
   }, [getLightListError, getCityError]);
 
-  const onChangeCity = async (index: number) => {
+  const onChangeCity = async ({
+    index,
+    item,
+  }: {
+    item: City;
+    index: number;
+  }) => {
     if (!cities[index]) return;
 
-    navi.setParams({ city: cities[index] });
+    setDefaultCity(item);
   };
-
-  useEffect(() => {
-    const cityIndex = cities.findIndex(city => city._id === params?.city._id);
-
-    if (cityIndex && city?._id === params?.city._id) {
-      setTimeout(() => {
-        carouselRef.current?.snapToItem?.(cityIndex, false, false, false);
-      });
-    }
-  }, [cities, city]);
 
   useHandleFromError(refetchCities, isFetching);
 
-  if (params?.city._id !== city?._id) {
+  if (!city || !cities.length) {
     return (
       <SafeLoader
-        image={params.city.image}
+        image={defaultCity.image}
         textColor="white"
         indicatorColor="white"
       />
     );
   }
 
-  const citiesImages = cities.map(({ image }) => image);
-  const windowWidth = Dimensions.get('window').width;
-
+  const initialCityIndex = cities.findIndex(
+    ({ _id }) => _id === params?.city._id
+  );
+  const currentIndex = cities.findIndex(({ _id }) => _id === defaultCity._id);
   return (
     <MainLayout
       style={{ paddingHorizontal: 0 }}
-      headerTitle={city.title}
+      headerTitle={defaultCity.title}
       isLoading={cityLoading}
       loaderTextColor="white"
     >
-      <View style={styles.layout}>
-        <CarouselEx
-          layout="tinder"
-          ref={c => {
-            carouselRef.current = c;
+      <View style={[styles.layout, { height: layoutHeight }]}>
+        <CarouselNew<City>
+          data={cities}
+          defaultIndex={initialCityIndex}
+          sliderRef={slider}
+          onChange={onChangeCity}
+          renderItem={({ item, index }) => {
+            return (
+              <CitiesCarouselImage
+                item={item}
+                key={item._id}
+                isActive={index === currentIndex}
+              />
+            );
           }}
-          data={citiesImages}
-          disableIntervalMomentum
-          onSnapToItem={onChangeCity}
-          renderItem={({ item }: any) => {
-            return <FastImage key={item} uri={item} style={styles.cityImage} />;
-          }}
-          sliderWidth={windowWidth}
-          itemWidth={windowWidth}
         />
       </View>
 
@@ -94,15 +102,16 @@ const CityScreen = ({ route: { params } }) => {
 
 const styles = StyleSheet.create({
   layout: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: Dimensions.get('screen').width,
-    height: Dimensions.get('window').height,
+    ...StyleSheet.absoluteFillObject,
+  },
+  imageWrapper: {
+    width: '100%',
+    height: '100%',
   },
   cityImage: {
     width: '100%',
     height: '100%',
+    objectFit: 'cover',
   },
 });
 
