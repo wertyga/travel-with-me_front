@@ -17,7 +17,7 @@ import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenH
 import { Loader } from '@/components/Loader';
 import { FastImage } from '@/components/Image';
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
-import { updateDomAction } from '@/stores';
+import { updateDomAction, useSelector } from '@/stores';
 
 type Props = {
   children: React.ReactNode;
@@ -48,6 +48,8 @@ export const MainLayout = ({
   onBgPress,
   bgContent,
 }: Props) => {
+  const layoutHeight = useSelector(state => state.domStore.layout?.height);
+
   const imageSource = typeof bgImage === 'string' ? { uri: bgImage } : bgImage;
 
   return (
@@ -75,7 +77,7 @@ export const MainLayout = ({
       {bgImage && (
         <TouchableOpacity
           onPress={onBgPress}
-          style={styles.bgImage}
+          style={[StyleSheet.absoluteFillObject, { height: layoutHeight }]}
           activeOpacity={1}
         >
           <Image source={imageSource} style={styles.bgImage} />
@@ -119,6 +121,8 @@ const styles = StyleSheet.create({
   },
   bgImage: {
     objectFit: 'cover',
+    width: '100%',
+    height: '100%',
     ...StyleSheet.absoluteFillObject,
   },
   withFooter: {
