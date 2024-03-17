@@ -6,7 +6,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FONTS, Guide, SCREENS } from '@/types';
+import { City, FONTS, Guide, SCREENS } from '@/types';
 import { useNavigation } from '@/hooks';
 import { CText } from '@/components/CText';
 import { FastImageBackground } from '@/components/Image';
@@ -15,19 +15,20 @@ import { defaultGuideImageUri, defaultGuideImage } from '@/utils';
 
 type Props = {
   guide: Guide;
+  city: City;
   containerClassName?: string;
   country: string;
 };
 
 const width = Dimensions.get('window').width * 0.7;
 
-export const GuidePreview = ({ guide, country }: Props) => {
+export const GuidePreview = ({ guide, country, city }: Props) => {
   const navi = useNavigation();
 
   const navigateToGuide = () => {
     navi.navigate(SCREENS.Guide, {
-      guideSlug: guide.slug,
-      image: guide.vImage,
+      guide,
+      city,
     });
   };
 

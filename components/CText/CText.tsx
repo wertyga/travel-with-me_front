@@ -8,7 +8,7 @@ export type CTextProps = TextProps & {
 
 const { width } = Dimensions.get('window');
 export const CText = ({ children, style, ...props }: CTextProps) => {
-  if (style.fontSize) {
+  if (style?.fontSize) {
     style.fontSize = (style.fontSize as number) * (width / 375);
   }
   return (

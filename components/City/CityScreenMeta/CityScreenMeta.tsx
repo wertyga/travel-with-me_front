@@ -40,8 +40,8 @@ export const CityScreenMeta = ({ city }: Props) => {
   return (
     <EntityMeta
       wrapperHeight={layoutHeight - 40}
-      collapsedHeight={300}
-      descriptionTextCutLines={4}
+      collapsedHeight={400}
+      descriptionTextCutLines={8}
       withHeaderHide
       TopContent={
         <>
@@ -63,6 +63,7 @@ export const CityScreenMeta = ({ city }: Props) => {
           <GuidesSlideList
             guides={filteredGuides}
             country={city.country.title}
+            city={city}
           />
         </>
       }

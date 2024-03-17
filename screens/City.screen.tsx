@@ -42,6 +42,8 @@ const CityScreen = ({ route: { params } }) => {
     navigateToError(navi, getLightListError || getCityError);
   }, [getLightListError, getCityError]);
 
+  useHandleFromError(refetchCities, isFetching);
+
   const onChangeCity = async ({
     index,
     item,
@@ -53,8 +55,6 @@ const CityScreen = ({ route: { params } }) => {
 
     setDefaultCity(item);
   };
-
-  useHandleFromError(refetchCities, isFetching);
 
   if (!city || !cities.length) {
     return (
