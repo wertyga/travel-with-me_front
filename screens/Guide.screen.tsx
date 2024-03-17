@@ -21,7 +21,7 @@ const GuideScreen = ({ route }: Props) => {
   const [defaultGuide, setDefaultGuide] = useState<Guide>(
     route.params?.guide as Guide
   );
-  console.log({ defaultGuide });
+
   const cityId =
     typeof defaultGuide?.city === 'string'
       ? defaultGuide.city

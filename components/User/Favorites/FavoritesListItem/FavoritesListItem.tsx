@@ -5,7 +5,6 @@ import Animated, {
   runOnJS,
   withTiming,
 } from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { FastImage } from '@/components/Image';
 import { CText } from '@/components/CText';
 import Button from '@/components/Button';
