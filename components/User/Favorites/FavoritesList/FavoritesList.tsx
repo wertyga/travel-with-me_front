@@ -22,7 +22,7 @@ export const FavoritesList = ({ guides, places }: Props) => {
             slug={slug}
             modelType={SOCIAL_MODELS.Guide}
             _id={_id}
-            city={city}
+            city={city as any}
           />
         );
       })}

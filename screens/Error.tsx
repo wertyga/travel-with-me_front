@@ -8,7 +8,6 @@ import Button from '@/components/Button';
 import Toast from 'react-native-toast-message';
 import { CText } from '@/components/CText';
 import { SCREENS } from '@/types';
-import Constants from 'expo-constants';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Error'>;
 

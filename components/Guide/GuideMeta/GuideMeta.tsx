@@ -31,7 +31,10 @@ export const GuideMeta = ({ guide, isFetching }: Props) => {
       BottomContent={
         <>
           {!subscription && (
-            <GoToPayContentLink high style={{ marginTop: 50 }}>
+            <GoToPayContentLink
+              high
+              style={{ marginTop: 50, marginBottom: 30 }}
+            >
               For more info get subscription
             </GoToPayContentLink>
           )}

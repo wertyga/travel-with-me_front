@@ -59,10 +59,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
-    API_BASE_URL: isProduction
-      ? 'https://api.underhood.space'
-      : 'https://4d9d-2a02-a31a-803b-7380-6954-e70c-81b3-8461.ngrok-free.app',
-    PUBLIC_STRIPE_PK_KEY:
+    // API_BASE_URL:
+    //   'https://58a2-2a02-a31a-803b-7380-7509-a42b-bc11-df25.ngrok-free.app',
+    API_BASE_URL: 'https://api.underhood.space',
+    PUBLIC_STRIPE_PKs_KEY:
       'pk_test_51NjctuLjIKbGVNPBwCRLtDko6G5xS4Ze7N42K6GsM5IkAnOQZn3skLD5kfzgKxXQuFl3watT7Xgo84A9HTwtWSST00CnF8tcSN',
   },
   runtimeVersion: {

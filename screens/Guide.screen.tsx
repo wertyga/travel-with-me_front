@@ -5,13 +5,13 @@ import { MainLayout } from '@/Layouts';
 import { RootStackParamList } from '@/app/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GuideMeta } from '@/components/Guide';
-import { defaultGuideImage, navigateToError } from '@/utils';
+import { defaultGuideImage } from '@/utils';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { Guide } from '@/types';
 import { StyleSheet, View } from 'react-native';
 import { useSelector } from '@/stores';
 import { FastImage } from '@/components/Image';
-import { useHandleFromError, useNavigation } from '@/hooks';
+import { useNavigation } from '@/hooks';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
@@ -32,16 +32,13 @@ const GuideScreen = ({ route }: Props) => {
     isLoading,
     isFetching,
     error: getGuideError,
+    refetch: refetchGuide,
   } = useGetGuideQuery(
     { slug: defaultGuide?.slug },
     { skip: !defaultGuide?.slug }
   );
-  const {
-    data: { guides = [] } = {},
-    isLoading: isListLoading,
-    error: getGuideListError,
-    refetch: refetchGuidesList,
-  } = useGetGuidesListQuery({ city: cityId }, { skip: !cityId });
+  const { data: { guides = [] } = {}, isLoading: isListLoading } =
+    useGetGuidesListQuery({ city: cityId }, { skip: !cityId });
 
   const onChangeCGuide = async ({
     index,
@@ -55,17 +52,13 @@ const GuideScreen = ({ route }: Props) => {
     setDefaultGuide(item);
   };
 
-  useEffect(() => {
-    if (!getGuideListError) return;
+  const isInitialLoading = !guide || isLoading || isListLoading;
 
-    navigateToError(navi, getGuideListError);
-  }, [getGuideListError]);
-
-  useHandleFromError(refetchGuidesList, isFetching);
-
-  if (!guide || isLoading || isListLoading) {
+  if (isInitialLoading) {
     return (
       <SafeLoader
+        reFetchMethod={refetchGuide}
+        fetchError={getGuideError}
         image={defaultGuide?.vImage}
         textColor="white"
         indicatorColor="white"
@@ -78,7 +71,11 @@ const GuideScreen = ({ route }: Props) => {
   );
 
   return (
-    <MainLayout headerTitle={guide.title}>
+    <MainLayout
+      headerTitle={guide.title}
+      reFetchMethod={refetchGuide}
+      fetchError={getGuideError}
+    >
       <View style={[styles.layout, { height: layoutHeight }]}>
         <CarouselNew<Guide>
           data={guides}

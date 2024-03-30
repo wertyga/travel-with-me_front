@@ -21,7 +21,7 @@ export const FastImage = props => {
       }
 
       const { cached, path } = await cacheImage(uri);
-      console.log({ cached, path });
+
       if (cached && path) {
         setUri(path);
 
@@ -33,8 +33,6 @@ export const FastImage = props => {
 
     loadImg();
   }, []);
-
-  console.log({ imgUri });
 
   return (
     <>

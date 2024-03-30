@@ -1,17 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Animated, {
-  withTiming,
-  useSharedValue,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
-import { StyleSheet, View, Image } from 'react-native';
-import { useNavigation } from '@/hooks';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { SafeLoader } from '@/components/SafeLoader';
-import { FastImage } from '@/components/Image';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
-import { navigateToError } from '@/utils';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
-import { useHandleFromError } from '@/hooks';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { City } from '@/types';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
@@ -19,30 +10,17 @@ import { useSelector } from '@/stores';
 import { CitiesCarouselImage } from '@/components/City/CitiesCarouselImage/CitiesCarouselImage';
 
 const CityScreen = ({ route: { params } }) => {
-  const navi = useNavigation();
   const slider = useRef();
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [defaultCity, setDefaultCity] = useState<City>(params?.city);
 
-  const {
-    data: { cities = [] } = {},
-    error: getLightListError,
-    isFetching,
-    refetch: refetchCities,
-  } = useGetCitiesLightListQuery();
+  const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
   const {
     data: { city } = {},
     isFetching: cityLoading,
     error: getCityError,
+    refetch: refetchCity,
   } = useGetCityQuery({ slug: defaultCity.slug });
-
-  useEffect(() => {
-    if (!getLightListError && !getCityError) return;
-
-    navigateToError(navi, getLightListError || getCityError);
-  }, [getLightListError, getCityError]);
-
-  useHandleFromError(refetchCities, isFetching);
 
   const onChangeCity = async ({
     index,
@@ -76,6 +54,8 @@ const CityScreen = ({ route: { params } }) => {
       headerTitle={defaultCity.title}
       isLoading={cityLoading}
       loaderTextColor="white"
+      fetchError={getCityError}
+      reFetchMethod={refetchCity}
     >
       <View style={[styles.layout, { height: layoutHeight }]}>
         <CarouselNew<City>

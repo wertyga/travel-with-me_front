@@ -13,16 +13,16 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
+const Detector = ({ children, onFinalize, onUpdate }) => {
+  const gesture = Gesture.Pan().onUpdate(onUpdate).onFinalize(onFinalize);
+
+  return <GestureDetector gesture={gesture}>{children}</GestureDetector>;
+};
+
 export const GesturesContainer = ({ children, style, ...props }: Props) => {
   return (
     <GestureHandlerRootView style={style}>
       <Detector {...props}>{children}</Detector>
     </GestureHandlerRootView>
   );
-};
-
-const Detector = ({ children, onFinalize, onUpdate }) => {
-  const gesture = Gesture.Pan().onUpdate(onUpdate).onFinalize(onFinalize);
-
-  return <GestureDetector gesture={gesture}>{children}</GestureDetector>;
 };

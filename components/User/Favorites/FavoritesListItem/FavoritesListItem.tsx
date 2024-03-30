@@ -1,19 +1,17 @@
-import { Dimensions, StyleSheet, View } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  runOnJS,
-  withTiming,
-} from 'react-native-reanimated';
+import { StyleSheet, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { FastImage } from '@/components/Image';
 import { CText } from '@/components/CText';
 import Button from '@/components/Button';
 import { useSetLikeMutation } from '@/api';
 import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
+import { useSlideLeft } from '@/hooks';
+import { FontAwesome } from '@expo/vector-icons';
 
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
+import { useState } from 'react';
 
 type Props = {
   title: string;
@@ -24,10 +22,6 @@ type Props = {
   _id: string;
   city?: string;
 };
-
-const { width: windowWidth } = Dimensions.get('window');
-
-const TRANSLATE_FOR_DELETE = -1000;
 
 export const FavoritesListItem = ({
   title,
@@ -40,49 +34,11 @@ export const FavoritesListItem = ({
 }: Props) => {
   const [setLike] = useSetLikeMutation();
 
-  const swipeValues = useSharedValue({
-    translateX: 0,
-  });
-
-  const animatedStyles = useAnimatedStyle<any>(() => {
-    const { translateX } = swipeValues.value;
-    const isWithTiming =
-      translateX === TRANSLATE_FOR_DELETE || translateX === 0;
-
-    return {
-      transform: [
-        {
-          translateX: isWithTiming
-            ? withTiming(swipeValues.value.translateX)
-            : translateX,
-        },
-      ],
-    };
-  });
-
-  const onUpdate = e => {
-    const { translationX } = e;
-
-    swipeValues.value = {
-      translateX: translationX,
-    };
-  };
-
-  const onFinalize = e => {
-    const { translationX } = e;
-    const isNotDelete = translationX > 0 || Math.abs(translationX) < 100;
-
-    if (isNotDelete) {
-      swipeValues.value = {
-        translateX: 0,
-      };
-      return;
-    }
-
-    swipeValues.value = {
-      translateX: TRANSLATE_FOR_DELETE,
-    };
-    runOnJS(setLike)({ modelType, _id });
+  const onUnliked = () => {
+    setLike({
+      modelType,
+      _id,
+    });
   };
 
   const href =
@@ -102,9 +58,14 @@ export const FavoritesListItem = ({
   const defaultImage =
     modelType === SOCIAL_MODELS.Guide ? DefaultGuideImage : DefaultPlaceImage;
 
+  const { onUpdate, animatedStyles, onFinalize } = useSlideLeft({
+    thresholdForFinish: 100,
+    leftSideTranslation: -80,
+  });
+
   return (
     <GesturesContainer onUpdate={onUpdate} onFinalize={onFinalize}>
-      <Animated.View style={animatedStyles}>
+      <Animated.View style={[animatedStyles, styles.wrapper]}>
         <Button
           href={href}
           hrefParams={hrefParams}
@@ -124,18 +85,25 @@ export const FavoritesListItem = ({
             )}
           </View>
         </Button>
+        <Button style={styles.removeBtn} rectangle>
+          <FontAwesome name="trash-o" size={34} color="white" />
+        </Button>
       </Animated.View>
     </GesturesContainer>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    position: 'relative',
+  },
   container: {
     flex: 1,
     padding: 5,
     paddingHorizontal: 5,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
+    zIndex: 2,
   },
   image: {
     height: 60,
@@ -143,7 +111,13 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginRight: 10,
   },
-  text: {},
+  removeBtn: {
+    position: 'absolute',
+    right: -80,
+    top: 0,
+    bottom: 0,
+    width: 70,
+  },
   title: {
     fontFamily: FONTS.OpenSansBold,
   },

@@ -47,7 +47,7 @@ export const GuidePreview = ({ guide, country, city }: Props) => {
           activeOpacity={1}
           style={styles.guide}
         >
-          <CountryPill style={styles.top} title={country} />
+          <CountryPill title={country} />
 
           <View>
             <CText style={styles.title}>{guide.title}</CText>
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginRight: 10,
   },
-  top: {},
   content: {
     padding: 15,
     height: '100%',

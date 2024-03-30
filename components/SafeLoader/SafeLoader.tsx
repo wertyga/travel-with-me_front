@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { CText } from '@/components/CText';
 import { FastImageBackground } from '@/components/Image';
-import { CONSTANTS } from '@/styles/constants';
+import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
 import { FONTS } from '@/types';
 
 import safeLoaderImage from '@/assets/splash-2.png';
@@ -15,6 +15,8 @@ type Props = {
   image?: string;
   textColor?: string;
   indicatorColor?: string;
+  fetchError?: { message: string; statusCode: number };
+  reFetchMethod?: (data?: any) => void;
 };
 
 const Children = ({ textColor, indicatorColor }) => {
@@ -30,25 +32,31 @@ export const SafeLoader = ({
   image,
   textColor = 'white',
   indicatorColor = 'white',
+  fetchError,
+  reFetchMethod,
 }: Props) => {
   if (image) {
     return (
-      <FastImageBackground
-        uri={image}
-        style={[StyleSheet.absoluteFillObject, styles.container]}
-      >
-        <Children textColor={textColor} indicatorColor={indicatorColor} />
-      </FastImageBackground>
+      <FetchErrorWrapper fetchError={fetchError} reFetchMethod={reFetchMethod}>
+        <FastImageBackground
+          uri={image}
+          style={[StyleSheet.absoluteFillObject, styles.container]}
+        >
+          <Children textColor={textColor} indicatorColor={indicatorColor} />
+        </FastImageBackground>
+      </FetchErrorWrapper>
     );
   }
 
   return (
-    <ImageBackground
-      style={[StyleSheet.absoluteFillObject, styles.container]}
-      source={safeLoaderImage}
-    >
-      <Children textColor={textColor} indicatorColor={indicatorColor} />
-    </ImageBackground>
+    <FetchErrorWrapper fetchError={fetchError} reFetchMethod={reFetchMethod}>
+      <ImageBackground
+        style={[StyleSheet.absoluteFillObject, styles.container]}
+        source={safeLoaderImage}
+      >
+        <Children textColor={textColor} indicatorColor={indicatorColor} />
+      </ImageBackground>
+    </FetchErrorWrapper>
   );
 };
 

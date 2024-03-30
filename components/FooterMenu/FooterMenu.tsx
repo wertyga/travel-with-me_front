@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 10,
     paddingBottom: 8,
+    height: 60,
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
