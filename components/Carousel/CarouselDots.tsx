@@ -18,15 +18,6 @@ type Props = {
 };
 
 export function CarouselDots({ totalCount, currentIndex }: Props) {
-  const [index, setIndex] = React.useState<number>(0);
-
-  const increaseIndex = () => {
-    setIndex(Math.min(index + 1, totalCount - 1));
-  };
-  const decreaseIndex = () => {
-    setIndex(Math.max(index - 1, 0));
-  };
-
   return (
     <View style={styles.container}>
       <AnimatedDotsCarousel

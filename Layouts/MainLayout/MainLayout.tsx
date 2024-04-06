@@ -17,6 +17,7 @@ import { Loader } from '@/components/Loader';
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { updateDomAction, useSelector } from '@/stores';
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   children: React.ReactNode;
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   content: {
-    paddingHorizontal: 15,
+    paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
     flex: 1,
     paddingTop: 100,
   },

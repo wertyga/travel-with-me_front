@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
@@ -48,6 +48,7 @@ const CityScreen = ({ route: { params } }) => {
     ({ _id }) => _id === params?.city._id
   );
   const currentIndex = cities.findIndex(({ _id }) => _id === defaultCity._id);
+
   return (
     <MainLayout
       style={{ paddingHorizontal: 0 }}
@@ -57,42 +58,27 @@ const CityScreen = ({ route: { params } }) => {
       fetchError={getCityError}
       reFetchMethod={refetchCity}
     >
-      <View style={[styles.layout, { height: layoutHeight }]}>
-        <CarouselNew<City>
-          data={cities}
-          defaultIndex={initialCityIndex}
-          sliderRef={slider}
-          onChange={onChangeCity}
-          renderItem={({ item, index }) => {
-            return (
-              <CitiesCarouselImage
-                item={item}
-                key={item._id}
-                isActive={index === currentIndex}
-              />
-            );
-          }}
-        />
-      </View>
+      <CarouselNew<City>
+        data={cities}
+        defaultIndex={initialCityIndex}
+        sliderRef={slider}
+        onChange={onChangeCity}
+        renderItem={({ item, index }) => {
+          return (
+            <CitiesCarouselImage
+              item={item}
+              key={item._id}
+              isActive={index === currentIndex}
+            />
+          );
+        }}
+        noDots
+        isFullScreen
+      />
 
       {!cityLoading && <CityScreenMeta city={city} />}
     </MainLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  layout: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  imageWrapper: {
-    width: '100%',
-    height: '100%',
-  },
-  cityImage: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-});
 
 export default CityScreen;

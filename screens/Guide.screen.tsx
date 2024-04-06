@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useGetGuideQuery, useGetGuidesListQuery } from '@/api';
 import { SafeLoader } from '@/components/SafeLoader';
 import { MainLayout } from '@/Layouts';
@@ -8,15 +8,13 @@ import { GuideMeta } from '@/components/Guide';
 import { defaultGuideImage } from '@/utils';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { Guide } from '@/types';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { useSelector } from '@/stores';
 import { FastImage } from '@/components/Image';
-import { useNavigation } from '@/hooks';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
 const GuideScreen = ({ route }: Props) => {
-  const navi = useNavigation();
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [defaultGuide, setDefaultGuide] = useState<Guide>(
     route.params?.guide as Guide
@@ -76,22 +74,22 @@ const GuideScreen = ({ route }: Props) => {
       reFetchMethod={refetchGuide}
       fetchError={getGuideError}
     >
-      <View style={[styles.layout, { height: layoutHeight }]}>
-        <CarouselNew<Guide>
-          data={guides}
-          defaultIndex={initialCityIndex}
-          onChange={onChangeCGuide}
-          renderItem={({ item }) => {
-            return (
-              <FastImage
-                key={item._id}
-                uri={item.vImage || defaultGuideImage}
-                style={styles.guideImage}
-              />
-            );
-          }}
-        />
-      </View>
+      <CarouselNew<Guide>
+        data={guides}
+        defaultIndex={initialCityIndex}
+        onChange={onChangeCGuide}
+        renderItem={({ item }) => {
+          return (
+            <FastImage
+              key={item._id}
+              uri={item.vImage || defaultGuideImage}
+              style={[styles.guideImage]}
+            />
+          );
+        }}
+        isFullScreen
+        noDots
+      />
 
       <GuideMeta guide={guide} isFetching={isFetching} />
     </MainLayout>
@@ -99,9 +97,6 @@ const GuideScreen = ({ route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  layout: {
-    ...StyleSheet.absoluteFillObject,
-  },
   guideImage: {
     width: '100%',
     height: '100%',
