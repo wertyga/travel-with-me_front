@@ -14,6 +14,7 @@ import Animated, {
 import { FONTS, Place } from '@/types';
 import { useSelector } from '@/stores';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
+import { BackgroundGradient } from '@/components/BackgroundGradient';
 
 type Props = {
   point: Place;
@@ -124,12 +125,17 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
   };
 
   return (
-    <>
+    <BackgroundGradient
+      style={{
+        ...styles.container,
+        width: point.images.length * windowWidth,
+        height: layoutHeight,
+      }}
+    >
       <GesturesContainer
         onFinalize={onFinalize}
         onUpdate={onUpdate}
         style={[
-          styles.container,
           {
             height: layoutHeight,
           },
@@ -138,16 +144,23 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
         <Animated.View
           style={[
             styles.gallery,
-            { height: layoutHeight, width: point.images.length * windowWidth },
+            {
+              height: layoutHeight,
+              width: point.images.length * windowWidth,
+            },
             animatedWrapperStyles,
           ]}
         >
           {point.images.map(image => {
             return (
               <Image
-                source={{ uri: image }}
                 key={image}
-                style={{ width: windowWidth }}
+                source={{ uri: image }}
+                style={{
+                  width: windowWidth,
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
               />
             );
           })}
@@ -174,7 +187,7 @@ export const PointImagesCarousel = ({ point, onClose }: Props) => {
           currentIndex={currentIndex}
         />
       </LinearGradient>
-    </>
+    </BackgroundGradient>
   );
 };
 
@@ -209,6 +222,7 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     height: 70,
+    width: Dimensions.get('window').width,
   },
   scrollToCloseBtn: {
     position: 'absolute',
@@ -217,6 +231,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     bottom: 20,
     right: 20,
+    backgroundColor: 'transparent',
   },
   dots: {
     position: 'absolute',

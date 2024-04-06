@@ -58,6 +58,7 @@
     "react": "18.2.0",
     "react-hook-form": "^7.48.2",
     "react-native": "0.73.6",
+    "react-native-animated-dots-carousel": "^1.0.2",
     "react-native-cached-image": "^1.4.3",
     "react-native-classnames": "^0.1.1",
     "react-native-gesture-handler": "~2.14.0",

@@ -1,5 +1,12 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
-import cn from '@/app/classname';
+import * as React from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
+import AnimatedDotsCarousel from 'react-native-animated-dots-carousel';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
@@ -10,64 +17,54 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const CarouselDots = ({
-  totalCount,
-  currentIndex,
-  activeColor = 'white',
-  inActiveColor = 'white',
-  style,
-}: Props) => {
-  const isFirstActive = currentIndex === 0;
-  const isMiddleActive = currentIndex > 0 && currentIndex !== totalCount - 1;
-  const isLastActive = currentIndex === totalCount - 1;
+export function CarouselDots({ totalCount, currentIndex }: Props) {
+  const [index, setIndex] = React.useState<number>(0);
+
+  const increaseIndex = () => {
+    setIndex(Math.min(index + 1, totalCount - 1));
+  };
+  const decreaseIndex = () => {
+    setIndex(Math.max(index - 1, 0));
+  };
+
   return (
-    <View style={[styles.container, style]}>
-      <View
-        style={cn(
+    <View style={styles.container}>
+      <AnimatedDotsCarousel
+        length={totalCount}
+        currentIndex={currentIndex}
+        maxIndicators={3}
+        interpolateOpacityAndColor={true}
+        activeIndicatorConfig={{
+          color: 'white',
+          margin: 3,
+          opacity: 1,
+          size: 8,
+        }}
+        inactiveIndicatorConfig={{
+          color: 'white',
+          margin: 3,
+          opacity: 0.5,
+          size: 8,
+        }}
+        decreasingDots={[
           {
-            ...styles.item,
-            backgroundColor: isFirstActive ? activeColor : inActiveColor,
+            config: { color: 'white', margin: 3, opacity: 0.5, size: 6 },
+            quantity: 1,
           },
-          { [isFirstActive]: styles.activeItem }
-        )}
-      />
-      <View
-        style={cn(
           {
-            ...styles.item,
-            backgroundColor: isMiddleActive ? activeColor : inActiveColor,
+            config: { color: 'white', margin: 3, opacity: 0.5, size: 4 },
+            quantity: 1,
           },
-          { [isMiddleActive]: styles.activeItem }
-        )}
-      />
-      <View
-        style={cn(
-          {
-            ...styles.item,
-            backgroundColor: isLastActive ? activeColor : inActiveColor,
-          },
-          { [isLastActive]: styles.activeItem }
-        )}
+        ]}
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
-  },
-  item: {
-    width: 30,
-    height: 4,
-    transform: [{ scaleX: 0.5 }],
-    opacity: 0.7,
-    borderRadius: 6,
-  },
-  activeItem: {
-    transform: [{ scaleX: 1 }],
-    opacity: 1,
   },
 });
