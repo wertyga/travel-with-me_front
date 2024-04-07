@@ -6,17 +6,21 @@ import { SafeLoader } from '@/components/SafeLoader';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import PlaceDefaultImage from '@/assets/images/guide_placeholder.png';
-import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
-import { updateDomAction } from '@/stores';
+import { updateDomAction, useSelector } from '@/stores';
+import { Dimensions, Image, ScrollView } from 'react-native';
+import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 
 const PlaceScreen = ({ route }) => {
-  const navi = useNavigation();
   useAuthGuard();
+
+  const navi = useNavigation();
+  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+
   const { params: { placeSlug, autoplay } = {} } = route;
   const [state, setState] = useState({
     isShowGallery: false,
     isMetaOpened: false,
+    currentIndex: 0,
   });
 
   const {
@@ -24,19 +28,6 @@ const PlaceScreen = ({ route }) => {
     isFetching,
     isLoading,
   } = useGetPlaceQuery({ slug: placeSlug }, { skip: !placeSlug });
-
-  const onToggleShowGallery = () => {
-    if (!place?.images?.length) {
-      setState(prev => ({ ...prev, isShowGallery: false }));
-      return;
-    }
-
-    setState(prev => ({ ...prev, isShowGallery: !prev.isShowGallery }));
-  };
-
-  const onOpenStateChange = (state: boolean) => {
-    setState(prev => ({ ...prev, isMetaOpened: state }));
-  };
 
   useLayoutEffect(() => {
     navi.setOptions({
@@ -66,24 +57,39 @@ const PlaceScreen = ({ route }) => {
     return <SafeLoader />;
   }
 
-  const isShowGalley = state.isShowGallery && !!place.images.length;
+  const { width: windowWidth } = Dimensions.get('window');
+
   return (
     <MainLayout
-      bgImage={place.images[0] || PlaceDefaultImage}
-      headerTitle={place.title}
-      onBgPress={onToggleShowGallery}
+      style={{
+        paddingHorizontal: 0,
+        paddingTop: 0,
+      }}
     >
-      <PointMeta
-        point={place}
-        autoplay={autoplay}
-        isFetching={isFetching}
-        toggleGallery={onToggleShowGallery}
-        onOpenStateChange={onOpenStateChange}
-      />
+      <ScrollView>
+        <CarouselNew<string>
+          style={{
+            height: layoutHeight - 300,
+          }}
+          data={place.images}
+          cardWidth={windowWidth}
+          renderItem={({ item, index }) => {
+            return (
+              <Image
+                key={item}
+                source={{ uri: item }}
+                style={{
+                  width: windowWidth,
+                  objectFit: 'cover',
+                  height: layoutHeight - 300,
+                }}
+              />
+            );
+          }}
+        />
 
-      {isShowGalley && (
-        <PointImagesCarousel point={place} onClose={onToggleShowGallery} />
-      )}
+        <PointMeta point={place} />
+      </ScrollView>
     </MainLayout>
   );
 };

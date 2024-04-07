@@ -16,5 +16,6 @@ export const CONSTANTS = {
   },
   spaces: {
     paddingTop: 50,
+    paddingHorizontal: 15,
   },
 };

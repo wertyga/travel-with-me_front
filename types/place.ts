@@ -12,7 +12,8 @@ export type Place = {
   title: string;
   description: string;
   slug: string;
-  audioStory?: string;
+  story: string;
+  audioStory: string;
   images: string[];
   coords: Path;
   owner: User;
