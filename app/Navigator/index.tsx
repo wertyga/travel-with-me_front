@@ -19,9 +19,8 @@ import ProfileScreen from '@/screens/Profile';
 import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import TransitionScreen from '@/screens/TransitionScreen';
 import FavoritesScreen from '@/screens/Favorites.screen';
-import { useAuth } from '@/context';
+import { AppStateProvider, useAuth } from '@/context';
 import { City, Guide, SCREENS } from '@/types';
-import { AppState } from 'react-native';
 
 export type RootStackParamList = {
   [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;
@@ -40,6 +39,7 @@ export type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
 export let navigation: NavigationContainerRefWithCurrent<any> | undefined;
 
 const Navigator = () => {
@@ -51,7 +51,7 @@ const Navigator = () => {
   }
 
   return (
-    <NavigationContainer
+    <NavigationContainer<RootStackParamList>
       ref={navigationRef}
       onReady={() => {
         navigation = navigationRef;
@@ -97,6 +97,8 @@ const Navigator = () => {
           component={ChangeEmailScreen}
         />
       </Stack.Navigator>
+
+      <AppStateProvider navigator={navigationRef} />
     </NavigationContainer>
   );
 };

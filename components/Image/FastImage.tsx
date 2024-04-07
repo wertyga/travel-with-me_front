@@ -26,6 +26,7 @@ export const FastImage = ({ uri, style, ...imageProps }: FastImageProps) => {
   }, [uri]);
 
   const source: any = typeof uri === 'number' ? uri : { uri: imgUri };
+
   return (
     <>
       {imgUri ? (

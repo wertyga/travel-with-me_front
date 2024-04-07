@@ -49,11 +49,9 @@ function App() {
     <Provider store={store}>
       <StatusBar style="light" />
       <AuthProvider>
-        <AppStateProvider>
-          <LayoutProvider>
-            <Navigator />
-          </LayoutProvider>
-        </AppStateProvider>
+        <LayoutProvider>
+          <Navigator />
+        </LayoutProvider>
       </AuthProvider>
       <Toast />
     </Provider>

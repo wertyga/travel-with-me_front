@@ -16,7 +16,6 @@ import {
   toggleGuideMute,
   updateFollowingGuideState,
 } from '@/stores';
-import { StyleSheet } from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
@@ -70,7 +69,5 @@ const GuideMapScreen = ({ route }: Props) => {
     </MainLayout>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default GuideMapScreen;

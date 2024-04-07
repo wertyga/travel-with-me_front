@@ -58,9 +58,9 @@ export const GlobalSearch = () => {
                   return (
                     <GlobalSearchItem
                       key={city._id}
-                      image={city.image ? { uri: city.image } : CityPlaceholder}
+                      image={city.image || CityPlaceholder}
                       title={city.title}
-                      href={SCREENS.Home}
+                      href={SCREENS.City}
                       hrefParams={{ city }}
                     />
                   );

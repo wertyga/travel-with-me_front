@@ -39,7 +39,11 @@ export const GuidePreview = ({ guide, country, city }: Props) => {
       uri={guide.hImage || defaultGuideImage}
     >
       <LinearGradient
-        colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.5)']}
+        colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
+        start={{
+          x: 0.5,
+          y: 0.6,
+        }}
         style={styles.content}
       >
         <TouchableOpacity

@@ -13,16 +13,20 @@ import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideActions } from './GuideActions';
 import { PointImagesCarousel } from './PointImagesCarousel';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
+import { useNavigation } from '@/hooks';
+import { useRoute } from '@react-navigation/native';
 
 type Props = {
   guide: Guide;
 };
 
-const { width: windowWidth, height } = Dimensions.get('window');
-// const PREVIEW_HEIGHT = height / 2;
+const { width: windowWidth } = Dimensions.get('window');
 const MAP_TOP = 120;
 
 export const GuideMap = ({ guide }: Props) => {
+  const route = useRoute();
+  const navi = useNavigation();
+
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
@@ -37,9 +41,15 @@ export const GuideMap = ({ guide }: Props) => {
     ({ guideStore }) => guideStore?.isFollowingToGuide
   );
 
+  const updateRouteMapState = (params: any) => {
+    navi.setParams(params);
+  };
+
   const [state, setState] = useState({
-    pointShowing: undefined as Place | undefined,
-    pointShowingIndex: 0,
+    pointShowing: (route.params?.pointShowing || undefined) as
+      | Place
+      | undefined,
+    pointShowingIndex: route.params?.pointShowingIndex || 0,
     isShowCarouselImages: false,
   });
 
@@ -104,6 +114,11 @@ export const GuideMap = ({ guide }: Props) => {
   }, [visiblePoint, isFollowingToGuide]);
 
   useEffect(() => {
+    updateRouteMapState({
+      pointShowing: state.pointShowing,
+      pointShowingIndex: state.pointShowingIndex,
+    });
+
     updateDomAction({
       header: {
         display: state.pointShowing ? 'none' : 'flex',
