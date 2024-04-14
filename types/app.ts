@@ -2,6 +2,7 @@ import { AppStateStatus } from 'react-native';
 import { GuideStore } from '@/types/guide';
 import { DomStore } from '@/types/dom';
 import { LocationStore } from './location';
+import { AppStateType } from '@/stores/appState/appState.reducer';
 
 export type AppStateStore = {
   state: AppStateStatus;
@@ -36,5 +37,5 @@ export type RootStore = {
   locationStore: LocationStore;
   guideStore: GuideStore;
   domStore: DomStore;
-  appStateStore: AppStateStore;
+  appStateStore: AppStateType;
 };

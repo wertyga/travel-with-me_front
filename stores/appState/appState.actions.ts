@@ -1,0 +1,39 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { SCREENS } from '@/types';
+import { store } from '@/app/store/create-isomorphic-store';
+import { appStateSlice } from '@/stores/appState/appState.reducer';
+import { AppState } from 'react-native';
+import { baseApi } from '@/app/query';
+import { removeAllNotification } from '@/stores';
+import { stopWatchingBackgroundLocation } from '@/utils';
+
+export const updateCurrentRoute = (route: Record<SCREENS, any>) => {
+  store.dispatch(appStateSlice.actions.updateCurrentRoute(route));
+};
+
+export const setBackScreenData = (route: SCREENS | null, params?: any) => {
+  if (!route) {
+    store.dispatch(appStateSlice.actions.setBackScreen(null));
+    return;
+  }
+  store.dispatch(appStateSlice.actions.setBackScreen({ [route]: params }));
+};
+
+export const updateAppStateListener = async (nextState: string) => {
+  if (nextState === 'background') {
+    store.dispatch(baseApi.util.resetApiState());
+    const {
+      appStateStore: { currentRoute },
+    } = store.getState();
+
+    if (currentRoute) {
+      const [routeName, routeParams] = Object.entries(currentRoute)[0];
+      setBackScreenData(routeName as SCREENS, routeParams);
+    }
+  }
+
+  if (nextState === 'active') {
+    await stopWatchingBackgroundLocation();
+    await removeAllNotification();
+  }
+};

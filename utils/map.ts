@@ -28,7 +28,7 @@ export const calculateDistance = (
 ) => {
   if (!point1 || !point2) return undefined;
 
-  const kmDistance = getDistanceFromLatLonInKm(
+  const kmDistance: number = getDistanceFromLatLonInKm(
     point1.lat,
     point1.lng,
     point2.lat,
@@ -36,13 +36,13 @@ export const calculateDistance = (
   );
   const roundedDistance = kmDistance.toFixed(kmDistance > 100 ? 0 : 2);
   if (onlyNumber) {
-    return kmDistance;
+    return kmDistance as number;
   }
 
   return `${roundedDistance} km`;
 };
 
-export const getNearestPoint = (pointsList: Place[], coords2: Path) => {
+export const getNearestPoint = (pointsList: Place[], coords2: Path): Place => {
   if (!pointsList.length) return;
 
   let closestDistance;
@@ -56,48 +56,4 @@ export const getNearestPoint = (pointsList: Place[], coords2: Path) => {
 
     return acc;
   }, pointsList[0]);
-};
-
-export const getLocationPermission = async () => {
-  let { status } = await Location.getForegroundPermissionsAsync();
-
-  if (status === 'undetermined') {
-    const data = await Location.requestForegroundPermissionsAsync();
-    status = data.status;
-  }
-
-  return status;
-};
-
-export const startWatchToLiveLocation = async (
-  callback: (coords: Path) => void,
-  minDistance?: number
-) => {
-  let status = await getLocationPermission();
-
-  if (status !== 'granted') {
-    const data = await Location.requestForegroundPermissionsAsync();
-    status = data.status;
-  }
-
-  if (status !== 'granted') return;
-
-  return Location.watchPositionAsync(
-    {
-      accuracy: LocationAccuracy.BestForNavigation,
-      distanceInterval: minDistance,
-      timeInterval: 1000,
-    },
-    newLocation => {
-      let { coords } = newLocation;
-
-      callback({ lat: coords.latitude, lng: coords.longitude });
-    }
-  );
-};
-
-export const getMyLocation = async () => {
-  const location = await Location.getCurrentPositionAsync();
-
-  return location.coords;
 };

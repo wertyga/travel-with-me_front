@@ -16,7 +16,7 @@ const PlaceScreen = ({ route }) => {
   const navi = useNavigation();
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
 
-  const { params: { placeSlug, autoplay } = {} } = route;
+  const { params: { placeSlug } = {} } = route;
   const [state, setState] = useState({
     isShowGallery: false,
     isMetaOpened: false,

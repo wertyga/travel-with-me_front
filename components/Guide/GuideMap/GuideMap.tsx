@@ -7,22 +7,31 @@ import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/
 import CarouselEx from 'react-native-snap-carousel';
 import cn from '@/app/classname';
 import { StatusBar } from 'expo-status-bar';
-import { updateDomAction, useSelector } from '@/stores';
+import { toggleGuideMute, updateDomAction, useSelector } from '@/stores';
 import { CarouselDots } from '@/components/Carousel';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideActions } from './GuideActions';
 import { PointImagesCarousel } from './PointImagesCarousel';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
+import { useNavigation } from '@/hooks';
+import { useRoute } from '@react-navigation/native';
+import { useNotify } from '@/context';
+import Button from '@/components/Button';
+import { Foundation } from '@expo/vector-icons';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   guide: Guide;
+  onPressGoToPointDirections?: (point: Place) => void;
 };
 
-const { width: windowWidth, height } = Dimensions.get('window');
-// const PREVIEW_HEIGHT = height / 2;
+const { width: windowWidth } = Dimensions.get('window');
 const MAP_TOP = 120;
 
-export const GuideMap = ({ guide }: Props) => {
+export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
+  const route = useRoute();
+  const navi = useNavigation();
+
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
@@ -37,10 +46,17 @@ export const GuideMap = ({ guide }: Props) => {
     ({ guideStore }) => guideStore?.isFollowingToGuide
   );
 
+  const updateRouteMapState = (params: any) => {
+    navi.setParams(params);
+  };
+
   const [state, setState] = useState({
-    pointShowing: undefined as Place | undefined,
-    pointShowingIndex: 0,
+    pointShowing: (route.params?.pointShowing || undefined) as
+      | Place
+      | undefined,
+    pointShowingIndex: route.params?.pointShowingIndex || 0,
     isShowCarouselImages: false,
+    isAudioPlaying: false,
   });
 
   const onPointChoose = (point: Place, forceUpdate?: boolean) => {
@@ -92,6 +108,10 @@ export const GuideMap = ({ guide }: Props) => {
     }));
   };
 
+  const onPlaySound = (value: boolean) => {
+    setState(prev => ({ ...prev, isAudioPlaying: value }));
+  };
+
   useEffect(() => {
     if (!visiblePoint || !isFollowingToGuide) return;
 
@@ -104,6 +124,11 @@ export const GuideMap = ({ guide }: Props) => {
   }, [visiblePoint, isFollowingToGuide]);
 
   useEffect(() => {
+    updateRouteMapState({
+      pointShowing: state.pointShowing,
+      pointShowingIndex: state.pointShowingIndex,
+    });
+
     updateDomAction({
       header: {
         display: state.pointShowing ? 'none' : 'flex',
@@ -134,10 +159,13 @@ export const GuideMap = ({ guide }: Props) => {
           !!state.pointShowing && styles.mapWithChosenPoint,
         ]}
       >
-        <GuideActions
-          guide={guide}
-          isWithPreviewOpened={!!state.pointShowing}
-        />
+        <GuideActions isWithPreviewOpened={!!state.pointShowing} />
+
+        {/*{state.isAudioPlaying && (*/}
+        {/*  <Button style={styles.soundBtn} onPress={toggleGuideMute}>*/}
+        {/*    <Foundation name="sound" size={24} color="white" />*/}
+        {/*  </Button>*/}
+        {/*)}*/}
 
         <GuideMapGoToNearestPointBtn
           guide={guide}
@@ -168,13 +196,7 @@ export const GuideMap = ({ guide }: Props) => {
             data={pointsWithChosen as any}
             disableIntervalMomentum={true}
             onSnapToItem={onSlidePoint}
-            renderItem={({
-              item: point,
-              index,
-            }: {
-              item: Place;
-              index: number;
-            }) => {
+            renderItem={({ item: point }: { item: Place; index: number }) => {
               return (
                 <PointMapMarkerPreview
                   point={point}
@@ -182,6 +204,8 @@ export const GuideMap = ({ guide }: Props) => {
                   key={point._id}
                   autoplayAudio={point.isChosen && !isGuideMuted}
                   onToggleCarouselShow={onToggleCarouselShow}
+                  onPlaySound={onPlaySound}
+                  onPressGoToPointDirections={onPressGoToPointDirections}
                 />
               );
             }}
@@ -209,7 +233,7 @@ const styles = StyleSheet.create({
     right: 5,
     zIndex: 10,
     borderRadius: 6,
-    overflow: 'hidden',
+    // overflow: 'hidden',
   },
   carouselWrapper: {
     width: Dimensions.get('window').width,
@@ -232,5 +256,15 @@ const styles = StyleSheet.create({
     top: Dimensions.get('screen').height,
     backgroundColor: 'grey',
     zIndex: 10,
+  },
+  soundBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+    width: 40,
+    backgroundColor: CONSTANTS.colors.bg1,
+    position: 'absolute',
+    bottom: 9,
+    left: 10,
   },
 });

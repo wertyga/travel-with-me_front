@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   NavigationContainer,
   NavigationContainerRefWithCurrent,
@@ -20,8 +20,9 @@ import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import TransitionScreen from '@/screens/TransitionScreen';
 import FavoritesScreen from '@/screens/Favorites.screen';
 import { useAuth } from '@/context';
+import { setBackScreenData, updateCurrentRoute, useSelector } from '@/stores';
 import { City, Guide, SCREENS } from '@/types';
-import { AppState } from 'react-native';
+import TestScreen from '@/screens/Test.screen';
 
 export type RootStackParamList = {
   [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;
@@ -40,37 +41,49 @@ export type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
 export let navigation: NavigationContainerRefWithCurrent<any> | undefined;
 
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
-  const { isLoading, getBackScreenData, setBackScreenData } = useAuth();
+  const { isLoading } = useAuth();
+  const backScreen = useSelector(
+    ({ appStateStore }) => appStateStore.backScreen
+  );
+
+  const addRouteListener = () => {
+    navigationRef?.addListener('state', ({ data: { state } }) => {
+      const { name, params } = state.routes[state.routes.length - 1];
+      updateCurrentRoute({ [name]: params } as any);
+    });
+  };
+
+  const onReady = () => {
+    navigation = navigationRef;
+    addRouteListener();
+
+    if (backScreen) {
+      const [routeName, params] = Object.entries(backScreen)[0];
+      navigationRef.navigate(routeName as any, params as any);
+      setBackScreenData(null);
+    }
+  };
 
   if (isLoading) {
     return <TransitionScreen />;
   }
 
   return (
-    <NavigationContainer
+    <NavigationContainer<RootStackParamList>
       ref={navigationRef}
-      onReady={() => {
-        navigation = navigationRef;
-        const backScreen = getBackScreenData();
-
-        if (backScreen) {
-          navigationRef.navigate(
-            backScreen.href as any,
-            backScreen.params as any
-          );
-          setBackScreenData(null);
-        }
-      }}
+      onReady={onReady}
     >
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
         }}
       >
+        {/*<Stack.Screen name={SCREENS.CitiesList} component={TestScreen} />*/}
         <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
         <Stack.Screen name={SCREENS.City} component={CityScreen} />
         <Stack.Screen name={SCREENS.Profile} component={ProfileScreen} />

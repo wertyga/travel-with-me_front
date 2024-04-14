@@ -31,7 +31,7 @@ export const GuideMetaActions = ({ travelTime, guide }: Props) => {
             title="Follow"
             onPress={() =>
               navi.navigate(SCREENS.GuideMap, {
-                guideSlug: guide.slug,
+                guide,
               })
             }
             customIcon={
@@ -42,7 +42,7 @@ export const GuideMetaActions = ({ travelTime, guide }: Props) => {
             title="Open map"
             onPress={() =>
               navi.navigate(SCREENS.GuideMap, {
-                guideSlug: guide.slug,
+                guide,
                 isOnlyMap: true,
               })
             }

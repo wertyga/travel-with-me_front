@@ -161,6 +161,9 @@ const styles = StyleSheet.create({
   textDisabled: {
     color: CONSTANTS.colors.textDisabled,
   },
+  free: {
+    width: undefined,
+  },
 });
 
 export default CustomButton;

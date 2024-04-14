@@ -1,18 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { AudioLine } from './AudioLine';
 import { Sound } from 'expo-av/src/Audio/Sound';
+import { useFocusEffect } from '@react-navigation/native';
+import { dropGuideStoreStateAction, onStopWatchLocation } from '@/stores';
 
 type Props = {
   audioUrl: string;
   autoplay?: boolean;
+  onPlay?: (isPlaying: boolean) => void;
 };
 
 let commonAudio: Sound | null = null;
 
-export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
+export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
   const audio = useRef<Sound | null>(null);
   const [state, setState] = useState({
     isPlaying: false,
@@ -30,6 +33,17 @@ export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
     }));
   };
 
+  const goPlaySound = async () => {
+    await audio.current?.playAsync();
+    onPlay?.(true);
+  };
+
+  const goStopSound = () => {
+    audio.current?.stopAsync();
+    audio.current?.setPositionAsync(0);
+    onPlay?.(false);
+  };
+
   async function playSound() {
     setState(prev => ({ ...prev, isLoading: true }));
 
@@ -43,7 +57,7 @@ export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
         audio.current?.pauseAsync();
         setState(prev => ({ ...prev, isPaused: true, isLoading: false }));
       } else {
-        audio.current?.playAsync();
+        goPlaySound();
         setState(prev => ({ ...prev, isPaused: false, isLoading: false }));
       }
       return;
@@ -59,7 +73,7 @@ export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
     commonAudio = sound as Sound;
 
     setState(prev => ({ ...prev, isLoading: false }));
-    await sound.playAsync();
+    await goPlaySound();
   }
 
   const dropState = () => {
@@ -72,21 +86,24 @@ export const AudioPlayer = ({ audioUrl, autoplay }: Props) => {
   useEffect(() => {
     if (autoplay) {
       playSound();
-    } else if (state.isPlaying || state.isLoading) {
+    } else if (state.isLoading) {
       dropState();
     }
-
-    return () => {
-      dropState();
-    };
   }, [autoplay]);
 
   useEffect(() => {
     if (state.playedPercent !== 100 || state.isPlaying) return;
 
-    audio.current?.stopAsync();
-    audio.current?.setPositionAsync(0);
+    goStopSound();
   }, [state.playedPercent, state.isPlaying]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        dropState();
+      };
+    }, [])
+  );
 
   const { isPlaying, isLoading, isPaused, playedPercent } = state;
   return (

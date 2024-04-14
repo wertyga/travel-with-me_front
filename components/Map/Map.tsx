@@ -17,7 +17,7 @@ import Button from '@/components/Button';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { CONSTANTS } from '@/styles/constants';
-import { getMyLocation } from '@/utils/map';
+import { getMyLocation } from '@/utils';
 import { useSelector } from '@/stores';
 import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
 import { customMapStyles } from '@/components/Map/Map.utils';

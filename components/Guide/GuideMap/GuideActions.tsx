@@ -8,17 +8,20 @@ import {
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import cn from '@/app/classname';
-import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
+import {
+  FontAwesome5,
+  Foundation,
+  Ionicons,
+  Octicons,
+} from '@expo/vector-icons';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Guide } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
-  guide: Guide;
   isWithPreviewOpened?: boolean;
 };
 
-export const GuideActions = ({ guide, isWithPreviewOpened }: Props) => {
+export const GuideActions = ({ isWithPreviewOpened }: Props) => {
   const isGuideMuted = useSelector(
     ({ guideStore }) => guideStore?.isGuideMuted
   );
@@ -51,7 +54,7 @@ export const GuideActions = ({ guide, isWithPreviewOpened }: Props) => {
       horizontal
     >
       <Button
-        style={cn(styles.actionBtn)}
+        style={styles.actionBtn}
         disabled={isLoadingLocation}
         onPress={toggleGuideMute}
       >
@@ -77,10 +80,9 @@ export const GuideActions = ({ guide, isWithPreviewOpened }: Props) => {
         )}
         {!!nearestPoint && (
           <CText>
-            {!!nearestPoint &&
-              `${nearestPoint.point?.title}: ${nearestPoint.distance.toFixed(
-                2
-              )} km`}
+            {`Nearest point: ${nearestPoint.point?.title} ${nearestPoint.distance.toFixed(
+              2
+            )} km`}
           </CText>
         )}
       </Button>

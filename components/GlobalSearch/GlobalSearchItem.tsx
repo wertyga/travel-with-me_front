@@ -3,7 +3,7 @@ import { FastImage } from '@/components/Image';
 import { CText } from '@/components/CText';
 import { CONSTANTS } from '@/styles/constants';
 import { FONTS, SCREENS } from '@/types';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@/hooks';
 
 type Props = {
   title?: string;
@@ -25,12 +25,12 @@ export const GlobalSearchItem = ({
   const onPress = () => {
     if (!href) return;
 
-    navi.navigate(href as any, hrefParams);
+    navi.navigate(href, hrefParams);
   };
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <FastImage style={styles.image} source={image} width={50} />
+      <FastImage style={styles.image} width={50} uri={image} />
       <View style={styles.itemContent}>
         {!!title && <CText style={styles.title}>{title}</CText>}
         {!!description && (

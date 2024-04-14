@@ -15,25 +15,76 @@ import {
   onStartWatchingAction,
   toggleGuideMute,
   updateFollowingGuideState,
+  showNotification,
+  removeNotification,
+  getNotificationAsync,
 } from '@/stores';
-import { StyleSheet } from 'react-native';
+import { store } from '@/app/store/create-isomorphic-store';
+import { calculateDistance } from '@/utils/map';
+import { startWatchToLiveLocationInBackground } from '@/utils';
+import {
+  getTheNearestVisiblePoint,
+  NearestPoint,
+} from '@/stores/guide/guide.utils';
+import { Path, Place } from '@/types';
+import { showPointDistanceNotification } from '@/stores/notify/notify.actions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
 
 const GuideMapScreen = ({ route }: Props) => {
   useAuthGuard();
+
   const navi = useNavigation();
 
   const { data: guide, isLoading } = useGetGuideQuery(
-    { slug: route.params?.guideSlug, withStory: true },
-    { skip: !route.params?.guideSlug }
+    { slug: route.params?.guide?.slug, withStory: true },
+    { skip: !route.params?.guide?.slug }
   );
 
+  const onPressGoToPointDirections = (point: Place) => {
+    const liveCords = store.getState().locationStore.liveCoords;
+    const distance = calculateDistance(point.coords, liveCords, true) as number;
+
+    showPointDistanceNotification({
+      point,
+      distance,
+    });
+
+    startWatchToLiveLocationInBackground(async (liveCoords: Path) => {
+      const prevNot = await getNotificationAsync(point._id);
+
+      const visiblePoint = getTheNearestVisiblePoint(
+        [point],
+        liveCoords,
+        (prevNot?.content?.data || undefined) as NearestPoint
+      );
+      showPointDistanceNotification(visiblePoint, visiblePoint);
+
+      // DOESN'T PLAY, DON'T KNOW WHY
+      //   if (visiblePoint.becameVisible) {
+      //     const audio = require('assets/Amsterdam_Dungeon.mp3');
+      //     console.log({ audio });
+      //     await removeNotification(`${point._id}_audio`);
+      //     await showNotification({
+      //       identifier: `${point._id}_audio`,
+      //       content: {
+      //         title: point.title,
+      //         body: !point.audioStory ? 'You have reached the point' : undefined,
+      //         // sound: 'assets/Amsterdam_Dungeon.mp3',
+      //         sound: point.audioStory,
+      //       },
+      //     });
+      //   } else if (visiblePoint.becameVisible === false) {
+      //     await removeNotification(`${point._id}_audio`);
+      //   }
+    });
+  };
+
   useLayoutEffect(() => {
-    if (!route.params?.guideSlug) {
+    if (!route.params?.guide) {
       Toast.show({
         type: 'error',
-        text1: 'No guide slug was provided',
+        text1: 'No guide was provided',
       });
       navi.goBack();
     }
@@ -66,11 +117,12 @@ const GuideMapScreen = ({ route }: Props) => {
 
   return (
     <MainLayout headerTitle={guide.title} bgImage={guide.vImage} noFooter>
-      <GuideMap guide={guide} />
+      <GuideMap
+        guide={guide}
+        onPressGoToPointDirections={onPressGoToPointDirections}
+      />
     </MainLayout>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default GuideMapScreen;

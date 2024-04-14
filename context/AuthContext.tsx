@@ -7,11 +7,10 @@ import {
   useSignInMutation,
   useSignUpMutation,
 } from '@/api';
-import { AuthCommonRequest, SCREENS } from '@/types';
+import { AuthCommonRequest } from '@/types';
 import { User } from '@/types/user';
 import Toast from 'react-native-toast-message';
 import { storage } from '@/utils';
-import { SafeLoader } from '@/components/SafeLoader';
 import { useDispatch } from 'react-redux';
 import {
   GUIDE_SIGNINOUT_TAGS,
@@ -25,26 +24,17 @@ export type AuthContextType = {
     user?: User;
     error?: { message: string; statusCode: number };
   }>;
-  logout: (backScreen?: SCREENS) => void;
+  logout: () => void;
   signUp: (data: AuthCommonRequest) => Promise<boolean>;
   isLoading: boolean;
   sigUpLoading: boolean;
   sigInLoading: boolean;
-  getBackScreenData: () => BackScreenType | null;
   resetSignInOutTags: () => void;
-  setBackScreenData: (data: BackScreenType | null) => void;
-};
-
-export type BackScreenType = {
-  href: SCREENS;
-  params?: Record<string, string>;
 };
 
 export const AuthContext = createContext<AuthContextType>({
   signIn: (() => {}) as any,
   logout: () => {},
-  getBackScreenData: () => null,
-  setBackScreenData: () => {},
   resetSignInOutTags: () => {},
   signUp: () => false as any,
   isLoading: false,
@@ -54,12 +44,10 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const backScreenData = useRef<BackScreenType | null>(null);
   const [state, setState] = useState({
     user: undefined,
     token: null,
     loading: false,
-    backScreen: undefined,
   });
 
   const [signInFetch, { isLoading: sigInLoading }] = useSignInMutation();
@@ -73,13 +61,6 @@ export const AuthProvider = ({ children }) => {
   });
 
   const isLoading = selfFetching || state.loading;
-
-  const getBackScreenData = () => {
-    return backScreenData.current;
-  };
-  const setBackScreenData = (data: BackScreenType) => {
-    backScreenData.current = data;
-  };
 
   const resetSignInOutTags = () => {
     dispatch(guideApi.util.invalidateTags(GUIDE_SIGNINOUT_TAGS));
@@ -157,8 +138,6 @@ export const AuthProvider = ({ children }) => {
         isLoading,
         sigUpLoading,
         sigInLoading,
-        getBackScreenData,
-        setBackScreenData,
         resetSignInOutTags,
       }}
     >
