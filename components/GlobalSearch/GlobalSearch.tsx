@@ -81,7 +81,7 @@ export const GlobalSearch = () => {
                       title={guide.title}
                       description={guide.city.title}
                       href={SCREENS.Guide}
-                      hrefParams={{ guideSlug: guide.slug }}
+                      hrefParams={{ guide }}
                     />
                   );
                 })}

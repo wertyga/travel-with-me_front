@@ -7,3 +7,4 @@ export * from './route';
 export * from './cache';
 export * from './guide';
 export * from './swipe';
+export * from './location';

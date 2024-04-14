@@ -11,12 +11,16 @@ import { AntDesign } from '@expo/vector-icons';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
+import { useSelector } from '@/stores';
+import { calculateDistance } from '@/utils/map';
 
 type Props = {
   point: Place;
   onClose: () => void;
   onToggleCarouselShow: () => void;
   autoplayAudio?: boolean;
+  onPlaySound?: (state: boolean) => void;
+  onPressGoToPointDirections?: (point: Place) => void;
 };
 
 export const PointMapMarkerPreview = ({
@@ -24,8 +28,16 @@ export const PointMapMarkerPreview = ({
   onClose,
   onToggleCarouselShow,
   autoplayAudio,
+  onPlaySound,
+  onPressGoToPointDirections,
 }: Props) => {
   const { story, title, audioStory } = point;
+
+  const liveCoords = useSelector(
+    ({ locationStore }) => locationStore?.liveCoords
+  );
+
+  const distanceToPoint = calculateDistance(point.coords, liveCoords);
 
   return (
     <BackgroundGradient style={styles.container}>
@@ -39,6 +51,8 @@ export const PointMapMarkerPreview = ({
         <GuideMapPointActions
           point={point}
           onOpenGallery={onToggleCarouselShow}
+          distanceToPoint={distanceToPoint as string}
+          onPressToDirection={onPressGoToPointDirections}
         />
       </View>
 
@@ -47,7 +61,11 @@ export const PointMapMarkerPreview = ({
       </ScrollView>
 
       {!!audioStory && (
-        <AudioPlayer audioUrl={audioStory} autoplay={autoplayAudio} />
+        <AudioPlayer
+          audioUrl={audioStory}
+          autoplay={autoplayAudio}
+          onPlay={onPlaySound}
+        />
       )}
     </BackgroundGradient>
   );
@@ -70,6 +88,8 @@ const styles = StyleSheet.create({
   },
   pointActions: {
     marginVertical: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontSize: 20,

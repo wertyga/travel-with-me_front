@@ -3,6 +3,7 @@ import { City } from '@/types/city';
 import { Country } from '@/types/country';
 import { Like } from '@/types/likes';
 import { Place } from '@/types/place';
+import { NearestPoint } from '@/stores/guide/guide.utils';
 
 export enum GUIDE_TAGS {
   Guide = 'Guide',
@@ -45,10 +46,7 @@ export type Guide = {
 
 export type GuideStore = {
   visiblePoint?: Place;
-  nearestPoint?: {
-    point: Place;
-    distance: number;
-  };
+  nearestPoint?: NearestPoint;
   isGuideMuted?: boolean;
   isFollowingToGuide?: boolean;
   _followingGuide?: Guide;

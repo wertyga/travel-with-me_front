@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { NativeWindStyleSheet } from 'nativewind';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -16,14 +16,19 @@ import {
 import { Provider } from 'react-redux';
 import { Toast } from '@/components/Toast';
 import { store } from '@/app/store/create-isomorphic-store';
-import { AuthProvider, LayoutProvider, AppStateProvider } from './context';
+import { AuthProvider, LayoutProvider } from './context';
 import Navigator from './app/Navigator';
+import { AppState } from 'react-native';
+import { updateAppStateListener } from '@/stores';
+// import { StoreProvider } from '@/mobx/StoreProvider';
 
 SplashScreen.preventAutoHideAsync();
 
 NativeWindStyleSheet.setOutput({
   default: 'native',
 });
+
+let isMounted = false;
 
 function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -41,11 +46,16 @@ function App() {
     }
   }, [fontsLoaded, fontError]);
 
+  useEffect(() => {
+    AppState.addEventListener('change', updateAppStateListener);
+  }, []);
+
   if (!fontsLoaded && !fontError) {
     return null;
   }
 
   return (
+    // <StoreProvider>
     <Provider store={store}>
       <StatusBar style="light" />
       <AuthProvider>
@@ -55,6 +65,7 @@ function App() {
       </AuthProvider>
       <Toast />
     </Provider>
+    // </StoreProvider>
   );
 }
 

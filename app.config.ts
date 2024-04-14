@@ -23,6 +23,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           'Allow Travel With Me to use your location.',
       },
     ],
+    [
+      'expo-notifications',
+      {
+        icon: './assets/logo2.png',
+        color: '#ffffff',
+      },
+    ],
   ],
   ios: {
     config: {

@@ -3,6 +3,7 @@ import { useAuth } from '@/context';
 import { useNavigation } from '@/hooks';
 import { SCREENS } from '@/types';
 import { useRoute } from '@react-navigation/native';
+import { setBackScreenData } from '@/stores';
 
 type Props = Omit<CustomButtonProps, 'onPress' | 'href'> & {};
 
@@ -14,12 +15,12 @@ export const GoToPayContentLink = ({
 }: Props) => {
   const navi = useNavigation();
   const router = useRoute();
-  const { setBackScreenData, user } = useAuth();
+  const { user } = useAuth();
 
   const handleNavigate = () => {
     const linkParams = { ...(hrefParams || {}), ...(router.params || {}) };
     const screen = user ? SCREENS.Subscriptions : SCREENS.Login;
-    setBackScreenData({ href: router.name as SCREENS, params: linkParams });
+    setBackScreenData(router.name as SCREENS, linkParams);
 
     navi.navigate(screen);
   };
