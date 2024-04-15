@@ -103,7 +103,10 @@ export const CarouselNew = <T,>({
         {data.map((info, i) => {
           if (isFullScreen) {
             return (
-              <View style={{ height: layoutHeight, width: windowWidth }}>
+              <View
+                style={{ height: layoutHeight, width: windowWidth }}
+                key={i}
+              >
                 {renderItem({
                   item: info,
                   index: i,

@@ -5,9 +5,8 @@ import { Guide, Place } from '@/types';
 import { useEffect, useRef, useState } from 'react';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import CarouselEx from 'react-native-snap-carousel';
-import cn from '@/app/classname';
 import { StatusBar } from 'expo-status-bar';
-import { toggleGuideMute, updateDomAction, useSelector } from '@/stores';
+import { updateDomAction, useSelector } from '@/stores';
 import { CarouselDots } from '@/components/Carousel';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideActions } from './GuideActions';
@@ -15,9 +14,6 @@ import { PointImagesCarousel } from './PointImagesCarousel';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
 import { useNavigation } from '@/hooks';
 import { useRoute } from '@react-navigation/native';
-import { useNotify } from '@/context';
-import Button from '@/components/Button';
-import { Foundation } from '@expo/vector-icons';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -161,12 +157,6 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
       >
         <GuideActions isWithPreviewOpened={!!state.pointShowing} />
 
-        {/*{state.isAudioPlaying && (*/}
-        {/*  <Button style={styles.soundBtn} onPress={toggleGuideMute}>*/}
-        {/*    <Foundation name="sound" size={24} color="white" />*/}
-        {/*  </Button>*/}
-        {/*)}*/}
-
         <GuideMapGoToNearestPointBtn
           guide={guide}
           onPointChoose={onPointChoose}
@@ -233,7 +223,6 @@ const styles = StyleSheet.create({
     right: 5,
     zIndex: 10,
     borderRadius: 6,
-    // overflow: 'hidden',
   },
   carouselWrapper: {
     width: Dimensions.get('window').width,

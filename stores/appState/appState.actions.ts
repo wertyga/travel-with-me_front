@@ -1,10 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { SCREENS } from '@/types';
 import { store } from '@/app/store/create-isomorphic-store';
 import { appStateSlice } from '@/stores/appState/appState.reducer';
-import { AppState } from 'react-native';
 import { baseApi } from '@/app/query';
-import { removeAllNotification } from '@/stores';
+import { removeAllNotification } from '@/stores/notify/notify.utils';
 import { stopWatchingBackgroundLocation } from '@/utils';
 
 export const updateCurrentRoute = (route: Record<SCREENS, any>) => {

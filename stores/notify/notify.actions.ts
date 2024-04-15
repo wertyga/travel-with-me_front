@@ -8,6 +8,7 @@ export const showPointDistanceNotification = async (
   const {
     point: { title, _id },
     distance,
+    becameVisible,
   } = nearestPoint;
 
   showNotification({
@@ -15,7 +16,8 @@ export const showPointDistanceNotification = async (
     content: {
       title: title,
       body: `${+distance.toFixed(2)} km`,
-      sound: false,
+      subtitle: becameVisible ? 'You reached the place' : undefined,
+      sound: !!becameVisible,
       data,
     },
   });

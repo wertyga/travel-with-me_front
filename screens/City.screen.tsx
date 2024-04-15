@@ -1,17 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { City } from '@/types';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
-import { useSelector } from '@/stores';
 import { CitiesCarouselImage } from '@/components/City/CitiesCarouselImage/CitiesCarouselImage';
 
 const CityScreen = ({ route: { params } }) => {
   const slider = useRef();
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [defaultCity, setDefaultCity] = useState<City>(params?.city);
 
   const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();

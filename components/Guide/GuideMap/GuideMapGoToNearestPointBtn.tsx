@@ -29,6 +29,10 @@ export const GuideMapGoToNearestPointBtn = ({
     onPointChoose(nearestPoint, true);
   };
 
+  if (!liveCoords) {
+    return null;
+  }
+
   return (
     <Button
       style={styles.closestBtn}
