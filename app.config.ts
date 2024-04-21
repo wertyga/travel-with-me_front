@@ -5,7 +5,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Travel With Me',
   slug: 'travel-with-me',
-  version: '1.0.0',
+  version: '2.0.0',
   orientation: 'portrait',
   icon: './assets/logo2.png',
   userInterfaceStyle: 'light',
