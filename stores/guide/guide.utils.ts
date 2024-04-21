@@ -28,9 +28,8 @@ export const getTheNearestVisiblePoint = (
     true
   );
 
-  // const isNewPointTheSame = _nearestPoint?._id === newNearestPoint?._id;
-  // const isNewPointVisible = distanceToNearestPoint <= MIN_CLOSE_DISTANCE; // Prod
-  const isNewPointVisible = distanceToNearestPoint >= MIN_CLOSE_DISTANCE; // Test
+  const isNewPointVisible = distanceToNearestPoint <= MIN_CLOSE_DISTANCE; // Prod
+  // const isNewPointVisible = distanceToNearestPoint >= MIN_CLOSE_DISTANCE; // Test
   const isNewPointStartBeVisible =
     isNewPointVisible && !prevNearestPoint?.isVisible;
   const isNewPointStartBeHidden =

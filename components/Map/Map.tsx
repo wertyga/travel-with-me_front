@@ -135,7 +135,7 @@ export const Map = React.memo(
                 onPress={handlePointPress(point)}
                 markerSize={mapMarkerSize}
                 isChosenExists={!!chosenPoint}
-                {...{ coords, title, description, images, isChosen }}
+                {...{ coords, title, description, image: images[0], isChosen }}
               />
             );
           })}

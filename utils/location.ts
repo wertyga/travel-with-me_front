@@ -1,6 +1,7 @@
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import { Path, Place } from '@/types';
+import { logger } from '@/utils/logger';
 
 const LOCATION_TASK_NAME = 'background-location-task';
 
@@ -30,26 +31,21 @@ export const startWatchToLiveLocationInBackground = async (
   callback: (path: Path) => void
 ) => {
   const status = await getBackgroundLocationPermission();
+
   if (status !== 'granted') return;
 
-  TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+  TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     try {
       if (error) {
-        console.log({ error });
-        // Error occurred - check `error.message` for more details.
         return;
       }
       if (data) {
-        console.log({ data: data.locations });
         const {
           locations: [{ coords }],
         } = data;
-        console.log({ coords });
         callback({ lat: coords.latitude, lng: coords.longitude });
       }
-    } catch (e) {
-      console.log({ e });
-    }
+    } catch (e) {}
   });
 
   await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
@@ -80,7 +76,7 @@ export const startWatchToLiveLocation = async (
     await Location.requestBackgroundPermissionsAsync();
   }
 
-  return Location.watchPositionAsync(
+  await Location.watchPositionAsync(
     {
       accuracy: Location.LocationAccuracy.BestForNavigation,
       distanceInterval: minDistance,

@@ -15,19 +15,23 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: '#C7D3C9',
   },
   assetBundlePatterns: ['**/*'],
+  notification: {
+    icon: './assets/notification_logo.png',
+  },
   plugins: [
     [
       'expo-location',
       {
         locationAlwaysAndWhenInUsePermission:
           'Allow Travel With Me to use your location.',
+        isAndroidBackgroundLocationEnabled: true,
       },
     ],
     [
       'expo-notifications',
       {
-        icon: './assets/logo2.png',
-        color: '#ffffff',
+        icon: './assets/notification_logo.png',
+        // color: '#ffffff',
       },
     ],
   ],
@@ -60,6 +64,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'android.permission.ACCESS_COARSE_LOCATION',
       'android.permission.ACCESS_FINE_LOCATION',
       'android.permission.FOREGROUND_SERVICE',
+      'android.permission.ACCESS_FINE_LOCATION',
+      'android.permission.ACCESS_BACKGROUND_LOCATION',
+      'android.permission.FOREGROUND_SERVICE_LOCATION',
     ],
   },
   extra: {
