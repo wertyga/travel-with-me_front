@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View, ImageBackground } from 'react-native';
 import { Map } from '@/components/Map';
 import { Guide, Place } from '@/types';
 import { useEffect, useRef, useState } from 'react';
@@ -173,10 +173,10 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
         ]}
       >
         <BackgroundGradient style={styles.carouselWrapper}>
-          <CarouselDots
-            totalCount={pointsWithChosen.length}
-            currentIndex={state.pointShowingIndex}
-          />
+          {/*<CarouselDots*/}
+          {/*  totalCount={pointsWithChosen.length}*/}
+          {/*  currentIndex={state.pointShowingIndex}*/}
+          {/*/>*/}
 
           <CarouselEx
             layout="tinder"

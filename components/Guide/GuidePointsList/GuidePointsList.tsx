@@ -24,7 +24,11 @@ export const GuidePointsList = ({ points }: Props) => {
   const navi = useNavigation();
 
   return (
-    <ScrollView contentContainerStyle={styles.points} horizontal>
+    <ScrollView
+      contentContainerStyle={styles.points}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+    >
       {points.map(point => {
         return (
           <TouchableOpacity

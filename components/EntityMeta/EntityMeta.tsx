@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Dimensions, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  ScrollView,
+  ImageBackground,
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,6 +18,7 @@ import { FONTS } from '@/types';
 import { updateDomAction, useSelector } from '@/stores';
 import { useFocusEffect } from '@react-navigation/native';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const UPPER_CONTENT_HEIGHT = 300;
 const MIN_BOTTOM = 380;
@@ -28,6 +35,7 @@ type Props = {
   descriptionTextCutLines?: number;
   underTopContentSlot?: React.ReactNode;
   onOpenStateChange?: (state: boolean) => void;
+  imageUri?: string;
 };
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -43,6 +51,7 @@ export const EntityMeta = ({
   collapsedHeight = UPPER_CONTENT_HEIGHT,
   onOpenStateChange,
   descriptionTextCutLines = 5,
+  imageUri,
 }: Props) => {
   const [opened, setOpened] = useState(false);
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
@@ -141,6 +150,27 @@ export const EntityMeta = ({
     }, [])
   );
 
+  const Container = imageUri
+    ? ({ children }) => (
+        <ImageBackground
+          source={{ uri: imageUri }}
+          resizeMode="cover"
+          style={styles.imageBgContainer}
+        >
+          <LinearGradient
+            style={styles.container}
+            colors={['rgba(0, 0, 0, 0.7)', 'rgba(0, 0, 0, 0.05)']}
+          >
+            {children}
+          </LinearGradient>
+        </ImageBackground>
+      )
+    : ({ children }) => (
+        <BackgroundGradient style={styles.container}>
+          {children}
+        </BackgroundGradient>
+      );
+
   return (
     <Animated.View
       style={[
@@ -151,7 +181,8 @@ export const EntityMeta = ({
         },
       ]}
     >
-      <BackgroundGradient style={styles.container}>
+      <Container>
+        {/*<BackgroundGradient style={styles.container}>*/}
         <View style={{ flexGrow: 1 }}>
           <View style={styles.meta}>
             {!disabled && (
@@ -183,7 +214,8 @@ export const EntityMeta = ({
             {BottomContent}
           </Animated.View>
         )}
-      </BackgroundGradient>
+        {/*</BackgroundGradient>*/}
+      </Container>
     </Animated.View>
   );
 };
@@ -204,10 +236,20 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 10,
   },
+  imageBgContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
+    flex: 1,
+    overflow: 'hidden',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
   scrollDescription: {
     position: 'relative',
     flexGrow: 1,
     flex: 1,
+    paddingRight: 15,
   },
   description: {
     lineHeight: 22,
