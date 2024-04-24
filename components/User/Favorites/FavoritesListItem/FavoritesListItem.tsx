@@ -74,7 +74,7 @@ export const FavoritesListItem = ({
           rectangle
         >
           <FastImage uri={image || defaultImage} style={styles.image} />
-          <View style={styles.text} t>
+          <View>
             <CText numberOfLines={1} style={styles.title}>
               {title}
             </CText>

@@ -2,19 +2,22 @@ import * as React from 'react';
 import { Dimensions, StyleSheet, View, ImageBackground } from 'react-native';
 import { Map } from '@/components/Map';
 import { Guide, Place } from '@/types';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import CarouselEx from 'react-native-snap-carousel';
 import { StatusBar } from 'expo-status-bar';
-import { updateDomAction, useSelector } from '@/stores';
+import { toggleGuideMute, updateDomAction, useSelector } from '@/stores';
 import { CarouselDots } from '@/components/Carousel';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideActions } from './GuideActions';
 import { PointImagesCarousel } from './PointImagesCarousel';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
 import { useNavigation } from '@/hooks';
-import { useRoute } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { CONSTANTS } from '@/styles/constants';
+import Button from '@/components/Button';
+import { Ionicons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 
 type Props = {
   guide: Guide;
@@ -27,6 +30,16 @@ const MAP_TOP = 120;
 export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
   const route = useRoute();
   const navi = useNavigation();
+
+  const [state, setState] = useState({
+    pointShowing: (route.params?.pointShowing || undefined) as
+      | Place
+      | undefined,
+    pointShowingIndex: route.params?.pointShowingIndex || 0,
+    isShowCarouselImages: false,
+    isAudioPlaying: false,
+    isBgPermissionDenied: false,
+  });
 
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
@@ -45,15 +58,6 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
   const updateRouteMapState = (params: any) => {
     navi.setParams(params);
   };
-
-  const [state, setState] = useState({
-    pointShowing: (route.params?.pointShowing || undefined) as
-      | Place
-      | undefined,
-    pointShowingIndex: route.params?.pointShowingIndex || 0,
-    isShowCarouselImages: false,
-    isAudioPlaying: false,
-  });
 
   const onPointChoose = (point: Place, forceUpdate?: boolean) => {
     const pointIndex = guide.points.findIndex(p => p._id === point._id);
@@ -161,6 +165,15 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
           guide={guide}
           onPointChoose={onPointChoose}
         />
+        {/*{state.isBgPermissionDenied && (*/}
+        {/*  <Button*/}
+        {/*  // style={styles.actionBtn}*/}
+        {/*  // disabled={isLoadingLocation}*/}
+        {/*  // onPress={toggleGuideMute}*/}
+        {/*  >*/}
+        {/*    <Ionicons name={volumeIcon} size={18} color="white" />*/}
+        {/*  </Button>*/}
+        {/*)}*/}
       </Map>
 
       <View

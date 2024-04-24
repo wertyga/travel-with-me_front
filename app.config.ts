@@ -2,10 +2,12 @@ import { ExpoConfig, ConfigContext } from 'expo/config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const version = 7;
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Travel With Me',
   slug: 'travel-with-me',
-  version: '6.0.0',
+  version: `${version}.0.0`,
   orientation: 'portrait',
   icon: './assets/logo2.png',
   userInterfaceStyle: 'light',
@@ -50,7 +52,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   scheme: 'travel-with-me',
   android: {
-    versionCode: 6,
+    versionCode: version,
     config: {
       googleMaps: {
         apiKey: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
@@ -61,7 +63,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#ffffff',
     },
     package: 'com.wertyga.travelwithme',
-    permissions: [],
+    permissions: [
+      'android.permission.ACCESS_COARSE_LOCATION',
+      'android.permission.ACCESS_FINE_LOCATION',
+      'android.permission.FOREGROUND_SERVICE',
+      'android.permission.ACCESS_FINE_LOCATION',
+      'android.permission.ACCESS_BACKGROUND_LOCATION',
+    ],
   },
   extra: {
     eas: {

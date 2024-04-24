@@ -4,14 +4,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  ImageBackground,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { City, FONTS, Guide, SCREENS } from '@/types';
 import { useNavigation } from '@/hooks';
 import { CText } from '@/components/CText';
-import { FastImageBackground } from '@/components/Image';
 import { CountryPill } from '@/components/Country';
-import { defaultGuideImageUri, defaultGuideImage } from '@/utils';
+import { defaultGuideImage } from '@/utils';
 
 type Props = {
   guide: Guide;
@@ -33,10 +33,10 @@ export const GuidePreview = ({ guide, country, city }: Props) => {
   };
 
   return (
-    <FastImageBackground
+    <ImageBackground
       resizeMode="cover"
       style={styles.container}
-      uri={guide.hImage || defaultGuideImage}
+      source={guide.hImage ? { uri: guide.hImage } : defaultGuideImage}
     >
       <LinearGradient
         colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
@@ -63,7 +63,7 @@ export const GuidePreview = ({ guide, country, city }: Props) => {
           </View>
         </TouchableOpacity>
       </LinearGradient>
-    </FastImageBackground>
+    </ImageBackground>
   );
 };
 

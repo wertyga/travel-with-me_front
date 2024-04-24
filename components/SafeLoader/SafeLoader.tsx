@@ -5,7 +5,6 @@ import {
   ImageBackground,
 } from 'react-native';
 import { CText } from '@/components/CText';
-import { FastImageBackground } from '@/components/Image';
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
 import { FONTS } from '@/types';
 
@@ -38,12 +37,12 @@ export const SafeLoader = ({
   if (image) {
     return (
       <FetchErrorWrapper fetchError={fetchError} reFetchMethod={reFetchMethod}>
-        <FastImageBackground
-          uri={image}
+        <ImageBackground
+          source={typeof image !== 'string' ? image : { uri: image }}
           style={[StyleSheet.absoluteFillObject, styles.container]}
         >
           <Children textColor={textColor} indicatorColor={indicatorColor} />
-        </FastImageBackground>
+        </ImageBackground>
       </FetchErrorWrapper>
     );
   }

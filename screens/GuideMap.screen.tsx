@@ -41,43 +41,50 @@ const GuideMapScreen = ({ route }: Props) => {
     { skip: !route.params?.guide?.slug }
   );
 
-  const onPressGoToPointDirections = (point: Place) => {
-    const liveCords = store.getState().locationStore.liveCoords;
-    const distance = calculateDistance(point.coords, liveCords, true) as number;
+  const onPressGoToPointDirections = async (point: Place) => {
+    const hasAccess = await startWatchToLiveLocationInBackground(
+      async (liveCoords: Path) => {
+        const prevNot = await getNotificationAsync(point._id);
 
-    showPointDistanceNotification({
-      point,
-      distance,
-    });
+        const visiblePoint = getTheNearestVisiblePoint(
+          [point],
+          liveCoords,
+          (prevNot?.content?.data || undefined) as NearestPoint
+        );
+        showPointDistanceNotification(visiblePoint, visiblePoint);
 
-    startWatchToLiveLocationInBackground(async (liveCoords: Path) => {
-      const prevNot = await getNotificationAsync(point._id);
+        // DOESN'T PLAY, DON'T KNOW WHY
+        //   if (visiblePoint.becameVisible) {
+        //     const audio = require('assets/Amsterdam_Dungeon.mp3');
+        //     console.log({ audio });
+        //     await removeNotification(`${point._id}_audio`);
+        //     await showNotification({
+        //       identifier: `${point._id}_audio`,
+        //       content: {
+        //         title: point.title,
+        //         body: !point.audioStory ? 'You have reached the point' : undefined,
+        //         // sound: 'assets/Amsterdam_Dungeon.mp3',
+        //         sound: point.audioStory,
+        //       },
+        //     });
+        //   } else if (visiblePoint.becameVisible === false) {
+        //     await removeNotification(`${point._id}_audio`);
+        //   }
+      }
+    );
 
-      const visiblePoint = getTheNearestVisiblePoint(
-        [point],
-        liveCoords,
-        (prevNot?.content?.data || undefined) as NearestPoint
-      );
-      showPointDistanceNotification(visiblePoint, visiblePoint);
-
-      // DOESN'T PLAY, DON'T KNOW WHY
-      //   if (visiblePoint.becameVisible) {
-      //     const audio = require('assets/Amsterdam_Dungeon.mp3');
-      //     console.log({ audio });
-      //     await removeNotification(`${point._id}_audio`);
-      //     await showNotification({
-      //       identifier: `${point._id}_audio`,
-      //       content: {
-      //         title: point.title,
-      //         body: !point.audioStory ? 'You have reached the point' : undefined,
-      //         // sound: 'assets/Amsterdam_Dungeon.mp3',
-      //         sound: point.audioStory,
-      //       },
-      //     });
-      //   } else if (visiblePoint.becameVisible === false) {
-      //     await removeNotification(`${point._id}_audio`);
-      //   }
-    });
+    if (hasAccess) {
+      const liveCords = store.getState().locationStore.liveCoords;
+      const distance = calculateDistance(
+        point.coords,
+        liveCords,
+        true
+      ) as number;
+      showPointDistanceNotification({
+        point,
+        distance,
+      });
+    }
   };
 
   useLayoutEffect(() => {

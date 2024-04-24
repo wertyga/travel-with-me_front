@@ -21,8 +21,11 @@ export const GuideMapPointActions = ({
   distanceToPoint,
   onPressToDirection,
 }: Props) => {
-  const onDirectionPress = () => {
-    onPressToDirection?.(point);
+  const onDirectionPress = async () => {
+    if (onPressToDirection) {
+      await onPressToDirection(point);
+    }
+
     openGoogleMap(point.coords);
   };
 

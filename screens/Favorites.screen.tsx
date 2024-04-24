@@ -9,12 +9,13 @@ import { useAuthGuard } from '@/hooks';
 
 const FavoritesScreen = () => {
   const user = useAuthGuard();
-
-  const { data: { guides, places } = {}, isFetching } = useGetFavoritesQuery(
-    undefined,
-    { skip: !user }
-  );
-
+  console.log({ user });
+  const {
+    data: { guides, places } = {},
+    isFetching,
+    error,
+  } = useGetFavoritesQuery(undefined, { skip: !user });
+  console.log({ guides, places, error });
   const isRenderList = !!guides || !!places;
   const isEmptyList = isRenderList && !guides.length && !places.length;
 

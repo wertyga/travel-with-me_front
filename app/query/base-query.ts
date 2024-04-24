@@ -26,6 +26,7 @@ export const baseQuery = async ({
 
     return { data: data?.data } as any;
   } catch (e: any) {
+    console.log(e.code, e.response?.code);
     if (!silentError) {
       Toast.show({
         type: 'error',

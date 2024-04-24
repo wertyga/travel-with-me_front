@@ -16,6 +16,9 @@ import {
 } from '@expo/vector-icons';
 import { ScrollView, StyleSheet } from 'react-native';
 import { CONSTANTS } from '@/styles/constants';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
+import * as Location from 'expo-location';
 
 type Props = {
   isWithPreviewOpened?: boolean;

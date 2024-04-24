@@ -32,7 +32,7 @@ export const startWatchToLiveLocationInBackground = async (
 ) => {
   const status = await getBackgroundLocationPermission();
 
-  if (status !== 'granted') return;
+  if (status !== 'granted') return false;
 
   TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     try {
@@ -51,6 +51,8 @@ export const startWatchToLiveLocationInBackground = async (
   await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
     accuracy: Location.Accuracy.BestForNavigation,
   });
+
+  return true;
 };
 
 export const stopWatchingBackgroundLocation = async () => {
@@ -67,11 +69,13 @@ export const startWatchToLiveLocation = async (
     const data = await Location.requestForegroundPermissionsAsync();
     status = data.status;
   }
+  console.log({ status });
 
   if (status !== 'granted') return;
 
   // Get bg permission
   let bgStatus = await getBackgroundLocationPermission();
+  console.log({ bgStatus });
   if (bgStatus !== 'granted') {
     await Location.requestBackgroundPermissionsAsync();
   }

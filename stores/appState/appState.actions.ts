@@ -4,6 +4,7 @@ import { appStateSlice } from '@/stores/appState/appState.reducer';
 import { baseApi } from '@/app/query';
 import { removeAllNotification } from '@/stores/notify/notify.utils';
 import { stopWatchingBackgroundLocation } from '@/utils';
+import * as Notifications from 'expo-notifications';
 
 export const updateCurrentRoute = (route: Record<SCREENS, any>) => {
   store.dispatch(appStateSlice.actions.updateCurrentRoute(route));
@@ -33,5 +34,7 @@ export const updateAppStateListener = async (nextState: string) => {
   if (nextState === 'active') {
     await stopWatchingBackgroundLocation();
     await removeAllNotification();
+
+    const notifications = await Notifications.getPresentedNotificationsAsync();
   }
 };
