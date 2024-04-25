@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
+import * as Linking from 'expo-linking';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
 import { SubscriptionList } from '@/components/Subscription';
 import Button from '@/components/Button';
@@ -18,7 +19,7 @@ const Subscriptions = () => {
     cancelSubscription,
     renewMySubscription,
     isLoading: subLoading,
-  } = useSubscription({ withList: true });
+  } = useSubscription({ withList: true, withRetrySubscriptionFetching: true });
   const { user, setBackScreen } = useAuth();
 
   const {
@@ -70,11 +71,17 @@ const Subscriptions = () => {
   const isLoading = paymentLoading || subLoading;
   const isSubscriptionCanceled = !!subscription && subscription.isCanceled;
   const isShowCancelAction = !!subscription && !subscription.isCanceled;
+  const urlSchema =
+    Constants.appOwnership === 'expo'
+      ? Linking.createURL('/--/')
+      : Linking.createURL('');
+
   return (
     <MainLayout headerTitle="Subscription" isLoading={isLoading}>
       <StripeProvider
-        publishableKey={Constants.expoConfig?.extra.PUBLIC_STRIPE_PK_KEY}
+        publishableKey={Constants.expoConfig?.extra.PUBLIC_STRIPE_KEY}
         merchantIdentifier="com.wertyga.travel-with-me"
+        urlScheme={urlSchema}
       >
         <SubscriptionList
           onBuy={onBuy}

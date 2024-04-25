@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
   },
   edit: {
     fontSize: 10,
+    padding: 10,
   },
   logoutBtn: {
     marginTop: 25,

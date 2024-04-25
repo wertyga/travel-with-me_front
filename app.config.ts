@@ -1,8 +1,9 @@
 import { ExpoConfig, ConfigContext } from 'expo/config';
+import { AndroidConfig } from '@expo/config-plugins';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const version = 7;
+const version = 8;
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Travel With Me',
@@ -34,6 +35,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       {
         icon: './assets/notification_logo.png',
         // color: '#ffffff',
+      },
+    ],
+    [
+      '@stripe/stripe-react-native',
+      {
+        merchantIdentifier: 'com.wertyga.travel-with-me',
+        enableGooglePay: false,
       },
     ],
   ],
@@ -75,10 +83,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
-    // API_BASE_URL:
-    //   'https://fef9-2a02-a31a-803b-7380-64e2-b303-a178-241e.ngrok-free.app',
-    API_BASE_URL: 'https://api.underhood.space',
-    PUBLIC_STRIPE_PKs_KEY:
+    API_BASE_URL:
+      'https://5ba0-2a02-a31a-803b-7380-dd57-ef6e-f798-1f00.ngrok-free.app',
+    // API_BASE_URL: 'https://api.underhood.space',
+    PUBLIC_STRIPE_KEY:
       'pk_test_51NjctuLjIKbGVNPBwCRLtDko6G5xS4Ze7N42K6GsM5IkAnOQZn3skLD5kfzgKxXQuFl3watT7Xgo84A9HTwtWSST00CnF8tcSN',
   },
   runtimeVersion: {
