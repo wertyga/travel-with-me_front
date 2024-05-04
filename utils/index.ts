@@ -9,3 +9,4 @@ export * from './guide';
 export * from './swipe';
 export * from './location';
 export * from './logger';
+export * from './number';

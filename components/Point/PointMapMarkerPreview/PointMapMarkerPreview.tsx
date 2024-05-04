@@ -38,7 +38,6 @@ export const PointMapMarkerPreview = ({
   );
 
   const distanceToPoint = calculateDistance(point.coords, liveCoords);
-
   return (
     <BackgroundGradient style={styles.container}>
       <TouchableOpacity onPress={onClose} style={styles.close}>
@@ -73,11 +72,10 @@ export const PointMapMarkerPreview = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    padding: 10,
+    paddingTop: 20,
     width: '100%',
     height: '100%',
-    position: 'relative',
     zIndex: 150,
   },
   close: {

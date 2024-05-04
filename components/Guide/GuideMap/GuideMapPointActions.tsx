@@ -40,6 +40,7 @@ export const GuideMapPointActions = ({
           <CText style={{ marginLeft: 5 }}>{distanceToPoint}</CText>
         )}
       </Button>
+
       {!!point.images.length && (
         <Button style={styles.btn} onPress={onOpenGallery}>
           <Ionicons name="images-outline" size={20} color="white" />
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   btn: {
     width: 40,
     height: 40,
-    backgroundColor: CONSTANTS.colors.bg1,
+    // backgroundColor: CONSTANTS.colors.bg1,
     borderRadius: 50,
   },
 });

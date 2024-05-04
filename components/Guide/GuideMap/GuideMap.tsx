@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   carouselWrapper: {
     width: Dimensions.get('window').width,
-    paddingTop: 10,
+    // paddingTop: 10,
   },
   pointActions: {
     position: 'absolute',
