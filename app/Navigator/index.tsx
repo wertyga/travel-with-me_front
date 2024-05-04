@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   NavigationContainer,
   NavigationContainerRefWithCurrent,
@@ -20,9 +20,11 @@ import WorldGuidesMap from '@/screens/WorldGuidesMap';
 import TransitionScreen from '@/screens/TransitionScreen';
 import FavoritesScreen from '@/screens/Favorites.screen';
 import { useAuth } from '@/context';
-import { setBackScreenData, updateCurrentRoute, useSelector } from '@/stores';
+import { updateCurrentRoute } from '@/stores';
 import { City, Guide, SCREENS } from '@/types';
 import TestScreen from '@/screens/Test.screen';
+import { storage } from '@/utils';
+import { AppState } from 'react-native';
 
 export type RootStackParamList = {
   [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;
@@ -46,30 +48,47 @@ export let navigation: NavigationContainerRefWithCurrent<any> | undefined;
 
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
+
   const { isLoading } = useAuth();
-  const backScreen = useSelector(
-    ({ appStateStore }) => appStateStore.backScreen
-  );
+
+  const [initialHistory, setInitialHistory] = useState(undefined);
+  const [isAppSet, setIsAppSet] = useState(true);
 
   const addRouteListener = () => {
     navigationRef?.addListener('state', ({ data: { state } }) => {
       const { name, params } = state.routes[state.routes.length - 1];
       updateCurrentRoute({ [name]: params } as any);
+
+      storage.set('routeHistory', state);
     });
   };
 
-  const onReady = () => {
+  const onReady = async () => {
     navigation = navigationRef;
     addRouteListener();
-
-    if (backScreen) {
-      const [routeName, params] = Object.entries(backScreen)[0];
-      navigationRef.navigate(routeName as any, params as any);
-      setBackScreenData(null);
-    }
   };
 
-  if (isLoading) {
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      async nextState => {
+        if (nextState === 'active') {
+          const history = await storage.get('routeHistory');
+          setInitialHistory(history);
+
+          setTimeout(() => {
+            setIsAppSet(true);
+          });
+        }
+
+        if (nextState === 'background') {
+          setIsAppSet(false);
+        }
+      }
+    );
+  }, []);
+
+  if (isLoading || !isAppSet) {
     return <TransitionScreen />;
   }
 
@@ -77,6 +96,7 @@ const Navigator = () => {
     <NavigationContainer<RootStackParamList>
       ref={navigationRef}
       onReady={onReady}
+      initialState={initialHistory}
     >
       <Stack.Navigator
         screenOptions={{

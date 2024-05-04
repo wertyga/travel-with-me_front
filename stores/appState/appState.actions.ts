@@ -15,6 +15,7 @@ export const setBackScreenData = (route: SCREENS | null, params?: any) => {
     store.dispatch(appStateSlice.actions.setBackScreen(null));
     return;
   }
+
   store.dispatch(appStateSlice.actions.setBackScreen({ [route]: params }));
 };
 
@@ -35,6 +36,6 @@ export const updateAppStateListener = async (nextState: string) => {
     await stopWatchingBackgroundLocation();
     await removeAllNotification();
 
-    const notifications = await Notifications.getPresentedNotificationsAsync();
+    await Notifications.getPresentedNotificationsAsync();
   }
 };

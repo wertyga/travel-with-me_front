@@ -5,7 +5,6 @@ import { Audio } from 'expo-av';
 import { AudioLine } from './AudioLine';
 import { Sound } from 'expo-av/src/Audio/Sound';
 import { useFocusEffect } from '@react-navigation/native';
-import { dropGuideStoreStateAction, onStopWatchLocation } from '@/stores';
 
 type Props = {
   audioUrl: string;

@@ -6,18 +6,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import CarouselEx from 'react-native-snap-carousel';
 import { StatusBar } from 'expo-status-bar';
-import { toggleGuideMute, updateDomAction, useSelector } from '@/stores';
-import { CarouselDots } from '@/components/Carousel';
+import { updateDomAction, useSelector } from '@/stores';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideActions } from './GuideActions';
 import { PointImagesCarousel } from './PointImagesCarousel';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
 import { useNavigation } from '@/hooks';
-import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { CONSTANTS } from '@/styles/constants';
-import Button from '@/components/Button';
-import { Ionicons } from '@expo/vector-icons';
-import * as Location from 'expo-location';
 
 type Props = {
   guide: Guide;

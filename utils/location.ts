@@ -69,13 +69,12 @@ export const startWatchToLiveLocation = async (
     const data = await Location.requestForegroundPermissionsAsync();
     status = data.status;
   }
-  console.log({ status });
 
   if (status !== 'granted') return;
 
   // Get bg permission
   let bgStatus = await getBackgroundLocationPermission();
-  console.log({ bgStatus });
+
   if (bgStatus !== 'granted') {
     await Location.requestBackgroundPermissionsAsync();
   }
