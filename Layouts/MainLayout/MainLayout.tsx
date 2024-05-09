@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Text,
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import cn from '@/app/classname';
@@ -27,7 +28,9 @@ type Props = {
   bgImage?: string | number;
   noFooter?: boolean;
   isLoading?: boolean;
+  noBackBtn?: boolean;
   headerTitle?: string;
+  floatingTitle?: boolean;
   loaderTextColor?: string;
   menu?: HeaderMenuProps['menu'];
   onBgPress?: () => void;
@@ -43,6 +46,7 @@ export const MainLayout = ({
   bgImage,
   noFooter,
   headerTitle,
+  floatingTitle,
   isLoading,
   loaderTextColor,
   menu,
@@ -51,6 +55,7 @@ export const MainLayout = ({
   bgContent,
   fetchError,
   reFetchMethod,
+  noBackBtn,
 }: Props) => {
   const layoutHeight = useSelector(state => state.domStore.layout?.height);
   const imageSource = typeof bgImage === 'string' ? { uri: bgImage } : bgImage;
@@ -70,12 +75,17 @@ export const MainLayout = ({
           {isLoading && <Loader textColor={loaderTextColor} />}
 
           {!!headerTitle && (
-            <CityScreenHeader
-              title={headerTitle}
+            <LinearGradient
+              colors={['rgba(0, 0, 0, 0.6)', 'transparent']}
               style={styles.header}
-              isDark={isHeaderDark}
-              menu={menu}
-            />
+            >
+              <CityScreenHeader
+                title={headerTitle}
+                isDark={isHeaderDark}
+                menu={menu}
+                noBackBtn={noBackBtn}
+              />
+            </LinearGradient>
           )}
 
           {!!bgContent && <View style={styles.bgImage}>{bgContent}</View>}
@@ -138,9 +148,12 @@ const styles = StyleSheet.create({
     paddingBottom: 70,
   },
   header: {
-    top: 40,
+    top: 0,
     left: 0,
+    paddingTop: 40,
+    paddingBottom: 20,
     position: 'absolute',
     width: '100%',
+    zIndex: 10,
   },
 });

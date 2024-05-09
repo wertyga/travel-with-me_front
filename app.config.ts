@@ -84,9 +84,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
     // API_BASE_URL:
-    //   'https://5ba0-2a02-a31a-803b-7380-dd57-ef6e-f798-1f00.ngrok-free.app',
+    //   'https://e3b2-2a02-a31a-803b-7380-1ddc-31d8-5c4-658c.ngrok-free.app',
     API_BASE_URL: 'https://api.underhood.space',
-    PUBLIC_STRIPE_KEY:
+    PUBLIC_STRIPE_KEaY:
       'pk_test_51NjctuLjIKbGVNPBwCRLtDko6G5xS4Ze7N42K6GsM5IkAnOQZn3skLD5kfzgKxXQuFl3watT7Xgo84A9HTwtWSST00CnF8tcSN',
   },
   runtimeVersion: {

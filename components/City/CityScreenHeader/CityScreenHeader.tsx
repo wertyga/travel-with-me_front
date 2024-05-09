@@ -22,16 +22,24 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
   style?: StyleProp<ViewStyle | TextStyle>;
   title: string;
   isDark?: boolean;
+  noBackBtn?: boolean;
   menu?: HeaderMenuProps['menu'];
 };
 
-export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
+export const CityScreenHeader = ({
+  style,
+  title,
+  menu,
+  isDark,
+  noBackBtn,
+}: Props) => {
   const navi = useNavigation();
   const headerStyles = useSelector(({ domStore }) => domStore?.header);
   const translateY = useSharedValue(0);
@@ -53,18 +61,19 @@ export const CityScreenHeader = ({ style, title, menu, isDark }: Props) => {
     }
   };
 
-  const isTitleExceed = title?.length >= 17;
   const { color, ...viewStyle } = style || {};
 
   return (
     <Animated.View style={[styles.container, viewStyle, animatedStyles]}>
-      <Button style={styles.btn} onPress={goBack}>
-        <FontAwesome
-          name="angle-left"
-          size={30}
-          color={isDark ? 'black' : 'white'}
-        />
-      </Button>
+      {!noBackBtn && (
+        <Button style={styles.btn} onPress={goBack}>
+          <FontAwesome
+            name="angle-left"
+            size={30}
+            color={isDark ? 'black' : 'white'}
+          />
+        </Button>
+      )}
 
       <CText
         style={cn(
