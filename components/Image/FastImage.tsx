@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ImageProps, Image, View, ActivityIndicator } from 'react-native';
-import { findImageInCache, cacheImage } from '@/utils';
+import { ActivityIndicator, Image, ImageProps, View } from 'react-native';
+import { cacheImage, findImageInCache } from '@/utils';
 
 export type FastImageProps = Omit<ImageProps, 'source'> & {
   uri: string | number;

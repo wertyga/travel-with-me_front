@@ -1,9 +1,9 @@
+import { useRoute } from '@react-navigation/native';
 import Button, { CustomButtonProps } from '@/components/Button';
 import { useAuth } from '@/context';
 import { useNavigation } from '@/hooks';
-import { SCREENS } from '@/types';
-import { useRoute } from '@react-navigation/native';
 import { setBackScreenData } from '@/stores';
+import { SCREENS } from '@/types';
 
 type Props = Omit<CustomButtonProps, 'onPress' | 'href'> & {};
 

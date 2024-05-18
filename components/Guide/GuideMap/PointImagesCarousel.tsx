@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { Dimensions, StyleSheet, Image, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { CText } from '@/components/CText';
-import Button from '@/components/Button';
-import { CarouselDots } from '@/components/Carousel';
-import { AntDesign } from '@expo/vector-icons';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { FONTS, Place } from '@/types';
-import { useSelector } from '@/stores';
-import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
+import Button from '@/components/Button';
+import { CText } from '@/components/CText';
+import { CarouselDots } from '@/components/Carousel';
+import { GesturesContainer } from '@/components/Gestures/Gestures';
+import { useSelector } from '@/stores';
+import { AntDesign } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { FONTS, Place } from '@/types';
 
 type Props = {
   point: Place;

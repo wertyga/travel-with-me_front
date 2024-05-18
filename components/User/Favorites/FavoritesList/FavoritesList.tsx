@@ -1,8 +1,7 @@
 import { ScrollView, StyleSheet } from 'react-native';
-import { Guide, Place, SOCIAL_MODELS } from '@/types';
-
-import { FavoritesListItem } from '../FavoritesListItem/FavoritesListItem';
 import { Style } from 'domelementtype';
+import { Guide, Place, SOCIAL_MODELS } from '@/types';
+import { FavoritesListItem } from '../FavoritesListItem/FavoritesListItem';
 
 type Props = {
   guides: Guide[];

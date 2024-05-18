@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { CONSTANTS } from '@/styles/constants';
 import { CText } from '@/components/CText';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   textColor?: string;

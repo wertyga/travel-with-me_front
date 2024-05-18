@@ -1,7 +1,7 @@
 import {
-  Reducer,
-  Middleware,
   EnhancedStore,
+  Middleware,
+  Reducer,
   configureStore,
 } from '@reduxjs/toolkit';
 

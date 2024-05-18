@@ -1,24 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Dimensions,
+  ImageBackground,
+  ScrollView,
   StyleSheet,
   View,
-  Dimensions,
-  ScrollView,
-  ImageBackground,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
   runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { CText } from '@/components/CText';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { FONTS } from '@/types';
-import { updateDomAction, useSelector } from '@/stores';
-import { useFocusEffect } from '@react-navigation/native';
+import { CText } from '@/components/CText';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
+import { updateDomAction, useSelector } from '@/stores';
 import { LinearGradient } from 'expo-linear-gradient';
+import { FONTS } from '@/types';
 
 const UPPER_CONTENT_HEIGHT = 300;
 const MIN_BOTTOM = 380;
@@ -54,7 +54,9 @@ export const EntityMeta = ({
   imageUri,
 }: Props) => {
   const [opened, setOpened] = useState(false);
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(
+    ({ domStore }) => domStore?.layout?.height || 0
+  );
 
   const refState = useRef({
     initialState: {
@@ -82,7 +84,7 @@ export const EntityMeta = ({
     };
   });
 
-  const onUpdate = e => {
+  const onUpdate = (e: any) => {
     if (disabled) return;
 
     const { translationY, absoluteY } = e;
@@ -97,7 +99,7 @@ export const EntityMeta = ({
     };
   };
 
-  const onFinalize = e => {
+  const onFinalize = (e: any) => {
     if (disabled) return;
 
     const { absoluteY } = e;
@@ -151,7 +153,7 @@ export const EntityMeta = ({
   );
 
   const Container = imageUri
-    ? ({ children }) => (
+    ? ({ children }: any) => (
         <ImageBackground
           source={{ uri: imageUri }}
           resizeMode="cover"
@@ -165,7 +167,7 @@ export const EntityMeta = ({
           </LinearGradient>
         </ImageBackground>
       )
-    : ({ children }) => (
+    : ({ children }: any) => (
         <BackgroundGradient style={styles.container}>
           {children}
         </BackgroundGradient>
@@ -182,7 +184,6 @@ export const EntityMeta = ({
       ]}
     >
       <Container>
-        {/*<BackgroundGradient style={styles.container}>*/}
         <View style={{ flexGrow: 1 }}>
           <View style={styles.meta}>
             {!disabled && (
@@ -214,7 +215,6 @@ export const EntityMeta = ({
             {BottomContent}
           </Animated.View>
         )}
-        {/*</BackgroundGradient>*/}
       </Container>
     </Animated.View>
   );
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     width: windowWidth,
+    zIndex: 100,
   },
   container: {
     paddingHorizontal: 15,

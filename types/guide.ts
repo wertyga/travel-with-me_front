@@ -1,9 +1,9 @@
-import { User } from '@/types/user';
+import { NearestPoint } from '@/stores/guide/guide.utils';
 import { City } from '@/types/city';
 import { Country } from '@/types/country';
 import { Like } from '@/types/likes';
 import { Place } from '@/types/place';
-import { NearestPoint } from '@/stores/guide/guide.utils';
+import { User } from '@/types/user';
 
 export enum GUIDE_TAGS {
   Guide = 'Guide',

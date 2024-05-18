@@ -1,15 +1,15 @@
-import { StyleSheet, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
-import { RecoveryPasswordForm } from '@/components/Auth';
+import { StyleSheet, View } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MainLayout } from '@/Layouts';
 import {
   useRecoveryPasswordInitMutation,
   useRecoveryPasswordMutation,
 } from '@/api';
-import { useAuth } from '@/context';
 import { RootStackParamList } from '@/app/Navigator';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MainLayout } from '@/Layouts';
+import { RecoveryPasswordForm } from '@/components/Auth';
 import Button from '@/components/Button';
+import { useAuth } from '@/context';
 import { SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'RecoveryPassword'>;

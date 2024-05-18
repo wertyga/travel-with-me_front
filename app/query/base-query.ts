@@ -1,8 +1,8 @@
-import { AxiosRequestConfig } from 'axios';
 import Toast from 'react-native-toast-message';
-import { storage } from '@/utils';
-import Constants from 'expo-constants';
+import { AxiosRequestConfig } from 'axios';
 import axios from 'axios/index';
+import Constants from 'expo-constants';
+import { storage } from '@/utils';
 
 export const baseQuery = async ({
   headers,

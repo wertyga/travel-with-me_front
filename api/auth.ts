@@ -1,15 +1,15 @@
 import { baseApi } from '@/app/query';
+import { SIGNINOUT_VALIDATION_TAGS } from '@/app/query/base-api';
 import {
-  UserResponse,
-  SignUpRequest,
-  SignInRequest,
-  SuccessResponse,
+  ChangeEmailRequest,
   RecoveryPasswordInitRequest,
   RecoveryPasswordRequest,
-  ChangeEmailRequest,
+  SignInRequest,
+  SignUpRequest,
+  SuccessResponse,
   USER_TAGS,
+  UserResponse,
 } from '@/types';
-import { SIGNINOUT_VALIDATION_TAGS } from '@/app/query/base-api';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: build => ({

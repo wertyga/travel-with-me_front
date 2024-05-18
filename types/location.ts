@@ -1,6 +1,6 @@
 import { PermissionStatus } from 'expo-location';
-import { Place } from '@/types/place';
 import { Path } from '@/types/guide';
+import { Place } from '@/types/place';
 
 export type LocationStore = {
   status: PermissionStatus;

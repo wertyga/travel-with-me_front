@@ -1,19 +1,19 @@
 import * as React from 'react';
-import { Dimensions, StyleSheet, View, ImageBackground } from 'react-native';
-import { Map } from '@/components/Map';
-import { Guide, Place } from '@/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
-import CarouselEx from 'react-native-snap-carousel';
-import { StatusBar } from 'expo-status-bar';
-import { updateDomAction, useSelector } from '@/stores';
-import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { GuideActions } from './GuideActions';
-import { PointImagesCarousel } from './PointImagesCarousel';
-import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
-import { useNavigation } from '@/hooks';
+import { Dimensions, ImageBackground, StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import CarouselEx from 'react-native-snap-carousel';
+import { BackgroundGradient } from '@/components/BackgroundGradient';
+import { Map } from '@/components/Map';
+import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
+import { useNavigation } from '@/hooks';
+import { updateDomAction, useSelector } from '@/stores';
+import { StatusBar } from 'expo-status-bar';
+import { Guide, Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+import { GuideActions } from './GuideActions';
+import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
+import { PointImagesCarousel } from './PointImagesCarousel';
 
 type Props = {
   guide: Guide;

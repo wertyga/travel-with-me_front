@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Switch, Linking, AppState } from 'react-native';
+import { AppState, Linking, StyleSheet, Switch, View } from 'react-native';
 import { MainLayout } from '@/Layouts';
+import Button from '@/components/Button';
+import { CText } from '@/components/CText';
 import { useAuth } from '@/context';
 import { useAuthGuard, useNavigation, useSubscription } from '@/hooks';
-import { CText } from '@/components/CText';
-import Button from '@/components/Button';
-import { SCREENS } from '@/types';
 import * as Location from 'expo-location';
+import { SCREENS } from '@/types';
 
 const ProfileScreen = () => {
   useAuthGuard();

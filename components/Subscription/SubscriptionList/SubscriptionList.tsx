@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import { SubscriptionListItem } from '../SubscriptionListItem/SubscriptionListItem';
 import { SubscriptionPreview } from '@/types';
+import { SubscriptionListItem } from '../SubscriptionListItem/SubscriptionListItem';
 
 type Props = {
   onBuy: (subscriptionId: string) => void;

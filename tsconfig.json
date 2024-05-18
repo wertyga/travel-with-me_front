@@ -3,17 +3,10 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "react-nativewind": [
-        "./app/nativewind/components"
-      ]
+      "@/*": ["./*"],
+      "react-nativewind": ["./app/nativewind/components"]
     }
   },
   "extends": "expo/tsconfig.base",
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

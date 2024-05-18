@@ -1,14 +1,13 @@
-import React, { useRef, useState } from 'react';
-import { SafeLoader } from '@/components/SafeLoader';
-import { useGetCityQuery, useGetCitiesLightListQuery } from '@/api';
+import React, { useState } from 'react';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
-import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
-import { City } from '@/types';
+import { useGetCitiesLightListQuery, useGetCityQuery } from '@/api';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { CitiesCarouselImage } from '@/components/City/CitiesCarouselImage/CitiesCarouselImage';
+import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
+import { SafeLoader } from '@/components/SafeLoader';
+import { City } from '@/types';
 
-const CityScreen = ({ route: { params } }) => {
-  const slider = useRef();
+const CityScreen = ({ route: { params } }: any) => {
   const [defaultCity, setDefaultCity] = useState<City>(params?.city);
 
   const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
@@ -44,7 +43,6 @@ const CityScreen = ({ route: { params } }) => {
   const initialCityIndex = cities.findIndex(
     ({ _id }) => _id === params?.city._id
   );
-  const currentIndex = cities.findIndex(({ _id }) => _id === defaultCity._id);
 
   return (
     <MainLayout
@@ -58,16 +56,9 @@ const CityScreen = ({ route: { params } }) => {
       <CarouselNew<City>
         data={cities}
         defaultIndex={initialCityIndex}
-        sliderRef={slider}
         onChange={onChangeCity}
         renderItem={({ item, index }) => {
-          return (
-            <CitiesCarouselImage
-              item={item}
-              key={item._id}
-              isActive={index === currentIndex}
-            />
-          );
+          return <CitiesCarouselImage item={item} key={item._id} />;
         }}
         noDots
         isFullScreen

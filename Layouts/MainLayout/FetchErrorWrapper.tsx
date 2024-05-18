@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { CText } from '@/components/CText';
-import Button from '@/components/Button';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
+import Button from '@/components/Button';
+import { CText } from '@/components/CText';
 
 type Props = {
   children: React.ReactNode;

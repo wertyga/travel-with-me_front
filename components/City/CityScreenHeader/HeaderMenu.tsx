@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import Button from '@/components/Button';
-import cn from '@/app/classname';
 import { Feather } from '@expo/vector-icons';
 
 export type MenuItem = {
@@ -27,7 +26,7 @@ export const HeaderMenu = ({ items }: HeaderMenuProps) => {
   return (
     <View style={styles.container}>
       <Button
-        style={cn(styles.btn, { [state.isOpened]: styles.openedMenu })}
+        style={[styles.btn, state.isOpened && styles.openedMenu]}
         rectangle
         noPaddings
         onPress={toggleOpen()}
@@ -37,7 +36,7 @@ export const HeaderMenu = ({ items }: HeaderMenuProps) => {
       </Button>
 
       {state.isOpened && (
-        <View style={cn(styles.menu)}>
+        <View style={styles.menu}>
           {items.map((item, i) => {
             return <View key={i}>{item.title}</View>;
           })}

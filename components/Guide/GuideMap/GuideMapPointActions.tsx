@@ -1,12 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Button from '@/components/Button';
+import { CText } from '@/components/CText';
+import { openGoogleMap } from '@/components/Map/Map.utils';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Place } from '@/types';
-import { CONSTANTS } from '@/styles/constants';
-import { openGoogleMap } from '@/components/Map/Map.utils';
-import { CText } from '@/components/CText';
-import cn from '@/app/classname';
 
 type Props = {
   point: Place;
@@ -32,7 +30,7 @@ export const GuideMapPointActions = ({
   return (
     <View style={styles.container}>
       <Button
-        style={cn(styles.btn, { [!!distanceToPoint]: { width: undefined } })}
+        style={[styles.btn, !!distanceToPoint && { width: undefined }]}
         onPress={onDirectionPress}
       >
         <MaterialIcons name="directions" size={24} color="white" />

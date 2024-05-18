@@ -8,19 +8,19 @@ import React, {
 import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
 import MapView, {
   MapViewProps,
-  Region,
   PROVIDER_GOOGLE,
+  Region,
 } from 'react-native-maps';
-import { Path, Place } from '@/types';
-import { MapMarker } from '@/components/Map/MapMarker';
-import Button from '@/components/Button';
-import { Ionicons } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { CONSTANTS } from '@/styles/constants';
-import { getMyLocation } from '@/utils';
-import { useSelector } from '@/stores';
-import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
+import Button from '@/components/Button';
 import { customMapStyles } from '@/components/Map/Map.utils';
+import { MapMarker } from '@/components/Map/MapMarker';
+import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
+import { useSelector } from '@/stores';
+import { Ionicons } from '@expo/vector-icons';
+import { getMyLocation } from '@/utils';
+import { Path, Place } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = MapViewProps & {
   points: Place[];

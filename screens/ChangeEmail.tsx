@@ -1,15 +1,15 @@
-import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { useCallback, useLayoutEffect } from 'react';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { ChangeEmailForm } from '@/components/Auth';
-import { Loader } from '@/components/Loader';
-import { useChangeEmailMutation } from '@/api';
-import { useAuth } from '@/context';
-import Toast from 'react-native-toast-message';
-import { RootStackParamList } from '@/app/Navigator';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Toast from 'react-native-toast-message';
 import { MainLayout } from '@/Layouts';
+import { useChangeEmailMutation } from '@/api';
+import { RootStackParamList } from '@/app/Navigator';
+import { ChangeEmailForm } from '@/components/Auth';
 import { CText } from '@/components/CText';
+import { Loader } from '@/components/Loader';
+import { useAuth } from '@/context';
 import { SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChangeEmail'>;

@@ -1,11 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Marker } from 'react-native-maps';
-import { CONSTANTS } from '@/styles/constants';
 import { FastImage } from '@/components/Image';
-import cn from '@/app/classname';
 import { Path } from '@/types';
-
+import { CONSTANTS } from '@/styles/constants';
 import DefaultPointImage from '@/assets/images/default_point_image.png';
 
 type Props = {
@@ -70,19 +68,21 @@ export const MapMarker = React.memo(
         tracksViewChanges={false}
         tracksInfoWindowChanges={false}
         opacity={opacity}
-        style={cn(mainMarkerSize, { [isChosen]: { zIndex: 5 } })}
+        style={[mainMarkerSize, isChosen && { zIndex: 5 }]}
       >
         <View
-          style={cn(
-            { ...styles.rootMarker, ...rootMarkerSize },
-            { [isChosen]: styles.chosenParent }
-          )}
+          style={[
+            styles.rootMarker,
+            rootMarkerSize,
+            isChosen && styles.chosenParent,
+          ]}
         >
           <View
-            style={cn(
-              { ...styles.marker, ...markerInnerSize },
-              { [isChosen]: styles.chosenChild }
-            )}
+            style={[
+              styles.marker,
+              markerInnerSize,
+              isChosen && styles.chosenChild,
+            ]}
           >
             <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
             <FastImage

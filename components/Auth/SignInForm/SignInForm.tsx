@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
-import { SIGNIN_FORM_SCHEMA } from './SignInForm.utils';
-import { Input } from '@/components/Input';
+import { Controller, useForm } from 'react-hook-form';
 import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
+import { Input } from '@/components/Input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { SIGNIN_FORM_SCHEMA } from './SignInForm.utils';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -20,7 +20,7 @@ export const SignInForm = ({ onSubmit }: Props) => {
   });
 
   return (
-    <View className="flex flex-col items-center w-full">
+    <View>
       <Controller
         control={control as any}
         render={({ field: { onChange, value } }) => {
@@ -46,7 +46,7 @@ export const SignInForm = ({ onSubmit }: Props) => {
             <Input
               style={styles.input}
               value={value}
-              onChangeText={onChange}
+              onChange={onChange}
               placeholder="Password"
               secureTextEntry
               textContentType="password"

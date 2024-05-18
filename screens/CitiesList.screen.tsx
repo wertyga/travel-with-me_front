@@ -1,20 +1,18 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useGetCitiesLightListQuery } from '@/api';
-import { MainLayout } from '@/Layouts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { MainLayout } from '@/Layouts';
+import { useGetCitiesLightListQuery } from '@/api';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
-import { Loader } from '@/components/Loader';
 import { GlobalSearch } from '@/components/GlobalSearch';
-import { navigateToError } from '@/utils';
-import { useHandleFromError } from '@/hooks';
-import cn from '@/app/classname';
-import { FONTS } from '@/types';
-
-import citiesBgImage from '@/assets/images/cities-bg-3.png';
-import { CONSTANTS } from '@/styles/constants';
+import { Loader } from '@/components/Loader';
 import { SafeLoader } from '@/components/SafeLoader';
+import { useHandleFromError } from '@/hooks';
+import { navigateToError } from '@/utils';
+import { FONTS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
+import citiesBgImage from '@/assets/images/cities-bg-3.png';
 
 const HEADERS_LIST = [
   {
@@ -78,9 +76,7 @@ const CitiesListScreen = () => {
           return (
             <CText
               key={id}
-              style={cn(styles.header, {
-                [state.tab === id]: styles.chosenHeader,
-              })}
+              style={[styles.header, state.tab === id && styles.chosenHeader]}
               onPress={onChangeTab(id)}
             >
               {title}

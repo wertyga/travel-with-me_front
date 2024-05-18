@@ -7,9 +7,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import cn from '@/app/classname';
+import { Feather } from '@expo/vector-icons';
 import { FONTS } from '@/types';
 
 type Props = {
@@ -34,9 +33,9 @@ const Search = ({
   };
 
   return (
-    <View style={cn(styles.container, style)}>
+    <View style={[styles.container, style]}>
       <TextInput
-        style={cn(styles.input, inputStyles)}
+        style={[styles.input, inputStyles]}
         value={search}
         onEndEditing={handleConfirm}
         onChangeText={setSearch}

@@ -1,8 +1,8 @@
-import { View, ScrollView, StyleSheet, ViewStyle } from 'react-native';
+import { ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { FONTS } from '@/types';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   categories: Record<string, number>;

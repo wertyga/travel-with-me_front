@@ -1,5 +1,5 @@
 import { baseApi } from '@/app/query';
-import { City, Guide, GUIDE_TAGS } from '@/types';
+import { City, GUIDE_TAGS, Guide } from '@/types';
 
 export const guideApi = baseApi.injectEndpoints({
   endpoints: build => ({

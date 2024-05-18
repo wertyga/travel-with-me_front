@@ -1,12 +1,12 @@
-import MapPoint from './icons/map-point';
-import MapPointSmall from './icons/map-point-small';
-import Profile from './icons/profile';
+import { ViewStyle } from 'react-native';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import Clock from './icons/clock';
 import Heart from './icons/heart';
 import HeartFilled from './icons/heart-filled';
-import Clock from './icons/clock';
+import MapPoint from './icons/map-point';
+import MapPointSmall from './icons/map-point-small';
 import NoAccess from './icons/no-access';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { ViewStyle } from 'react-native';
+import Profile from './icons/profile';
 
 export const ICONS_MAP = {
   'map-point': MapPoint,

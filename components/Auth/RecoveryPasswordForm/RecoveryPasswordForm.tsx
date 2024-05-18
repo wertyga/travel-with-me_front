@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
+import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
+import Button from '@/components/Button';
 import { Input } from '@/components/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
 import { getRecoveryPasswordSchema } from './RecoveryPasswordForm.utils';
 
 type Props = {
@@ -22,7 +23,7 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
     resolver: yupResolver(getRecoveryPasswordSchema(codeSent)),
   });
 
-  const goSubmit = (refetch?: boolean) => data => {
+  const goSubmit = (refetch?: boolean) => (data: any) => {
     if (codeSent && !data.code && !refetch) {
       setError('code', { message: 'This field is required' });
       return;
@@ -42,8 +43,8 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
   return (
     <View>
       <Controller
-        control={control as any}
-        render={({ field: { onChange, value } }) => {
+        control={control}
+        render={({ field: { value, onChange } }) => {
           return (
             <Input
               style={styles.input}
@@ -53,7 +54,7 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
               autoCapitalize="none"
               keyboardType="email-address"
               textContentType="emailAddress"
-              error={errors?.email?.message}
+              error={errors?.email?.message as string}
             />
           );
         }}
@@ -62,7 +63,7 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
       {codeSent && (
         <>
           <Controller
-            control={control as any}
+            control={control}
             render={({ field: { onChange, value } }) => {
               return (
                 <Input
@@ -71,7 +72,7 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
                   onChange={onChange}
                   placeholder="Your code here"
                   autoCapitalize="none"
-                  error={errors?.code?.message}
+                  error={errors?.code?.message as string}
                 />
               );
             }}
@@ -89,7 +90,7 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
                   autoCapitalize="none"
                   secureTextEntry
                   textContentType="password"
-                  error={errors?.password?.message}
+                  error={errors?.password?.message as string}
                 />
               );
             }}
@@ -107,7 +108,7 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
                   autoCapitalize="none"
                   secureTextEntry
                   textContentType="password"
-                  error={errors?.confirmPassword?.message}
+                  error={errors?.confirmPassword?.message as string}
                 />
               );
             }}
@@ -121,12 +122,14 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
       </SubmitBtn>
 
       {codeSent && (
-        <Text
+        <Button
           onPress={handleSubmit(goSubmit(true))}
-          className="text-white mt-6 text-right"
+          style={styles.sendAgain}
+          right
+          textable
         >
           Send again
-        </Text>
+        </Button>
       )}
     </View>
   );
@@ -135,5 +138,8 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
 const styles = StyleSheet.create({
   input: {
     marginBottom: 15,
+  },
+  sendAgain: {
+    marginTop: 20,
   },
 });

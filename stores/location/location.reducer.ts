@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Guide, LocationStore } from '@/types';
 import { LocationSubscription, PermissionStatus } from 'expo-location';
 import { startWatchToLiveLocation } from '@/utils';
+import { Guide, LocationStore } from '@/types';
 
 export let watchLocationHandler: LocationSubscription | undefined = undefined;
 

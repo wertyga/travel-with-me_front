@@ -1,15 +1,16 @@
-import { Dimensions, StyleSheet, Text, TextProps } from 'react-native';
-import cn from '@/app/classname';
+import { StyleSheet, Text, TextProps } from 'react-native';
 import { FONTS } from '@/types';
 
 export type CTextProps = TextProps & {
   style?: TextProps['style'] & { fontFamily?: FONTS };
 };
 
-const { width } = Dimensions.get('window');
 export const CText = ({ children, style, ...props }: CTextProps) => {
   return (
-    <Text {...props} style={cn(styles.container, style)}>
+    <Text
+      {...props}
+      style={[styles.container, ...(Array.isArray(style) ? style : [style])]}
+    >
       {children}
     </Text>
   );

@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import { useGetGuideQuery, useGetGuidesListQuery } from '@/api';
-import { SafeLoader } from '@/components/SafeLoader';
-import { MainLayout } from '@/Layouts';
-import { RootStackParamList } from '@/app/Navigator';
+import { StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { GuideMeta } from '@/components/Guide';
-import { defaultGuideImage } from '@/utils';
+import { MainLayout } from '@/Layouts';
+import { useGetGuideQuery, useGetGuidesListQuery } from '@/api';
+import { RootStackParamList } from '@/app/Navigator';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
-import { Guide } from '@/types';
-import { Dimensions, StyleSheet, View } from 'react-native';
-import { useSelector } from '@/stores';
+import { GuideMeta } from '@/components/Guide';
 import { FastImage } from '@/components/Image';
+import { SafeLoader } from '@/components/SafeLoader';
+import { defaultGuideImage } from '@/utils';
+import { Guide, SCREENS } from '@/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
+type Props = NativeStackScreenProps<RootStackParamList, SCREENS.Guide>;
 
 const GuideScreen = ({ route }: Props) => {
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
   const [defaultGuide, setDefaultGuide] = useState<Guide>(
     route.params?.guide as Guide
   );

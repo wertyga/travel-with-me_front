@@ -1,11 +1,11 @@
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { Guide } from '@/types';
-import { useSubscription } from '@/hooks';
 import { GoToPayContentLink } from '@/components/GoToPayContentLink';
+import { useSubscription } from '@/hooks';
+import { useSelector } from '@/stores';
+import { Guide } from '@/types';
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 import { GuideMetaActions } from './GuideMetaActions';
 import { GuideMetaTitle } from './GuideMetaTitle';
-import { useSelector } from '@/stores';
 
 type Props = {
   guide: Guide;
@@ -14,7 +14,9 @@ type Props = {
 
 export const GuideMeta = ({ guide, isFetching }: Props) => {
   const { subscription } = useSubscription();
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(
+    ({ domStore }) => domStore?.layout?.height || 0
+  );
 
   const { travelTime } = guide;
   const isRenderPointsList = !!guide.points?.length && !!subscription;

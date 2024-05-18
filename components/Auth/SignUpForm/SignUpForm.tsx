@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
-import { REGISTER_FORM_SCHEMA } from './SignUpForm.utils';
-import { Input } from '@/components/Input';
+import { Controller, useForm } from 'react-hook-form';
 import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
+import { Input } from '@/components/Input';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { REGISTER_FORM_SCHEMA } from './SignUpForm.utils';
 
 type Props = {
   onSubmit: (data: any) => void;

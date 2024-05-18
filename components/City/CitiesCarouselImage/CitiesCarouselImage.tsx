@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { FastImage } from '@/components/Image';
-import { City } from '@/types';
 import { useSelector } from '@/stores';
+import { City } from '@/types';
 
 type Props = {
   item: City;

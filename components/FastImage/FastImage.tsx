@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, ActivityIndicator, Image } from 'react-native';
+import { ActivityIndicator, Image, View } from 'react-native';
 import { cacheImage, findImageInCache } from '@/utils';
 
 export const FastImage = props => {

@@ -1,5 +1,5 @@
-import { Path, Place } from '@/types';
 import { Alert, Linking } from 'react-native';
+import { Path, Place } from '@/types';
 
 export const getMiddleCoordinates = (
   points: { lat: number; lng: number }[]

@@ -1,16 +1,16 @@
-import { View, Button } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useAuth } from '@/context';
-import { useOauthGoogleMutation } from '@/api';
+import { Button, View } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { useOauthGoogleMutation } from '@/api';
+import { useAuth } from '@/context';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import axios from 'axios';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
 const GOOGLE_URL = 'https://googleapis.com/userinfo/v2/me';
 

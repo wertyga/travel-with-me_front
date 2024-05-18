@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import {
   useCancelMySubscriptionMutation,
   useCreateSubscriptionPaymentMutation,
@@ -6,7 +7,6 @@ import {
   useRenewMySubscriptionMutation,
 } from '@/api';
 import { useAuth } from '@/context';
-import { useEffect, useRef } from 'react';
 
 type Props = {
   withList?: boolean;

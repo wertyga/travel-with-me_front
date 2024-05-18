@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
-import { Path, Place } from '@/types';
 import { LocationAccuracy } from 'expo-location';
+import { Path, Place } from '@/types';
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km

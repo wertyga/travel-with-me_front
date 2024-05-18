@@ -1,4 +1,4 @@
-import { Text, View, Button } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { useStores } from '@/mobx/StoreProvider';
 import { observer } from 'mobx-react';
 

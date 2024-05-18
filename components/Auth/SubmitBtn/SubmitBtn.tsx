@@ -1,8 +1,8 @@
-import { CText } from '@/components/CText';
-import { StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { CONSTANTS } from '@/styles/constants';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { CText } from '@/components/CText';
 import { FONTS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   onPress: () => void;

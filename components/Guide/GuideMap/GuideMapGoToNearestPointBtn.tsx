@@ -1,11 +1,11 @@
-import { FontAwesome6 } from '@expo/vector-icons';
-import Button from '@/components/Button';
 import * as React from 'react';
-import { getNearestPoint } from '@/utils/map';
-import { CONSTANTS } from '@/styles/constants';
 import { StyleSheet } from 'react-native';
-import { Guide, Place } from '@/types';
+import Button from '@/components/Button';
 import { useSelector } from '@/stores';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { getNearestPoint } from '@/utils/map';
+import { Guide, Place } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   guide: Guide;

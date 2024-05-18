@@ -1,17 +1,16 @@
 import React from 'react';
-import cn from '@/app/classname';
 import {
+  StyleSheet,
+  Text,
   TextInput,
   TextInputProps,
   View,
-  Text,
-  StyleSheet,
   ViewStyle,
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = TextInputProps & {
+type Props = Omit<TextInputProps, 'error' | 'onChangeText'> & {
   onChange: (value: string) => void;
   error?: string;
   style?: StyleProp<ViewStyle>;
@@ -26,11 +25,11 @@ export const Input = ({
   ...inputProps
 }: Props) => {
   return (
-    <View style={cn(styles.container, style)}>
+    <View style={[styles.container, style]}>
       <TextInput
-        onChangeText={onChange}
-        style={cn(styles.input, inputStyle)}
+        style={[styles.input, inputStyle]}
         placeholderTextColor={CONSTANTS.colors.bgDark}
+        onChangeText={onChange}
         {...inputProps}
       />
       {!!error && <Text style={styles.error}>{error}</Text>}

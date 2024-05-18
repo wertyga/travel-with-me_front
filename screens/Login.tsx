@@ -1,11 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { SignUpForm, SignInForm } from '@/components/Auth';
-import { AuthCommonRequest, SCREENS } from '@/types';
+import { ScrollView, StyleSheet } from 'react-native';
 import { MainLayout } from '@/Layouts';
+import { SignInForm, SignUpForm } from '@/components/Auth';
+import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { useAuth } from '@/context/AuthContext';
 import { useNavigation } from '@/hooks';
+import { AuthCommonRequest, SCREENS } from '@/types';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -45,19 +46,20 @@ const Login = () => {
       isLoading={isLoading}
     >
       <ScrollView style={styles.content}>
-        <TouchableOpacity style={styles.goToText} onPress={onChangeForm}>
+        <Button style={styles.goToText} onPress={onChangeForm} textable>
           <CText>{screen === 'signin' ? 'Register' : 'Login'}</CText>
-        </TouchableOpacity>
+        </Button>
 
         {screen === 'signup' && <SignUpForm onSubmit={onSignUp} />}
         {screen === 'signin' && <SignInForm onSubmit={onSignIn} />}
 
-        <Text
-          className="text-white text-right mt-4 mr-2"
-          onPress={() => navigation.navigate(SCREENS.RecoveryPassword)}
+        <Button
+          textable
+          href={SCREENS.RecoveryPassword}
+          style={styles.forgotText}
         >
           Forgot password?
-        </Text>
+        </Button>
       </ScrollView>
     </MainLayout>
   );
@@ -72,9 +74,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   goToText: {
-    alignItems: 'flex-end',
-    width: '100%',
+    justifyContent: 'flex-end',
     marginBottom: 20,
+  },
+  forgotText: {
+    justifyContent: 'flex-end',
+    marginTop: 20,
   },
 });
 

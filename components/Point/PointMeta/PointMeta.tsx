@@ -1,24 +1,18 @@
 import { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import cn from '@/app/classname';
-import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { CountryPill } from '@/components/Country';
-import { CText } from '@/components/CText';
-import { AudioPlayer } from '@/components/AudioPlayer';
-import { FONTS, Place, SOCIAL_MODELS } from '@/types';
-import { LikeAction } from '@/components/LikeAction';
-import Button from '@/components/Button';
-import { useSelector } from '@/stores';
-import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AudioPlayer } from '@/components/AudioPlayer';
+import { CText } from '@/components/CText';
+import { CountryPill } from '@/components/Country';
+import { LikeAction } from '@/components/LikeAction';
+import { useSelector } from '@/stores';
+import { FONTS, Place, SOCIAL_MODELS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   point: Place;
   autoplay?: boolean;
   isFetching?: boolean;
-  // toggleGallery: () => void;
-  // onOpenStateChange: (state: boolean) => void;
 };
 
 const META_TEXT = {
@@ -30,26 +24,15 @@ const META_TEXT = {
   },
 };
 
-export const PointMeta = ({
-  point,
-  autoplay,
-  isFetching,
-  toggleGallery,
-  onOpenStateChange,
-}: Props) => {
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
-
+export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
   const [state, setState] = useState({
     chosen: 'description' as keyof typeof META_TEXT,
   });
 
   const {
     city: { title: cityTitle },
-    audioStory,
     images,
   } = point;
-
-  const hasImages = !!images?.length;
 
   return (
     <View style={styles.container}>
@@ -71,9 +54,10 @@ export const PointMeta = ({
           onPress={() => setState(prev => ({ ...prev, chosen: 'description' }))}
         >
           <CText
-            style={cn(styles.aboutText, {
-              [state.chosen === 'description']: styles.activeTitle,
-            })}
+            style={[
+              styles.aboutText,
+              state.chosen === 'description' && styles.activeTitle,
+            ]}
           >
             {META_TEXT.description.title}
           </CText>
@@ -83,9 +67,10 @@ export const PointMeta = ({
           onPress={() => setState(prev => ({ ...prev, chosen: 'story' }))}
         >
           <CText
-            style={cn(styles.aboutText, {
-              [state.chosen === 'story']: styles.activeTitle,
-            })}
+            style={[
+              styles.aboutText,
+              state.chosen === 'story' && styles.activeTitle,
+            ]}
           >
             {META_TEXT.story.title}
           </CText>
@@ -106,77 +91,6 @@ export const PointMeta = ({
       </>
     </View>
   );
-
-  // return (
-  //   <EntityMeta
-  //     wrapperHeight={layoutHeight - 120}
-  //     collapsedHeight={400}
-  //     descriptionTextCutLines={8}
-  //     onOpenStateChange={onOpenStateChange}
-  //     TopContent={
-  //       <>
-  //         <View style={styles.top}>
-  //           <View style={{ flexDirection: 'row', gap: 10 }}>
-  //             <CountryPill title={cityTitle} icon="map-point-small" />
-  //             {hasImages && (
-  //               <Button
-  //                 style={styles.galleryAction}
-  //                 noPaddings
-  //                 onPress={toggleGallery}
-  //               >
-  //                 <Ionicons name="images-outline" size={20} color="white" />
-  //               </Button>
-  //             )}
-  //           </View>
-  //           <LikeAction
-  //             modelType={SOCIAL_MODELS.Place}
-  //             _id={point._id}
-  //             initialLike={point.likes}
-  //             parentFetching={isFetching}
-  //           />
-  //         </View>
-  //
-  //         <View style={styles.titles}>
-  //           <TouchableOpacity
-  //             activeOpacity={1}
-  //             onPress={() =>
-  //               setState(prev => ({ ...prev, chosen: 'description' }))
-  //             }
-  //           >
-  //             <CText
-  //               style={cn(styles.aboutText, {
-  //                 [state.chosen === 'description']: styles.activeTitle,
-  //               })}
-  //             >
-  //               {META_TEXT.description.title}
-  //             </CText>
-  //           </TouchableOpacity>
-  //           <TouchableOpacity
-  //             activeOpacity={1}
-  //             onPress={() => setState(prev => ({ ...prev, chosen: 'story' }))}
-  //           >
-  //             <CText
-  //               style={cn(styles.aboutText, {
-  //                 [state.chosen === 'story']: styles.activeTitle,
-  //               })}
-  //             >
-  //               {META_TEXT.story.title}
-  //             </CText>
-  //           </TouchableOpacity>
-  //         </View>
-  //       </>
-  //     }
-  //     description={point[state.chosen]}
-  //     BottomContent={
-  //       !!audioStory && (
-  //         <>
-  //           <CText style={styles.aboutText}>Audio play of the story</CText>
-  //           <AudioPlayer audioUrl={audioStory} autoplay={autoplay} />
-  //         </>
-  //       )
-  //     }
-  //   />
-  // );
 };
 
 const styles = StyleSheet.create({

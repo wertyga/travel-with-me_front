@@ -4,17 +4,16 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
-import cn from '@/app/classname';
-import { useNavigation } from '@/hooks';
+import { getArrayedButtonStyles } from '@/components/Button/Button.utils';
 import { CText } from '@/components/CText';
 import { CTextProps } from '@/components/CText/CText';
+import { useNavigation } from '@/hooks';
 import { FONTS, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
-import { getTruthlyValues } from '@/utils';
 
 export type CustomButtonProps = TouchableOpacityProps & {
   children: React.ReactNode;
-  style?: TouchableOpacityProps['style'] | CTextProps['style'];
+  style?: TouchableOpacityProps['style'];
   textStyle?: CTextProps['style'];
   onPress?: () => void;
   href?: SCREENS;
@@ -27,6 +26,8 @@ export type CustomButtonProps = TouchableOpacityProps & {
   rectangle?: boolean;
   textable?: boolean;
   noPaddings?: boolean;
+  left?: boolean;
+  right?: boolean;
 };
 
 const CustomButton = ({
@@ -45,36 +46,41 @@ const CustomButton = ({
   textable,
   rectangle,
   noPaddings,
+  left,
+  right,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
 
-  const { fontSize, color, fontFamily, fontWeight, textAlign, ...btnStyle } =
-    style || {};
+  const { button: btnStyles, text: textStyles } = getArrayedButtonStyles(
+    style as any
+  );
 
   const handleOnPress = () => {
+    onPress?.();
+
     if (href) {
       navi.navigate(href, hrefParams);
-    } else {
-      onPress?.();
     }
   };
 
   return (
     <TouchableOpacity
-      style={cn(
+      style={[
         styles.container,
-        { [wide]: styles.wide },
-        { [fluid]: styles.fluid },
-        { [outlined]: styles.outlined },
-        { [high]: styles.high },
-        { [filled]: styles.filled },
-        { [rectangle]: styles.rectangle },
-        { [textable]: styles.textable },
-        { [noPaddings]: styles.noPaddings },
-        { [!!disabled]: styles.disabled },
-        btnStyle
-      )}
+        wide && styles.wide,
+        fluid && styles.fluid,
+        outlined && styles.outlined,
+        high && styles.high,
+        filled && styles.filled,
+        rectangle && styles.rectangle,
+        textable && styles.textable,
+        noPaddings && styles.noPaddings,
+        !!disabled && styles.disabled,
+        left && { justifyContent: 'flex-start' },
+        right && { justifyContent: 'flex-end' },
+        ...(btnStyles as any),
+      ]}
       onPress={handleOnPress}
       disabled={disabled}
       {...rest}
@@ -82,18 +88,12 @@ const CustomButton = ({
       {typeof children !== 'string' && children}
       {typeof children === 'string' && (
         <CText
-          style={cn(
+          style={[
             styles.text,
-            getTruthlyValues({
-              fontSize,
-              color,
-              fontFamily,
-              fontWeight,
-              textAlign,
-            }),
-            { [filled]: styles.textFilled },
-            { [!!disabled]: styles.textDisabled }
-          )}
+            filled && styles.textFilled,
+            !!disabled && styles.textDisabled,
+            ...(textStyles as any),
+          ]}
         >
           {children}
         </CText>

@@ -1,34 +1,32 @@
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
   Dimensions,
   ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { City, FONTS, Guide, SCREENS } from '@/types';
-import { useNavigation } from '@/hooks';
 import { CText } from '@/components/CText';
 import { CountryPill } from '@/components/Country';
+import { useNavigation } from '@/hooks';
+import { LinearGradient } from 'expo-linear-gradient';
 import { defaultGuideImage } from '@/utils';
+import { City, FONTS, Guide, SCREENS } from '@/types';
 
 type Props = {
   guide: Guide;
-  city: City;
   containerClassName?: string;
   country: string;
 };
 
 const width = Dimensions.get('window').width * 0.7;
 
-export const GuidePreview = ({ guide, country, city }: Props) => {
+export const GuidePreview = ({ guide, country }: Props) => {
   const navi = useNavigation();
 
   const navigateToGuide = () => {
     navi.navigate(SCREENS.Guide, {
       guide,
-      city,
     });
   };
 

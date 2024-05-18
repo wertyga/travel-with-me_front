@@ -1,9 +1,9 @@
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { FastImage } from '@/components/Image';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CText } from '@/components/CText';
-import { CONSTANTS } from '@/styles/constants';
-import { FONTS, SCREENS } from '@/types';
+import { FastImage } from '@/components/Image';
 import { useNavigation } from '@/hooks';
+import { FONTS, SCREENS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   title?: string;

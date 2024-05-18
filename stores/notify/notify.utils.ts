@@ -1,5 +1,5 @@
-import { NotificationRequestInput } from 'expo-notifications/src/Notifications.types';
 import * as Notifications from 'expo-notifications';
+import { NotificationRequestInput } from 'expo-notifications/src/Notifications.types';
 
 export const showNotification = async (
   data: Omit<NotificationRequestInput, 'trigger'> & {

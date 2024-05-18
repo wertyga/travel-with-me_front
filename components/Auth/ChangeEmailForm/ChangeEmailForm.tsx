@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
-import { Input } from '@/components/Input';
-import Button from '@/components/Button';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { CHANGE_EMAIL_FORM_SCHEMA } from '@/components/Auth/ChangeEmailForm/ChangeEmailForm.utils';
+import Button from '@/components/Button';
+import { Input } from '@/components/Input';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type Props = {
   onSubmit: (data: any) => void;
@@ -27,7 +27,6 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
           render={({ field: { onChange, value } }) => {
             return (
               <Input
-                className="mb-4"
                 value={value}
                 onChange={onChange}
                 placeholder="New e-mail"
@@ -45,7 +44,6 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
           render={({ field: { onChange, value } }) => {
             return (
               <Input
-                className="mb-4"
                 value={value}
                 onChangeText={onChange}
                 placeholder="Password"
@@ -74,4 +72,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  input: {},
 });

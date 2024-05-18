@@ -1,17 +1,16 @@
+import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useNavigation } from '@/hooks';
 import { CText } from '@/components/CText';
-import { Icon, IconNames } from '@/components/Icon';
-import cn from '@/app/classname';
 import { FOOTER_MENU } from '@/components/FooterMenu/FooterMenu.utils';
-import { SCREENS } from '@/types';
+import { Icon, IconNames } from '@/components/Icon';
+import { useNavigation } from '@/hooks';
 import { useSelector } from '@/stores';
-import { useEffect } from 'react';
+import { SCREENS } from '@/types';
 
 export const FooterMenu = () => {
   const navi = useNavigation();
@@ -37,7 +36,7 @@ export const FooterMenu = () => {
         return (
           <TouchableOpacity
             key={title}
-            style={cn(styles.item)}
+            style={styles.item}
             onPress={redirectTo(screen)}
           >
             {typeof icon === 'string' && (

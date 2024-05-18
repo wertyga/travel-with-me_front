@@ -1,6 +1,6 @@
+import { NavigationProp } from '@react-navigation/core/src/types';
 import { useNavigation as useNativeNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/app/Navigator';
-import { NavigationProp } from '@react-navigation/core/src/types';
 import { SCREENS } from '@/types';
 
 export const useNavigation = () => {

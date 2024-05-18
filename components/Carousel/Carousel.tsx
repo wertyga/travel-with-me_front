@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { View, Image } from 'react-native';
+import { Image, View, ViewStyle } from 'react-native';
 import CarouselEx from 'react-native-snap-carousel';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
   images: string[];
   onChange?: () => void;
-  containerClassName?: string;
+  style?: StyleProp<ViewStyle>;
   sliderWidth: number;
   itemWidth: number;
   onSnapToItem?: (index: number) => void;
@@ -15,28 +16,24 @@ type Props = {
 
 export const Carousel = ({
   images,
-  containerClassName = '',
+  style,
   sliderWidth,
   itemWidth,
   onSnapToItem,
   carouselRef,
 }: Props) => {
   return (
-    <View className={containerClassName}>
+    <View style={style}>
       <CarouselEx
         layout="tinder"
         ref={carouselRef}
         data={images as any}
-        disableIntervalMomentum={true}
         onSnapToItem={onSnapToItem}
+        vertical={false}
         renderItem={({ item }: any) => {
           return (
             <LinearGradient colors={['rgba(0, 0, 0, 1)', 'rgba(0, 0, 0, 1)']}>
-              <Image
-                source={{ uri: item }}
-                className="h-full w-full object-cover"
-                key={item}
-              />
+              <Image source={{ uri: item }} key={item} />
             </LinearGradient>
           );
         }}

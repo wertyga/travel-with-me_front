@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { useSetLikeMutation } from '@/api';
 import Button from '@/components/Button';
 import { Icon } from '@/components/Icon';
-import { Like, SOCIAL_MODELS } from '@/types';
 import { useAuth } from '@/context';
-import Toast from 'react-native-toast-message';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Like, SOCIAL_MODELS } from '@/types';
 
 type Props = {
   modelType: SOCIAL_MODELS;

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
-import { AudioLine } from './AudioLine';
 import { Sound } from 'expo-av/src/Audio/Sound';
-import { useFocusEffect } from '@react-navigation/native';
+import { AudioLine } from './AudioLine';
 
 type Props = {
   audioUrl: string;

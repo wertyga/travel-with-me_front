@@ -1,9 +1,9 @@
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Button from '@/components/Button';
-import { getCurrencyMeta } from '@/utils';
-import { CONSTANTS } from '@/styles/constants';
-import { FONTS, SubscriptionPreview } from '@/types';
 import { CText } from '@/components/CText';
+import { getCurrencyMeta } from '@/utils';
+import { FONTS, SubscriptionPreview } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   subscription: SubscriptionPreview;

@@ -1,7 +1,7 @@
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { CityPreview } from '../CityPreview/CityPreview';
-import { City, SCREENS } from '@/types';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@/hooks';
+import { City, SCREENS } from '@/types';
+import { CityPreview } from '../CityPreview/CityPreview';
 
 type Props = {
   cities: City[];

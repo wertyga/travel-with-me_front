@@ -1,22 +1,22 @@
-import { createContext, useState, useContext, useEffect, useRef } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
 import {
   guideApi,
   subscriptionApi,
   useGetSelfQuery,
-  userApi,
   useSignInMutation,
   useSignUpMutation,
+  userApi,
 } from '@/api';
-import { AuthCommonRequest } from '@/types';
-import { User } from '@/types/user';
-import Toast from 'react-native-toast-message';
-import { storage } from '@/utils';
-import { useDispatch } from 'react-redux';
 import {
   GUIDE_SIGNINOUT_TAGS,
   SUBSCRIPTION_SIGNINOUT_TAGS,
   USER_SIGNINOUT_TAGS,
 } from '@/app/query/base-api';
+import { storage } from '@/utils';
+import { AuthCommonRequest } from '@/types';
+import { User } from '@/types/user';
 
 export type AuthContextType = {
   user?: User;

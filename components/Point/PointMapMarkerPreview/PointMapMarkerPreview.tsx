@@ -1,18 +1,18 @@
 import React from 'react';
 import {
-  Text,
-  StyleSheet,
   ScrollView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Place } from '@/types';
-import { AntDesign } from '@expo/vector-icons';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 import { useSelector } from '@/stores';
+import { AntDesign } from '@expo/vector-icons';
 import { calculateDistance } from '@/utils/map';
+import { Place } from '@/types';
 
 type Props = {
   point: Place;

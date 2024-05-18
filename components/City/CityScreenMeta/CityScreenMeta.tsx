@@ -1,20 +1,22 @@
+import { useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
-import { GuidesSlideList } from '@/components/Guide';
+import { getGuidesCategories } from '@/components/City/CityScreenMeta/CityScreenMeta.utils';
 import { CountryPill } from '@/components/Country';
 import { EntityMeta } from '@/components/EntityMeta/EntityMeta';
-import { City, FONTS } from '@/types';
-import { getGuidesCategories } from '@/components/City/CityScreenMeta/CityScreenMeta.utils';
-import { useState } from 'react';
+import { GuidesSlideList } from '@/components/Guide';
 import { useSelector } from '@/stores';
+import { City, FONTS } from '@/types';
 
 type Props = {
   city: City;
 };
 
 export const CityScreenMeta = ({ city }: Props) => {
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(
+    ({ domStore }) => domStore?.layout?.height || 0
+  );
 
   const [state, setState] = useState({
     filterByCategory: '',
@@ -63,7 +65,6 @@ export const CityScreenMeta = ({ city }: Props) => {
           <GuidesSlideList
             guides={filteredGuides}
             country={city.country.title}
-            city={city}
           />
         </>
       }

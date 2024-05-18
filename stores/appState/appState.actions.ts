@@ -1,10 +1,10 @@
-import { SCREENS } from '@/types';
+import { baseApi } from '@/app/query';
 import { store } from '@/app/store/create-isomorphic-store';
 import { appStateSlice } from '@/stores/appState/appState.reducer';
-import { baseApi } from '@/app/query';
 import { removeAllNotification } from '@/stores/notify/notify.utils';
-import { stopWatchingBackgroundLocation } from '@/utils';
 import * as Notifications from 'expo-notifications';
+import { stopWatchingBackgroundLocation } from '@/utils';
+import { SCREENS } from '@/types';
 
 export const updateCurrentRoute = (route: Record<SCREENS, any>) => {
   store.dispatch(appStateSlice.actions.updateCurrentRoute(route));

@@ -1,10 +1,10 @@
+import { ViewStyle } from 'react-native';
 import {
-  GestureHandlerRootView,
-  GestureDetector,
   Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { ViewStyle } from 'react-native';
 
 type Props = {
   children: React.ReactNode;

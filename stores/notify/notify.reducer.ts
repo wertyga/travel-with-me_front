@@ -1,5 +1,5 @@
-import * as Notifications from 'expo-notifications';
 import { createSlice } from '@reduxjs/toolkit';
+import * as Notifications from 'expo-notifications';
 
 export enum Notification_Channels {
   POINT_DISTANCE = 'POINT_DISTANCE',

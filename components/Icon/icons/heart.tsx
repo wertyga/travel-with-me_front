@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, { Path, Mask, G } from 'react-native-svg';
+import Svg, { G, Mask, Path } from 'react-native-svg';
 
 const SvgComponent = props => {
   return (

@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Dimensions,
+  StyleProp,
   StyleSheet,
   View,
   ViewStyle,
-  StyleProp,
-  Dimensions,
 } from 'react-native';
 import Animated, {
   runOnJS,
-  useSharedValue,
   useAnimatedScrollHandler,
+  useSharedValue,
 } from 'react-native-reanimated';
 import { CarouselDots } from '@/components/Carousel';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from '@/stores';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type Props<T = any> = {
   data: T[];
@@ -42,7 +42,7 @@ export const CarouselNew = <T,>({
   const [currentIndex, setCurrentIndex] = useState(defaultIndex as number);
 
   const { width: windowWidth } = Dimensions.get('window');
-  const currentCardWith = isFullScreen ? windowWidth : cardWidth;
+  const currentCardWith: number = (isFullScreen ? windowWidth : cardWidth) || 1;
 
   const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
 

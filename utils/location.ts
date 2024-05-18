@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
-import { Path, Place } from '@/types';
 import { logger } from '@/utils/logger';
+import { Path, Place } from '@/types';
 
 const LOCATION_TASK_NAME = 'background-location-task';
 

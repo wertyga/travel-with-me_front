@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { useAuthGuard } from '@/hooks';
-import { useGetPlaceQuery } from '@/api';
-import { MainLayout } from '@/Layouts';
-import { SafeLoader } from '@/components/SafeLoader';
-import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { updateDomAction, useSelector } from '@/stores';
 import { Dimensions, Image, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { MainLayout } from '@/Layouts';
+import { useGetPlaceQuery } from '@/api';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
+import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
+import { SafeLoader } from '@/components/SafeLoader';
+import { useAuthGuard } from '@/hooks';
+import { updateDomAction, useSelector } from '@/stores';
 
 const PlaceScreen = ({ route }) => {
   useAuthGuard();

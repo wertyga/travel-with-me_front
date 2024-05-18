@@ -1,7 +1,7 @@
+import { StyleSheet, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { LikeAction } from '@/components/LikeAction';
 import { FONTS, Guide, SOCIAL_MODELS } from '@/types';
-import { StyleSheet, View } from 'react-native';
 
 type Props = {
   guide: Guide;

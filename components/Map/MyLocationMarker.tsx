@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Marker } from 'react-native-maps';
-import { CONSTANTS } from '@/styles/constants';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Path } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   liveCoords: Path;

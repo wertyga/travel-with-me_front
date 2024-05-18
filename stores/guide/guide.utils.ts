@@ -1,5 +1,5 @@
-import { Path, Place } from '@/types';
 import { calculateDistance, getNearestPoint } from '@/utils/map';
+import { Path, Place } from '@/types';
 
 export const MIN_CLOSE_DISTANCE = 0.01; // In km
 

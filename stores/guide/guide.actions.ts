@@ -1,6 +1,5 @@
-import { Place } from '@/types';
 import { store } from '@/app/store/create-isomorphic-store';
-
+import { Place } from '@/types';
 import { guideSlice } from './guide.reducer';
 
 export const updateVisiblePointAction = (visiblePoint?: Place) => {

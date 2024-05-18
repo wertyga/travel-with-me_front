@@ -1,12 +1,12 @@
+import { useEffect, useState } from 'react';
 import {
-  StyleSheet,
+  ActivityIndicator,
+  Image,
   ImageBackground,
   ImageBackgroundProps,
-  Image,
+  StyleSheet,
   View,
-  ActivityIndicator,
 } from 'react-native';
-import { useEffect, useState } from 'react';
 import { cacheImage, findImageInCache } from '@/utils';
 
 type Props = Omit<ImageBackgroundProps, 'source'> & {

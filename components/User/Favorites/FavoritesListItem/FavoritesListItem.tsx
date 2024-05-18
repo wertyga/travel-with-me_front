@@ -1,17 +1,16 @@
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { FastImage } from '@/components/Image';
-import { CText } from '@/components/CText';
-import Button from '@/components/Button';
 import { useSetLikeMutation } from '@/api';
-import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
+import Button from '@/components/Button';
+import { CText } from '@/components/CText';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
+import { FastImage } from '@/components/Image';
 import { useSlideLeft } from '@/hooks';
 import { FontAwesome } from '@expo/vector-icons';
-
-import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
+import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
-import { useState } from 'react';
+import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
 
 type Props = {
   title: string;

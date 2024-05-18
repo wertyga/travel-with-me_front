@@ -1,12 +1,12 @@
 import { useLayoutEffect } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { useNavigation } from '@/hooks';
-import { RootStackParamList } from '@/app/Navigator';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MainLayout } from '@/Layouts';
-import Button from '@/components/Button';
 import Toast from 'react-native-toast-message';
+import { MainLayout } from '@/Layouts';
+import { RootStackParamList } from '@/app/Navigator';
+import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { useNavigation } from '@/hooks';
 import { SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Error'>;

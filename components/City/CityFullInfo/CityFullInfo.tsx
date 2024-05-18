@@ -1,7 +1,7 @@
 import { Dimensions, View } from 'react-native';
 import { GuidesPreviewsList } from '@/components/Guide';
-import { City } from '@/types';
 import intersection from 'lodash/intersection';
+import { City } from '@/types';
 
 type Props = {
   city: City;
@@ -28,12 +28,11 @@ export const CityFullInfo = ({
 
   const { width } = Dimensions.get('screen');
   return (
-    <View className={`w-full absolute bottom-0 left-0 items-center`}>
+    <View>
       <GuidesPreviewsList
         guides={cityGuides}
         sliderWidth={width}
         itemWidth={width}
-        previewContainerClassName={`h-80`}
       />
     </View>
   );

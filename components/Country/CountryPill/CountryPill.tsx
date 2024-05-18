@@ -1,9 +1,8 @@
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import cn from '@/app/classname';
 import Button from '@/components/Button';
-import { Icon, IconNames } from '@/components/Icon';
 import { CText } from '@/components/CText';
+import { Icon, IconNames } from '@/components/Icon';
 import { FONTS } from '@/types';
 
 type Props = {
@@ -22,7 +21,7 @@ export const CountryPill = ({
   onPress,
 }: Props) => {
   return (
-    <View style={cn(styles.container, style)}>
+    <View style={[styles.container, style]}>
       <Button onPress={onPress} style={styles.content}>
         {!!icon && <Icon name={icon as IconNames} />}
         {customIcon}

@@ -1,5 +1,9 @@
 import { baseApi } from '@/app/query';
 import {
+  SIGNINOUT_VALIDATION_TAGS,
+  USER_SIGNINOUT_TAGS,
+} from '@/app/query/base-api';
+import {
   CreateSubscriptionResponse,
   GetMySubscriptionRequest,
   GetMySubscriptionResponse,
@@ -7,10 +11,6 @@ import {
   SUBSCRIPTION_TAGS,
   SuccessResponse,
 } from '@/types';
-import {
-  SIGNINOUT_VALIDATION_TAGS,
-  USER_SIGNINOUT_TAGS,
-} from '@/app/query/base-api';
 
 export const subscriptionApi = baseApi.injectEndpoints({
   endpoints: build => ({

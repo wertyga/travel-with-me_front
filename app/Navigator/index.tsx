@@ -1,30 +1,30 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 import {
   NavigationContainer,
   NavigationContainerRefWithCurrent,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useAuth } from '@/context';
+import ChangeEmailScreen from '@/screens/ChangeEmail';
+import CitiesListScreen from '@/screens/CitiesList.screen';
 import CityScreen from '@/screens/City.screen';
 import ErrorScreen from '@/screens/Error';
-import LoginScreen from '@/screens/Login';
-import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
+import FavoritesScreen from '@/screens/Favorites.screen';
 import GuideScreen from '@/screens/Guide.screen';
 import GuideMapScreen from '@/screens/GuideMap.screen';
-import ChangeEmailScreen from '@/screens/ChangeEmail';
-import SubscriptionsScreen from '@/screens/Subscriptions';
-import CitiesListScreen from '@/screens/CitiesList.screen';
+import LoginScreen from '@/screens/Login';
 import PlaceScreen from '@/screens/Place.screen';
 import ProfileScreen from '@/screens/Profile';
-import WorldGuidesMap from '@/screens/WorldGuidesMap';
-import TransitionScreen from '@/screens/TransitionScreen';
-import FavoritesScreen from '@/screens/Favorites.screen';
-import { useAuth } from '@/context';
-import { updateCurrentRoute } from '@/stores';
-import { City, Guide, SCREENS } from '@/types';
+import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
+import SubscriptionsScreen from '@/screens/Subscriptions';
 import TestScreen from '@/screens/Test.screen';
+import TransitionScreen from '@/screens/TransitionScreen';
+import WorldGuidesMap from '@/screens/WorldGuidesMap';
+import { updateCurrentRoute } from '@/stores';
 import { storage } from '@/utils';
-import { AppState } from 'react-native';
+import { City, Guide, SCREENS } from '@/types';
 
 export type RootStackParamList = {
   [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;

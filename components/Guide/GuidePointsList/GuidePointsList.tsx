@@ -1,16 +1,9 @@
-import {
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  View,
-  Dimensions,
-} from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { FastImage } from '@/components/Image';
-import cn from '@/app/classname';
-import { Guide, Place, SCREENS } from '@/types';
-import { useNavigation } from '@/hooks';
 import { PointDistance } from '@/components/Point';
+import { useNavigation } from '@/hooks';
+import { Guide, Place, SCREENS } from '@/types';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
 
 type Props = {
@@ -38,7 +31,7 @@ export const GuidePointsList = ({ points }: Props) => {
               navi.navigate(SCREENS.Place, { placeSlug: point.slug })
             }
           >
-            <View style={cn(styles.imageWrapper, {})}>
+            <View style={styles.imageWrapper}>
               <FastImage
                 uri={point.images[0] || GuidePlaceholder}
                 style={styles.image}
@@ -50,7 +43,7 @@ export const GuidePointsList = ({ points }: Props) => {
                 />
               )}
             </View>
-            <CText style={cn(styles.title)} numberOfLines={2}>
+            <CText style={styles.title} numberOfLines={2}>
               {point.title}
             </CText>
           </TouchableOpacity>

@@ -1,8 +1,8 @@
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { CountryPill } from '@/components/Country';
-import { Guide, SCREENS } from '@/types';
+import { useNavigation, useSubscription } from '@/hooks';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import { useSubscription, useNavigation } from '@/hooks';
+import { Guide, SCREENS } from '@/types';
 
 type Props = {
   travelTime?: string;

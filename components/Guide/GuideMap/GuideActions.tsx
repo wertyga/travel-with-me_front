@@ -1,24 +1,15 @@
 import * as React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import Button from '@/components/Button';
+import { CText } from '@/components/CText';
 import {
   dropGuideStoreStateAction,
   toggleGuideMute,
   updateFollowingGuideState,
   useSelector,
 } from '@/stores';
-import Button from '@/components/Button';
-import { CText } from '@/components/CText';
-import cn from '@/app/classname';
-import {
-  FontAwesome5,
-  Foundation,
-  Ionicons,
-  Octicons,
-} from '@expo/vector-icons';
-import { ScrollView, StyleSheet } from 'react-native';
+import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
 import { CONSTANTS } from '@/styles/constants';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-import * as Location from 'expo-location';
 
 type Props = {
   isWithPreviewOpened?: boolean;
@@ -52,19 +43,19 @@ export const GuideActions = ({ isWithPreviewOpened }: Props) => {
 
   return (
     <ScrollView
-      style={cn(styles.container, { [isWithPreviewOpened]: { top: 30 } })}
+      style={[styles.container, isWithPreviewOpened && { top: 30 }]}
       contentContainerStyle={styles.actions}
       horizontal
     >
       <Button
         style={styles.actionBtn}
         disabled={isLoadingLocation}
-        onPress={toggleGuideMute}
+        onPress={() => toggleGuideMute()}
       >
         <Ionicons name={volumeIcon} size={18} color="white" />
       </Button>
       <Button
-        style={cn(styles.actionBtn, { [isFollowingToGuide]: styles.activeBtn })}
+        style={[styles.actionBtn, isFollowingToGuide && styles.activeBtn]}
         onPress={onToggleFollowGuide}
         disabled={isLoadingLocation}
       >

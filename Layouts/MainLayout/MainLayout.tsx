@@ -1,23 +1,22 @@
 import React, { ReactNode } from 'react';
 import {
-  StyleSheet,
-  ViewStyle,
   Dimensions,
-  View,
-  TouchableOpacity,
   Image,
+  StyleSheet,
   Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import cn from '@/app/classname';
-import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
-import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { LinearGradient } from 'expo-linear-gradient';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
-import { Loader } from '@/components/Loader';
-import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
-import { updateDomAction, useSelector } from '@/stores';
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
+import { BackgroundGradient } from '@/components/BackgroundGradient';
+import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
+import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
+import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
+import { Loader } from '@/components/Loader';
+import { updateDomAction, useSelector } from '@/stores';
+import { LinearGradient } from 'expo-linear-gradient';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -57,12 +56,14 @@ export const MainLayout = ({
   reFetchMethod,
   noBackBtn,
 }: Props) => {
-  const layoutHeight = useSelector(state => state.domStore.layout?.height);
+  const layoutHeight = useSelector(
+    state => state.domStore?.layout?.height || 0
+  );
   const imageSource = typeof bgImage === 'string' ? { uri: bgImage } : bgImage;
 
   return (
     <View
-      style={cn(styles.main, containerStyle)}
+      style={[styles.main, containerStyle]}
       onLayout={e => {
         updateDomAction({
           layout: { height: e.nativeEvent.layout.height },
@@ -104,11 +105,7 @@ export const MainLayout = ({
             </TouchableOpacity>
           )}
 
-          <View
-            style={cn(styles.content, style, {
-              [!noFooter]: styles.withFooter,
-            })}
-          >
+          <View style={[styles.content, style, !noFooter && styles.withFooter]}>
             {children}
           </View>
 

@@ -1,8 +1,8 @@
 import { AppStateStatus } from 'react-native';
-import { GuideStore } from '@/types/guide';
-import { DomStore } from '@/types/dom';
-import { LocationStore } from './location';
 import { AppStateType } from '@/stores/appState/appState.reducer';
+import { DomStore } from '@/types/dom';
+import { GuideStore } from '@/types/guide';
+import { LocationStore } from './location';
 
 export type AppStateStore = {
   state: AppStateStatus;

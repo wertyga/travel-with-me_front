@@ -1,6 +1,6 @@
-import { Like } from './likes';
 import { Guide } from '@/types/guide';
 import { Place } from '@/types/place';
+import { Like } from './likes';
 
 export enum USER_TAGS {
   User = 'User',

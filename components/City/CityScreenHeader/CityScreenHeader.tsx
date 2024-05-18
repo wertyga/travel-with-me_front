@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -5,25 +6,22 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import Button from '@/components/Button';
-import { FontAwesome } from '@expo/vector-icons';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import cn from '@/app/classname';
-import { CText } from '@/components/CText';
-import { useNavigation } from '@/hooks';
-import { FONTS, SCREENS } from '@/types';
-import {
-  HeaderMenu,
-  HeaderMenuProps,
-} from '@/components/City/CityScreenHeader/HeaderMenu';
-import { useSelector } from '@/stores';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import React, { useEffect } from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import Button from '@/components/Button';
+import { CText } from '@/components/CText';
+import {
+  HeaderMenu,
+  HeaderMenuProps,
+} from '@/components/City/CityScreenHeader/HeaderMenu';
+import { useNavigation } from '@/hooks';
+import { useSelector } from '@/stores';
+import { FontAwesome } from '@expo/vector-icons';
+import { FONTS, SCREENS } from '@/types';
 
 type Props = {
   style?: StyleProp<ViewStyle | TextStyle>;
@@ -75,16 +73,7 @@ export const CityScreenHeader = ({
         </Button>
       )}
 
-      <CText
-        style={cn(
-          {
-            ...styles.title,
-            // lineHeight: isTitleExceed ? 30 : undefined,
-          },
-          { [isDark]: styles.dark }
-        )}
-        numberOfLines={2}
-      >
+      <CText style={[styles.title, isDark && styles.dark]} numberOfLines={2}>
         {title}
       </CText>
 

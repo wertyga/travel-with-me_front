@@ -2,15 +2,15 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useGetCitiesLightListQuery } from '@/api';
+import { CText } from '@/components/CText';
 import {
   customMapStyles,
   getMiddleCoordinates,
 } from '@/components/Map/Map.utils';
-import { CText } from '@/components/CText';
-import { City, FONTS, SCREENS } from '@/types';
 import { MapMarker } from '@/components/Map/MapMarker';
-import { useSelector } from '@/stores';
 import { useNavigation } from '@/hooks';
+import { useSelector } from '@/stores';
+import { City, FONTS, SCREENS } from '@/types';
 
 const EUROPE_REGION = {
   latitude: 43.13591618938807,

@@ -1,13 +1,12 @@
+import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import Search from '@/components/Search';
 import { useLazyGlobalSearchQuery } from '@/api';
-
+import { GlobalSearchItem } from '@/components/GlobalSearch/GlobalSearchItem';
+import Search from '@/components/Search';
+import { AntDesign } from '@expo/vector-icons';
+import { SCREENS } from '@/types';
 import CityPlaceholder from '@/assets/images/city_placeholder.png';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
-import { GlobalSearchItem } from '@/components/GlobalSearch/GlobalSearchItem';
-import { useEffect, useState } from 'react';
-import { SCREENS } from '@/types';
 
 export const GlobalSearch = () => {
   const [state, setState] = useState({});

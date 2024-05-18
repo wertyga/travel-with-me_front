@@ -1,13 +1,12 @@
 import {
   ActivityIndicator,
+  ImageBackground,
   StyleSheet,
   View,
-  ImageBackground,
 } from 'react-native';
-import { CText } from '@/components/CText';
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
+import { CText } from '@/components/CText';
 import { FONTS } from '@/types';
-
 import safeLoaderImage from '@/assets/splash-2.png';
 
 type Props = {

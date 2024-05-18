@@ -1,5 +1,5 @@
-import { showNotification } from './notify.utils';
 import { NearestPoint } from '@/stores/guide/guide.utils';
+import { showNotification } from './notify.utils';
 
 export const showPointDistanceNotification = async (
   nearestPoint: NearestPoint,

@@ -2,9 +2,9 @@ import { baseApi } from '@/app/query';
 import {
   GUIDE_TAGS,
   PLACE_TAGS,
+  SOCIAL_MODELS,
   SetLikeRequest,
   SetLikeResponse,
-  SOCIAL_MODELS,
   USER_TAGS,
 } from '@/types';
 

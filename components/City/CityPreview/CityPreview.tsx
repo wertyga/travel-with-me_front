@@ -1,4 +1,4 @@
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { CText } from '@/components/CText';
 import { Icon } from '@/components/Icon';
 import { FastImage } from '@/components/Image';

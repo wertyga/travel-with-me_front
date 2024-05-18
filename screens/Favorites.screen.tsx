@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { useGetFavoritesQuery } from '@/api';
-import { MainLayout } from '@/Layouts';
-import { FavoritesList } from '@/components/User';
-import { CText } from '@/components/CText';
 import { StyleSheet } from 'react-native';
+import { MainLayout } from '@/Layouts';
+import { useGetFavoritesQuery } from '@/api';
+import { CText } from '@/components/CText';
+import { FavoritesList } from '@/components/User';
 import { useAuthGuard } from '@/hooks';
 
 const FavoritesScreen = () => {

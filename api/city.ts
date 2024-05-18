@@ -1,7 +1,7 @@
 import { baseApi } from '@/app/query';
 import {
-  City,
   CITY_TAGS,
+  City,
   GetCitiesListRequest,
   GetCitiesListResponse,
 } from '@/types';

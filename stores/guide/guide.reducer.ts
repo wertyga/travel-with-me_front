@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GuideStore } from '@/types';
 import { calculateDistance, getNearestPoint } from '@/utils/map';
+import { GuideStore } from '@/types';
 import {
+  MIN_CLOSE_DISTANCE,
   dropNearestPoint,
   getTheNearestVisiblePoint,
-  MIN_CLOSE_DISTANCE,
 } from './guide.utils';
 
 const INITIAL_STATE: GuideStore = {
