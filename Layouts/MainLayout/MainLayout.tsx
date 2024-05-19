@@ -1,9 +1,7 @@
 import React, { ReactNode } from 'react';
 import {
-  Dimensions,
   Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -31,7 +29,7 @@ type Props = {
   headerTitle?: string;
   floatingTitle?: boolean;
   loaderTextColor?: string;
-  menu?: HeaderMenuProps['menu'];
+  menu?: HeaderMenuProps['items'];
   onBgPress?: () => void;
   bgContent?: ReactNode;
   fetchError?: { message: string; statusCode: number };
@@ -45,7 +43,6 @@ export const MainLayout = ({
   bgImage,
   noFooter,
   headerTitle,
-  floatingTitle,
   isLoading,
   loaderTextColor,
   menu,
@@ -105,7 +102,7 @@ export const MainLayout = ({
             </TouchableOpacity>
           )}
 
-          <View style={[styles.content, style, !noFooter && styles.withFooter]}>
+          <View style={[styles.content, !noFooter && styles.withFooter, style]}>
             {children}
           </View>
 
@@ -118,7 +115,6 @@ export const MainLayout = ({
 
 const styles = StyleSheet.create({
   main: {
-    width: Dimensions.get('window').width,
     flex: 1,
   },
   container: {},

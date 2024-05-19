@@ -1,7 +1,15 @@
+import { ButtonStylesProp, CustomButtonProps } from '@/components/Button/index';
 import { getTruthlyValues } from '@/utils';
 
-const getButtonStyles = (styles: Record<string, string>) => {
-  const { fontSize, color, fontFamily, fontWeight, ...btnStyle } = styles;
+const getButtonStyles = (styles: ButtonStylesProp) => {
+  const {
+    fontSize,
+    color,
+    fontFamily,
+    fontWeight,
+    textDecorationLine,
+    ...btnStyle
+  } = styles as any;
 
   return {
     button: getTruthlyValues(btnStyle),
@@ -10,14 +18,15 @@ const getButtonStyles = (styles: Record<string, string>) => {
       color,
       fontFamily,
       fontWeight,
+      textDecorationLine,
     }),
   };
 };
 
 export const getArrayedButtonStyles = (
-  styles: Record<string, string> | Record<string, string>[]
+  styles: CustomButtonProps['style'] | CustomButtonProps['style'][]
 ) => {
-  const st = Array.isArray(styles) ? styles : [styles];
+  const st: any = Array.isArray(styles) ? styles : [styles];
 
   return st.reduce(
     (acc: any, s: any) => {

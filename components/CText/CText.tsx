@@ -1,8 +1,9 @@
 import { StyleSheet, Text, TextProps } from 'react-native';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { FONTS } from '@/types';
 
-export type CTextProps = TextProps & {
-  style?: TextProps['style'] & { fontFamily?: FONTS };
+export type CTextProps = Omit<TextProps, 'style'> & {
+  style?: Omit<StyleProp<TextProps>, 'fontFamily'> & { fontFamily?: FONTS };
 };
 
 export const CText = ({ children, style, ...props }: CTextProps) => {

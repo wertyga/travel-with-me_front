@@ -20,7 +20,11 @@ export const CityGuidesCategories = ({
   return (
     <View style={style}>
       <CText style={styles.title}>Guide categories</CText>
-      <ScrollView contentContainerStyle={styles.list} horizontal>
+      <ScrollView
+        contentContainerStyle={styles.list}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
         {Object.entries(categories).map(([title, count]) => {
           return (
             <Button
@@ -42,8 +46,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   title: {
+    marginTop: 20,
     marginBottom: 15,
     fontFamily: FONTS.CrimsonSemiBold,
-    fontSize: 20,
+    fontSize: 22,
   },
 });

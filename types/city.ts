@@ -13,6 +13,9 @@ export type City = {
   title: string;
   slug: string;
   description: string;
+  history: string;
+  security: string;
+  transport: string;
   country: Country;
   guides: Guide[];
   image: string;

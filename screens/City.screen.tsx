@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet } from 'react-native';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useGetCitiesLightListQuery, useGetCityQuery } from '@/api';
+import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { CitiesCarouselImage } from '@/components/City/CitiesCarouselImage/CitiesCarouselImage';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { SafeLoader } from '@/components/SafeLoader';
+import { ScreenContentWrapper } from '@/components/Screen';
+import { useSelector } from '@/stores';
 import { City } from '@/types';
 
 const CityScreen = ({ route: { params } }: any) => {
@@ -46,27 +50,33 @@ const CityScreen = ({ route: { params } }: any) => {
 
   return (
     <MainLayout
-      style={{ paddingHorizontal: 0 }}
+      style={[styles.container, cityLoading && { paddingBottom: 0 }]}
       headerTitle={defaultCity.title}
       isLoading={cityLoading}
       loaderTextColor="white"
       fetchError={getCityError}
       reFetchMethod={refetchCity}
     >
-      <CarouselNew<City>
+      <ScreenContentWrapper<City>
         data={cities}
         defaultIndex={initialCityIndex}
         onChange={onChangeCity}
-        renderItem={({ item, index }) => {
-          return <CitiesCarouselImage item={item} key={item._id} />;
-        }}
+        imageKey="image"
         noDots
         isFullScreen
-      />
-
-      {!cityLoading && <CityScreenMeta city={city} />}
+      >
+        {!cityLoading && <CityScreenMeta city={city} />}
+      </ScreenContentWrapper>
     </MainLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 0,
+    paddingTop: 0,
+    paddingBottom: 70,
+  },
+});
 
 export default CityScreen;

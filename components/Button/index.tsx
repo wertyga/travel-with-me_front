@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { getArrayedButtonStyles } from '@/components/Button/Button.utils';
 import { CText } from '@/components/CText';
 import { CTextProps } from '@/components/CText/CText';
@@ -11,10 +12,14 @@ import { useNavigation } from '@/hooks';
 import { FONTS, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
+export type ButtonStylesProp =
+  | StyleProp<TouchableOpacity>
+  | CTextProps['style']
+  | (StyleProp<TouchableOpacity> & CTextProps['style']);
+
 export type CustomButtonProps = TouchableOpacityProps & {
   children: React.ReactNode;
-  style?: TouchableOpacityProps['style'];
-  textStyle?: CTextProps['style'];
+  style?: ButtonStylesProp | ButtonStylesProp[];
   onPress?: () => void;
   href?: SCREENS;
   hrefParams?: Record<string, any>;
@@ -34,7 +39,6 @@ const CustomButton = ({
   children,
   style,
   onPress,
-  textStyle,
   wide,
   fluid,
   outlined,
@@ -53,7 +57,7 @@ const CustomButton = ({
   const navi = useNavigation();
 
   const { button: btnStyles, text: textStyles } = getArrayedButtonStyles(
-    style as any
+    style || {}
   );
 
   const handleOnPress = () => {

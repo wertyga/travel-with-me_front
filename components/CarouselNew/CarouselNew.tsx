@@ -11,11 +11,11 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 import { CarouselDots } from '@/components/Carousel';
 import { useSelector } from '@/stores';
-import { LinearGradient } from 'expo-linear-gradient';
 
-type Props<T = any> = {
+export type Props<T = any> = {
   data: T[];
   renderItem: (data: { item: T; index: number }) => React.ReactNode;
   onChange?: (data: { index: number; item: T }) => void;
@@ -134,12 +134,6 @@ export const CarouselNew = <T,>({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-  },
   dots: {
     height: 40,
     position: 'absolute',

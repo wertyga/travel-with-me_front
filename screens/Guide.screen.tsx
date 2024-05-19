@@ -5,11 +5,13 @@ import { MainLayout } from '@/Layouts';
 import { useGetGuideQuery, useGetGuidesListQuery } from '@/api';
 import { RootStackParamList } from '@/app/Navigator';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
+import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { GuideMeta } from '@/components/Guide';
 import { FastImage } from '@/components/Image';
 import { SafeLoader } from '@/components/SafeLoader';
+import { ScreenContentWrapper } from '@/components/Screen';
 import { defaultGuideImage } from '@/utils';
-import { Guide, SCREENS } from '@/types';
+import { City, Guide, SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, SCREENS.Guide>;
 
@@ -68,33 +70,51 @@ const GuideScreen = ({ route }: Props) => {
 
   return (
     <MainLayout
+      style={styles.container}
       headerTitle={guide.title}
       reFetchMethod={refetchGuide}
       fetchError={getGuideError}
     >
-      <CarouselNew<Guide>
+      <ScreenContentWrapper<Guide>
         data={guides}
         defaultIndex={initialCityIndex}
         onChange={onChangeCGuide}
-        renderItem={({ item }) => {
-          return (
-            <FastImage
-              key={item._id}
-              uri={item.vImage || defaultGuideImage}
-              style={[styles.guideImage]}
-            />
-          );
-        }}
-        isFullScreen
+        imageKey="vImage"
+        defaultImage={defaultGuideImage}
         noDots
-      />
+        isFullScreen
+      >
+        <GuideMeta guide={guide} isFetching={isFetching} />
+      </ScreenContentWrapper>
 
-      <GuideMeta guide={guide} isFetching={isFetching} />
+      {/*<CarouselNew<Guide>*/}
+      {/*  data={guides}*/}
+      {/*  defaultIndex={initialCityIndex}*/}
+      {/*  onChange={onChangeCGuide}*/}
+      {/*  renderItem={({ item }) => {*/}
+      {/*    return (*/}
+      {/*      <FastImage*/}
+      {/*        key={item._id}*/}
+      {/*        uri={item.vImage || defaultGuideImage}*/}
+      {/*        style={[styles.guideImage]}*/}
+      {/*      />*/}
+      {/*    );*/}
+      {/*  }}*/}
+      {/*  isFullScreen*/}
+      {/*  noDots*/}
+      {/*/>*/}
+
+      {/*<GuideMeta guide={guide} isFetching={isFetching} />*/}
     </MainLayout>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 0,
+    paddingTop: 0,
+    paddingBottom: 70,
+  },
   guideImage: {
     width: '100%',
     height: '100%',

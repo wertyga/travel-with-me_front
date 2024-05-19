@@ -14,7 +14,9 @@ const PlaceScreen = ({ route }) => {
   useAuthGuard();
 
   const navi = useNavigation();
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(
+    ({ domStore }) => domStore?.layout?.height || 0
+  );
 
   const { params: { placeSlug } = {} } = route;
   const [state, setState] = useState({

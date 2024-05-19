@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSetLikeMutation } from '@/api';
 import Button from '@/components/Button';
 import { Icon } from '@/components/Icon';
 import { useAuth } from '@/context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Like, SOCIAL_MODELS } from '@/types';
 
 type Props = {
@@ -41,6 +41,7 @@ export const LikeAction = ({
       style={styles.btn}
       disabled={isLoading || parentFetching}
       onPress={handleLike}
+      noPaddings
     >
       <MaterialCommunityIcons
         name={isInteracted ? 'cards-heart' : 'cards-heart-outline'}
