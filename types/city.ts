@@ -8,14 +8,29 @@ export enum CITY_TAGS {
   'LightList' = 'CitiesLightList',
 }
 
+export type CitySecurityType = {
+  overview: string;
+  emergency: {
+    police: string;
+    ambulance: string;
+    fireDepartment: string;
+    touristPolice?: string;
+  };
+};
+
+export type CityPublicTransport = {
+  overview: string;
+  apps: { name: string; description: string; link: string }[];
+};
+
 export type City = {
   _id: string;
   title: string;
   slug: string;
   description: string;
   history: string;
-  security: string;
-  transport: string;
+  security: CitySecurityType;
+  transport: CityPublicTransport;
   country: Country;
   guides: Guide[];
   image: string;

@@ -1,23 +1,18 @@
 import { useMemo, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
-import RenderHtml from 'react-native-render-html';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import Button from '@/components/Button';
+import { CText } from '@/components/CText';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import {
   CITY_TABS,
-  DOM_VISITORS,
-  TAG_STYLES,
   getCityMetaData,
   getGuidesCategories,
 } from '@/components/City/CityScreenMeta/CityScreenMeta.utils';
+import { CityScreenMetaDHST } from '@/components/City/CityScreenMeta/CityScreenMetaDHST';
 import { CountryPill } from '@/components/Country';
 import { GuidesSlideList } from '@/components/Guide';
-import { useSelector } from '@/stores';
+import { useNavigation } from '@/hooks';
 import { City, FONTS } from '@/types';
 
 type Props = {
@@ -25,14 +20,12 @@ type Props = {
 };
 
 export const CityScreenMeta = ({ city }: Props) => {
-  const { width } = useWindowDimensions();
-  const layoutHeight = useSelector(
-    ({ domStore }) => domStore?.layout?.height || 0
-  );
+  const router = useRoute();
+  const navi = useNavigation();
 
+  const chosenCityTab = (router.params as any)?.cityTab || CITY_TABS[0].title;
   const [state, setState] = useState({
     filterByCategory: '',
-    tabChosen: CITY_TABS[0],
   });
 
   const onChangeFilterByCategory = (filterByCategory: string) => () => {
@@ -46,7 +39,7 @@ export const CityScreenMeta = ({ city }: Props) => {
   };
 
   const onChangeTextData = (title: string) => () => {
-    setState(prev => ({ ...prev, tabChosen: title }));
+    navi.setParams({ cityTab: title });
   };
 
   const guidesCityCategories = getGuidesCategories(city.guides);
@@ -60,7 +53,7 @@ export const CityScreenMeta = ({ city }: Props) => {
     return getCityMetaData(city);
   }, [city]);
 
-  const cityTabs = Object.keys(cityMetaInfo);
+  const cityTabs = CITY_TABS.filter(({ title }) => !!cityMetaInfo[title]);
 
   return (
     <>
@@ -69,26 +62,22 @@ export const CityScreenMeta = ({ city }: Props) => {
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {cityTabs.map(title => {
+        {cityTabs.map(({ title, icon }) => {
           return (
             <Button
               style={styles.aboutText}
               key={title}
               onPress={onChangeTextData(title)}
-              outlined={state.tabChosen !== title}
+              outlined={chosenCityTab !== title}
             >
-              {title}
+              {icon}
+              <CText style={{ marginLeft: 5 }}>{title}</CText>
             </Button>
           );
         })}
       </ScrollView>
 
-      <RenderHtml
-        contentWidth={width}
-        source={{ html: (cityMetaInfo as any)[state.tabChosen]?.info }}
-        tagsStyles={TAG_STYLES}
-        domVisitors={DOM_VISITORS}
-      />
+      <CityScreenMetaDHST type={chosenCityTab} city={city} />
 
       <>
         <CityGuidesCategories
@@ -102,47 +91,6 @@ export const CityScreenMeta = ({ city }: Props) => {
       </>
     </>
   );
-
-  // return (
-  //   <EntityMeta
-  //     wrapperHeight={layoutHeight - 40}
-  //     collapsedHeight={400}
-  //     descriptionTextCutLines={8}
-  //     withHeaderHide
-  //     TopContent={
-  //       <>
-  //         <View style={styles.top}>
-  //           <CountryPill title={city.country.title} />
-  //         </View>
-  //         <CText style={styles.aboutText}>About city</CText>
-  //       </>
-  //     }
-  //     BottomContent={
-  //       <>
-  //         <CityGuidesCategories
-  //           categories={guidesCityCategories}
-  //           onCategoryPress={onChangeFilterByCategory}
-  //           chosenCategory={state.filterByCategory}
-  //           style={styles.categories}
-  //         />
-  //
-  //         <GuidesSlideList
-  //           guides={filteredGuides}
-  //           country={city.country.title}
-  //         />
-  //         <GuidesSlideList
-  //           guides={filteredGuides}
-  //           country={city.country.title}
-  //         />
-  //         <GuidesSlideList
-  //           guides={filteredGuides}
-  //           country={city.country.title}
-  //         />
-  //       </>
-  //     }
-  //     description={city.description + city.description}
-  //   />
-  // );
 };
 
 const styles = StyleSheet.create({

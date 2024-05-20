@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { useGetCitiesLightListQuery, useGetCityQuery } from '@/api';
-import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
-import { CitiesCarouselImage } from '@/components/City/CitiesCarouselImage/CitiesCarouselImage';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
-import { useSelector } from '@/stores';
+import { useNavigation } from '@/hooks';
 import { City } from '@/types';
 
 const CityScreen = ({ route: { params } }: any) => {
-  const [defaultCity, setDefaultCity] = useState<City>(params?.city);
+  const navi = useNavigation();
+  const router = useRoute();
 
+  const currentCity = router.params?.city;
   const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
   const {
     data: { city } = {},
     isFetching: cityLoading,
     error: getCityError,
     refetch: refetchCity,
-  } = useGetCityQuery({ slug: defaultCity.slug });
+  } = useGetCityQuery({ slug: currentCity?.slug });
 
   const onChangeCity = async ({
     index,
@@ -31,13 +31,13 @@ const CityScreen = ({ route: { params } }: any) => {
   }) => {
     if (!cities[index]) return;
 
-    setDefaultCity(item);
+    navi.setParams({ cityTab: null, city: item });
   };
 
   if (!city || !cities.length) {
     return (
       <SafeLoader
-        image={defaultCity.image}
+        image={currentCity?.image}
         textColor="white"
         indicatorColor="white"
       />
@@ -51,7 +51,7 @@ const CityScreen = ({ route: { params } }: any) => {
   return (
     <MainLayout
       style={[styles.container, cityLoading && { paddingBottom: 0 }]}
-      headerTitle={defaultCity.title}
+      headerTitle={currentCity?.title}
       isLoading={cityLoading}
       loaderTextColor="white"
       fetchError={getCityError}

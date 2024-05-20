@@ -11,6 +11,7 @@ module.exports = {
     '^react-native$',
     '^@react-navigation',
     '^react(.*)$',
+    '^@expo(.*)$',
     '<THIRD_PARTY_MODULES>',
     '^@/.(?:assets|types|utils)',
     '@/utils',
