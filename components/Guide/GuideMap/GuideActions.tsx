@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import {
   dropGuideStoreStateAction,
   toggleGuideMute,
   updateFollowingGuideState,
   useSelector,
 } from '@/stores';
-import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -42,10 +43,10 @@ export const GuideActions = ({ isWithPreviewOpened }: Props) => {
     : 'volume-mute-outline';
 
   return (
-    <ScrollView
+    <ScrollHorizontalNoEdges
       style={[styles.container, isWithPreviewOpened && { top: 30 }]}
       contentContainerStyle={styles.actions}
-      horizontal
+      edge={CONSTANTS.spaces.paddingHorizontal}
     >
       <Button
         style={styles.actionBtn}
@@ -80,7 +81,7 @@ export const GuideActions = ({ isWithPreviewOpened }: Props) => {
           </CText>
         )}
       </Button>
-    </ScrollView>
+    </ScrollHorizontalNoEdges>
   );
 };
 
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 40,
-    width: 40,
+    minWidth: 40,
     backgroundColor: CONSTANTS.colors.bg1,
   },
   activeBtn: {

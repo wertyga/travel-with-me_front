@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Dimensions, ImageBackground, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import CarouselEx from 'react-native-snap-carousel';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
@@ -39,7 +39,9 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
 
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const layoutHeight = useSelector(
+    ({ domStore }) => domStore?.layout?.height || 0
+  );
 
   const visiblePoint = useSelector(
     ({ guideStore }) => guideStore?.visiblePoint

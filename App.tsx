@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import { AppState } from 'react-native';
 import { Provider } from 'react-redux';
-import { store } from '@/app/store/create-isomorphic-store';
-import { Toast } from '@/components/Toast';
-import { updateAppStateListener } from '@/stores';
 import {
   CrimsonText_400Regular as Crimson,
   CrimsonText_700Bold as CrimsonBold,
@@ -15,21 +12,21 @@ import {
   OpenSans_700Bold as OpenSansBold,
   OpenSans_600SemiBold as OpenSansSemiBold,
 } from '@expo-google-fonts/open-sans';
+import { baseQuery } from '@/app/query';
+import { store } from '@/app/store/create-isomorphic-store';
+import { Toast } from '@/components/Toast';
+import { fetchEnvs, updateAppStateListener } from '@/stores';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { NativeWindStyleSheet } from 'nativewind';
 import Navigator from './app/Navigator';
 import { AuthProvider, LayoutProvider } from './context';
 
-// import { StoreProvider } from '@/mobx/StoreProvider';
-
 SplashScreen.preventAutoHideAsync();
 
 NativeWindStyleSheet.setOutput({
   default: 'native',
 });
-
-let isMounted = false;
 
 function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -56,7 +53,6 @@ function App() {
   }
 
   return (
-    // <StoreProvider>
     <Provider store={store}>
       <StatusBar style="light" />
       <AuthProvider>
@@ -66,7 +62,6 @@ function App() {
       </AuthProvider>
       <Toast />
     </Provider>
-    // </StoreProvider>
   );
 }
 

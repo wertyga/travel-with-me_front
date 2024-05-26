@@ -28,6 +28,7 @@ type Props = {
   noBackBtn?: boolean;
   headerTitle?: string;
   floatingTitle?: boolean;
+  withHeaderShadow?: boolean;
   loaderTextColor?: string;
   menu?: HeaderMenuProps['items'];
   onBgPress?: () => void;
@@ -52,6 +53,7 @@ export const MainLayout = ({
   fetchError,
   reFetchMethod,
   noBackBtn,
+  withHeaderShadow,
 }: Props) => {
   const layoutHeight = useSelector(
     state => state.domStore?.layout?.height || 0
@@ -74,7 +76,11 @@ export const MainLayout = ({
 
           {!!headerTitle && (
             <LinearGradient
-              colors={['rgba(0, 0, 0, 0.6)', 'transparent']}
+              colors={
+                withHeaderShadow
+                  ? ['rgba(0, 0, 0, 0.6)', 'transparent']
+                  : ['transparent', 'transparent']
+              }
               style={styles.header}
             >
               <CityScreenHeader

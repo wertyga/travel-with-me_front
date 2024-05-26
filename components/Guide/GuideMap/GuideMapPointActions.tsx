@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { openGoogleMap } from '@/components/Map/Map.utils';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Place } from '@/types';
 
 type Props = {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   btn: {
-    width: 40,
+    minWidth: 40,
     height: 40,
     // backgroundColor: CONSTANTS.colors.bg1,
     borderRadius: 50,

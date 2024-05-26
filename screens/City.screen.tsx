@@ -56,6 +56,7 @@ const CityScreen = ({ route: { params } }: any) => {
       loaderTextColor="white"
       fetchError={getCityError}
       reFetchMethod={refetchCity}
+      withHeaderShadow
     >
       <ScreenContentWrapper<City>
         data={cities}

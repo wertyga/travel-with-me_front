@@ -2,9 +2,11 @@ import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
+import { CText } from '@/components/CText';
 import { SubscriptionList } from '@/components/Subscription';
 import { useAuth } from '@/context';
 import { useNavigation, useSubscription } from '@/hooks';
+import { useSelector } from '@/stores';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
 import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
@@ -20,7 +22,9 @@ const Subscriptions = () => {
     renewMySubscription,
     isLoading: subLoading,
   } = useSubscription({ withList: true, withRetrySubscriptionFetching: true });
-  const { user, setBackScreen } = useAuth();
+  const { user } = useAuth();
+
+  const envs = useSelector(({ appStateStore }) => appStateStore.envs);
 
   const {
     initPaymentSheet,
@@ -52,18 +56,21 @@ const Subscriptions = () => {
 
   const onBuy = async (subscriptionId: string) => {
     if (!user) {
-      setBackScreen(SCREENS.Subscriptions);
       navi.navigate(SCREENS.Login);
       return;
     }
 
     try {
       await initializePaymentSheet(subscriptionId);
-      await presentPaymentSheet();
-    } catch (e) {
+      const result = await presentPaymentSheet();
+
+      if (result.error) {
+        throw result.error;
+      }
+    } catch (e: any) {
       Toast.show({
         type: 'error',
-        text1: e?.message || e,
+        text1: e.message || e,
       });
     }
   };
@@ -76,10 +83,20 @@ const Subscriptions = () => {
       ? Linking.createURL('/--/')
       : Linking.createURL('');
 
+  if (!envs.STRIPE_PUBLIC_KEY) {
+    return (
+      <MainLayout headerTitle="Subscriptions" isLoading={isLoading}>
+        <CText style={{ textAlign: 'center' }}>
+          Subscriptions Under Maintenance Now
+        </CText>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout headerTitle="Subscription" isLoading={isLoading}>
       <StripeProvider
-        publishableKey={Constants.expoConfig?.extra.PUBLIC_STRIPE_KEY}
+        publishableKey={envs.STRIPE_PUBLIC_KEY}
         merchantIdentifier="com.wertyga.travel-with-me"
         urlScheme={urlSchema}
       >

@@ -68,6 +68,7 @@ const PlaceScreen = ({ route }) => {
         paddingTop: 0,
       }}
       headerTitle={place.title}
+      withHeaderShadow
     >
       <ScrollView>
         <CarouselNew<string>

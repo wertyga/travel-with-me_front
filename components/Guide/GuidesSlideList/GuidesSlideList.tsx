@@ -1,5 +1,6 @@
-import { ScrollView } from 'react-native';
+import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { Guide } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 import { GuidePreview } from '../GuidePreview/GuidePreview';
 
 type Props = {
@@ -9,10 +10,10 @@ type Props = {
 
 export const GuidesSlideList = ({ guides, country }: Props) => {
   return (
-    <ScrollView horizontal>
+    <ScrollHorizontalNoEdges edge={CONSTANTS.spaces.paddingHorizontal}>
       {guides.map(guide => {
         return <GuidePreview guide={guide} key={guide._id} country={country} />;
       })}
-    </ScrollView>
+    </ScrollHorizontalNoEdges>
   );
 };

@@ -1,9 +1,9 @@
-import { AndroidConfig } from '@expo/config-plugins';
 import { ConfigContext, ExpoConfig } from 'expo/config';
-
-const isProduction = process.env.NODE_ENV === 'production';
+import ENV from './env.config';
 
 const version = 10;
+
+const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Travel With Me',
@@ -34,7 +34,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'expo-notifications',
       {
         icon: './assets/notification_logo.png',
-        // color: '#ffffff',
       },
     ],
     [
@@ -47,7 +46,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ],
   ios: {
     config: {
-      googleMapsApiKey: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
+      googleMapsApiKey: envs.GOOGLE_MAPS_API_KEY,
     },
     supportsTablet: true,
     bundleIdentifier: 'com.wertyga.travelwithme',
@@ -63,7 +62,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     versionCode: version,
     config: {
       googleMaps: {
-        apiKey: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
+        apiKey: envs.GOOGLE_MAPS_API_KEY,
       },
     },
     adaptiveIcon: {
@@ -83,11 +82,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
-    API_BASE_URL:
-      'https://5df8-2a02-a31a-803b-7380-e0cd-c671-fd5a-fc95.ngrok-free.app',
-    // API_BASE_URL: 'https://api.underhood.space',
-    PUBLIC_STRIPE_KEaY:
-      'pk_test_51NjctuLjIKbGVNPBwCRLtDko6G5xS4Ze7N42K6GsM5IkAnOQZn3skLD5kfzgKxXQuFl3watT7Xgo84A9HTwtWSST00CnF8tcSN',
+    API_BASE_URL: envs.API_BASE_URL,
+    STRIPE_PUBLIC_KEY: envs.STRIPE_PUBLIC_KEY,
   },
   runtimeVersion: {
     policy: 'appVersion',

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -12,8 +12,10 @@ import {
 import { CityScreenMetaDHST } from '@/components/City/CityScreenMeta/CityScreenMetaDHST';
 import { CountryPill } from '@/components/Country';
 import { GuidesSlideList } from '@/components/Guide';
+import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation } from '@/hooks';
 import { City, FONTS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   city: City;
@@ -61,7 +63,7 @@ export const CityScreenMeta = ({ city }: Props) => {
         <CountryPill title={city.country.title} />
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollHorizontalNoEdges edge={CONSTANTS.spaces.paddingHorizontal}>
         {cityTabs.map(({ title, icon }) => {
           return (
             <Button
@@ -75,7 +77,7 @@ export const CityScreenMeta = ({ city }: Props) => {
             </Button>
           );
         })}
-      </ScrollView>
+      </ScrollHorizontalNoEdges>
 
       <CityScreenMetaDHST type={chosenCityTab} city={city} />
 

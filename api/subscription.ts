@@ -62,9 +62,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
 
 export const {
   useGetSubscriptionListQuery,
-  useLazyGetSubscriptionListQuery,
   useGetMySubscriptionQuery,
-  useLazyGetUserSubscriptionQuery,
   useCreateSubscriptionPaymentMutation,
   useCancelMySubscriptionMutation,
   useRenewMySubscriptionMutation,

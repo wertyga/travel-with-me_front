@@ -2,8 +2,10 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { FastImage } from '@/components/Image';
 import { PointDistance } from '@/components/Point';
+import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation } from '@/hooks';
 import { Guide, Place, SCREENS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
 
 type Props = {
@@ -17,10 +19,9 @@ export const GuidePointsList = ({ points }: Props) => {
   const navi = useNavigation();
 
   return (
-    <ScrollView
+    <ScrollHorizontalNoEdges
       contentContainerStyle={styles.points}
-      horizontal
-      showsHorizontalScrollIndicator={false}
+      edge={CONSTANTS.spaces.paddingHorizontal}
     >
       {points.map(point => {
         return (
@@ -49,7 +50,7 @@ export const GuidePointsList = ({ points }: Props) => {
           </TouchableOpacity>
         );
       })}
-    </ScrollView>
+    </ScrollHorizontalNoEdges>
   );
 };
 

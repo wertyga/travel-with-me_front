@@ -15,8 +15,6 @@ import {
   getNotificationAsync,
   onStartWatchingAction,
   onStopWatchLocation,
-  removeNotification,
-  showNotification,
   toggleGuideMute,
   updateFollowingGuideState,
 } from '@/stores';

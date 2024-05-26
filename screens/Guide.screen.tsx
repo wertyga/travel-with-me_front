@@ -74,6 +74,7 @@ const GuideScreen = ({ route }: Props) => {
       headerTitle={guide.title}
       reFetchMethod={refetchGuide}
       fetchError={getGuideError}
+      withHeaderShadow
     >
       <ScreenContentWrapper<Guide>
         data={guides}

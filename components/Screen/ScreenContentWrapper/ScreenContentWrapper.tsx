@@ -14,6 +14,7 @@ import {
   Props as CarouselProps,
 } from '@/components/CarouselNew/CarouselNew';
 import { useSelector } from '@/stores';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
   data: T[];
@@ -63,7 +64,7 @@ export const ScreenContentWrapper = <DATA,>({
         <BackgroundGradient
           style={[
             styles.content,
-            { top: layoutHeight - 400, paddingBottom: 500 },
+            { top: layoutHeight - 300, paddingBottom: layoutHeight - 300 },
           ]}
         >
           {children}
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     objectFit: 'cover',
   },
   content: {
-    padding: 15,
+    padding: CONSTANTS.spaces.paddingHorizontal,
     paddingTop: 20,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
