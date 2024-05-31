@@ -12,6 +12,7 @@ module.exports = {
     '^@react-navigation',
     '^react(.*)$',
     '^@expo(.*)$',
+    'expo(.*)$',
     '<THIRD_PARTY_MODULES>',
     '^@/.(?:assets|types|utils)',
     '@/utils',

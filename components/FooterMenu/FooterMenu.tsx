@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -11,6 +11,7 @@ import { Icon, IconNames } from '@/components/Icon';
 import { useNavigation } from '@/hooks';
 import { useSelector } from '@/stores';
 import { SCREENS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 export const FooterMenu = () => {
   const navi = useNavigation();
@@ -61,9 +62,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 10,
     paddingBottom: 8,
-    height: 60,
+    height: CONSTANTS.spaces.footerHeight,
     width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: CONSTANTS.colors.bg3,
     zIndex: 200,
   },
   item: {

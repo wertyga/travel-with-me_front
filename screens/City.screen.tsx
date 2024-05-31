@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
@@ -13,7 +13,7 @@ const CityScreen = ({ route: { params } }: any) => {
   const navi = useNavigation();
   const router = useRoute();
 
-  const currentCity = router.params?.city;
+  const currentCity = (router.params as any)?.city;
   const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
   const {
     data: { city } = {},
@@ -31,7 +31,7 @@ const CityScreen = ({ route: { params } }: any) => {
   }) => {
     if (!cities[index]) return;
 
-    navi.setParams({ cityTab: null, city: item });
+    navi.setParams({ cityTab: null, city: item } as any);
   };
 
   if (!city || !cities.length) {
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
     paddingTop: 0,
-    paddingBottom: 70,
   },
 });
 

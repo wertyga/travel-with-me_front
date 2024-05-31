@@ -4,13 +4,18 @@ import { FONTS } from '@/types';
 
 export type CTextProps = Omit<TextProps, 'style'> & {
   style?: StyleProp<Omit<TextStyle, 'fontFamily'>> & { fontFamily?: FONTS };
+  small?: boolean;
 };
 
-export const CText = ({ children, style, ...props }: CTextProps) => {
+export const CText = ({ children, style, small, ...props }: CTextProps) => {
   return (
     <Text
       {...props}
-      style={[styles.container, ...(Array.isArray(style) ? style : [style])]}
+      style={[
+        styles.container,
+        small && styles.small,
+        ...(Array.isArray(style) ? style : [style]),
+      ]}
     >
       {children}
     </Text>
@@ -22,5 +27,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.OpenSans,
     color: 'white',
+  },
+  small: {
+    fontSize: 12,
   },
 });

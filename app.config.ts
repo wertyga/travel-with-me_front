@@ -1,7 +1,17 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
-import ENV from './env.config';
 
-const version = 10;
+const ENV = {
+  development: {
+    GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
+    API_BASE_URL: 'https://api.underhood.space',
+  },
+  production: {
+    GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
+    API_BASE_URL: 'https://api.underhood.space',
+  },
+};
+
+const version = 11;
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
@@ -83,7 +93,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
     API_BASE_URL: envs.API_BASE_URL,
-    STRIPE_PUBLIC_KEY: envs.STRIPE_PUBLIC_KEY,
   },
   runtimeVersion: {
     policy: 'appVersion',

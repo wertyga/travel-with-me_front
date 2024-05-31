@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   withFooter: {
-    paddingBottom: 70,
+    paddingBottom: CONSTANTS.spaces.footerHeight,
   },
   header: {
     top: 0,

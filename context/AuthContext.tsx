@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import {
