@@ -1,31 +1,18 @@
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@/hooks';
-import { City, SCREENS } from '@/types';
+import { ScrollView, StyleSheet, ViewStyle } from 'react-native';
+import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { City } from '@/types';
 import { CityPreview } from '../CityPreview/CityPreview';
 
 type Props = {
   cities: City[];
+  style?: StyleProp<ViewStyle>;
 };
 
-export const CitiesList = ({ cities }: Props) => {
-  const navi = useNavigation();
-
+export const CitiesList = ({ cities, style }: Props) => {
   return (
-    <ScrollView contentContainerStyle={styles.list}>
+    <ScrollView contentContainerStyle={styles.list} style={style}>
       {cities.map(city => {
-        return (
-          <TouchableOpacity
-            key={city._id}
-            style={styles.preview}
-            onPress={() =>
-              navi.navigate(SCREENS.City, {
-                city,
-              })
-            }
-          >
-            <CityPreview city={city} />
-          </TouchableOpacity>
-        );
+        return <CityPreview city={city} key={city._id} />;
       })}
     </ScrollView>
   );
@@ -33,12 +20,7 @@ export const CitiesList = ({ cities }: Props) => {
 
 const styles = StyleSheet.create({
   list: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 20,
-    paddingBottom: 20,
-  },
-  preview: {
-    width: '46%',
+    gap: 10,
+    paddingBottom: 200,
   },
 });

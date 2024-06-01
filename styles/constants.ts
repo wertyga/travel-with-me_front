@@ -9,6 +9,7 @@ export const CONSTANTS = {
     disabled: '#c2c2c2',
     blue: '#19b9dd',
     ultramarine: '#30D5C8',
+    ultramarine1: '#28a99f',
     bg1: '#036068',
     bg2: '#00353B',
     bg3: '#17282E',

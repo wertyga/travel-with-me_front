@@ -7,6 +7,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { LinearGradient } from 'expo-linear-gradient';
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
@@ -14,7 +15,6 @@ import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
 import { Loader } from '@/components/Loader';
 import { updateDomAction, useSelector } from '@/stores';
-import { LinearGradient } from 'expo-linear-gradient';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -35,6 +35,7 @@ type Props = {
   bgContent?: ReactNode;
   fetchError?: { message: string; statusCode: number };
   reFetchMethod?: (data?: any) => void;
+  bgColors?: string[];
 };
 
 export const MainLayout = ({
@@ -54,6 +55,7 @@ export const MainLayout = ({
   reFetchMethod,
   noBackBtn,
   withHeaderShadow,
+  bgColors,
 }: Props) => {
   const layoutHeight = useSelector(
     state => state.domStore?.layout?.height || 0
@@ -69,7 +71,9 @@ export const MainLayout = ({
         });
       }}
     >
-      {!bgImage && <BackgroundGradient style={styles.bgGradient} />}
+      {!bgImage && (
+        <BackgroundGradient style={styles.bgGradient} colors={bgColors} />
+      )}
       <FetchErrorWrapper fetchError={fetchError} reFetchMethod={reFetchMethod}>
         <>
           {isLoading && <Loader textColor={loaderTextColor} />}

@@ -7,7 +7,7 @@ import {
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
 import { CText } from '@/components/CText';
 import { FONTS } from '@/types';
-import safeLoaderImage from '@/assets/splash-2.png';
+import safeLoaderImage from '@/assets/splash.png';
 
 type Props = {
   image?: string;
@@ -17,7 +17,7 @@ type Props = {
   reFetchMethod?: (data?: any) => void;
 };
 
-const Children = ({ textColor, indicatorColor }) => {
+const Children = ({ textColor, indicatorColor }: any) => {
   return (
     <View style={{ ...styles.loadingContent }}>
       <ActivityIndicator size="small" color={indicatorColor} />

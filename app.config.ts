@@ -23,7 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/logo2.png',
   userInterfaceStyle: 'light',
   splash: {
-    image: './assets/splash-2.png',
+    image: './assets/splash.png',
     resizeMode: 'cover',
     backgroundColor: '#C7D3C9',
   },

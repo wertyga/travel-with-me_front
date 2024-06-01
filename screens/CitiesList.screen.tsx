@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, ImageBackground, StyleSheet, View } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { MainLayout } from '@/Layouts';
 import { useGetCitiesLightListQuery } from '@/api';
 import { CText } from '@/components/CText';
@@ -12,7 +13,7 @@ import { useHandleFromError } from '@/hooks';
 import { navigateToError } from '@/utils';
 import { FONTS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
-import citiesBgImage from '@/assets/images/cities-bg-3.png';
+import SplashBgImage from '@/assets/splash.png';
 
 const HEADERS_LIST = [
   {
@@ -69,24 +70,53 @@ const CitiesListScreen = () => {
   }
 
   return (
-    <MainLayout style={styles.layout} bgImage={citiesBgImage}>
-      <GlobalSearch />
-      <View style={styles.headers}>
-        {HEADERS_LIST.map(({ title, id }) => {
-          return (
-            <CText
-              key={id}
-              style={[styles.header, state.tab === id && styles.chosenHeader]}
-              onPress={onChangeTab(id)}
-            >
-              {title}
-            </CText>
-          );
-        })}
-      </View>
-      {state.tab === 'list' && <CitiesList cities={cities} />}
-      {state.tab === 'map' && <CitiesMap />}
+    <MainLayout
+      style={styles.layout}
+      bgColors={[CONSTANTS.colors.bg1, CONSTANTS.colors.bg3]}
+    >
+      <ImageBackground
+        source={SplashBgImage}
+        style={StyleSheet.absoluteFillObject}
+      >
+        <LinearGradient
+          colors={['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.7)']}
+          style={StyleSheet.absoluteFillObject}
+        ></LinearGradient>
+      </ImageBackground>
 
+      <View
+        style={{
+          position: 'absolute',
+          top: CONSTANTS.spaces.paddingTop,
+          left: CONSTANTS.spaces.paddingHorizontal,
+          width: '100%',
+          zIndex: 20,
+        }}
+      >
+        <GlobalSearch />
+        <View style={styles.headers}>
+          {HEADERS_LIST.map(({ title, id }) => {
+            return (
+              <CText
+                key={id}
+                style={[styles.header, state.tab === id && styles.chosenHeader]}
+                onPress={onChangeTab(id)}
+              >
+                {title}
+              </CText>
+            );
+          })}
+        </View>
+      </View>
+
+      {state.tab === 'list' && (
+        <CitiesList cities={cities} style={{ paddingTop: 160 }} />
+      )}
+      {state.tab === 'map' && (
+        <View style={{ paddingTop: 160 }}>
+          <CitiesMap />
+        </View>
+      )}
       {isFetching && <Loader />}
     </MainLayout>
   );
@@ -94,7 +124,7 @@ const CitiesListScreen = () => {
 
 const styles = StyleSheet.create({
   layout: {
-    paddingTop: CONSTANTS.spaces.paddingTop,
+    paddingTop: 0,
   },
   headers: {
     flexDirection: 'row',

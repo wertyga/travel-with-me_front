@@ -42,6 +42,7 @@ export const ScreenContentWrapper = <DATA,>({
     <ScrollView
       contentContainerStyle={{
         minHeight: '100%',
+        paddingBottom: 20,
       }}
     >
       <CarouselNew<DATA>

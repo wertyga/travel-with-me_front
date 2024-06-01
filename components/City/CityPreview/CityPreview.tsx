@@ -1,52 +1,75 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import {
+  Dimensions,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { CText } from '@/components/CText';
-import { Icon } from '@/components/Icon';
+import { ImageBackgroundWithGradient } from '@/components/Common';
+import { CountryPill } from '@/components/Country';
+import { Icon, IconNames } from '@/components/Icon';
 import { FastImage } from '@/components/Image';
-import { City, FONTS } from '@/types';
+import { useNavigation } from '@/hooks';
+import { getHeight } from '@/utils';
+import { City, FONTS, SCREENS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   city: City;
-  style?: ViewStyle;
 };
 
-export const CityPreview = ({ city, style }: Props) => {
+export const CityPreview = ({ city }: Props) => {
+  const navi = useNavigation();
+
   return (
-    <View style={style}>
-      <FastImage
-        uri={city.image}
-        // width={200}
-        style={styles.image}
-      />
-      <View>
+    <TouchableOpacity
+      key={city._id}
+      style={styles.preview}
+      onPress={() =>
+        navi.navigate(SCREENS.City, {
+          city,
+        })
+      }
+    >
+      <ImageBackgroundWithGradient
+        image={city.image}
+        contentStyle={styles.content}
+        gradient="top-bottom"
+        // locations={[0.05, 0.5]}
+      >
+        <CountryPill
+          title={city.country.title}
+          style={styles.country}
+          icon="map-point-small"
+        />
         <CText style={styles.header}>{city.title}</CText>
-        <View style={styles.country}>
-          <Icon name="map-point-small" />
-          <CText style={styles.countryText}>{city.country.title}</CText>
-        </View>
-      </View>
-    </View>
+      </ImageBackgroundWithGradient>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
+  preview: {
+    width: '100%',
+    height: getHeight(70, CONSTANTS.spaces.paddingHorizontal * 2),
+    borderRadius: 15,
+    overflow: 'hidden',
+  },
   header: {
     fontSize: 22,
-    marginBottom: 8,
     fontFamily: FONTS.CrimsonSemiBold,
   },
   country: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
   },
   countryText: {
     marginLeft: 5,
     fontSize: 12,
   },
-  image: {
-    width: '100%',
-    aspectRatio: 0.825,
-    borderRadius: 15,
-    marginBottom: 8,
-    objectFit: 'cover',
+  content: {
+    padding: 10,
   },
 });

@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     height: CONSTANTS.spaces.footerHeight,
     width: '100%',
-    backgroundColor: CONSTANTS.colors.bg3,
+    backgroundColor: CONSTANTS.colors.bg2,
     zIndex: 200,
   },
   item: {

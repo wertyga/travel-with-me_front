@@ -41,7 +41,7 @@ export const CityScreenMeta = ({ city }: Props) => {
   };
 
   const onChangeTextData = (title: string) => () => {
-    navi.setParams({ cityTab: title });
+    navi.setParams({ cityTab: title } as any);
   };
 
   const guidesCityCategories = getGuidesCategories(city.guides);
@@ -55,7 +55,9 @@ export const CityScreenMeta = ({ city }: Props) => {
     return getCityMetaData(city);
   }, [city]);
 
-  const cityTabs = CITY_TABS.filter(({ title }) => !!cityMetaInfo[title]);
+  const cityTabs = CITY_TABS.filter(
+    ({ title }) => !!(cityMetaInfo as any)[title]
+  );
 
   return (
     <>
