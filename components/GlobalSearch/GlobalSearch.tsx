@@ -1,20 +1,24 @@
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { useLazyGlobalSearchQuery } from '@/api';
 import { GlobalSearchItem } from '@/components/GlobalSearch/GlobalSearchItem';
 import Search from '@/components/Search';
-import { AntDesign } from '@expo/vector-icons';
-import { SCREENS } from '@/types';
+import { City, Guide, Place, SCREENS } from '@/types';
 import CityPlaceholder from '@/assets/images/city_placeholder.png';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
 
 export const GlobalSearch = () => {
-  const [state, setState] = useState({});
+  const [state, setState] = useState<{
+    cities: City[];
+    guides: Guide[];
+    places: Place[];
+  }>({} as any);
   const [search, setSearch] = useState('');
   const [fetchForSearch, { isLoading }] = useLazyGlobalSearchQuery();
 
   const onClose = () => {
-    setState({});
+    setState({} as any);
     setSearch('');
   };
 
@@ -24,7 +28,7 @@ export const GlobalSearch = () => {
       return;
     }
     const { data } = await fetchForSearch({ search });
-    setState(data || {});
+    setState(data || ({} as any));
   };
 
   const { cities = [], guides = [], places = [] } = state;
@@ -114,25 +118,20 @@ export const GlobalSearch = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // position: 'relative',
-    // zIndex: 20,
-  },
+  container: {},
   list: {
-    position: 'absolute',
-    top: 90,
-    left: 15,
+    top: 5,
+    left: 0,
     width: '100%',
     height: 300,
     backgroundColor: 'white',
     marginTop: 3,
-    zIndex: 20,
     borderRadius: 10,
+    zIndex: 2,
   },
   listContent: {
     paddingTop: 10,
     marginRight: 25,
-    position: 'relative',
   },
   item: {
     paddingHorizontal: 10,

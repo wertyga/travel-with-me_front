@@ -90,7 +90,7 @@ const CitiesListScreen = () => {
           top: CONSTANTS.spaces.paddingTop,
           left: CONSTANTS.spaces.paddingHorizontal,
           width: '100%',
-          zIndex: 20,
+          zIndex: 1,
         }}
       >
         <GlobalSearch />
@@ -128,6 +128,9 @@ const styles = StyleSheet.create({
   },
   headers: {
     flexDirection: 'row',
+    position: 'absolute',
+    top: 30,
+    left: 0,
   },
   header: {
     fontSize: 30,

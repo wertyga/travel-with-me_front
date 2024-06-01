@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
     paddingTop: 10,
+    paddingBottom: 20,
   },
   galleryAction: {
     width: 35,

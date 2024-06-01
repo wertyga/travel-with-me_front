@@ -4,14 +4,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainLayout } from '@/Layouts';
 import { useGetGuideQuery, useGetGuidesListQuery } from '@/api';
 import { RootStackParamList } from '@/app/Navigator';
-import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
-import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { GuideMeta } from '@/components/Guide';
-import { FastImage } from '@/components/Image';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
 import { defaultGuideImage } from '@/utils';
-import { City, Guide, SCREENS } from '@/types';
+import { Guide, SCREENS } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, SCREENS.Guide>;
 

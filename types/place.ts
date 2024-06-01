@@ -1,3 +1,4 @@
+import { City } from '@/types/city';
 import { Guide, Path } from '@/types/guide';
 import { Like } from '@/types/likes';
 import { User } from '@/types/user';
@@ -19,6 +20,7 @@ export type Place = {
   owner: User;
   likes: Like;
   isChosen?: boolean;
+  city: City;
 };
 
 export type GetPlaceResponse = {

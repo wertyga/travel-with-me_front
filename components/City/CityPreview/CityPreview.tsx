@@ -36,7 +36,6 @@ export const CityPreview = ({ city }: Props) => {
         image={city.image}
         contentStyle={styles.content}
         gradient="top-bottom"
-        // locations={[0.05, 0.5]}
       >
         <CountryPill
           title={city.country.title}

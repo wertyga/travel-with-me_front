@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { FontAwesome } from '@expo/vector-icons';
 import { useSetLikeMutation } from '@/api';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { FastImage } from '@/components/Image';
 import { useSlideLeft } from '@/hooks';
-import { FontAwesome } from '@expo/vector-icons';
 import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
@@ -84,7 +84,7 @@ export const FavoritesListItem = ({
             )}
           </View>
         </Button>
-        <Button style={styles.removeBtn} rectangle>
+        <Button style={styles.removeBtn} rectangle onPress={onUnliked}>
           <FontAwesome name="trash-o" size={34} color="white" />
         </Button>
       </Animated.View>
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 70,
+    height: '100%',
   },
   title: {
     fontFamily: FONTS.OpenSansBold,
