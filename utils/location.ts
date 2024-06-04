@@ -79,7 +79,7 @@ export const startWatchToLiveLocation = async (
     await Location.requestBackgroundPermissionsAsync();
   }
 
-  await Location.watchPositionAsync(
+  return Location.watchPositionAsync(
     {
       accuracy: Location.LocationAccuracy.BestForNavigation,
       distanceInterval: minDistance,

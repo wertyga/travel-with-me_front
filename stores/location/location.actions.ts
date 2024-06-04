@@ -6,6 +6,6 @@ export const onStopWatchLocation = () => {
   store.dispatch(locationSlice.actions.onStopWatchLocation());
 };
 
-export const onStartWatchingAction = (guide: Guide) => {
+export const onStartWatchingLocationAction = (guide: Guide) => {
   store.dispatch(onStartWatchingLocation(guide));
 };

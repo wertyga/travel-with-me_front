@@ -7,12 +7,12 @@ import {
   Switch,
   View,
 } from 'react-native';
+import * as Location from 'expo-location';
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { useAuth } from '@/context';
 import { useAuthGuard, useNavigation, useSubscription } from '@/hooks';
-import * as Location from 'expo-location';
 import { SCREENS } from '@/types';
 
 const ProfileScreen = () => {
@@ -115,19 +115,19 @@ const ProfileScreen = () => {
         />
       </View>
 
-      <View style={styles.item}>
-        <View style={styles.optionText}>
-          <CText>Background position permission</CText>
-          <CText small style={styles.optionSubtext}>
-            This app collects location data to keep enabled your live location
-            even when the app is closed or not in use.
-          </CText>
-        </View>
-        <Switch
-          value={state.background.isGranted}
-          onValueChange={onChangePermission('background')}
-        />
-      </View>
+      {/*<View style={styles.item}>*/}
+      {/*  <View style={styles.optionText}>*/}
+      {/*    <CText>Background position permission</CText>*/}
+      {/*    <CText small style={styles.optionSubtext}>*/}
+      {/*      This app collects location data to keep enabled your live location*/}
+      {/*      even when the app is closed or not in use.*/}
+      {/*    </CText>*/}
+      {/*  </View>*/}
+      {/*  <Switch*/}
+      {/*    value={state.background.isGranted}*/}
+      {/*    onValueChange={onChangePermission('background')}*/}
+      {/*  />*/}
+      {/*</View>*/}
 
       {!!subscription && (
         <View style={styles.item}>

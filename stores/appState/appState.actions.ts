@@ -1,8 +1,8 @@
+import * as Notifications from 'expo-notifications';
 import { baseApi, baseQuery } from '@/app/query';
 import { store } from '@/app/store/create-isomorphic-store';
 import { appStateSlice } from '@/stores/appState/appState.reducer';
 import { removeAllNotification } from '@/stores/notify/notify.utils';
-import * as Notifications from 'expo-notifications';
 import { stopWatchingBackgroundLocation, storage } from '@/utils';
 import { SCREENS } from '@/types';
 
@@ -45,7 +45,7 @@ export const updateAppStateListener = async (nextState: string) => {
 
   if (nextState === 'active') {
     await fetchEnvs();
-    await stopWatchingBackgroundLocation();
+    // await stopWatchingBackgroundLocation();
     await removeAllNotification();
 
     await Notifications.getPresentedNotificationsAsync();

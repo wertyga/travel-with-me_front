@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 import { useSelector } from '@/stores';
-import { AntDesign } from '@expo/vector-icons';
 import { calculateDistance } from '@/utils/map';
 import { Place } from '@/types';
 
@@ -51,7 +51,7 @@ export const PointMapMarkerPreview = ({
           point={point}
           onOpenGallery={onToggleCarouselShow}
           distanceToPoint={distanceToPoint as string}
-          onPressToDirection={onPressGoToPointDirections}
+          onPressGoToPointDirections={onPressGoToPointDirections}
         />
       </View>
 

@@ -9,6 +9,7 @@ import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
 import { defaultGuideImage } from '@/utils';
 import { Guide, SCREENS } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = NativeStackScreenProps<RootStackParamList, SCREENS.Guide>;
 
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
     paddingTop: 0,
-    paddingBottom: 70,
+    paddingBottom: CONSTANTS.spaces.footerHeight,
   },
   guideImage: {
     width: '100%',

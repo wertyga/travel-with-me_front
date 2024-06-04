@@ -11,7 +11,7 @@ const ENV = {
   },
 };
 
-const version = 11;
+const version = 12;
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 

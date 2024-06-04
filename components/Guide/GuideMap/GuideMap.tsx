@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import CarouselEx from 'react-native-snap-carousel';
+import { StatusBar } from 'expo-status-bar';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { Map } from '@/components/Map';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import { useNavigation } from '@/hooks';
 import { updateDomAction, useSelector } from '@/stores';
-import { StatusBar } from 'expo-status-bar';
 import { Guide, Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 import { GuideActions } from './GuideActions';
@@ -163,15 +163,6 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
           guide={guide}
           onPointChoose={onPointChoose}
         />
-        {/*{state.isBgPermissionDenied && (*/}
-        {/*  <Button*/}
-        {/*  // style={styles.actionBtn}*/}
-        {/*  // disabled={isLoadingLocation}*/}
-        {/*  // onPress={toggleGuideMute}*/}
-        {/*  >*/}
-        {/*    <Ionicons name={volumeIcon} size={18} color="white" />*/}
-        {/*  </Button>*/}
-        {/*)}*/}
       </Map>
 
       <View
@@ -184,11 +175,6 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
         ]}
       >
         <BackgroundGradient style={styles.carouselWrapper}>
-          {/*<CarouselDots*/}
-          {/*  totalCount={pointsWithChosen.length}*/}
-          {/*  currentIndex={state.pointShowingIndex}*/}
-          {/*/>*/}
-
           <CarouselEx
             layout="tinder"
             ref={c => {

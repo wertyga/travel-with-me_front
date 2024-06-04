@@ -17,11 +17,11 @@ export const GuideMapPointActions = ({
   point,
   onOpenGallery,
   distanceToPoint,
-  onPressToDirection,
+  onPressGoToPointDirections,
 }: Props) => {
   const onDirectionPress = async () => {
-    if (onPressToDirection) {
-      await onPressToDirection(point);
+    if (onPressGoToPointDirections) {
+      await onPressGoToPointDirections(point);
     }
 
     openGoogleMap(point.coords);

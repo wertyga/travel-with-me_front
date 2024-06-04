@@ -12,10 +12,10 @@ type Props = {
   onPlay?: (isPlaying: boolean) => void;
 };
 
-let commonAudio: Sound | null = null;
+// let commonAudio: Sound | null = null;
 
 export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
-  const audio = useRef<Sound | null>(null);
+  const audio = useRef<Audio.Sound | null>(null);
   const [state, setState] = useState({
     isPlaying: false,
     isLoading: false,
@@ -43,18 +43,17 @@ export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
     onPlay?.(false);
   };
 
+  const setPause = () => {
+    audio.current?.pauseAsync();
+    setState(prev => ({ ...prev, isPaused: true, isLoading: false }));
+  };
+
   async function playSound() {
     setState(prev => ({ ...prev, isLoading: true }));
 
-    if (commonAudio) {
-      await commonAudio.stopAsync();
-      commonAudio = null;
-    }
-
     if (audio.current) {
       if (state.isPlaying) {
-        audio.current?.pauseAsync();
-        setState(prev => ({ ...prev, isPaused: true, isLoading: false }));
+        setPause();
       } else {
         goPlaySound();
         setState(prev => ({ ...prev, isPaused: false, isLoading: false }));
@@ -68,8 +67,8 @@ export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
       onPlaybackStatusUpdate
     );
 
-    audio.current = sound as Sound;
-    commonAudio = sound as Sound;
+    audio.current = sound;
+    // commonAudio = sound as Sound;
 
     setState(prev => ({ ...prev, isLoading: false }));
     await goPlaySound();
@@ -78,8 +77,8 @@ export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
   const dropState = () => {
     audio.current?.unloadAsync();
     audio.current = null;
-    commonAudio?.unloadAsync();
-    commonAudio = null;
+    // commonAudio?.unloadAsync();
+    // commonAudio = null;
   };
 
   useEffect(() => {
@@ -87,6 +86,8 @@ export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
       playSound();
     } else if (state.isLoading) {
       dropState();
+    } else if (!autoplay && state.isPlaying) {
+      setPause();
     }
   }, [autoplay]);
 

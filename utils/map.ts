@@ -25,7 +25,7 @@ export const calculateDistance = (
   point1?: Path,
   point2?: Path,
   onlyNumber?: boolean
-) => {
+): number | string | undefined => {
   if (!point1 || !point2) return undefined;
 
   const kmDistance: number = getDistanceFromLatLonInKm(

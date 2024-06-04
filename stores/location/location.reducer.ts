@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LocationSubscription, PermissionStatus } from 'expo-location';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { startWatchToLiveLocation } from '@/utils';
 import { Guide, LocationStore } from '@/types';
 
