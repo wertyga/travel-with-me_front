@@ -146,6 +146,11 @@ const ProfileScreen = () => {
         </View>
       )}
 
+      <Button style={styles.item} href={SCREENS.Contact} noPaddings>
+        <CText>Support</CText>
+        <CText style={styles.edit}>Get Help</CText>
+      </Button>
+
       {!subscription && (
         <Button high href={SCREENS.Subscriptions}>
           Buy subscription
@@ -168,6 +173,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   edit: {
     fontSize: 10,

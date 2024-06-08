@@ -1,7 +1,25 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
     "baseUrl": ".",
+    "incremental": true,
     "paths": {
       "@/*": ["./*"],
       "react-nativewind": ["./app/nativewind/components"]

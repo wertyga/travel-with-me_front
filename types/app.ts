@@ -22,6 +22,7 @@ export enum SCREENS {
   Place = 'Place',
   Favorite = 'Favorite',
   WorldGuidesMap = 'WorldGuidesMap',
+  Contact = 'Contact',
 }
 
 export enum FONTS {

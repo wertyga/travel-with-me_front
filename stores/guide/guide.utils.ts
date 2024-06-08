@@ -1,7 +1,6 @@
+import { ENV } from '@/stores/appState/appState.reducer';
 import { calculateDistance, getNearestPoint } from '@/utils/map';
 import { Path, Place } from '@/types';
-
-export const MIN_CLOSE_DISTANCE = 0.06; // In km
 
 export type NearestPoint = {
   point: Place;
@@ -9,6 +8,8 @@ export type NearestPoint = {
   isVisible?: boolean;
   becameVisible?: boolean;
 };
+
+const MIN_CLOSE_DISTANCE = 0;
 
 let _nearestPoint: NearestPoint | undefined;
 
@@ -28,8 +29,10 @@ export const getTheNearestVisiblePoint = (
     true
   ) as number;
 
-  // const isNewPointVisible = distanceToNearestPoint <= MIN_CLOSE_DISTANCE; // Prod
-  const isNewPointVisible = distanceToNearestPoint >= MIN_CLOSE_DISTANCE; // Test
+  const { minCloseDistance } = ENV;
+
+  const isNewPointVisible = distanceToNearestPoint <= Number(minCloseDistance); // Prod
+  // const isNewPointVisible = distanceToNearestPoint >= MIN_CLOSE_DISTANCE; // Test
   const isNewPointStartBeVisible =
     isNewPointVisible && !prevNearestPoint?.isVisible;
   const isNewPointStartBeHidden =

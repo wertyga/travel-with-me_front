@@ -35,13 +35,8 @@ export const useSubscription = (props?: Props) => {
     skip: !user,
   });
 
-  const [
-    renewMySubscription,
-    {
-      data: { subscription: renewedSubscription } = {},
-      isLoading: renewLoading,
-    },
-  ] = useRenewMySubscriptionMutation();
+  const [renewMySubscription, { isLoading: renewLoading }] =
+    useRenewMySubscriptionMutation();
 
   useEffect(() => {
     if (!props?.withRetrySubscriptionFetching && timer.current) {

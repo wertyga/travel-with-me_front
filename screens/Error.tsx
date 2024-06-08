@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import { MainLayout } from '@/Layouts';
@@ -23,6 +23,7 @@ const Error = ({ route, navigation }: Props) => {
   const goBack = () => {
     const { routes } = navigation.getState();
     const prevScreenName = routes[routes.length - 2]?.name;
+
     if (!prevScreenName) {
       Toast.show({
         type: 'error',

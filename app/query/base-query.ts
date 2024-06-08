@@ -1,7 +1,7 @@
 import Toast from 'react-native-toast-message';
+import Constants from 'expo-constants';
 import { AxiosRequestConfig } from 'axios';
 import axios from 'axios/index';
-import Constants from 'expo-constants';
 import { storage } from '@/utils';
 
 export const baseQuery = async ({
@@ -20,7 +20,7 @@ export const baseQuery = async ({
         ...authHeader,
         ...headers,
       },
-      baseURL: Constants.expoConfig?.extra.API_BASE_URL,
+      baseURL: Constants.expoConfig?.extra?.API_BASE_URL,
       ...config,
     } as AxiosRequestConfig);
 

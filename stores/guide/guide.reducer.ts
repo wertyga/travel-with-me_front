@@ -40,7 +40,6 @@ export const guideSlice = createSlice({
         dropNearestPoint();
         return;
       }
-
       const { guide, liveCoords } = payload;
 
       state.nearestPoint = getTheNearestVisiblePoint(guide.points, liveCoords);

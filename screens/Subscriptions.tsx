@@ -1,15 +1,15 @@
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
+import Constants from 'expo-constants';
+import * as Linking from 'expo-linking';
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { SubscriptionList } from '@/components/Subscription';
 import { useAuth } from '@/context';
 import { useNavigation, useSubscription } from '@/hooks';
-import { useSelector } from '@/stores';
+import { ENV } from '@/stores/appState/appState.reducer';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
-import Constants from 'expo-constants';
-import * as Linking from 'expo-linking';
 import { SCREENS } from '@/types';
 
 const Subscriptions = () => {
@@ -23,8 +23,6 @@ const Subscriptions = () => {
     isLoading: subLoading,
   } = useSubscription({ withList: true, withRetrySubscriptionFetching: true });
   const { user } = useAuth();
-
-  const envs = useSelector(({ appStateStore }) => appStateStore.envs);
 
   const {
     initPaymentSheet,
@@ -83,7 +81,7 @@ const Subscriptions = () => {
       ? Linking.createURL('/--/')
       : Linking.createURL('');
 
-  if (!envs.STRIPE_PUBLIC_KEY) {
+  if (!ENV.stripePk) {
     return (
       <MainLayout headerTitle="Subscriptions" isLoading={isLoading}>
         <CText style={{ textAlign: 'center' }}>
@@ -96,7 +94,7 @@ const Subscriptions = () => {
   return (
     <MainLayout headerTitle="Subscription" isLoading={isLoading}>
       <StripeProvider
-        publishableKey={envs.STRIPE_PUBLIC_KEY}
+        publishableKey={ENV.stripePk}
         merchantIdentifier="com.wertyga.travel-with-me"
         urlScheme={urlSchema}
       >

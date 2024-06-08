@@ -10,6 +10,7 @@ import { useAuth } from '@/context';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import CitiesListScreen from '@/screens/CitiesList.screen';
 import CityScreen from '@/screens/City.screen';
+import ContactScreen from '@/screens/Contact.screen';
 import ErrorScreen from '@/screens/Error';
 import FavoritesScreen from '@/screens/Favorites.screen';
 import GuideScreen from '@/screens/Guide.screen';
@@ -38,6 +39,7 @@ export type RootStackParamList = {
   [SCREENS.Favorite]: undefined;
   [SCREENS.Profile]: undefined;
   [SCREENS.WorldGuidesMap]: undefined;
+  [SCREENS.Contact]: undefined;
   [SCREENS.Place]: { placeSlug: string; autoplay?: boolean };
   [SCREENS.Error]: { error: string };
 };
@@ -121,6 +123,7 @@ const Navigator = () => {
         <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
         <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
         <Stack.Screen name={SCREENS.Favorite} component={FavoritesScreen} />
+        <Stack.Screen name={SCREENS.Contact} component={ContactScreen} />
         <Stack.Screen
           name={SCREENS.RecoveryPassword}
           component={RecoveryPasswordScreen}
