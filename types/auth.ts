@@ -10,7 +10,7 @@ export enum USER_TAGS {
 export type AuthCommonRequest = {
   email: string;
   password: string;
-  username?: string;
+  username: string;
 };
 
 export type ChangeEmailRequest = {

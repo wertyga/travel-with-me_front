@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, View } from 'react-native';
 import Toast from 'react-native-toast-message';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 import { useOauthGoogleMutation } from '@/api';
 import { useAuth } from '@/context';
 import {
@@ -9,15 +11,12 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import axios from 'axios';
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
 
 const GOOGLE_URL = 'https://googleapis.com/userinfo/v2/me';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export const OauthGoogle = () => {
-  const { setUser } = useAuth();
   const [accessToken, setAccessToken] = useState('');
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
@@ -35,17 +34,6 @@ export const OauthGoogle = () => {
 
   const fetchUserInfo = async () => {
     await promptAsync();
-    // if (!accessToken) {
-    //   return Toast.show({
-    //     type: 'error',
-    //     text1: 'Access token was not been provided',
-    //   });
-    // }
-    //
-    // const userInfo = await fetchForGoogleUser({ accessToken });
-    // setUser(userInfo);
-    //
-    // console.log({ userInfo });
   };
 
   return (

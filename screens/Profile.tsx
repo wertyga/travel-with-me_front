@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   AppState,
   Dimensions,
@@ -11,23 +11,30 @@ import * as Location from 'expo-location';
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
-import { useAuth } from '@/context';
-import { useAuthGuard, useNavigation, useSubscription } from '@/hooks';
+import {
+  useAuthGuard,
+  useFocus,
+  useNavigation,
+  useSubscription,
+} from '@/hooks';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
 const ProfileScreen = () => {
   useAuthGuard();
 
   const navi = useNavigation();
-  const { logout, user } = useAuth();
+  const { user, logout, getSelf } = useStores(stores => ({
+    user: stores.userStore.user,
+    getSelf: stores.userStore.getSelf,
+    logout: stores.authStore.logout,
+  }));
+
   const { subscription } = useSubscription();
 
   const [state, setState] = useState({
     foreground: {
-      isDenied: false,
-      isGranted: false,
-    },
-    background: {
       isDenied: false,
       isGranted: false,
     },
@@ -45,21 +52,15 @@ const ProfileScreen = () => {
   }, []);
 
   const getPermissions = async () => {
-    const [{ status: foregroundStatus }, { status: backgroundStatus }] =
-      await Promise.all([
-        Location.getForegroundPermissionsAsync(),
-        Location.getBackgroundPermissionsAsync(),
-      ]);
+    const [{ status: foregroundStatus }] = await Promise.all([
+      Location.getForegroundPermissionsAsync(),
+    ]);
 
     setState(prev => ({
       ...prev,
       foreground: {
         isDenied: foregroundStatus === 'denied',
         isGranted: foregroundStatus === 'granted',
-      },
-      background: {
-        isDenied: backgroundStatus === 'denied',
-        isGranted: backgroundStatus === 'granted',
       },
     }));
   };
@@ -76,74 +77,46 @@ const ProfileScreen = () => {
 
     if (aim === 'foreground') {
       Location.requestForegroundPermissionsAsync();
-    } else {
-      Location.requestBackgroundPermissionsAsync();
     }
   };
 
-  useEffect(() => {
+  useFocus(() => {
     getPermissions();
     const subscription = AppState.addEventListener('change', stateListener);
 
     return () => {
       subscription.remove();
     };
-  }, []);
+  });
 
   if (!user) return null;
 
   return (
     <MainLayout headerTitle="Profile" style={styles.container}>
       <CText style={styles.item}>{user.username}</CText>
-      <View style={styles.item}>
+
+      <Button style={styles.item} href={SCREENS.ChangeEmail} noPaddings>
         <CText>{user.email}</CText>
-        <CText
-          style={styles.edit}
-          onPress={() => {
-            navi.navigate(SCREENS.ChangeEmail);
-          }}
-        >
-          Edit
-        </CText>
-      </View>
+        <CText style={styles.edit}>Edit</CText>
+      </Button>
 
-      <View style={styles.item}>
+      <Button
+        style={styles.item}
+        noPaddings
+        onPress={onChangePermission('foreground')}
+      >
         <CText>Foreground position permission</CText>
-        <Switch
-          value={state.foreground.isGranted}
-          onValueChange={onChangePermission('foreground')}
-        />
-      </View>
-
-      {/*<View style={styles.item}>*/}
-      {/*  <View style={styles.optionText}>*/}
-      {/*    <CText>Background position permission</CText>*/}
-      {/*    <CText small style={styles.optionSubtext}>*/}
-      {/*      This app collects location data to keep enabled your live location*/}
-      {/*      even when the app is closed or not in use.*/}
-      {/*    </CText>*/}
-      {/*  </View>*/}
-      {/*  <Switch*/}
-      {/*    value={state.background.isGranted}*/}
-      {/*    onValueChange={onChangePermission('background')}*/}
-      {/*  />*/}
-      {/*</View>*/}
+        <Switch value={state.foreground.isGranted} />
+      </Button>
 
       {!!subscription && (
-        <View style={styles.item}>
+        <Button style={styles.item} href={SCREENS.Subscriptions} noPaddings>
           <CText>Subscription</CText>
           <CText style={styles.edit}>
             {new Date(subscription.validUntil).toLocaleDateString()}
           </CText>
-          <CText
-            style={styles.edit}
-            onPress={() => {
-              navi.navigate(SCREENS.Subscriptions);
-            }}
-          >
-            Edit
-          </CText>
-        </View>
+          <CText style={styles.edit}>Edit</CText>
+        </Button>
       )}
 
       <Button style={styles.item} href={SCREENS.Contact} noPaddings>
@@ -190,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default observer(ProfileScreen);

@@ -13,7 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CarouselDots } from '@/components/Carousel';
-import { useSelector } from '@/stores';
+import { useStores } from '@/hooks';
 
 export type Props<T = any> = {
   data: T[];
@@ -44,7 +44,9 @@ export const CarouselNew = <T,>({
   const { width: windowWidth } = Dimensions.get('window');
   const currentCardWith: number = (isFullScreen ? windowWidth : cardWidth) || 1;
 
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const { layoutHeight } = useStores(stores => ({
+    layoutHeight: stores.domStore.layoutHeight,
+  }));
 
   const slideToIndex = (index: number) => {
     currentIndexShared.value = index;

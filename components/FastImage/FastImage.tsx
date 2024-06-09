@@ -1,46 +1,46 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, View } from 'react-native';
-import { cacheImage, findImageInCache } from '@/utils';
+import {
+  ActivityIndicator,
+  Image,
+  ImageProps,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { handleCacheImage } from '@/components/FastImage/FastImage.utils';
 
-export const FastImage = props => {
-  const {
-    source: { uri },
-    cacheKey,
-    style,
-  } = props;
-  // const isMounted = useRef(true);
+type Props = Omit<ImageProps, 'style' | 'source'> & {
+  source: string | number;
+  style?: ImageProps['style'] | ViewStyle;
+};
+
+export const FastImage = ({ source, style = {}, ...imageProps }: Props) => {
+  const isLocalImage = typeof source === 'number';
+
   const [imgUri, setUri] = useState('');
 
   useEffect(() => {
-    async function loadImg() {
-      const { exists, uri: cachedUri } = await findImageInCache(uri);
-      if (exists && cachedUri) {
-        setUri(cachedUri);
+    if (isLocalImage) return;
 
-        return;
-      }
-
-      const { cached, path } = await cacheImage(uri);
-
-      if (cached && path) {
-        setUri(path);
-
-        return;
-      }
-
-      setUri(uri);
-    }
-
-    loadImg();
+    handleCacheImage(source, setUri);
   }, []);
+
+  const isRenderImage = isLocalImage || !!imgUri;
 
   return (
     <>
-      {imgUri ? (
-        <Image source={{ uri: imgUri }} style={style} />
+      {isRenderImage ? (
+        <Image
+          source={isLocalImage ? source : { uri: imgUri }}
+          style={style as ImageProps['style']}
+          {...imageProps}
+        />
       ) : (
         <View
-          style={{ ...style, alignItems: 'center', justifyContent: 'center' }}
+          style={{
+            ...(style as ViewStyle),
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
           <ActivityIndicator size={33} />
         </View>

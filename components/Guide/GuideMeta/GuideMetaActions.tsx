@@ -3,6 +3,7 @@ import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { CountryPill } from '@/components/Country';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation, useSubscription } from '@/hooks';
+import { observer } from 'mobx-react';
 import { Guide, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
@@ -11,7 +12,7 @@ type Props = {
   guide: Guide;
 };
 
-export const GuideMetaActions = ({ travelTime, guide }: Props) => {
+export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
   const navi = useNavigation();
   const { subscription } = useSubscription();
 
@@ -67,3 +68,5 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 });
+
+export const GuideMetaActions = observer(GuideMetaActionsComponent);

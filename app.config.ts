@@ -3,7 +3,8 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 const ENV = {
   development: {
     GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-    API_BASE_URL: 'https://api.underhood.space',
+    API_BASE_URL:
+      'https://380a-2a02-a31a-803b-7380-b0e8-d117-6b5d-a328.ngrok-free.app',
   },
   production: {
     GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',

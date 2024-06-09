@@ -8,7 +8,8 @@ import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { Map } from '@/components/Map';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import { useNavigation } from '@/hooks';
-import { updateDomAction, useSelector } from '@/stores';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { Guide, Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 import { GuideActions } from './GuideActions';
@@ -23,14 +24,33 @@ type Props = {
 const { width: windowWidth } = Dimensions.get('window');
 const MAP_TOP = 120;
 
-export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
+export const GuideMapComponent = ({
+  guide,
+  onPressGoToPointDirections,
+}: Props) => {
   const route = useRoute();
   const navi = useNavigation();
 
+  const {
+    layoutHeight,
+    visiblePoint,
+    isGuideMuted,
+    isFollowingToGuide,
+    updateDomState,
+  } = useStores(stores => ({
+    layoutHeight: stores.domStore.layoutHeight,
+    visiblePoint: stores.guideStore.visiblePoint,
+    isGuideMuted: stores.guideStore.isGuideMuted,
+    isFollowingToGuide: stores.guideStore.isFollowingToGuide,
+    updateDomState: stores.domStore.updateDomState,
+  }));
+
   const [state, setState] = useState({
+    // @ts-ignore
     pointShowing: (route.params?.pointShowing || undefined) as
       | Place
       | undefined,
+    // @ts-ignore
     pointShowingIndex: route.params?.pointShowingIndex || 0,
     isShowCarouselImages: false,
     isAudioPlaying: false,
@@ -38,20 +58,6 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
   });
 
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
-
-  const layoutHeight = useSelector(
-    ({ domStore }) => domStore?.layout?.height || 0
-  );
-
-  const visiblePoint = useSelector(
-    ({ guideStore }) => guideStore?.visiblePoint
-  );
-  const isGuideMuted = useSelector(
-    ({ guideStore }) => guideStore?.isGuideMuted
-  );
-  const isFollowingToGuide = useSelector(
-    ({ guideStore }) => guideStore?.isFollowingToGuide
-  );
 
   const updateRouteMapState = (params: any) => {
     navi.setParams(params);
@@ -119,7 +125,7 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
       isShowCarouselImages: true,
     }));
     handleSlideToPoint(visiblePoint);
-  }, [visiblePoint, isFollowingToGuide]);
+  }, [visiblePoint?._id, isFollowingToGuide]);
 
   useEffect(() => {
     updateRouteMapState({
@@ -127,7 +133,7 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
       pointShowingIndex: state.pointShowingIndex,
     });
 
-    updateDomAction({
+    updateDomState({
       header: {
         display: state.pointShowing ? 'none' : 'flex',
       },
@@ -146,10 +152,11 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
 
   return (
     <>
-      {!!state.pointShowing && <StatusBar style="black" />}
+      {!!state.pointShowing && <StatusBar style="dark" />}
       <Map
         points={guide.points}
         chosenPoint={state.pointShowing}
+        // @ts-ignore
         onPress={onPointChoose}
         mapMarkerSize={30}
         mapStyles={[
@@ -178,11 +185,13 @@ export const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
           <CarouselEx
             layout="tinder"
             ref={c => {
+              // @ts-ignore
               carouselRef.current = c;
             }}
             data={pointsWithChosen as any}
             disableIntervalMomentum={true}
             onSnapToItem={onSlidePoint}
+            // @ts-ignore
             renderItem={({ item: point }: { item: Place; index: number }) => {
               return (
                 <PointMapMarkerPreview
@@ -223,7 +232,6 @@ const styles = StyleSheet.create({
   },
   carouselWrapper: {
     width: Dimensions.get('window').width,
-    // paddingTop: 10,
   },
   pointActions: {
     position: 'absolute',
@@ -254,3 +262,5 @@ const styles = StyleSheet.create({
     left: 10,
   },
 });
+
+export const GuideMap = observer(GuideMapComponent);

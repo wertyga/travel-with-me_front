@@ -12,3 +12,6 @@ export * from './app';
 export * from './location';
 export * from './search';
 export * from './dom';
+export * from './router';
+export * from './store';
+export * from './tech';

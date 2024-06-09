@@ -1,0 +1,76 @@
+import {makeObservable, observable, runInAction, action} from 'mobx';
+import { fetchGuide } from '@/api';
+import {withLoading} from "@/mobx/store.utils";
+import {Guide, Place, RootStoreType} from "@/types";
+import {getTheNearestVisiblePoint, NearestPoint} from "./guide.utils";
+
+export class GuideStore {
+	@observable isLoading: boolean;
+	@observable isFollowingToGuide: boolean;
+	@observable isGuideMuted: boolean;
+	@observable guide: Guide | null = null;
+	@observable nearestPoint: NearestPoint | null = null;
+	@observable visiblePoint: Place | null = null;
+	private _followingGuide: Guide | null = null;
+	
+  constructor(public rootStore: RootStoreType) {
+    makeObservable(this);
+  }
+	
+	@withLoading async getGuide(...params: Parameters<typeof fetchGuide>) {
+		try {
+			const guide = await fetchGuide(...params);
+	
+			runInAction(() => {
+				this.guide = guide;
+			})
+		} catch (e) {
+		
+		}
+	}
+	
+	@action updateGuidePointWithLiveCoords(guide: Guide) {
+		const { liveCoords } = this.rootStore.locationStore;
+		
+		if (this._followingGuide?._id !== guide._id) {
+			this._followingGuide = guide;
+		}
+		
+		if (!this.isFollowingToGuide) {
+			this.nearestPoint = null;
+			return;
+		}
+		
+		this.nearestPoint = getTheNearestVisiblePoint(guide.points, liveCoords);
+		this.isFollowingToGuide = true;
+		
+		if (this.nearestPoint.becameVisible) {
+			this.visiblePoint = this.nearestPoint.point;
+		} else if (this.nearestPoint.becameVisible === false) {
+			this.visiblePoint = null;
+		}
+	}
+	
+	@action renewFollowingGuide(guide: Guide) {
+		this.isFollowingToGuide = true;
+		this.updateGuidePointWithLiveCoords(guide);
+	}
+	
+	@action dropFollowingGuide() {
+		this.isFollowingToGuide = false;
+		this._followingGuide = null;
+		this.nearestPoint = null;
+		this.visiblePoint = null;
+	}
+	
+	@action setIsFollowingGuide(value: boolean) {
+		this.isFollowingToGuide = value
+	}
+	
+	@action toggleMuteGuideSound(value?: boolean) {
+		const actualValue =
+			typeof value !== 'undefined' ? value : !this.isGuideMuted;
+		
+		this.isGuideMuted = actualValue;
+	}
+}

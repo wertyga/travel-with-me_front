@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CText } from '@/components/CText';
-import { FastImage } from '@/components/Image';
+import { FastImage } from '@/components/FastImage';
 import { useNavigation } from '@/hooks';
 import { FONTS, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
@@ -30,7 +30,7 @@ export const GlobalSearchItem = ({
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <FastImage style={styles.image} width={50} uri={image} />
+      <FastImage style={styles.image} source={image} />
       <View style={styles.itemContent}>
         {!!title && <CText style={styles.title}>{title}</CText>}
         {!!description && (

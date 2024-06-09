@@ -7,6 +7,7 @@ import {
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { LinearGradient } from 'expo-linear-gradient';
 import { LinearGradientProps } from 'expo-linear-gradient/src/LinearGradient';
+import { FastImageBackground } from '@/components/FastImage';
 import { gradientDirections } from './ImageBackgroundWithGradient.utils';
 
 type Props = Pick<LinearGradientProps, 'locations'> & {
@@ -15,6 +16,7 @@ type Props = Pick<LinearGradientProps, 'locations'> & {
   style?: StyleProp<ImageStyle>;
   contentStyle?: StyleProp<ViewStyle>;
   gradient?: keyof typeof gradientDirections | LinearGradientProps['colors'];
+  isFastImage?: boolean;
 };
 
 export const ImageBackgroundWithGradient = ({
@@ -24,13 +26,20 @@ export const ImageBackgroundWithGradient = ({
   contentStyle,
   gradient = 'top',
   locations,
+  isFastImage,
 }: Props) => {
-  const imageSource = typeof image === 'string' ? { uri: image } : image;
   const gradientValue =
     typeof gradient === 'string' ? gradientDirections[gradient] : gradient;
 
+  const ComponentWrapper = isFastImage ? FastImageBackground : ImageBackground;
+  const source = isFastImage
+    ? image
+    : typeof image === 'string'
+      ? { uri: image }
+      : image;
+
   return (
-    <ImageBackground source={imageSource} style={[styles.container, style]}>
+    <ComponentWrapper source={source as any} style={[styles.container, style]}>
       <LinearGradient
         colors={gradientValue}
         style={[styles.gradient, contentStyle]}
@@ -38,7 +47,7 @@ export const ImageBackgroundWithGradient = ({
       >
         {children}
       </LinearGradient>
-    </ImageBackground>
+    </ComponentWrapper>
   );
 };
 

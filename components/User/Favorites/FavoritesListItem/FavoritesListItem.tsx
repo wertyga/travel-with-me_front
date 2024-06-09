@@ -1,13 +1,12 @@
-import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
-import { useSetLikeMutation } from '@/api';
+import { setLike } from '@/api';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { FastImage } from '@/components/FastImage';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
-import { FastImage } from '@/components/Image';
-import { useSlideLeft } from '@/hooks';
+import { useSlideLeft, useStores } from '@/hooks';
 import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
@@ -31,13 +30,16 @@ export const FavoritesListItem = ({
   slug,
   city,
 }: Props) => {
-  const [setLike] = useSetLikeMutation();
+  const { getFavorites } = useStores(stores => ({
+    getFavorites: stores.userStore.getFavorites,
+  }));
 
-  const onUnliked = () => {
-    setLike({
+  const onUnliked = async () => {
+    await setLike({
       modelType,
       _id,
     });
+    getFavorites();
   };
 
   const href =
@@ -72,7 +74,7 @@ export const FavoritesListItem = ({
           activeOpacity={1}
           rectangle
         >
-          <FastImage uri={image || defaultImage} style={styles.image} />
+          <FastImage source={image || defaultImage} style={styles.image} />
           <View>
             <CText numberOfLines={1} style={styles.title}>
               {title}

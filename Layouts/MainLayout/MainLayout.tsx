@@ -14,7 +14,8 @@ import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenH
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
 import { Loader } from '@/components/Loader';
-import { updateDomAction, useSelector } from '@/stores';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -38,7 +39,7 @@ type Props = {
   bgColors?: string[];
 };
 
-export const MainLayout = ({
+export const MainLayoutComponent = ({
   children,
   style,
   containerStyle,
@@ -57,16 +58,18 @@ export const MainLayout = ({
   withHeaderShadow,
   bgColors,
 }: Props) => {
-  const layoutHeight = useSelector(
-    state => state.domStore?.layout?.height || 0
-  );
+  const { layoutHeight, updateDomState } = useStores(stores => ({
+    layoutHeight: stores.domStore.layoutHeight,
+    updateDomState: stores.domStore.updateDomState,
+  }));
+
   const imageSource = typeof bgImage === 'string' ? { uri: bgImage } : bgImage;
 
   return (
     <View
       style={[styles.main, containerStyle]}
       onLayout={e => {
-        updateDomAction({
+        updateDomState({
           layout: { height: e.nativeEvent.layout.height },
         });
       }}
@@ -74,54 +77,56 @@ export const MainLayout = ({
       {!bgImage && (
         <BackgroundGradient style={styles.bgGradient} colors={bgColors} />
       )}
-      <FetchErrorWrapper fetchError={fetchError} reFetchMethod={reFetchMethod}>
-        <>
-          {isLoading && <Loader textColor={loaderTextColor} />}
+      {/*<FetchErrorWrapper fetchError={fetchError} reFetchMethod={reFetchMethod}>*/}
+      <>
+        {isLoading && <Loader textColor={loaderTextColor} />}
 
-          {!!headerTitle && (
+        {!!headerTitle && (
+          <LinearGradient
+            colors={
+              withHeaderShadow
+                ? ['rgba(0, 0, 0, 0.6)', 'transparent']
+                : ['transparent', 'transparent']
+            }
+            style={styles.header}
+          >
+            <CityScreenHeader
+              title={headerTitle}
+              isDark={isHeaderDark}
+              menu={menu}
+              noBackBtn={noBackBtn}
+            />
+          </LinearGradient>
+        )}
+
+        {!!bgContent && <View style={styles.bgImage}>{bgContent}</View>}
+
+        {bgImage && (
+          <TouchableOpacity
+            onPress={onBgPress}
+            style={[StyleSheet.absoluteFillObject, { height: layoutHeight }]}
+            activeOpacity={1}
+          >
+            <Image source={imageSource} style={styles.bgImage} />
             <LinearGradient
-              colors={
-                withHeaderShadow
-                  ? ['rgba(0, 0, 0, 0.6)', 'transparent']
-                  : ['transparent', 'transparent']
-              }
-              style={styles.header}
-            >
-              <CityScreenHeader
-                title={headerTitle}
-                isDark={isHeaderDark}
-                menu={menu}
-                noBackBtn={noBackBtn}
-              />
-            </LinearGradient>
-          )}
+              colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
+              style={[StyleSheet.absoluteFillObject]}
+            />
+          </TouchableOpacity>
+        )}
 
-          {!!bgContent && <View style={styles.bgImage}>{bgContent}</View>}
+        <View style={[styles.content, !noFooter && styles.withFooter, style]}>
+          {children}
+        </View>
 
-          {bgImage && (
-            <TouchableOpacity
-              onPress={onBgPress}
-              style={[StyleSheet.absoluteFillObject, { height: layoutHeight }]}
-              activeOpacity={1}
-            >
-              <Image source={imageSource} style={styles.bgImage} />
-              <LinearGradient
-                colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
-                style={[StyleSheet.absoluteFillObject]}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={[styles.content, !noFooter && styles.withFooter, style]}>
-            {children}
-          </View>
-
-          {!noFooter && <FooterMenu />}
-        </>
-      </FetchErrorWrapper>
+        {!noFooter && <FooterMenu />}
+      </>
+      {/*</FetchErrorWrapper>*/}
     </View>
   );
 };
+
+export const MainLayout = observer(MainLayoutComponent);
 
 const styles = StyleSheet.create({
   main: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
 import Button from '@/components/Button';
 import { Input } from '@/components/Input';
@@ -19,25 +19,25 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
     setError,
     reset,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(getRecoveryPasswordSchema(codeSent)),
   });
+  const email = watch('email');
 
-  const goSubmit = (refetch?: boolean) => (data: any) => {
-    if (codeSent && !data.code && !refetch) {
-      setError('code', { message: 'This field is required' });
-      return;
-    }
+  const goSubmit = (refetch?: boolean) => {
     if (refetch) {
       reset({
         code: '',
         password: '',
         confirmPassword: '',
-        email: data.email,
+        email,
       });
+
+      return onSubmit({ email, refetch });
     }
 
-    return onSubmit({ ...data, refetch });
+    return handleSubmit(onSubmit)();
   };
 
   return (
@@ -117,13 +117,13 @@ export const RecoveryPasswordForm = ({ onSubmit, codeSent }: Props) => {
         </>
       )}
 
-      <SubmitBtn onPress={handleSubmit(goSubmit())}>
+      <SubmitBtn onPress={() => goSubmit()}>
         {codeSent ? 'Change password' : 'Send request'}
       </SubmitBtn>
 
       {codeSent && (
         <Button
-          onPress={handleSubmit(goSubmit(true))}
+          onPress={() => goSubmit(true)}
           style={styles.sendAgain}
           right
           textable

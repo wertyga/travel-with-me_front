@@ -1,24 +1,13 @@
-import { useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import { MainLayout } from '@/Layouts';
-import { RootStackParamList } from '@/app/Navigator';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { useNavigation } from '@/hooks';
 import { SCREENS } from '@/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Error'>;
-
-const Error = ({ route, navigation }: Props) => {
+const Error = ({ route, navigation }) => {
   const navi = useNavigation();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
 
   const goBack = () => {
     const { routes } = navigation.getState();
@@ -41,10 +30,10 @@ const Error = ({ route, navigation }: Props) => {
       <View style={styles.scrollView}>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <CText>Oops... Something went wrong</CText>
-          <CText>{route.params.error}</CText>
+          <CText>{route.params?.error}</CText>
         </View>
 
-        <Button onPress={goBack} fluid>
+        <Button onPress={goBack} fluid high>
           Go Back
         </Button>
       </View>

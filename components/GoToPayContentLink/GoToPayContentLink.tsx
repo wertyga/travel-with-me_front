@@ -1,26 +1,25 @@
 import { useRoute } from '@react-navigation/native';
 import Button, { CustomButtonProps } from '@/components/Button';
-import { useAuth } from '@/context';
-import { useNavigation } from '@/hooks';
-import { setBackScreenData } from '@/stores';
+import { useNavigation, useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
 type Props = Omit<CustomButtonProps, 'onPress' | 'href'> & {};
 
-export const GoToPayContentLink = ({
+export const GoToPayContentLinkComponent = ({
   children,
   hrefParams,
-  href,
   ...btnProps
 }: Props) => {
   const navi = useNavigation();
   const router = useRoute();
-  const { user } = useAuth();
+
+  const { user } = useStores(stores => ({
+    user: stores.userStore.user,
+  }));
 
   const handleNavigate = () => {
-    const linkParams = { ...(hrefParams || {}), ...(router.params || {}) };
     const screen = user ? SCREENS.Subscriptions : SCREENS.Login;
-    setBackScreenData(router.name as SCREENS, linkParams);
 
     navi.navigate(screen);
   };
@@ -31,3 +30,5 @@ export const GoToPayContentLink = ({
     </Button>
   );
 };
+
+export const GoToPayContentLink = observer(GoToPayContentLinkComponent);

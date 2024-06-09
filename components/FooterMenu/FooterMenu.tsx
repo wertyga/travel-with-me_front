@@ -9,13 +9,17 @@ import { CText } from '@/components/CText';
 import { FOOTER_MENU } from '@/components/FooterMenu/FooterMenu.utils';
 import { Icon, IconNames } from '@/components/Icon';
 import { useNavigation } from '@/hooks';
-import { useSelector } from '@/stores';
+import { useStores } from '@/hooks';
 import { SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
 export const FooterMenu = () => {
   const navi = useNavigation();
-  const footerStyles = useSelector(({ domStore }) => domStore?.footer);
+
+  const { footer } = useStores(stores => ({
+    footer: stores.domStore.footer,
+  }));
+
   const translateY = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -24,8 +28,8 @@ export const FooterMenu = () => {
   });
 
   useEffect(() => {
-    translateY.value = withTiming(footerStyles?.hidden ? 100 : 0);
-  }, [footerStyles?.hidden]);
+    translateY.value = withTiming(footer.hidden ? 100 : 0);
+  }, [footer.hidden]);
 
   const redirectTo = (screen: SCREENS) => () => {
     navi.navigate(screen);

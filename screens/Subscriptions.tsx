@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import Constants from 'expo-constants';
@@ -8,8 +9,9 @@ import { CText } from '@/components/CText';
 import { SubscriptionList } from '@/components/Subscription';
 import { useAuth } from '@/context';
 import { useNavigation, useSubscription } from '@/hooks';
-import { ENV } from '@/stores/appState/appState.reducer';
+import { RouterStore } from '@/mobx/stores';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
+import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
 const Subscriptions = () => {
@@ -21,8 +23,8 @@ const Subscriptions = () => {
     cancelSubscription,
     renewMySubscription,
     isLoading: subLoading,
+    user,
   } = useSubscription({ withList: true, withRetrySubscriptionFetching: true });
-  const { user } = useAuth();
 
   const {
     initPaymentSheet,
@@ -31,12 +33,10 @@ const Subscriptions = () => {
   } = usePaymentSheet();
 
   const initializePaymentSheet = async (subscriptionId: string) => {
-    const { data, error: fetchError } = await createSubscription({
+    const { customer, ephemeralKey, clientSecret } = await createSubscription({
       subscription: subscriptionId,
     });
-    if (fetchError) throw fetchError;
 
-    const { customer, ephemeralKey, clientSecret } = data;
     if (!clientSecret) {
       // If no clientSecret - it mean that payment has been takes from the user's stripe available balance
       return;
@@ -73,6 +73,7 @@ const Subscriptions = () => {
     }
   };
 
+  const { ENV } = RouterStore;
   const isLoading = paymentLoading || subLoading;
   const isSubscriptionCanceled = !!subscription && subscription.isCanceled;
   const isShowCancelAction = !!subscription && !subscription.isCanceled;
@@ -137,4 +138,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Subscriptions;
+export default observer(Subscriptions);

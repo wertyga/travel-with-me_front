@@ -1,24 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { useLazyGlobalSearchQuery } from '@/api';
 import { GlobalSearchItem } from '@/components/GlobalSearch/GlobalSearchItem';
 import Search from '@/components/Search';
-import { City, Guide, Place, SCREENS } from '@/types';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
+import { SCREENS } from '@/types';
 import CityPlaceholder from '@/assets/images/city_placeholder.png';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
 
-export const GlobalSearch = () => {
-  const [state, setState] = useState<{
-    cities: City[];
-    guides: Guide[];
-    places: Place[];
-  }>({} as any);
+export const GlobalSearchComponent = () => {
   const [search, setSearch] = useState('');
-  const [fetchForSearch, { isLoading }] = useLazyGlobalSearchQuery();
+  const { isLoading, global, dropStore, getGlobalSearch } = useStores(
+    stores => ({
+      global: stores.searchStore.global,
+      isLoading: stores.searchStore.isLoading,
+      dropStore: stores.searchStore.dropStore,
+      getGlobalSearch: stores.searchStore.getGlobalSearch,
+    })
+  );
 
   const onClose = () => {
-    setState({} as any);
+    dropStore();
     setSearch('');
   };
 
@@ -27,11 +30,10 @@ export const GlobalSearch = () => {
       onClose();
       return;
     }
-    const { data } = await fetchForSearch({ search });
-    setState(data || ({} as any));
+    await getGlobalSearch({ search });
   };
 
-  const { cities = [], guides = [], places = [] } = state;
+  const { cities = [], guides = [], places = [] } = global;
   const isRenderList = !!cities.length || !!guides.length || !!places.length;
 
   return (
@@ -144,3 +146,5 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
 });
+
+export const GlobalSearch = observer(GlobalSearchComponent);

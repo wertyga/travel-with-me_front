@@ -12,13 +12,14 @@ import MapView, {
   Region,
 } from 'react-native-maps';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { Ionicons } from '@expo/vector-icons';
 import Button from '@/components/Button';
 import { customMapStyles } from '@/components/Map/Map.utils';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
-import { useSelector } from '@/stores';
-import { Ionicons } from '@expo/vector-icons';
-import { getMyLocation } from '@/utils';
+import { useStores } from '@/hooks';
+import { getMyLocation } from '@/mobx/stores/location/location.utils';
+import { observer } from 'mobx-react';
 import { Path, Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
@@ -32,126 +33,125 @@ type Props = MapViewProps & {
   mapStyles?: StyleProp<ViewStyle>;
 };
 
-export const Map = React.memo(
-  ({
-    points,
-    onPress,
-    mapMarkerSize,
-    chosenPoint,
-    chosenRegion,
-    children,
-    mapStyles,
-    ...mapViewProps
-  }: Props) => {
-    const liveCoords = useSelector(
-      ({ locationStore }) => locationStore?.liveCoords
-    );
-    const mapRef = useRef();
-    const delta = useRef({
-      latitudeDelta: 0.2,
-      longitudeDelta: 0.2,
-      latitude: 0,
-      longitude: 0,
+export const MapComponent = ({
+  points,
+  onPress,
+  mapMarkerSize,
+  chosenPoint,
+  chosenRegion,
+  children,
+  mapStyles,
+  ...mapViewProps
+}: Props) => {
+  const { liveCoords } = useStores(stores => ({
+    liveCoords: stores.locationStore.liveCoords,
+  }));
+
+  const mapRef = useRef();
+  const delta = useRef({
+    latitudeDelta: 0.2,
+    longitudeDelta: 0.2,
+    latitude: 0,
+    longitude: 0,
+  });
+  const [currentRegion, setCurrentRegion] = useState<Region>();
+
+  const handlePointPress = useCallback(
+    (point: Place) => () => {
+      onPress(point);
+    },
+    []
+  );
+
+  const onRegionChange = useCallback(
+    ({ latitudeDelta, longitudeDelta, latitude, longitude }) => {
+      delta.current = { latitudeDelta, longitudeDelta, latitude, longitude };
+    },
+    []
+  );
+
+  const updateCurrentRegion = ({ longitude, latitude }) => {
+    setCurrentRegion({
+      latitudeDelta: delta.current.latitudeDelta,
+      longitudeDelta: delta.current.longitudeDelta,
+      longitude,
+      latitude,
     });
-    const [currentRegion, setCurrentRegion] = useState<Region>();
+  };
 
-    const handlePointPress = useCallback(
-      (point: Place) => () => {
-        onPress(point);
-      },
-      []
-    );
+  const onGetMyLocationClick = async () => {
+    const { longitude, latitude } = await getMyLocation();
 
-    const onRegionChange = useCallback(
-      ({ latitudeDelta, longitudeDelta, latitude, longitude }) => {
-        delta.current = { latitudeDelta, longitudeDelta, latitude, longitude };
-      },
-      []
-    );
+    updateCurrentRegion({ longitude, latitude });
+  };
 
-    const updateCurrentRegion = ({ longitude, latitude }) => {
-      setCurrentRegion({
-        latitudeDelta: delta.current.latitudeDelta,
-        longitudeDelta: delta.current.longitudeDelta,
-        longitude,
-        latitude,
-      });
+  useEffect(() => {
+    if (!chosenPoint) return;
+
+    updateCurrentRegion({
+      longitude: chosenPoint.coords.lng,
+      latitude: chosenPoint.coords.lat,
+    });
+  }, [chosenPoint]);
+
+  const { formattedPoints } = useMemo(() => {
+    return {
+      formattedPoints: points.map(point => ({
+        ...point,
+        isChosen: point._id === chosenPoint?._id,
+      })),
     };
+  }, [points, chosenPoint]);
 
-    const onGetMyLocationClick = async () => {
-      const { longitude, latitude } = await getMyLocation();
+  return (
+    <View style={[styles.container, mapStyles]}>
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        ref={marker => {
+          // @ts-ignore
+          mapRef.current = marker;
+        }}
+        customMapStyle={customMapStyles}
+        style={styles.map}
+        zoomEnabled
+        zoomTapEnabled
+        region={currentRegion}
+        onRegionChange={onRegionChange}
+        toolbarEnabled={false}
+        initialRegion={{
+          latitude: points[0].coords.lat,
+          longitude: points[0].coords.lng,
+          latitudeDelta: delta.current.latitudeDelta,
+          longitudeDelta: delta.current.longitudeDelta,
+        }}
+        {...mapViewProps}
+      >
+        {!!liveCoords && <MyLocationMarker liveCoords={liveCoords} />}
 
-      updateCurrentRegion({ longitude, latitude });
-    };
-
-    useEffect(() => {
-      if (!chosenPoint) return;
-
-      updateCurrentRegion({
-        longitude: chosenPoint.coords.lng,
-        latitude: chosenPoint.coords.lat,
-      });
-    }, [chosenPoint]);
-
-    const { formattedPoints } = useMemo(() => {
-      return {
-        formattedPoints: points.map(point => ({
-          ...point,
-          isChosen: point._id === chosenPoint?._id,
-        })),
-      };
-    }, [points, chosenPoint]);
-
-    return (
-      <View style={[styles.container, mapStyles]}>
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          ref={marker => {
-            mapRef.current = marker;
-          }}
-          customMapStyle={customMapStyles}
-          style={styles.map}
-          zoomEnabled
-          zoomTapEnabled
-          enableZoomControl
-          region={currentRegion}
-          onRegionChange={onRegionChange}
-          toolbarEnabled={false}
-          initialRegion={{
-            latitude: points[0].coords.lat,
-            longitude: points[0].coords.lng,
-            latitudeDelta: delta.current.latitudeDelta,
-            longitudeDelta: delta.current.longitudeDelta,
-          }}
-          {...mapViewProps}
-        >
-          {!!liveCoords && <MyLocationMarker liveCoords={liveCoords} />}
-
-          {formattedPoints.map((point, index) => {
-            const { coords, title, description, images, isChosen } = point;
-            return (
-              <MapMarker
-                key={title}
-                onPress={handlePointPress(point)}
-                markerSize={mapMarkerSize}
-                isChosenExists={!!chosenPoint}
-                {...{ coords, title, description, image: images[0], isChosen }}
-              />
-            );
-          })}
-        </MapView>
-        <Button
-          style={styles.showMyLocationBtn}
-          onPress={onGetMyLocationClick}
-          noPaddings
-        >
-          <Ionicons name="man-sharp" size={18} color="white" />
-        </Button>
-        {children}
-      </View>
-    );
-  }
-);
+        {formattedPoints.map((point, index) => {
+          const { coords, title, description, images, isChosen } = point;
+          return (
+            <MapMarker
+              key={title}
+              onPress={handlePointPress(point)}
+              markerSize={mapMarkerSize}
+              isChosenExists={!!chosenPoint}
+              {...{ coords, title, description, image: images[0], isChosen }}
+            />
+          );
+        })}
+      </MapView>
+      <Button
+        style={styles.showMyLocationBtn}
+        onPress={onGetMyLocationClick}
+        noPaddings
+      >
+        <Ionicons name="man-sharp" size={18} color="white" />
+      </Button>
+      {children}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -171,3 +171,5 @@ const styles = StyleSheet.create({
     backgroundColor: CONSTANTS.colors.bg1,
   },
 });
+
+export const Map = observer(MapComponent);

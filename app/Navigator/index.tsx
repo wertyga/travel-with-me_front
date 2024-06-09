@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { AppState } from 'react-native';
+import React from 'react';
 import {
   NavigationContainer,
   NavigationContainerRefWithCurrent,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useAuth } from '@/context';
+import { useStores } from '@/hooks';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import CitiesListScreen from '@/screens/CitiesList.screen';
 import CityScreen from '@/screens/City.screen';
@@ -20,11 +19,8 @@ import PlaceScreen from '@/screens/Place.screen';
 import ProfileScreen from '@/screens/Profile';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import SubscriptionsScreen from '@/screens/Subscriptions';
-import TestScreen from '@/screens/Test.screen';
 import TransitionScreen from '@/screens/TransitionScreen';
-import WorldGuidesMap from '@/screens/WorldGuidesMap';
-import { updateCurrentRoute } from '@/stores';
-import { storage } from '@/utils';
+import { observer } from 'mobx-react';
 import { City, Guide, SCREENS } from '@/types';
 
 export type RootStackParamList = {
@@ -51,52 +47,26 @@ export let navigation: NavigationContainerRefWithCurrent<any> | undefined;
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
 
-  const { isLoading } = useAuth();
-
-  const [initialHistory, setInitialHistory] = useState(undefined);
-  const [isAppSet, setIsAppSet] = useState(true);
-
-  const addRouteListener = () => {
-    navigationRef?.addListener('state', ({ data: { state } }) => {
-      const { name, params } = state.routes[state.routes.length - 1];
-      updateCurrentRoute({ [name]: params } as any);
-
-      storage.set('routeHistory', state);
-    });
-  };
+  const { onRouterStoreReady, initialHistory, isAppSet, isInitialLoading } =
+    useStores(stores => ({
+      onRouterStoreReady: stores.routerStore.onReady,
+      initialHistory: stores.routerStore.initialHistory,
+      isAppSet: stores.routerStore.isAppSet,
+      isInitialLoading: stores.authStore.isInitialLoading,
+    }));
 
   const onReady = async () => {
     navigation = navigationRef;
-    addRouteListener();
+    onRouterStoreReady(navigationRef);
   };
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener(
-      'change',
-      async nextState => {
-        if (nextState === 'active') {
-          const history = await storage.get('routeHistory');
-          setInitialHistory(history);
-
-          setTimeout(() => {
-            setIsAppSet(true);
-          });
-        }
-
-        if (nextState === 'background') {
-          setIsAppSet(false);
-        }
-      }
-    );
-  }, []);
-
-  if (isLoading || !isAppSet) {
+  if (isInitialLoading || !isAppSet) {
     return <TransitionScreen />;
   }
 
   return (
     <NavigationContainer<RootStackParamList>
-      ref={navigationRef}
+      ref={navigationRef as any}
       onReady={onReady}
       initialState={initialHistory}
     >
@@ -105,17 +75,12 @@ const Navigator = () => {
           headerShown: false,
         }}
       >
-        {/*<Stack.Screen name={SCREENS.CitiesList} component={TestScreen} />*/}
         <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
         <Stack.Screen name={SCREENS.City} component={CityScreen} />
         <Stack.Screen name={SCREENS.Profile} component={ProfileScreen} />
         <Stack.Screen name={SCREENS.Place} component={PlaceScreen} />
         <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
         <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
-        <Stack.Screen
-          name={SCREENS.WorldGuidesMap}
-          component={WorldGuidesMap}
-        />
         <Stack.Screen
           name={SCREENS.Subscriptions}
           component={SubscriptionsScreen}
@@ -137,4 +102,4 @@ const Navigator = () => {
   );
 };
 
-export default Navigator;
+export default observer(Navigator);

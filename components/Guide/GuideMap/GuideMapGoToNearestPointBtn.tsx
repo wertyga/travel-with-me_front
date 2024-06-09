@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import Button from '@/components/Button';
-import { useSelector } from '@/stores';
 import { FontAwesome6 } from '@expo/vector-icons';
+import Button from '@/components/Button';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { getNearestPoint } from '@/utils/map';
 import { Guide, Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
@@ -12,13 +13,13 @@ type Props = {
   onPointChoose: (point: Place, force?: boolean) => void;
 };
 
-export const GuideMapGoToNearestPointBtn = ({
+export const GuideMapGoToNearestPointBtnComponent = ({
   guide,
   onPointChoose,
 }: Props) => {
-  const liveCoords = useSelector(
-    ({ locationStore }) => locationStore?.liveCoords
-  );
+  const { liveCoords } = useStores(stores => ({
+    liveCoords: stores.locationStore.liveCoords,
+  }));
 
   const chooseNearestPoint = () => {
     if (!liveCoords) return;
@@ -56,3 +57,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
 });
+
+export const GuideMapGoToNearestPointBtn = observer(
+  GuideMapGoToNearestPointBtnComponent
+);

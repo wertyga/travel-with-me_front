@@ -6,14 +6,15 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { AntDesign } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { CarouselDots } from '@/components/Carousel';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
-import { useSelector } from '@/stores';
-import { AntDesign } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { FONTS, Place } from '@/types';
 
 type Props = {
@@ -24,8 +25,11 @@ type Props = {
 const TRANSLATION_Y_OFFSET = 150;
 
 const { width: windowWidth } = Dimensions.get('window');
-export const PointImagesCarousel = ({ point, onClose }: Props) => {
-  const layoutHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
+  const { layoutHeight } = useStores(stores => ({
+    layoutHeight: stores.domStore.layoutHeight,
+  }));
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeTopValue = useSharedValue({
     translateX: 0,
@@ -240,3 +244,5 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
   },
 });
+
+export const PointImagesCarousel = observer(PointImagesCarouselComponent);
