@@ -1,26 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
-import { useGetCitiesLightListQuery, useGetCityQuery } from '@/api';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
 import { useNavigation } from '@/hooks';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { City } from '@/types';
 
-const CityScreen = ({ route: { params } }: any) => {
+const CityScreen = () => {
   const navi = useNavigation();
   const router = useRoute();
 
+  const { getCityLightList, getCity, cityLightList, city, isLoading } =
+    useStores(stores => ({
+      getCityLightList: stores.citiesListStore.getCityLightList,
+      cityLightList: stores.citiesListStore.cityLightList,
+      getCity: stores.cityStore.getCity,
+      city: stores.cityStore.city,
+      isLoading: stores.cityStore.isLoading,
+    }));
+
   const currentCity = (router.params as any)?.city;
-  const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
-  const {
-    data: { city } = {},
-    isFetching: cityLoading,
-    error: getCityError,
-    refetch: refetchCity,
-  } = useGetCityQuery({ slug: currentCity?.slug });
 
   const onChangeCity = async ({
     index,
@@ -29,12 +32,24 @@ const CityScreen = ({ route: { params } }: any) => {
     item: City;
     index: number;
   }) => {
-    if (!cities[index]) return;
+    if (!cityLightList[index]) return;
 
     navi.setParams({ cityTab: null, city: item } as any);
   };
 
-  if (!city || !cities.length) {
+  useEffect(() => {
+    if (cityLightList.length) return;
+
+    getCityLightList();
+  }, []);
+
+  useEffect(() => {
+    if (!cityLightList.length) return;
+
+    getCity({ slug: currentCity?.slug });
+  }, [router.params?.city, cityLightList.length]);
+
+  if (!city || !cityLightList.length) {
     return (
       <SafeLoader
         image={currentCity?.image}
@@ -44,29 +59,27 @@ const CityScreen = ({ route: { params } }: any) => {
     );
   }
 
-  const initialCityIndex = cities.findIndex(
-    ({ _id }) => _id === params?.city._id
+  const initialCityIndex = cityLightList.findIndex(
+    ({ _id }) => _id === router.params?.city._id
   );
 
   return (
     <MainLayout
-      style={[styles.container, cityLoading && { paddingBottom: 0 }]}
+      style={[styles.container, isLoading && { paddingBottom: 0 }]}
       headerTitle={currentCity?.title}
-      isLoading={cityLoading}
+      isLoading={isLoading}
       loaderTextColor="white"
-      fetchError={getCityError}
-      reFetchMethod={refetchCity}
       withHeaderShadow
     >
       <ScreenContentWrapper<City>
-        data={cities}
+        data={cityLightList}
         defaultIndex={initialCityIndex}
         onChange={onChangeCity}
         imageKey="image"
         noDots
         isFullScreen
       >
-        {!cityLoading && <CityScreenMeta city={city} />}
+        {!isLoading && <CityScreenMeta city={city} />}
       </ScreenContentWrapper>
     </MainLayout>
   );
@@ -79,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CityScreen;
+export default observer(CityScreen);

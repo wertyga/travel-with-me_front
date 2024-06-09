@@ -1,7 +1,7 @@
 import { ButtonStylesProp, CustomButtonProps } from '@/components/Button/index';
 import { getTruthlyValues } from '@/utils';
 
-const getButtonStyles = (styles: ButtonStylesProp) => {
+const getButtonStyles = (styles: ButtonStylesProp = {}) => {
   const {
     fontSize,
     color,

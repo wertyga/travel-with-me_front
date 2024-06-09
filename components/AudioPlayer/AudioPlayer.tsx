@@ -12,8 +12,6 @@ type Props = {
   onPlay?: (isPlaying: boolean) => void;
 };
 
-// let commonAudio: Sound | null = null;
-
 export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
   const audio = useRef<Audio.Sound | null>(null);
   const [state, setState] = useState({
@@ -68,7 +66,6 @@ export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
     );
 
     audio.current = sound;
-    // commonAudio = sound as Sound;
 
     setState(prev => ({ ...prev, isLoading: false }));
     await goPlaySound();
@@ -77,8 +74,6 @@ export const AudioPlayer = ({ audioUrl, autoplay, onPlay }: Props) => {
   const dropState = () => {
     audio.current?.unloadAsync();
     audio.current = null;
-    // commonAudio?.unloadAsync();
-    // commonAudio = null;
   };
 
   useEffect(() => {

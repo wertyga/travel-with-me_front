@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import { AppState } from 'react-native';
-import { Provider } from 'react-redux';
 import {
   CrimsonText_400Regular as Crimson,
   CrimsonText_700Bold as CrimsonBold,
@@ -14,12 +12,11 @@ import {
 } from '@expo-google-fonts/open-sans';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { store } from '@/app/store/create-isomorphic-store';
 import { Toast } from '@/components/Toast';
-import { updateAppStateListener } from '@/stores';
+import { StoreProvider } from '@/mobx/StoreProvider';
+import * as stores from '@/mobx/stores';
 import { NativeWindStyleSheet } from 'nativewind';
 import Navigator from './app/Navigator';
-import { AuthProvider, LayoutProvider } from './context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -43,24 +40,16 @@ function App() {
     }
   }, [fontsLoaded, fontError]);
 
-  useEffect(() => {
-    AppState.addEventListener('change', updateAppStateListener);
-  }, []);
-
   if (!fontsLoaded && !fontError) {
     return null;
   }
 
   return (
-    <Provider store={store}>
+    <StoreProvider store={stores}>
       <StatusBar style="light" />
-      <AuthProvider>
-        <LayoutProvider>
-          <Navigator />
-        </LayoutProvider>
-      </AuthProvider>
+      <Navigator />
       <Toast />
-    </Provider>
+    </StoreProvider>
   );
 }
 

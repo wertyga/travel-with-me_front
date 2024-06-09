@@ -1,39 +1,30 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainLayout } from '@/Layouts';
-import {
-  useRecoveryPasswordInitMutation,
-  useRecoveryPasswordMutation,
-} from '@/api';
-import { RootStackParamList } from '@/app/Navigator';
 import { RecoveryPasswordForm } from '@/components/Auth';
 import Button from '@/components/Button';
-import { useAuth } from '@/context';
+import { useNavigation, useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'RecoveryPassword'>;
+const RecoveryPassword = () => {
+  const navi = useNavigation();
 
-const RecoveryPassword = ({ navigation }: Props) => {
-  const { logout, setBackScreen } = useAuth();
+  const { logout, recoveryPasswordInit, recoveryPassword, isLoading } =
+    useStores(stores => ({
+      logout: stores.authStore.logout,
+      recoveryPasswordInit: stores.authStore.recoveryPasswordInit,
+      recoveryPassword: stores.authStore.recoveryPassword,
+      isLoading: stores.authStore.isLoading,
+    }));
+
   const [state, setState] = useState({
     codeSent: false,
   });
 
-  const [changeInit, { isLoading: initLoading }] =
-    useRecoveryPasswordInitMutation();
-  const [changePassword, { isLoading: changeLoading, error }] =
-    useRecoveryPasswordMutation();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
-
   const onRecoveryInit = async ({ email }) => {
-    const { data } = await changeInit({ email });
-    if (data?.success) {
+    const { success } = await recoveryPasswordInit({ email });
+    if (success) {
       setState(prev => ({ ...prev, codeSent: true }));
     }
   };
@@ -47,15 +38,29 @@ const RecoveryPassword = ({ navigation }: Props) => {
     code: string;
     password: string;
   }) => {
-    const { data } = await changePassword({ email, token: code, password });
-    if (data?.success) {
+    const { success } = await recoveryPassword({
+      email,
+      token: code,
+      password,
+    });
+
+    if (success) {
       setState(prev => ({ ...prev, codeSent: false }));
-      setBackScreen(SCREENS.Login);
-      logout();
+      await logout();
+
+      navi.replace(SCREENS.Login);
     }
   };
 
-  const onSubmit = ({ refetch, ...data }) => {
+  const onSubmit = ({
+    refetch,
+    ...data
+  }: {
+    refetch: boolean;
+    email: string;
+    code: string;
+    password: string;
+  }) => {
     if (refetch) {
       onRecoveryInit(data);
       return;
@@ -67,8 +72,6 @@ const RecoveryPassword = ({ navigation }: Props) => {
 
     onRecoveryInit(data);
   };
-
-  const isLoading = initLoading || changeLoading;
 
   return (
     <MainLayout headerTitle="Recovery Password" isLoading={isLoading}>
@@ -98,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecoveryPassword;
+export default observer(RecoveryPassword);

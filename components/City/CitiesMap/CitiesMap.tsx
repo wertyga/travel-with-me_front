@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { useGetCitiesLightListQuery } from '@/api';
 import { CText } from '@/components/CText';
 import {
   customMapStyles,
@@ -9,7 +8,8 @@ import {
 } from '@/components/Map/Map.utils';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { useNavigation } from '@/hooks';
-import { useSelector } from '@/stores';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { City, FONTS, SCREENS } from '@/types';
 
 const EUROPE_REGION = {
@@ -19,40 +19,50 @@ const EUROPE_REGION = {
   longitudeDelta: 61.60953674465418,
 };
 
-export const CitiesMap = () => {
+export const CitiesMapComponent = () => {
   const navi = useNavigation();
-  const windowHeight = useSelector(({ domStore }) => domStore?.layout?.height);
+  const { layoutHeight, getCityLightList, cityLightList } = useStores(
+    stores => ({
+      layoutHeight: stores.domStore.layoutHeight,
+      getCityLightList: stores.citiesListStore.getCityLightList,
+      cityLightList: stores.citiesListStore.cityLightList,
+    })
+  );
 
-  const { data: { cities = [] } = {} } = useGetCitiesLightListQuery();
+  useEffect(() => {
+    if (!cityLightList.length) {
+      getCityLightList();
+    }
+  }, []);
 
   const navigateToCity = (city: City) => () => {
     navi.navigate(SCREENS.City, { city });
   };
 
-  const middlePoint = getMiddleCoordinates(cities.map(({ coords }) => coords));
+  const middlePoint = getMiddleCoordinates(
+    cityLightList.map(({ coords }) => coords)
+  );
 
   if (!middlePoint) {
     return null;
   }
 
   return (
-    <View style={{ ...styles.map, height: windowHeight - 230 }}>
+    <View style={{ ...styles.map, height: layoutHeight - 230 }}>
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.mapSelf}
         region={EUROPE_REGION}
         zoomEnabled
         zoomTapEnabled
-        enableZoomControl
         customMapStyle={customMapStyles}
       >
-        {cities.map(city => {
+        {cityLightList.map(city => {
           return (
             <MapMarker
               key={city.title}
               coords={city.coords}
               image={city.image}
-              title={city.guidesCount}
               markerSize={42}
               onPress={navigateToCity(city)}
             >
@@ -79,3 +89,5 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.OpenSansSemiBold,
   },
 });
+
+export const CitiesMap = observer(CitiesMapComponent);

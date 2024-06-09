@@ -1,42 +1,37 @@
 import * as React from 'react';
-import { useCallback, useEffect, useLayoutEffect } from 'react';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useEffect, useLayoutEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { MainLayout } from '@/Layouts';
-import { useGetGuideQuery } from '@/api';
-import { RootStackParamList } from '@/app/Navigator';
-import { store } from '@/app/store/create-isomorphic-store';
 import { GuideMap } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
-import { useAuthGuard } from '@/hooks';
-import {
-  dropGuideStoreStateAction,
-  onStartWatchingLocationAction,
-  onStopWatchLocation,
-  toggleGuideMute,
-  updateFollowingGuideState,
-} from '@/stores';
-import {
-  NearestPoint,
-  getTheNearestVisiblePoint,
-} from '@/stores/guide/guide.utils';
-import { showPointDistanceNotification } from '@/stores/notify/notify.actions';
-import { startWatchToLiveLocationInBackground } from '@/utils';
-import { calculateDistance } from '@/utils/map';
-import { Path, Place } from '@/types';
+import { useAuthGuard, useFocus } from '@/hooks';
+import { useStores } from '@/hooks';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Guide'>;
-
-const GuideMapScreen = ({ route }: Props) => {
+const GuideMapScreen = ({ route }) => {
   useAuthGuard();
 
   const navi = useNavigation();
-
-  const { data: guide, isLoading } = useGetGuideQuery(
-    { slug: route.params?.guide?.slug, withStory: true },
-    { skip: !route.params?.guide?.slug }
-  );
+  const {
+    getGuide,
+    guide,
+    onStartWatchingLocation,
+    updateGuidePointWithLiveCoords,
+    dropLocationStore,
+    dropFollowingGuide,
+    toggleMuteGuideSound,
+    setIsFollowingGuide,
+  } = useStores(stores => ({
+    getGuide: stores.guideStore.getGuide,
+    guide: stores.guideStore.guide,
+    onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
+    dropLocationStore: stores.locationStore.dropStore,
+    dropFollowingGuide: stores.guideStore.dropFollowingGuide,
+    toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
+    setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
+    updateGuidePointWithLiveCoords:
+      stores.guideStore.updateGuidePointWithLiveCoords,
+  }));
 
   useLayoutEffect(() => {
     if (!route.params?.guide) {
@@ -47,38 +42,35 @@ const GuideMapScreen = ({ route }: Props) => {
       navi.goBack();
     }
 
-    toggleGuideMute(!!route.params?.isOnlyMap);
+    toggleMuteGuideSound(!!route.params?.isOnlyMap);
+
+    getGuide({ slug: route.params?.guide?.slug, withStory: true });
   }, []);
 
   useEffect(() => {
     if (!guide) return;
 
-    onStartWatchingLocationAction(guide);
-
-    if (route.params?.isOnlyMap) return;
-
-    updateFollowingGuideState(true);
+    setIsFollowingGuide(!route.params?.isOnlyMap);
+    onStartWatchingLocation(
+      guide,
+      !route.params?.isOnlyMap ? updateGuidePointWithLiveCoords : undefined
+    );
   }, [guide]);
 
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        onStopWatchLocation();
-        dropGuideStoreStateAction();
-      };
-    }, [])
-  );
+  useFocus(() => {
+    return () => {
+      dropLocationStore();
+      dropFollowingGuide();
+    };
+  });
 
-  if (!guide || isLoading) {
+  if (!guide) {
     return <SafeLoader />;
   }
 
   return (
     <MainLayout headerTitle={guide.title} bgImage={guide.vImage} noFooter>
-      <GuideMap
-        guide={guide}
-        // onPressGoToPointDirections={onPressGoToPointDirections}
-      />
+      <GuideMap guide={guide} />
     </MainLayout>
   );
 };

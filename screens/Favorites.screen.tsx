@@ -1,21 +1,28 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { MainLayout } from '@/Layouts';
 import { useGetFavoritesQuery } from '@/api';
 import { CText } from '@/components/CText';
 import { FavoritesList } from '@/components/User';
-import { useAuthGuard } from '@/hooks';
+import { useAuthGuard, useFocus, useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 
 const FavoritesScreen = () => {
-  const user = useAuthGuard();
+  useAuthGuard();
 
-  const {
-    data: { guides, places } = {},
-    isFetching,
-    error,
-  } = useGetFavoritesQuery(undefined, { skip: !user });
+  const { getFavorites, favorites, isLoading } = useStores(stores => ({
+    getFavorites: stores.userStore.getFavorites,
+    favorites: stores.userStore.favorites,
+    isLoading: stores.userStore.isLoading,
+  }));
 
+  useFocus(() => {
+    getFavorites();
+  });
+
+  const { guides, places } = favorites;
   const isRenderList = !!guides || !!places;
   const isEmptyList = isRenderList && !guides.length && !places.length;
 
@@ -23,7 +30,7 @@ const FavoritesScreen = () => {
     <MainLayout
       headerTitle="Favorites"
       style={styles.container}
-      isLoading={isFetching}
+      isLoading={isLoading}
     >
       {isRenderList && !isEmptyList && (
         <FavoritesList guides={guides} places={places} />
@@ -41,13 +48,11 @@ const FavoritesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // paddingTop: 35,
-  },
+  container: {},
   emptyText: {
     height: '100%',
     paddingTop: 100,
   },
 });
 
-export default FavoritesScreen;
+export default observer(FavoritesScreen);

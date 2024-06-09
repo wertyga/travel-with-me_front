@@ -13,7 +13,8 @@ import {
   CarouselNew,
   Props as CarouselProps,
 } from '@/components/CarouselNew/CarouselNew';
-import { useSelector } from '@/stores';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
@@ -25,7 +26,7 @@ type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
   children?: React.ReactNode;
 };
 
-export const ScreenContentWrapper = <DATA,>({
+export const ScreenContentWrapperComponent = <DATA,>({
   data,
   carouselStyles,
   imageKey,
@@ -34,9 +35,9 @@ export const ScreenContentWrapper = <DATA,>({
   imageStyle = {},
   ...carouselProps
 }: Props<DATA>) => {
-  const layoutHeight = useSelector(
-    ({ domStore }) => domStore?.layout?.height || 0
-  );
+  const { layoutHeight } = useStores(stores => ({
+    layoutHeight: stores.domStore.layoutHeight,
+  }));
 
   return (
     <ScrollView
@@ -88,3 +89,5 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
   },
 });
+
+export const ScreenContentWrapper = observer(ScreenContentWrapperComponent);

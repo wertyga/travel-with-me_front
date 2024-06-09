@@ -3,19 +3,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
+  ViewStyle,
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { getArrayedButtonStyles } from '@/components/Button/Button.utils';
 import { CText } from '@/components/CText';
-import { CTextProps } from '@/components/CText/CText';
+import { CTextProps, CTextStyleProp } from '@/components/CText/CText';
 import { useNavigation } from '@/hooks';
 import { FONTS, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
-export type ButtonStylesProp =
-  | StyleProp<TouchableOpacity>
-  | CTextProps['style']
-  | (StyleProp<TouchableOpacity> & CTextProps['style']);
+export type ButtonStylesProp = ViewStyle & CTextStyleProp;
 
 export type CustomButtonProps = TouchableOpacityProps & {
   children: React.ReactNode;

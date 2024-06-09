@@ -1,11 +1,13 @@
 import { useLayoutEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { useAuth } from '@/context';
+import { useNavigation } from '@/hooks/useNavigation';
+import { useStores } from '@/hooks/useStores';
 import { SCREENS } from '@/types';
 
 export const useAuthGuard = () => {
   const navi = useNavigation();
-  const { user } = useAuth();
+  const { user } = useStores(stores => ({
+    user: stores.userStore.user,
+  }));
 
   useLayoutEffect(() => {
     if (!user) {
@@ -13,5 +15,5 @@ export const useAuthGuard = () => {
     }
   }, [user]);
 
-  return user;
+  return null;
 };

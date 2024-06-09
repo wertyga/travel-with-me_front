@@ -10,7 +10,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
+import { useStores } from '@/hooks';
 import { useSelector } from '@/stores';
+import { observer } from 'mobx-react';
 import { calculateDistance } from '@/utils/map';
 import { Place } from '@/types';
 
@@ -23,7 +25,7 @@ type Props = {
   onPressGoToPointDirections?: (point: Place) => void;
 };
 
-export const PointMapMarkerPreview = ({
+export const PointMapMarkerPreviewComponent = ({
   point,
   onClose,
   onToggleCarouselShow,
@@ -32,10 +34,13 @@ export const PointMapMarkerPreview = ({
   onPressGoToPointDirections,
 }: Props) => {
   const { story, title, audioStory } = point;
+  const { liveCoords } = useStores(stores => ({
+    liveCoords: stores.locationStore.liveCoords,
+  }));
 
-  const liveCoords = useSelector(
-    ({ locationStore }) => locationStore?.liveCoords
-  );
+  // const liveCoords = useSelector(
+  //   ({ locationStore }) => locationStore?.liveCoords
+  // );
 
   const distanceToPoint = calculateDistance(point.coords, liveCoords);
   return (
@@ -105,3 +110,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export const PointMapMarkerPreview = observer(PointMapMarkerPreviewComponent);

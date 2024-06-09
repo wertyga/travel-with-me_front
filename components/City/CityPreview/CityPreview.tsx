@@ -1,15 +1,8 @@
-import {
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { CText } from '@/components/CText';
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
-import { Icon, IconNames } from '@/components/Icon';
-import { FastImage } from '@/components/Image';
+import { FastImage } from '@/components/FastImage';
 import { useNavigation } from '@/hooks';
 import { getHeight } from '@/utils';
 import { City, FONTS, SCREENS } from '@/types';
@@ -36,6 +29,7 @@ export const CityPreview = ({ city }: Props) => {
         image={city.image}
         contentStyle={styles.content}
         gradient="top-bottom"
+        isFastImage
       >
         <CountryPill
           title={city.country.title}

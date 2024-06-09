@@ -1,17 +1,12 @@
 import React, { useEffect } from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { Dimensions, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { FontAwesome } from '@expo/vector-icons';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import {
@@ -19,8 +14,8 @@ import {
   HeaderMenuProps,
 } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { useNavigation } from '@/hooks';
-import { useSelector } from '@/stores';
-import { FontAwesome } from '@expo/vector-icons';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { FONTS, SCREENS } from '@/types';
 
 type Props = {
@@ -28,10 +23,10 @@ type Props = {
   title: string;
   isDark?: boolean;
   noBackBtn?: boolean;
-  menu?: HeaderMenuProps['menu'];
+  menu?: HeaderMenuProps['items'];
 };
 
-export const CityScreenHeader = ({
+export const CityScreenHeaderComponent = ({
   style,
   title,
   menu,
@@ -39,7 +34,10 @@ export const CityScreenHeader = ({
   noBackBtn,
 }: Props) => {
   const navi = useNavigation();
-  const headerStyles = useSelector(({ domStore }) => domStore?.header);
+  const { header } = useStores(stores => ({
+    header: stores.domStore.header,
+  }));
+
   const translateY = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -48,8 +46,8 @@ export const CityScreenHeader = ({
   });
 
   useEffect(() => {
-    translateY.value = withTiming(headerStyles?.hidden ? -150 : 0);
-  }, [headerStyles?.hidden]);
+    translateY.value = withTiming(header.hidden ? -150 : 0);
+  }, [header.hidden]);
 
   const goBack = () => {
     if (navi.canGoBack()) {
@@ -59,7 +57,7 @@ export const CityScreenHeader = ({
     }
   };
 
-  const { color, ...viewStyle } = style || {};
+  const { color, ...viewStyle } = style || ({} as any);
 
   return (
     <Animated.View style={[styles.container, viewStyle, animatedStyles]}>
@@ -81,6 +79,8 @@ export const CityScreenHeader = ({
     </Animated.View>
   );
 };
+
+export const CityScreenHeader = observer(CityScreenHeaderComponent);
 
 const styles = StyleSheet.create({
   container: {

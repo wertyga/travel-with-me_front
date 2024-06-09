@@ -1,33 +1,56 @@
-import { makeObservable } from 'mobx';
-import { TestStore } from './TestStore';
+import {action, makeObservable} from 'mobx';
 
-export const stores = { testStore: TestStore };
-
-// for (let key of props) {
-//   console.log(key, typeof store[key]);
-// }
-// props.forEach(prop => {
-//   console.log(prop, typeof store[prop]);
-// });
+export type RootStoreType<T> = RootStore & T;
 
 export class RootStore {
-  constructor() {
-    makeObservable(this);
+  private _stores: Record<string, any>;
 
-    Object.entries(stores).forEach(([storeName, Store]) => {
+  private _getStoreName(name) {
+    return `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
+  }
+
+  private _iterateStores(callback: (store) => void) {
+    Object.keys(this._stores).forEach(name => {
+      const storeName = this._getStoreName(name);
+      callback(this[storeName]);
+    });
+  }
+  
+  private _initialize() {
+    Object.entries(this._stores).forEach(([storeName, Store]) => {
       const store = new Store(this);
       const props = Object.getOwnPropertyNames(Object.getPrototypeOf(store));
-      // console.log({ store, Store });
-      //
+      
       for (let key of props) {
-        if (key === 'constructor') continue;
-        console.log({ key });
-        store[key].bind(store);
+        if (key === 'constructor' || Object.getOwnPropertyDescriptor(store, key)?.get) continue;
+        
+        store[key] = store[key].bind(store);
       }
-      // Object.entries(store).forEach(([name, value]) => {
-      //   console.log(name, typeof value, 'asdasd');
-      // });
-      this[storeName] = store;
+      
+      this[this._getStoreName(storeName)] = store;
     });
+  }
+  
+  constructor(stores: Record<string, any>) {
+    makeObservable(this);
+    
+    this._stores = stores;
+
+    this._initialize();
+    if (typeof window !== 'undefined') {
+      setTimeout(() => this.runInitiations());
+    }
+  }
+  
+  runInitiations() {
+    this._iterateStores((store: any) => {
+      if (store.onInitiate) {
+        store.onInitiate();
+      }
+    });
+  }
+  
+  @action dropRootStore() {
+    this._initialize();
   }
 }

@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useSetLikeMutation } from '@/api';
+import { setLike } from '@/api';
 import Button from '@/components/Button';
-import { Icon } from '@/components/Icon';
-import { useAuth } from '@/context';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { Like, SOCIAL_MODELS } from '@/types';
 
 type Props = {
@@ -14,15 +15,18 @@ type Props = {
   parentFetching?: boolean;
 };
 
-export const LikeAction = ({
+export const LikeActionComponent = ({
   modelType,
   _id,
   initialLike: { isInteracted },
   parentFetching,
 }: Props) => {
-  const { user } = useAuth();
+  const [isLoading, setLoading] = useState(false);
+  const [state, setState] = useState<Like>({ isInteracted, count: 0 });
 
-  const [setLike, { isLoading }] = useSetLikeMutation();
+  const { user } = useStores(stores => ({
+    user: stores.userStore.user,
+  }));
 
   const handleLike = async () => {
     if (!user) {
@@ -32,7 +36,18 @@ export const LikeAction = ({
       });
       return;
     }
-    await setLike({ modelType, _id });
+
+    try {
+      setLoading(true);
+      const response = await setLike({ modelType, _id });
+
+      if (response) {
+        setState(response);
+      }
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,7 +59,7 @@ export const LikeAction = ({
       noPaddings
     >
       <MaterialCommunityIcons
-        name={isInteracted ? 'cards-heart' : 'cards-heart-outline'}
+        name={state.isInteracted ? 'cards-heart' : 'cards-heart-outline'}
         size={24}
         color="white"
       />
@@ -60,3 +75,5 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
 });
+
+export const LikeAction = observer(LikeActionComponent);

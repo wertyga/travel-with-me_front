@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainLayout } from '@/Layouts';
@@ -7,6 +7,8 @@ import { RootStackParamList } from '@/app/Navigator';
 import { GuideMeta } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
+import { useFocus, useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { defaultGuideImage } from '@/utils';
 import { Guide, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
@@ -18,25 +20,34 @@ const GuideScreen = ({ route }: Props) => {
     route.params?.guide as Guide
   );
 
+  const { getGuide, guide, getGuidesList, guides, isListLoading, isLoading } =
+    useStores(stores => ({
+      guide: stores.guideStore.guide,
+      getGuide: stores.guideStore.getGuide,
+      isLoading: stores.guideStore.isLoading,
+      getGuidesList: stores.guidesListStore.getGuidesList,
+      isListLoading: stores.guidesListStore.isLoading,
+      guides: stores.guidesListStore.guides,
+    }));
+
   const cityId =
     typeof defaultGuide?.city === 'string'
       ? defaultGuide.city
       : defaultGuide?.city._id;
 
-  const {
-    data: guide,
-    isLoading,
-    isFetching,
-    error: getGuideError,
-    refetch: refetchGuide,
-  } = useGetGuideQuery(
-    { slug: defaultGuide?.slug },
-    { skip: !defaultGuide?.slug }
-  );
-  const { data: { guides = [] } = {}, isLoading: isListLoading } =
-    useGetGuidesListQuery({ city: cityId }, { skip: !cityId });
+  useFocus(() => {
+    if (!defaultGuide?.slug) return;
 
-  const onChangeCGuide = async ({
+    getGuide({ slug: defaultGuide.slug });
+  }, [defaultGuide?.slug]);
+
+  useEffect(() => {
+    if (!cityId) return;
+
+    getGuidesList({ city: cityId });
+  }, [cityId]);
+
+  const onChangeGuide = async ({
     index,
     item,
   }: {
@@ -53,8 +64,6 @@ const GuideScreen = ({ route }: Props) => {
   if (isInitialLoading) {
     return (
       <SafeLoader
-        reFetchMethod={refetchGuide}
-        fetchError={getGuideError}
         image={defaultGuide?.vImage}
         textColor="white"
         indicatorColor="white"
@@ -70,20 +79,18 @@ const GuideScreen = ({ route }: Props) => {
     <MainLayout
       style={styles.container}
       headerTitle={guide.title}
-      reFetchMethod={refetchGuide}
-      fetchError={getGuideError}
       withHeaderShadow
     >
       <ScreenContentWrapper<Guide>
         data={guides}
         defaultIndex={initialCityIndex}
-        onChange={onChangeCGuide}
+        onChange={onChangeGuide}
         imageKey="vImage"
         defaultImage={defaultGuideImage}
         noDots
         isFullScreen
       >
-        <GuideMeta guide={guide} isFetching={isFetching} />
+        <GuideMeta guide={guide} isFetching={isLoading} />
       </ScreenContentWrapper>
 
       {/*<CarouselNew<Guide>*/}
@@ -121,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GuideScreen;
+export default observer(GuideScreen);

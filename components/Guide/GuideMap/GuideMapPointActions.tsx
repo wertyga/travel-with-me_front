@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
   btn: {
     minWidth: 40,
     height: 40,
-    // backgroundColor: CONSTANTS.colors.bg1,
     borderRadius: 50,
   },
 });

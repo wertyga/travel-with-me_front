@@ -29,6 +29,7 @@ export const likeApi = baseApi.injectEndpoints({
 
         if (!tag) return [];
 
+        // @ts-ignore
         return [{ type: tag, id: result._id }, USER_TAGS.Favorites];
       },
       query: data => {

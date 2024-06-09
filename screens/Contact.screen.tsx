@@ -1,30 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
+import Toast from 'react-native-toast-message';
 import { MainLayout } from '@/Layouts';
-import { REGISTER_FORM_SCHEMA } from '@/components/Auth/SignUpForm/SignUpForm.utils';
+import { sendHelpMessage } from '@/api';
 import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
 import { Input } from '@/components/Input';
 import { useAuthGuard } from '@/hooks';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 const ContactScreen = () => {
   useAuthGuard();
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(REGISTER_FORM_SCHEMA),
-  });
+  const { handleSubmit, control, reset } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = data => {
-    console.log({ data });
+  const onSubmit = async ({ message }) => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+    try {
+      const { success } = await sendHelpMessage({ message });
+
+      if (success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Message sent. We will contact with you by e-mail',
+        });
+        reset();
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong',
+        });
+      }
+    } catch (e) {
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <MainLayout headerTitle="Support">
+    <MainLayout headerTitle="Support" isLoading={isLoading}>
       <View>
         <Controller
           control={control}
@@ -37,11 +57,10 @@ const ContactScreen = () => {
                 onChange={onChange}
                 placeholder="Message"
                 autoCapitalize="none"
-                error={errors?.email?.message}
               />
             );
           }}
-          name="email"
+          name="message"
         />
 
         <SubmitBtn onPress={handleSubmit(onSubmit)}>Send Request</SubmitBtn>
@@ -54,6 +73,7 @@ const styles = StyleSheet.create({
   textarea: {
     height: 200,
     textAlignVertical: 'top',
+    padding: 5,
   },
 });
 

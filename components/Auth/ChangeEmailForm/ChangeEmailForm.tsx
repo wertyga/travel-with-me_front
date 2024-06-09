@@ -45,6 +45,7 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
             return (
               <Input
                 value={value}
+                // @ts-ignore
                 onChangeText={onChange}
                 placeholder="Password"
                 secureTextEntry

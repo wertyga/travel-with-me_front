@@ -4,13 +4,20 @@ import { MainLayout } from '@/Layouts';
 import { SignInForm, SignUpForm } from '@/components/Auth';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
-import { useAuth } from '@/context/AuthContext';
 import { useNavigation } from '@/hooks';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { AuthCommonRequest, SCREENS } from '@/types';
 
 const Login = () => {
   const navigation = useNavigation();
-  const { signIn, signUp, sigUpLoading, sigInLoading } = useAuth();
+  const { signUp, signIn, isLoading, navigator } = useStores(stores => ({
+    signIn: stores.authStore.signIn,
+    signUp: stores.authStore.signUp,
+    isLoading: stores.authStore.isLoading,
+    navigator: stores.routerStore.navigator,
+  }));
+
   const [state, setState] = useState({
     screen: 'signin',
   });
@@ -31,15 +38,19 @@ const Login = () => {
   };
 
   const onSignIn = async (data: AuthCommonRequest) => {
-    const { user } = await signIn(data);
-    if (user) {
-      navigation.navigate(SCREENS.CitiesList);
+    const isSuccess = await signIn(data);
+    if (isSuccess) {
+      const routeState = navigator.getState();
+      const { name, params } =
+        routeState.routes[routeState.routes.length - 2] ||
+        routeState.routes[routeState.routes.length - 1];
+
+      navigation.navigate(name as SCREENS, params);
     }
   };
 
   const { screen } = state;
   const isLogin = screen === 'signin';
-  const isLoading = sigUpLoading || sigInLoading;
   return (
     <MainLayout
       headerTitle={isLogin ? 'Login' : 'Register'}
@@ -83,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default observer(Login);

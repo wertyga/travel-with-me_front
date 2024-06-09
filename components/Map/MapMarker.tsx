@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Marker } from 'react-native-maps';
-import { FastImage } from '@/components/Image';
+import { FastImage } from '@/components/FastImage';
 import { Path } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+// @ts-ignore
 import DefaultPointImage from '@/assets/images/default_point_image.png';
 
 type Props = {
   coords: Path;
-  title: string;
   description?: string;
   isChosen?: boolean;
   isChosenExists?: boolean;
@@ -24,7 +24,6 @@ export const MapMarker = React.memo(
   ({
     coords,
     image,
-    title,
     markerSize = MARKER_SIZE,
     onPress,
     isChosen,
@@ -86,7 +85,7 @@ export const MapMarker = React.memo(
           >
             <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
             <FastImage
-              uri={image || DefaultPointImage}
+              source={image || DefaultPointImage}
               width={markerInnerSize.width}
               style={styles.image}
               key={image}

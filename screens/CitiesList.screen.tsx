@@ -1,18 +1,17 @@
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import { Image, ImageBackground, StyleSheet, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MainLayout } from '@/Layouts';
-import { useGetCitiesLightListQuery } from '@/api';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
 import { GlobalSearch } from '@/components/GlobalSearch';
-import { Loader } from '@/components/Loader';
 import { SafeLoader } from '@/components/SafeLoader';
-import { useHandleFromError } from '@/hooks';
-import { navigateToError } from '@/utils';
+import { useFocus, useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 import { FONTS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+// @ts-ignore
 import SplashBgImage from '@/assets/splash.png';
 
 const HEADERS_LIST = [
@@ -28,26 +27,19 @@ const HEADERS_LIST = [
 
 const CitiesListScreen = () => {
   const navi = useNavigation();
+
+  const { cities, getCityLightList } = useStores(stores => ({
+    cities: stores.citiesListStore.cityLightList,
+    getCityLightList: stores.citiesListStore.getCityLightList,
+  }));
+
   const [state, setState] = useState({
     tab: 'list',
   });
 
-  const {
-    data: { cities = [] } = {},
-    isFetching,
-    error,
-    refetch: refetchCities,
-  } = useGetCitiesLightListQuery();
-
   const onChangeTab = (tab: string) => () => {
     setState(prev => ({ ...prev, tab }));
   };
-
-  useLayoutEffect(() => {
-    navi.setOptions({
-      headerShown: false,
-    });
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -57,13 +49,9 @@ const CitiesListScreen = () => {
     }, [])
   );
 
-  useEffect(() => {
-    if (!error) return;
-
-    navigateToError(navi, error);
-  }, [error, cities]);
-
-  useHandleFromError(refetchCities, isFetching);
+  useFocus(() => {
+    getCityLightList();
+  });
 
   if (!cities.length) {
     return <SafeLoader />;
@@ -117,7 +105,6 @@ const CitiesListScreen = () => {
           <CitiesMap />
         </View>
       )}
-      {isFetching && <Loader />}
     </MainLayout>
   );
 };
@@ -145,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CitiesListScreen;
+export default observer(CitiesListScreen);

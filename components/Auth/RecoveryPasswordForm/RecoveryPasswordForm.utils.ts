@@ -9,14 +9,10 @@ export const getRecoveryPasswordSchema = (isSent?: boolean) => {
   };
 
   if (isSent) {
-    yupObject.code = yup.string().required();
-    yupObject.password = yup
-      .string()
-      .required('This field should not be empty')
-      .min(6);
+    yupObject.code = yup.string();
+    yupObject.password = yup.string().min(6);
     yupObject.confirmPassword = yup
       .string()
-      .required('This field should not be empty')
       .oneOf([yup.ref('password')], 'passwords must match');
   }
 

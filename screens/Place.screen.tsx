@@ -1,59 +1,31 @@
 import * as React from 'react';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Dimensions, Image, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { MainLayout } from '@/Layouts';
-import { useGetPlaceQuery } from '@/api';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useAuthGuard } from '@/hooks';
-import { updateDomAction, useSelector } from '@/stores';
+import { useStores } from '@/hooks';
+import { observer } from 'mobx-react';
 
 const PlaceScreen = ({ route }) => {
   useAuthGuard();
 
-  const navi = useNavigation();
-  const layoutHeight = useSelector(
-    ({ domStore }) => domStore?.layout?.height || 0
-  );
+  const { params: { placeSlug } = {} as any } = route;
 
-  const { params: { placeSlug } = {} } = route;
-  const [state, setState] = useState({
-    isShowGallery: false,
-    isMetaOpened: false,
-    currentIndex: 0,
-  });
-
-  const {
-    data: { place } = {},
-    isFetching,
-    isLoading,
-  } = useGetPlaceQuery({ slug: placeSlug }, { skip: !placeSlug });
-
-  useLayoutEffect(() => {
-    navi.setOptions({
-      headerShown: false,
-    });
-  }, []);
+  const { layoutHeight, getPlace, place, isLoading } = useStores(stores => ({
+    layoutHeight: stores.domStore.layoutHeight,
+    place: stores.placeStore.place,
+    getPlace: stores.placeStore.getPlace,
+    isLoading: stores.placeStore.isLoading,
+  }));
 
   useEffect(() => {
-    if (state.isShowGallery) {
-      updateDomAction({
-        footer: { hidden: true },
-        header: { hidden: true },
-      });
-    } else if (!state.isMetaOpened) {
-      updateDomAction({
-        footer: { hidden: false },
-        header: { hidden: false },
-      });
-    } else {
-      updateDomAction({
-        header: { hidden: false },
-      });
-    }
-  }, [state.isShowGallery]);
+    if (!placeSlug) return;
+
+    getPlace({ slug: placeSlug });
+  }, [placeSlug]);
 
   if (!place || isLoading) {
     return <SafeLoader />;
@@ -98,4 +70,4 @@ const PlaceScreen = ({ route }) => {
   );
 };
 
-export default PlaceScreen;
+export default observer(PlaceScreen);
