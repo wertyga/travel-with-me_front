@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
+import { observer } from 'mobx-react-lite';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
-import { Guide } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {

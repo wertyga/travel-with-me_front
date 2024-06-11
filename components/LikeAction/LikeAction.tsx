@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { observer } from 'mobx-react-lite';
 import { setLike } from '@/api';
 import Button from '@/components/Button';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { Like, SOCIAL_MODELS } from '@/types';
 
 type Props = {

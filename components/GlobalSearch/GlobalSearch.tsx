@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { observer } from 'mobx-react-lite';
 import { GlobalSearchItem } from '@/components/GlobalSearch/GlobalSearchItem';
 import Search from '@/components/Search';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 import CityPlaceholder from '@/assets/images/city_placeholder.png';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';

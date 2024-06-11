@@ -13,6 +13,7 @@
     "^react(.*)$",
     "^@expo(.*)$",
     "expo(.*)$",
+    "mobx(.*)$",
     "<THIRD_PARTY_MODULES>",
     "^@/.(?:assets|types|utils)",
     "@/utils",

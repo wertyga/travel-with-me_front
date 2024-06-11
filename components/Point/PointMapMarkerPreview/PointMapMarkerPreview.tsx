@@ -7,12 +7,11 @@ import {
   View,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { observer } from 'mobx-react-lite';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 import { useStores } from '@/hooks';
-import { useSelector } from '@/stores';
-import { observer } from 'mobx-react';
 import { calculateDistance } from '@/utils/map';
 import { Place } from '@/types';
 
@@ -37,10 +36,6 @@ export const PointMapMarkerPreviewComponent = ({
   const { liveCoords } = useStores(stores => ({
     liveCoords: stores.locationStore.liveCoords,
   }));
-
-  // const liveCoords = useSelector(
-  //   ({ locationStore }) => locationStore?.liveCoords
-  // );
 
   const distanceToPoint = calculateDistance(point.coords, liveCoords);
   return (

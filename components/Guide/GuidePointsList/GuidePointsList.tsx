@@ -31,6 +31,7 @@ export const GuidePointsList = ({ points }: Props) => {
             <ImageBackgroundWithGradient
               image={point.images[0] || GuidePlaceholder}
               style={styles.imageWrapper}
+              isFastImage
             >
               {!!point.distance && (
                 <PointDistance

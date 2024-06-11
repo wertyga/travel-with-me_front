@@ -1,5 +1,5 @@
 import { Alert, Linking } from 'react-native';
-import { Path, Place } from '@/types';
+import { Path } from '@/types';
 
 export const getMiddleCoordinates = (
   points: { lat: number; lng: number }[]
@@ -40,35 +40,6 @@ export const getMiddleCoordinates = (
 
 export const openGoogleMap = (coords: Path) => {
   Linking.openURL(`https://maps.google.com/?q=${coords.lat},${coords.lng}`);
-};
-
-export const openMaps = () => {
-  Alert.alert(
-    'Open in Maps',
-    'Choose the app to open this location',
-    [
-      {
-        text: 'Google Maps',
-        onPress: () =>
-          Linking.openURL(
-            `https://maps.google.com/?q=${coords.lat},${coords.lng}`
-          ),
-      },
-      {
-        text: 'Apple Maps',
-        onPress: () =>
-          Linking.openURL(
-            `http://maps.apple.com/?sll=${coords.lat},${coords.lng}&daddr=${coords.lat},${coords.lng}`
-          ),
-      },
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-    ],
-    { cancelable: true }
-  );
 };
 
 export const customMapStyles = [

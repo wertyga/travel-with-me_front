@@ -1,7 +1,7 @@
+import { observer } from 'mobx-react-lite';
 import { CText } from '@/components/CText';
 import { GoToPayContentLink } from '@/components/GoToPayContentLink';
 import { useSubscription } from '@/hooks';
-import { observer } from 'mobx-react';
 import { Guide } from '@/types';
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 import { GuideMetaActions } from './GuideMetaActions';

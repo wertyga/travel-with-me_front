@@ -50,6 +50,14 @@ export class RootStore {
     });
   }
   
+  runDropStores() {
+    this._iterateStores((store: any) => {
+      if (store.dropStore) {
+        store.dropStore();
+      }
+    });
+  }
+  
   @action dropRootStore() {
     this._initialize();
   }

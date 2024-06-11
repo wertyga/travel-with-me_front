@@ -17,9 +17,12 @@ export class GuideStore {
     makeObservable(this);
   }
 	
-	@withLoading async getGuide(...params: Parameters<typeof fetchGuide>) {
+	@withLoading async getGuide(params: {
+		slug: string;
+		withStory?: boolean;
+	}) {
 		try {
-			const guide = await fetchGuide(...params);
+			const guide = await fetchGuide(params);
 	
 			runInAction(() => {
 				this.guide = guide;
@@ -72,5 +75,10 @@ export class GuideStore {
 			typeof value !== 'undefined' ? value : !this.isGuideMuted;
 		
 		this.isGuideMuted = actualValue;
+	}
+	
+	@action dropStore() {
+		this.guide = null;
+		this.dropFollowingGuide()
 	}
 }

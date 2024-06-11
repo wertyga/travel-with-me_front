@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import * as Location from 'expo-location';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -18,7 +19,6 @@ import {
   useSubscription,
 } from '@/hooks';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
 const ProfileScreen = () => {

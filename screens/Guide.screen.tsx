@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
-import { useGetGuideQuery, useGetGuidesListQuery } from '@/api';
 import { RootStackParamList } from '@/app/Navigator';
 import { GuideMeta } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
-import { useFocus, useStores } from '@/hooks';
-import { observer } from 'mobx-react';
+import { useStores } from '@/hooks';
 import { defaultGuideImage } from '@/utils';
 import { Guide, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
@@ -35,7 +34,7 @@ const GuideScreen = ({ route }: Props) => {
       ? defaultGuide.city
       : defaultGuide?.city._id;
 
-  useFocus(() => {
+  useEffect(() => {
     if (!defaultGuide?.slug) return;
 
     getGuide({ slug: defaultGuide.slug });

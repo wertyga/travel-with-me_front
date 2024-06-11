@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { City } from '@/types';
 
 const CityScreen = () => {

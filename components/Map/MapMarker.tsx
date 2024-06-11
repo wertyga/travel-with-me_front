@@ -4,7 +4,6 @@ import { Marker } from 'react-native-maps';
 import { FastImage } from '@/components/FastImage';
 import { Path } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
-// @ts-ignore
 import DefaultPointImage from '@/assets/images/default_point_image.png';
 
 type Props = {

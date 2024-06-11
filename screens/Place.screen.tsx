@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Dimensions, Image, ScrollView } from 'react-native';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useAuthGuard } from '@/hooks';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 
 const PlaceScreen = ({ route }) => {
   useAuthGuard();

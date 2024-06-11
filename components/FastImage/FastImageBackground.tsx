@@ -6,7 +6,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { ImageURISource } from 'react-native/Libraries/Image/ImageSource';
 import { handleCacheImage } from '@/components/FastImage/FastImage.utils';
 
 type Props = Omit<ImageBackgroundProps, 'style' | 'source'> & {

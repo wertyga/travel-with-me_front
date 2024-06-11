@@ -2,12 +2,11 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
-import { useGetFavoritesQuery } from '@/api';
 import { CText } from '@/components/CText';
 import { FavoritesList } from '@/components/User';
 import { useAuthGuard, useFocus, useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 
 const FavoritesScreen = () => {
   useAuthGuard();

@@ -13,84 +13,75 @@ import MapView, {
 } from 'react-native-maps';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { Ionicons } from '@expo/vector-icons';
+import { getMyLocation } from '@/mobx/stores/location/location.utils';
+import { observer } from 'mobx-react-lite';
 import Button from '@/components/Button';
 import { customMapStyles } from '@/components/Map/Map.utils';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
 import { useStores } from '@/hooks';
-import { getMyLocation } from '@/mobx/stores/location/location.utils';
-import { observer } from 'mobx-react';
-import { Path, Place } from '@/types';
+import { Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = MapViewProps & {
   points: Place[];
+  initialRegion?: Region;
+  onRegionChange?: (region: Region) => void;
   chosenPoint?: Place;
-  chosenRegion?: Path;
-  onPress: (point: Place & { isChosen?: boolean }) => void;
+  onPointPress: (point: Place & { isChosen?: boolean }) => void;
   mapMarkerSize?: number;
   children?: React.ReactNode;
   mapStyles?: StyleProp<ViewStyle>;
 };
 
+export const DEFAULT_DELTA = 0.2;
+const MY_LOCATION_DELTA = 0.01;
+
 export const MapComponent = ({
   points,
-  onPress,
+  onPointPress,
   mapMarkerSize,
   chosenPoint,
-  chosenRegion,
   children,
+  onRegionChange,
   mapStyles,
+  initialRegion,
   ...mapViewProps
 }: Props) => {
+  const mapRef = useRef();
+
   const { liveCoords } = useStores(stores => ({
     liveCoords: stores.locationStore.liveCoords,
   }));
 
-  const mapRef = useRef();
-  const delta = useRef({
-    latitudeDelta: 0.2,
-    longitudeDelta: 0.2,
-    latitude: 0,
-    longitude: 0,
-  });
-  const [currentRegion, setCurrentRegion] = useState<Region>();
+  const [currentRegion, setCurrentRegion] = useState<Region | undefined>();
 
   const handlePointPress = useCallback(
     (point: Place) => () => {
-      onPress(point);
+      onPointPress(point);
     },
     []
   );
 
-  const onRegionChange = useCallback(
-    ({ latitudeDelta, longitudeDelta, latitude, longitude }) => {
-      delta.current = { latitudeDelta, longitudeDelta, latitude, longitude };
-    },
-    []
-  );
+  const onGetMyLocationClick = async () => {
+    const { longitude, latitude } = await getMyLocation();
 
-  const updateCurrentRegion = ({ longitude, latitude }) => {
     setCurrentRegion({
-      latitudeDelta: delta.current.latitudeDelta,
-      longitudeDelta: delta.current.longitudeDelta,
+      latitudeDelta: MY_LOCATION_DELTA,
+      longitudeDelta: MY_LOCATION_DELTA,
       longitude,
       latitude,
     });
   };
 
-  const onGetMyLocationClick = async () => {
-    const { longitude, latitude } = await getMyLocation();
-
-    updateCurrentRegion({ longitude, latitude });
-  };
-
   useEffect(() => {
     if (!chosenPoint) return;
 
-    updateCurrentRegion({
+    setCurrentRegion({
       longitude: chosenPoint.coords.lng,
       latitude: chosenPoint.coords.lat,
+      latitudeDelta: DEFAULT_DELTA,
+      longitudeDelta: DEFAULT_DELTA,
     });
   }, [chosenPoint]);
 
@@ -118,12 +109,7 @@ export const MapComponent = ({
         region={currentRegion}
         onRegionChange={onRegionChange}
         toolbarEnabled={false}
-        initialRegion={{
-          latitude: points[0].coords.lat,
-          longitude: points[0].coords.lng,
-          latitudeDelta: delta.current.latitudeDelta,
-          longitudeDelta: delta.current.longitudeDelta,
-        }}
+        initialRegion={initialRegion}
         {...mapViewProps}
       >
         {!!liveCoords && <MyLocationMarker liveCoords={liveCoords} />}

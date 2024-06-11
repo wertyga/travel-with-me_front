@@ -77,4 +77,10 @@ export class SubscriptionStore {
 		
 		}
 	}
+	
+	@action dropStore() {
+		this.isLoading = false;
+		this.subscriptions = [];
+		this.mySubscription = null;
+	}
 }

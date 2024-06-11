@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { ChangeEmailForm } from '@/components/Auth';
 import { CText } from '@/components/CText';
 import { useFocus, useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
 const RecoveryPassword = ({ navigation }) => {

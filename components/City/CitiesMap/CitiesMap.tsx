@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { observer } from 'mobx-react-lite';
 import { CText } from '@/components/CText';
 import {
   customMapStyles,
@@ -9,7 +10,6 @@ import {
 import { MapMarker } from '@/components/Map/MapMarker';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { City, FONTS, SCREENS } from '@/types';
 
 const EUROPE_REGION = {

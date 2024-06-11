@@ -1,5 +1,4 @@
-import { RootStore } from '@/mobx/RootStore';
-import {makeObservable, action, observable, runInAction} from 'mobx';
+import {makeObservable, observable, runInAction} from 'mobx';
 import {City, RootStoreType} from "@/types";
 import { fetchLightCityList } from '@/api';
 import {withLoading} from "@/mobx/store.utils";

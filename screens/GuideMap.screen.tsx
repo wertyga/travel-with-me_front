@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { GuideMap } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
@@ -75,4 +76,4 @@ const GuideMapScreen = ({ route }) => {
   );
 };
 
-export default GuideMapScreen;
+export default observer(GuideMapScreen);

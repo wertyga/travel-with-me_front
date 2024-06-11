@@ -1,7 +1,7 @@
 import { useRoute } from '@react-navigation/native';
+import { observer } from 'mobx-react-lite';
 import Button, { CustomButtonProps } from '@/components/Button';
 import { useNavigation, useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
 type Props = Omit<CustomButtonProps, 'onPress' | 'href'> & {};

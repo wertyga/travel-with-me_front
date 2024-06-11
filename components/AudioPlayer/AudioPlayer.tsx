@@ -3,7 +3,6 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
-import { Sound } from 'expo-av/src/Audio/Sound';
 import { AudioLine } from './AudioLine';
 
 type Props = {

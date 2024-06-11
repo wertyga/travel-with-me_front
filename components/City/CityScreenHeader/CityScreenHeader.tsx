@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { FontAwesome } from '@expo/vector-icons';
+import { observer } from 'mobx-react-lite';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import {
@@ -15,7 +16,6 @@ import {
 } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { FONTS, SCREENS } from '@/types';
 
 type Props = {

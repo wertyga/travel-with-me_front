@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
 import Button from '@/components/Button';
 import { Input } from '@/components/Input';

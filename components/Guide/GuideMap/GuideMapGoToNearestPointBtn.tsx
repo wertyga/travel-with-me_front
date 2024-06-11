@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { observer } from 'mobx-react-lite';
 import Button from '@/components/Button';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { getNearestPoint } from '@/utils/map';
 import { Guide, Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';

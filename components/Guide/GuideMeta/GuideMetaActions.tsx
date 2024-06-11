@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { observer } from 'mobx-react-lite';
 import { CountryPill } from '@/components/Country';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation, useSubscription } from '@/hooks';
-import { observer } from 'mobx-react';
 import { Guide, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 

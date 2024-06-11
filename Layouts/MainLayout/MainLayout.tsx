@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { LinearGradient } from 'expo-linear-gradient';
+import { observer } from 'mobx-react-lite';
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
@@ -15,7 +16,6 @@ import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
 import { Loader } from '@/components/Loader';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -77,7 +77,6 @@ export const MainLayoutComponent = ({
       {!bgImage && (
         <BackgroundGradient style={styles.bgGradient} colors={bgColors} />
       )}
-      {/*<FetchErrorWrapper fetchError={fetchError} reFetchMethod={reFetchMethod}>*/}
       <>
         {isLoading && <Loader textColor={loaderTextColor} />}
 
@@ -121,7 +120,6 @@ export const MainLayoutComponent = ({
 
         {!noFooter && <FooterMenu />}
       </>
-      {/*</FetchErrorWrapper>*/}
     </View>
   );
 };

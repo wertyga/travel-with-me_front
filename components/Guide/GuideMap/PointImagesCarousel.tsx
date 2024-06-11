@@ -8,13 +8,13 @@ import Animated, {
 } from 'react-native-reanimated';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { observer } from 'mobx-react-lite';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { CarouselDots } from '@/components/Carousel';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { FONTS, Place } from '@/types';
 
 type Props = {

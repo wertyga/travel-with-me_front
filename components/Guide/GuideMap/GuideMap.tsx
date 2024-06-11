@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { Region } from 'react-native-maps';
 import CarouselEx from 'react-native-snap-carousel';
 import { StatusBar } from 'expo-status-bar';
+import { observer } from 'mobx-react-lite';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { Map } from '@/components/Map';
+import { DEFAULT_DELTA } from '@/components/Map/Map';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
-import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { Guide, Place } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 import { GuideActions } from './GuideActions';
@@ -24,12 +24,8 @@ type Props = {
 const { width: windowWidth } = Dimensions.get('window');
 const MAP_TOP = 120;
 
-export const GuideMapComponent = ({
-  guide,
-  onPressGoToPointDirections,
-}: Props) => {
-  const route = useRoute();
-  const navi = useNavigation();
+const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
+  const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
   const {
     layoutHeight,
@@ -37,47 +33,31 @@ export const GuideMapComponent = ({
     isGuideMuted,
     isFollowingToGuide,
     updateDomState,
-  } = useStores(stores => ({
-    layoutHeight: stores.domStore.layoutHeight,
-    visiblePoint: stores.guideStore.visiblePoint,
-    isGuideMuted: stores.guideStore.isGuideMuted,
-    isFollowingToGuide: stores.guideStore.isFollowingToGuide,
-    updateDomState: stores.domStore.updateDomState,
-  }));
+  } = useStores(stores => {
+    return {
+      layoutHeight: stores.domStore.layoutHeight,
+      visiblePoint: stores.guideStore.visiblePoint,
+      isGuideMuted: stores.guideStore.isGuideMuted,
+      isFollowingToGuide: stores.guideStore.isFollowingToGuide,
+      updateDomState: stores.domStore.updateDomState,
+    };
+  });
 
   const [state, setState] = useState({
-    // @ts-ignore
-    pointShowing: (route.params?.pointShowing || undefined) as
-      | Place
-      | undefined,
-    // @ts-ignore
-    pointShowingIndex: route.params?.pointShowingIndex || 0,
+    pointShowing: undefined,
     isShowCarouselImages: false,
     isAudioPlaying: false,
     isBgPermissionDenied: false,
   });
 
-  const carouselRef = useRef<CarouselEx<Guide> | null>(null);
-
-  const updateRouteMapState = (params: any) => {
-    navi.setParams(params);
-  };
-
-  const onPointChoose = (point: Place, forceUpdate?: boolean) => {
+  const onPointChoose = (point: Place & { isChosen?: boolean }) => {
     const pointIndex = guide.points.findIndex(p => p._id === point._id);
     carouselRef.current?.snapToItem(pointIndex, false);
 
-    if (forceUpdate) {
-      setState(prev => ({
-        ...prev,
-        pointShowing: { ...point },
-        pointShowingIndex: pointIndex,
-      }));
-    } else if (state.pointShowing?._id !== point._id) {
+    if (state.pointShowing?._id !== point._id) {
       setState(prev => ({
         ...prev,
         pointShowing: point,
-        pointShowingIndex: pointIndex,
       }));
     }
   };
@@ -86,16 +66,15 @@ export const GuideMapComponent = ({
     setState(prev => ({
       ...prev,
       pointShowing: undefined,
-      pointShowingIndex: 0,
     }));
   };
 
   const onSlidePoint = (index: number) => {
-    const chosenPoint = guide.points.find((_, i) => i === index) || undefined;
+    const pointShowing = guide.points.find((_, i) => i === index) || undefined;
+
     setState(prev => ({
       ...prev,
-      pointShowing: chosenPoint,
-      pointShowingIndex: index,
+      pointShowing,
       isShowCarouselImages: false,
     }));
   };
@@ -111,6 +90,8 @@ export const GuideMapComponent = ({
       isShowCarouselImages: !prev.isShowCarouselImages,
     }));
   };
+
+  const onRegionChange = (region: Region) => {};
 
   const onPlaySound = (value: boolean) => {
     setState(prev => ({ ...prev, isAudioPlaying: value }));
@@ -128,11 +109,6 @@ export const GuideMapComponent = ({
   }, [visiblePoint?._id, isFollowingToGuide]);
 
   useEffect(() => {
-    updateRouteMapState({
-      pointShowing: state.pointShowing,
-      pointShowingIndex: state.pointShowingIndex,
-    });
-
     updateDomState({
       header: {
         display: state.pointShowing ? 'none' : 'flex',
@@ -145,7 +121,7 @@ export const GuideMapComponent = ({
     isChosen: point._id === visiblePoint?._id,
   }));
 
-  const PREVIEW_HEIGHT = layoutHeight / 2;
+  const PREVIEW_HEIGHT = layoutHeight / 2.5;
   const mapHeight = !!state.pointShowing
     ? layoutHeight - PREVIEW_HEIGHT
     : layoutHeight - MAP_TOP - 5;
@@ -156,8 +132,14 @@ export const GuideMapComponent = ({
       <Map
         points={guide.points}
         chosenPoint={state.pointShowing}
-        // @ts-ignore
-        onPress={onPointChoose}
+        onPointPress={onPointChoose}
+        initialRegion={{
+          latitude: guide.points[0].coords.lat,
+          longitude: guide.points[0].coords.lng,
+          latitudeDelta: DEFAULT_DELTA,
+          longitudeDelta: DEFAULT_DELTA,
+        }}
+        onRegionChange={onRegionChange}
         mapMarkerSize={30}
         mapStyles={[
           { ...styles.map, height: mapHeight },
@@ -263,4 +245,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export const GuideMap = observer(GuideMapComponent);
+export default observer(GuideMap);

@@ -1,10 +1,10 @@
 import React from 'react';
 import {
   NavigationContainer,
-  NavigationContainerRefWithCurrent,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { observer } from 'mobx-react-lite';
 import { useStores } from '@/hooks';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import CitiesListScreen from '@/screens/CitiesList.screen';
@@ -20,7 +20,6 @@ import ProfileScreen from '@/screens/Profile';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import SubscriptionsScreen from '@/screens/Subscriptions';
 import TransitionScreen from '@/screens/TransitionScreen';
-import { observer } from 'mobx-react';
 import { City, Guide, SCREENS } from '@/types';
 
 export type RootStackParamList = {
@@ -42,25 +41,19 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export let navigation: NavigationContainerRefWithCurrent<any> | undefined;
-
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
 
-  const { onRouterStoreReady, initialHistory, isAppSet, isInitialLoading } =
-    useStores(stores => ({
-      onRouterStoreReady: stores.routerStore.onReady,
-      initialHistory: stores.routerStore.initialHistory,
-      isAppSet: stores.routerStore.isAppSet,
-      isInitialLoading: stores.authStore.isInitialLoading,
-    }));
+  const { onRouterStoreReady, isAuthLoading } = useStores(stores => ({
+    onRouterStoreReady: stores.routerStore.onReady,
+    isAuthLoading: stores.authStore.isInitialLoading,
+  }));
 
   const onReady = async () => {
-    navigation = navigationRef;
     onRouterStoreReady(navigationRef);
   };
 
-  if (isInitialLoading || !isAppSet) {
+  if (isAuthLoading) {
     return <TransitionScreen />;
   }
 
@@ -68,7 +61,6 @@ const Navigator = () => {
     <NavigationContainer<RootStackParamList>
       ref={navigationRef as any}
       onReady={onReady}
-      initialState={initialHistory}
     >
       <Stack.Navigator
         screenOptions={{

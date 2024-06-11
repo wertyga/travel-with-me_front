@@ -21,12 +21,12 @@ export class UserStore {
 	
 	@action async getSelf() {
 		try {
-			const token = await storage.get('token');
-			if (!token) return;
+			this.rootStore.authStore.isInitialLoading = true
 			
-			runInAction(() => {
-				this.rootStore.authStore.isInitialLoading = true
-			})
+			const token = await storage.get('token');
+			if (!token) {
+				return;
+			}
 			
 			const user = await fetchSelfUser();
 			

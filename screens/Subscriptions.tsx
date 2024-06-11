@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import Constants from 'expo-constants';
@@ -7,11 +6,10 @@ import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { SubscriptionList } from '@/components/Subscription';
-import { useAuth } from '@/context';
 import { useNavigation, useSubscription } from '@/hooks';
-import { RouterStore } from '@/mobx/stores';
+import { AppStateStore } from '@/mobx/stores';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { SCREENS } from '@/types';
 
 const Subscriptions = () => {
@@ -73,7 +71,7 @@ const Subscriptions = () => {
     }
   };
 
-  const { ENV } = RouterStore;
+  const { ENV } = AppStateStore;
   const isLoading = paymentLoading || subLoading;
   const isSubscriptionCanceled = !!subscription && subscription.isCanceled;
   const isShowCancelAction = !!subscription && !subscription.isCanceled;

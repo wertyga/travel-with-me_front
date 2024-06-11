@@ -1,4 +1,4 @@
-import { RouterStore } from '@/mobx/stores/RouterStore';
+import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import { calculateDistance, getNearestPoint } from '@/utils/map';
 import { Path, Place } from '@/types';
 
@@ -21,10 +21,10 @@ export const getTheNearestVisiblePoint = (
     true
   ) as number;
 
-  const { minCloseDistance } = RouterStore.ENV;
+  const { minCloseDistance } = AppStateStore.ENV;
 
-  const isNewPointVisible = distanceToNearestPoint <= Number(minCloseDistance); // Prod
-  // const isNewPointVisible = distanceToNearestPoint >= Number(minCloseDistance); // Test
+  // const isNewPointVisible = distanceToNearestPoint <= Number(minCloseDistance); // Prod
+  const isNewPointVisible = distanceToNearestPoint >= Number(minCloseDistance); // Test
   const isNewPointStartBeVisible =
     isNewPointVisible && !prevNearestPoint?.isVisible;
   const isNewPointStartBeHidden =

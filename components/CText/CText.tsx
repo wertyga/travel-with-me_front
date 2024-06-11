@@ -1,5 +1,4 @@
 import { StyleSheet, Text, TextProps, TextStyle } from 'react-native';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import { FONTS } from '@/types';
 
 export type CTextStyleProp = Omit<TextStyle, 'fontFamily'> & {

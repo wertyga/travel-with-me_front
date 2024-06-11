@@ -51,6 +51,7 @@ export class AuthStore {
     await storage.delete('token');
 
     this.rootStore.userStore.dropStore();
+    this.rootStore.subscriptionStore.dropStore();
   }
 
   @withLoading async changeEmail(...data: Parameters<typeof changeEmailApi>) {

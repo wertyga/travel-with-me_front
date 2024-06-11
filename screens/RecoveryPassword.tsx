@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { RecoveryPasswordForm } from '@/components/Auth';
 import Button from '@/components/Button';
 import { useNavigation, useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { SCREENS } from '@/types';
 
 const RecoveryPassword = () => {

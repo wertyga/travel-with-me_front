@@ -8,13 +8,13 @@ import {
   ViewStyle,
 } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+import { observer } from 'mobx-react-lite';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import {
   CarouselNew,
   Props as CarouselProps,
 } from '@/components/CarouselNew/CarouselNew';
 import { useStores } from '@/hooks';
-import { observer } from 'mobx-react';
 import { CONSTANTS } from '@/styles/constants';
 
 type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
