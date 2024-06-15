@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { observer } from 'mobx-react-lite';
@@ -17,10 +17,14 @@ type Props = {
   point: Place;
 };
 
-const PointGoToDirection = ({ style, onPress, point }: Props) => {
-  const { liveCoords } = useStores(stores => ({
-    liveCoords: stores.locationStore.liveCoords,
-  }));
+const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
+  const { liveCoords, isWatching, dropLocationStore, onStartWatchingLocation } =
+    useStores(stores => ({
+      liveCoords: stores.locationStore.liveCoords,
+      isWatching: stores.locationStore.isWatching,
+      dropLocationStore: stores.locationStore.dropStore,
+      onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
+    }));
 
   const onDirectionPress = async () => {
     if (onPress) {
@@ -37,6 +41,18 @@ const PointGoToDirection = ({ style, onPress, point }: Props) => {
     openGoogleMap(point.coords);
   };
 
+  useEffect(() => {
+    return () => {
+      dropLocationStore();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isWatching) {
+      onStartWatchingLocation();
+    }
+  }, [isWatching]);
+
   const distanceToPoint = calculateDistance(point.coords, liveCoords);
   const stylesArrayed = Array.isArray(style) ? style : [style];
 
@@ -45,7 +61,10 @@ const PointGoToDirection = ({ style, onPress, point }: Props) => {
     <Button
       style={[
         styles.container,
-        !!distanceToPoint && { width: undefined },
+        {
+          width: !!distanceToPoint ? undefined : 40,
+          maxWidth: !!distanceToPoint ? undefined : 40,
+        },
         ...stylesArrayed,
       ]}
       noPaddings={!distanceToPoint}

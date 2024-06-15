@@ -42,6 +42,11 @@ const GuideMapScreen = ({ route }) => {
       stores.guideStore.updateGuidePointWithLiveCoords,
   }));
 
+  const watchingLocationCallback = () => {
+    if (route.params?.isOnlyMap) return;
+    updateGuidePointWithLiveCoords(guide);
+  };
+
   useLayoutEffect(() => {
     if (!route.params?.guide) {
       Toast.show({
@@ -60,10 +65,7 @@ const GuideMapScreen = ({ route }) => {
     if (!guide) return;
 
     setIsFollowingGuide(!route.params?.isOnlyMap);
-    onStartWatchingLocation(
-      guide,
-      !route.params?.isOnlyMap ? updateGuidePointWithLiveCoords : undefined
-    );
+    onStartWatchingLocation(watchingLocationCallback);
   }, [guide]);
 
   useFocus(() => {

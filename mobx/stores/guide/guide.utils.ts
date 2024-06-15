@@ -23,8 +23,8 @@ export const getTheNearestVisiblePoint = (
 
   const { minCloseDistance } = AppStateStore.ENV;
 
-  const isNewPointVisible = distanceToNearestPoint <= Number(minCloseDistance); // Prod
-  // const isNewPointVisible = distanceToNearestPoint >= Number(minCloseDistance); // Test
+  // const isNewPointVisible = distanceToNearestPoint <= Number(minCloseDistance); // Prod
+  const isNewPointVisible = distanceToNearestPoint >= Number(minCloseDistance); // Test
   const isNewPointStartBeVisible =
     isNewPointVisible && !prevNearestPoint?.isVisible;
   const isNewPointStartBeHidden =
