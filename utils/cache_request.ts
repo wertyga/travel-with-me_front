@@ -1,62 +1,6 @@
 import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import { runInAction } from 'mobx';
 
-class CacheHandler {
-  key: string;
-  loadingKey: string;
-  _parent: any;
-
-  constructor(
-    private promise: (...params: any) => Promise<any>,
-    private params?: any
-  ) {
-    this.key = CacheReq.getCacheKey(promise.name, params);
-  }
-
-  withLoading(parent: any, loadingKey = 'isLoading') {
-    this.loadingKey = loadingKey;
-    this._parent = parent;
-
-    return this;
-  }
-
-  async invoke() {
-    const cachedResult = CacheReq.getCacheByKey(this.key);
-    if (cachedResult) {
-      return cachedResult;
-    }
-
-    try {
-      if (this.loadingKey) {
-        runInAction(() => {
-          this._parent[this.loadingKey] = true;
-        });
-      }
-
-      const params = Array.isArray(this.params) ? this.params : [this.params];
-      const result = await this.promise(...params);
-
-      CacheReq.setCacheByKey(this.key, result);
-
-      if (this.loadingKey) {
-        runInAction(() => {
-          this._parent[this.loadingKey] = false;
-        });
-      }
-
-      return result;
-    } catch (e) {
-      throw e;
-    } finally {
-      if (this.loadingKey) {
-        runInAction(() => {
-          this._parent[this.loadingKey] = false;
-        });
-      }
-    }
-  }
-}
-
 export class CacheReq {
   private static cache = new Map<string, Record<'data' | 'expiredAt', any>>();
 
@@ -99,12 +43,6 @@ export class CacheReq {
     });
   }
 
-  static wrap(promise: (params?: any) => Promise<any>, params?: any) {
-    const handler = new CacheHandler(promise, params);
-
-    return handler;
-  }
-
   static drop(key: string) {
     this.cache.delete(key);
   }
@@ -112,4 +50,70 @@ export class CacheReq {
   static dropAll() {
     this.cache.clear();
   }
+}
+
+class CacheHandler {
+  key: string;
+  loadingKey: string;
+
+  constructor(
+    private _parent: any,
+    private _promise: (...params: any) => Promise<any>,
+    private _params?: any
+  ) {
+    this.key = CacheReq.getCacheKey(_promise.name, _params);
+  }
+
+  withLoading(loadingKey = 'isLoading') {
+    this.loadingKey = loadingKey;
+
+    return this;
+  }
+
+  async invoke() {
+    const cachedResult = CacheReq.getCacheByKey(this.key);
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    try {
+      if (this.loadingKey) {
+        runInAction(() => {
+          this._parent[this.loadingKey] = true;
+        });
+      }
+
+      const params = Array.isArray(this._params)
+        ? this._params
+        : [this._params];
+      const result = await this._promise(...params);
+
+      CacheReq.setCacheByKey(this.key, result);
+
+      if (this.loadingKey) {
+        runInAction(() => {
+          this._parent[this.loadingKey] = false;
+        });
+      }
+
+      return result;
+    } catch (e) {
+      throw e;
+    } finally {
+      if (this.loadingKey) {
+        runInAction(() => {
+          this._parent[this.loadingKey] = false;
+        });
+      }
+    }
+  }
+}
+
+export function cacheWrap(
+  promise: (params?: any) => Promise<any>,
+  params?: any
+) {
+  const handler = new CacheHandler(this, promise, params);
+
+  return handler;
 }

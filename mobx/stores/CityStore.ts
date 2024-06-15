@@ -2,7 +2,7 @@ import { RootStore } from '@/mobx/RootStore';
 import { makeObservable, observable, runInAction} from 'mobx';
 import {City} from "@/types";
 import {fetchCity} from "@/api";
-import {CacheReq} from "@/utils/cache_request";
+import {cacheWrap} from "@/utils/cache_request";
 
 
 export class CityStore {
@@ -15,13 +15,13 @@ export class CityStore {
 	
 	async getCity(...params: Parameters<typeof fetchCity>) {
 		try {
-			const cachedReq = CacheReq.wrap(fetchCity, params);
-		  const {city} = await cachedReq.withLoading(this).invoke();
-			
+			const cachedReq = cacheWrap.apply(this, [fetchCity, params]);
+		  const {city} = await cachedReq.withLoading().invoke();
+
 			runInAction(() => {
 				this.city = city;
 			});
-			
+
 			return city;
 		} catch (e) {
 		

@@ -2,7 +2,7 @@ import {makeObservable, observable, runInAction, action} from 'mobx';
 import { fetchGuide } from '@/api';
 import {Guide, Place, RootStoreType} from "@/types";
 import {getTheNearestVisiblePoint, NearestPoint} from "./guide.utils";
-import {CacheReq} from "@/utils/cache_request";
+import {cacheWrap} from "@/utils/cache_request";
 
 export class GuideStore {
 	@observable isLoading: boolean;
@@ -22,8 +22,8 @@ export class GuideStore {
 		withStory?: boolean;
 	}) {
 		try {
-			const cachedReq = CacheReq.wrap(fetchGuide, params);
-			const guide = await cachedReq.withLoading(this).invoke();
+			const cachedReq = cacheWrap.apply(this, [fetchGuide, params]);
+			const guide = await cachedReq.withLoading().invoke();
 			
 			runInAction(() => {
 				this.guide = guide;

@@ -1,7 +1,7 @@
 import {makeObservable, observable, runInAction} from "mobx";
 import {fetchGuidesList} from "@/api";
 import {Guide, RootStoreType} from "@/types";
-import {CacheReq} from "@/utils/cache_request";
+import {CacheReq, cacheWrap} from "@/utils/cache_request";
 
 export class GuidesListStore {
 	@observable isLoading: boolean;
@@ -14,8 +14,8 @@ export class GuidesListStore {
 	
 	async getGuidesList(...params: Parameters<typeof fetchGuidesList>) {
 		try {
-			const cachedReq = CacheReq.wrap(fetchGuidesList, params);
-			const {guides, total} = await cachedReq.withLoading(this).invoke();
+			const cachedReq = cacheWrap.apply(this, [fetchGuidesList, params]);
+			const {guides, total} = await cachedReq.withLoading().invoke();
 			
 			runInAction(() => {
 				this.guides = guides;
