@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';

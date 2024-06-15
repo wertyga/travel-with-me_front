@@ -1,8 +1,8 @@
 import {makeObservable, observable, runInAction, action} from 'mobx';
 import { fetchGuide } from '@/api';
-import {withLoading} from "@/mobx/store.utils";
 import {Guide, Place, RootStoreType} from "@/types";
 import {getTheNearestVisiblePoint, NearestPoint} from "./guide.utils";
+import {CacheReq} from "@/utils";
 
 export class GuideStore {
 	@observable isLoading: boolean;
@@ -17,19 +17,18 @@ export class GuideStore {
     makeObservable(this);
   }
 	
-	@withLoading async getGuide(params: {
+	async getGuide(params: {
 		slug: string;
 		withStory?: boolean;
 	}) {
 		try {
-			const guide = await fetchGuide(params);
-	
+			const cachedReq = CacheReq.wrap(fetchGuide, params);
+			const guide = await cachedReq.withLoading(this).invoke();
+			
 			runInAction(() => {
 				this.guide = guide;
 			})
-		} catch (e) {
-		
-		}
+		} catch (e) {}
 	}
 	
 	@action updateGuidePointWithLiveCoords(guide: Guide) {

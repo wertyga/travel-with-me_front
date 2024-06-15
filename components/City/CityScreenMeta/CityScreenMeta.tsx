@@ -22,12 +22,10 @@ type Props = {
 };
 
 export const CityScreenMeta = ({ city }: Props) => {
-  const router = useRoute();
-  const navi = useNavigation();
-
-  const chosenCityTab = (router.params as any)?.cityTab || CITY_TABS[0].title;
+  const chosenCityTab = CITY_TABS[0].title;
   const [state, setState] = useState({
     filterByCategory: '',
+    chosenCityTab: CITY_TABS[0].title,
   });
 
   const onChangeFilterByCategory = (filterByCategory: string) => () => {
@@ -40,8 +38,8 @@ export const CityScreenMeta = ({ city }: Props) => {
     });
   };
 
-  const onChangeTextData = (title: string) => () => {
-    navi.setParams({ cityTab: title } as any);
+  const onChangeTextData = (chosenCityTab: string) => () => {
+    setState(prev => ({ ...prev, chosenCityTab }));
   };
 
   const guidesCityCategories = getGuidesCategories(city.guides);
@@ -81,7 +79,7 @@ export const CityScreenMeta = ({ city }: Props) => {
         })}
       </ScrollHorizontalNoEdges>
 
-      <CityScreenMetaDHST type={chosenCityTab} city={city} />
+      <CityScreenMetaDHST type={state.chosenCityTab as any} city={city} />
 
       <>
         <CityGuidesCategories

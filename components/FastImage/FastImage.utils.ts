@@ -5,6 +5,7 @@ export const handleCacheImage = async (
   setUri: (cachedUri: string) => void
 ) => {
   const { exists, uri: cachedUri } = await findImageInCache(uri);
+
   if (exists && cachedUri) {
     setUri(cachedUri);
 

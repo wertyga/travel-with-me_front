@@ -1,24 +1,28 @@
 import { RootStore } from '@/mobx/RootStore';
-import {makeObservable, action, observable, runInAction} from 'mobx';
+import { makeObservable, observable, runInAction} from 'mobx';
 import {City} from "@/types";
 import {fetchCity} from "@/api";
-import {withLoading} from "@/mobx/store.utils";
+import {CacheReq} from "@/utils/cache_request";
+
 
 export class CityStore {
-	@observable city: City| null = null;
+	@observable city: City | null = null;
 	@observable isLoading: boolean;
 	
   constructor(rootStore: RootStore) {
     makeObservable(this);
   }
 	
-	@withLoading async getCity(...params: Parameters<typeof fetchCity>) {
+	async getCity(...params: Parameters<typeof fetchCity>) {
 		try {
-		  const {city} = await fetchCity(...params);
+			const cachedReq = CacheReq.wrap(fetchCity, params);
+		  const {city} = await cachedReq.withLoading(this).invoke();
 			
 			runInAction(() => {
 				this.city = city;
 			});
+			
+			return city;
 		} catch (e) {
 		
 		}

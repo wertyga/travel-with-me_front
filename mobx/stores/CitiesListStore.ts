@@ -1,7 +1,8 @@
 import {makeObservable, observable, runInAction} from 'mobx';
 import {City, RootStoreType} from "@/types";
-import { fetchLightCityList } from '@/api';
+import {fetchGuide, fetchLightCityList} from '@/api';
 import {withLoading} from "@/mobx/store.utils";
+import {CacheReq} from "@/utils";
 
 export class CitiesListStore {
   @observable isLoading: boolean;
@@ -12,9 +13,10 @@ export class CitiesListStore {
     makeObservable(this);
   }
   
-  @withLoading async getCityLightList() {
+  async getCityLightList() {
     try {
-      const {cities, total} = await fetchLightCityList();
+      const cachedReq = CacheReq.wrap(fetchLightCityList);
+      const {cities, total} = await cachedReq.withLoading(this).invoke();
 
       runInAction(() => {
         this.cityLightList = cities;

@@ -34,7 +34,7 @@ const CityScreen = () => {
   }) => {
     if (!cityLightList[index]) return;
 
-    navi.setParams({ cityTab: null, city: item } as any);
+    navi.setParams({ city: item } as any);
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const CityScreen = () => {
     if (!cityLightList.length) return;
 
     getCity({ slug: currentCity?.slug });
-  }, [router.params?.city, cityLightList.length]);
+  }, [currentCity, cityLightList.length]);
 
   if (!city || !cityLightList.length) {
     return (
@@ -60,7 +60,7 @@ const CityScreen = () => {
   }
 
   const initialCityIndex = cityLightList.findIndex(
-    ({ _id }) => _id === router.params?.city._id
+    ({ _id }) => _id === currentCity?._id
   );
 
   return (

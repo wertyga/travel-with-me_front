@@ -1,21 +1,22 @@
 import {RootStore} from "@/mobx/RootStore";
 import {makeObservable, observable, runInAction} from "mobx";
-import {withLoading} from "@/mobx/store.utils";
 import {fetchGuidesList} from "@/api";
-import {Guide} from "@/types";
+import {Guide, RootStoreType} from "@/types";
+import {CacheReq} from "@/utils";
 
 export class GuidesListStore {
 	@observable isLoading: boolean;
 	@observable guides: Guide[] = [];
 	@observable total = 0;
 	
-	constructor(rootStore: RootStore) {
+	constructor(public rootStore: RootStoreType) {
 		makeObservable(this);
 	}
 	
-	@withLoading async getGuidesList(...params: Parameters<typeof fetchGuidesList>) {
+	async getGuidesList(...params: Parameters<typeof fetchGuidesList>) {
 		try {
-			const {guides, total} = await fetchGuidesList(...params);
+			const cachedReq = CacheReq.wrap(fetchGuidesList, params);
+			const {guides, total} = await cachedReq.withLoading(this).invoke();
 			
 			runInAction(() => {
 				this.guides = guides;

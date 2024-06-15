@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
@@ -7,7 +8,7 @@ import { RootStackParamList } from '@/app/Navigator';
 import { GuideMeta } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
-import { useStores } from '@/hooks';
+import { useNavigation, useStores } from '@/hooks';
 import { defaultGuideImage } from '@/utils';
 import { Guide, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
@@ -15,36 +16,51 @@ import { CONSTANTS } from '@/styles/constants';
 type Props = NativeStackScreenProps<RootStackParamList, SCREENS.Guide>;
 
 const GuideScreen = ({ route }: Props) => {
-  const [defaultGuide, setDefaultGuide] = useState<Guide>(
-    route.params?.guide as Guide
-  );
+  const navi = useNavigation();
+  const router = useRoute();
 
-  const { getGuide, guide, getGuidesList, guides, isListLoading, isLoading } =
+  const [guides, setGuides] = useState([]);
+  const [fetchedCityId, setFetchedCityId] = useState('');
+
+  const { getGuide, guide, isLoading, getCity, isCityLoading, city } =
     useStores(stores => ({
       guide: stores.guideStore.guide,
       getGuide: stores.guideStore.getGuide,
       isLoading: stores.guideStore.isLoading,
-      getGuidesList: stores.guidesListStore.getGuidesList,
-      isListLoading: stores.guidesListStore.isLoading,
-      guides: stores.guidesListStore.guides,
+      getCity: stores.cityStore.getCity,
+      city: stores.cityStore.city,
+      isCityLoading: stores.cityStore.isLoading,
     }));
 
-  const cityId =
-    typeof defaultGuide?.city === 'string'
-      ? defaultGuide.city
-      : defaultGuide?.city._id;
+  const currentGuide = (router.params as any)?.guide;
 
   useEffect(() => {
-    if (!defaultGuide?.slug) return;
+    if (!currentGuide?.slug) return;
 
-    getGuide({ slug: defaultGuide.slug });
-  }, [defaultGuide?.slug]);
+    getGuide({ slug: currentGuide.slug });
+  }, [currentGuide?.slug]);
 
   useEffect(() => {
-    if (!cityId) return;
+    const cityId =
+      typeof currentGuide?.city === 'string'
+        ? currentGuide.city
+        : currentGuide?.city._id;
 
-    getGuidesList({ city: cityId });
-  }, [cityId]);
+    if (fetchedCityId === cityId) {
+      return;
+    }
+
+    const getCityGuides = async () => {
+      try {
+        const city = await getCity({ _id: cityId });
+
+        setGuides(city.guides);
+        setFetchedCityId(city._id);
+      } catch (e) {}
+    };
+
+    getCityGuides();
+  }, [currentGuide?.slug]);
 
   const onChangeGuide = async ({
     index,
@@ -55,61 +71,42 @@ const GuideScreen = ({ route }: Props) => {
   }) => {
     if (!guides[index]) return;
 
-    setDefaultGuide(item);
+    navi.setParams({ guide: item });
   };
 
-  const isInitialLoading = !guide || isLoading || isListLoading;
-
-  if (isInitialLoading) {
+  if (!guide) {
     return (
       <SafeLoader
-        image={defaultGuide?.vImage}
+        image={currentGuide?.vImage}
         textColor="white"
         indicatorColor="white"
       />
     );
   }
 
-  const initialCityIndex = guides.findIndex(
+  const initialGuideIndex = guides.findIndex(
     ({ _id }) => _id === route.params?.guide._id
   );
+  const loading = isLoading || isCityLoading;
 
   return (
     <MainLayout
       style={styles.container}
       headerTitle={guide.title}
+      isLoading={isLoading}
       withHeaderShadow
     >
       <ScreenContentWrapper<Guide>
         data={guides}
-        defaultIndex={initialCityIndex}
+        defaultIndex={initialGuideIndex}
         onChange={onChangeGuide}
         imageKey="vImage"
         defaultImage={defaultGuideImage}
         noDots
         isFullScreen
       >
-        <GuideMeta guide={guide} isFetching={isLoading} />
+        {!loading && <GuideMeta guide={guide} />}
       </ScreenContentWrapper>
-
-      {/*<CarouselNew<Guide>*/}
-      {/*  data={guides}*/}
-      {/*  defaultIndex={initialCityIndex}*/}
-      {/*  onChange={onChangeCGuide}*/}
-      {/*  renderItem={({ item }) => {*/}
-      {/*    return (*/}
-      {/*      <FastImage*/}
-      {/*        key={item._id}*/}
-      {/*        uri={item.vImage || defaultGuideImage}*/}
-      {/*        style={[styles.guideImage]}*/}
-      {/*      />*/}
-      {/*    );*/}
-      {/*  }}*/}
-      {/*  isFullScreen*/}
-      {/*  noDots*/}
-      {/*/>*/}
-
-      {/*<GuideMeta guide={guide} isFetching={isFetching} />*/}
     </MainLayout>
   );
 };

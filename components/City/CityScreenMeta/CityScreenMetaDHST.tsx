@@ -110,7 +110,7 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
     }
 
     return null;
-  }, [type]);
+  }, [type, city]);
 
   return Component;
 };

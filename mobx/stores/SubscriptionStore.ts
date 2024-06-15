@@ -9,7 +9,6 @@ import {
 } from '@/api';
 import { withLoading } from '../store.utils';
 import {SubscriptionPreview, UserSubscription} from "@/types";
-import {storage} from "@/utils";
 
 export class SubscriptionStore {
 	@observable isLoading: boolean;

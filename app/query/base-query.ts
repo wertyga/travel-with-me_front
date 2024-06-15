@@ -24,13 +24,6 @@ export const baseQuery = async ({
       ...config,
     } as AxiosRequestConfig);
 
-    // MOCK
-    return new Promise(res => {
-      setTimeout(() => {
-        res({ data: data?.data });
-      }, 1000);
-    });
-
     return { data: data?.data } as any;
   } catch (e: any) {
     if (!silentError) {

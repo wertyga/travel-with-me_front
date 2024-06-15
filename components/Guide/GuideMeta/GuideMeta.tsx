@@ -9,7 +9,7 @@ import { GuideMetaTitle } from './GuideMetaTitle';
 
 type Props = {
   guide: Guide;
-  isFetching: boolean;
+  isFetching?: boolean;
 };
 
 export const GuideMetaComponent = ({ guide, isFetching }: Props) => {
