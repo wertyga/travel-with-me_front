@@ -25,13 +25,13 @@ export const CityPreview = ({ city }: Props) => {
         })
       }
     >
-      <FastImageBackground
-        source={city.image}
-        // image={city.image}
+      <ImageBackgroundWithGradient
+        // source={city.image}
+        image={city.image}
         style={styles.image}
-        // gradient="top-bottom"
-        // locations={[0.2, 0.45, 0.8]}
-        // isFastImage
+        gradient="top-bottom"
+        locations={[0.1, 0.2, 1]}
+        isFastImage
       >
         <View style={styles.content}>
           <CountryPill
@@ -41,7 +41,7 @@ export const CityPreview = ({ city }: Props) => {
           />
           <CText style={styles.header}>{city.title}</CText>
         </View>
-      </FastImageBackground>
+      </ImageBackgroundWithGradient>
     </TouchableOpacity>
   );
 };
