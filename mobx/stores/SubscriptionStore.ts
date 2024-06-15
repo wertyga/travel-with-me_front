@@ -1,5 +1,4 @@
-import { RootStore } from '@/mobx/RootStore';
-import {makeObservable, action, observable, runInAction} from 'mobx';
+import {makeObservable, action, observable, runInAction, reaction} from 'mobx';
 import {
 	cancelMySubscription as cancelMySubscriptionApi,
 	createSubscriptionPayment,
@@ -8,15 +7,20 @@ import {
 	renewMySubscription as renewMySubscriptionApi
 } from '@/api';
 import { withLoading } from '../store.utils';
-import {SubscriptionPreview, UserSubscription} from "@/types";
+import {RootStoreType, SubscriptionPreview, UserSubscription} from "@/types";
+import {CacheReq} from "@/utils/cache_request";
 
 export class SubscriptionStore {
 	@observable isLoading: boolean;
 	@observable subscriptions: SubscriptionPreview[] = []
 	@observable mySubscription: UserSubscription | null = null;
 	
-  constructor(rootStore: RootStore) {
+  constructor(public rootStore: RootStoreType) {
     makeObservable(this);
+		
+		reaction(() => this.mySubscription?._id, () => {
+			CacheReq.dropAll();
+		})
   }
 	
 	@withLoading async createSubscription(...data: Parameters<typeof createSubscriptionPayment>) {

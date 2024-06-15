@@ -110,6 +110,7 @@ export class CacheReq {
   }
 
   static dropAll() {
+    console.log('dropAll');
     this.cache.clear();
   }
 }
