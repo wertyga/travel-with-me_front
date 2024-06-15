@@ -2,7 +2,7 @@ import {makeObservable, observable, runInAction, action} from 'mobx';
 import { fetchGuide } from '@/api';
 import {Guide, Place, RootStoreType} from "@/types";
 import {getTheNearestVisiblePoint, NearestPoint} from "./guide.utils";
-import {CacheReq} from "@/utils";
+import {CacheReq} from "@/utils/cache_request";
 
 export class GuideStore {
 	@observable isLoading: boolean;

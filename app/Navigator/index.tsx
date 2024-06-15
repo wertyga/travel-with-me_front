@@ -44,10 +44,13 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
 
-  const { onRouterStoreReady, isAuthLoading } = useStores(stores => ({
-    onRouterStoreReady: stores.routerStore.onReady,
-    isAuthLoading: stores.authStore.isInitialLoading,
-  }));
+  const { onRouterStoreReady, isAuthLoading, isAppReady } = useStores(
+    stores => ({
+      onRouterStoreReady: stores.routerStore.onReady,
+      isAuthLoading: stores.authStore.isInitialLoading,
+      isAppReady: stores.appStateStore.isAppReady,
+    })
+  );
 
   const onReady = async () => {
     onRouterStoreReady(navigationRef);

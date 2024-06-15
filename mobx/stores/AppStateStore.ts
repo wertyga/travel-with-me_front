@@ -1,24 +1,29 @@
-import {action, makeObservable} from 'mobx';
+import {action, makeObservable, observable, runInAction} from 'mobx';
 import {AppState} from "react-native";
 import {removeAllNotification} from "@/utils";
-import {RootStoreType} from "@/types";
+import {EnvMap, RootStoreType} from "@/types";
 import {fetchEnvs} from "@/api";
 import Constants from "expo-constants";
 
-const envNames = ['stripePk', 'minCloseDistance'];
-
 export class AppStateStore {
-	static ENV: Record<(typeof envNames)[number], string> = {
+	static ENV: Partial<EnvMap> = {
 		stripePk: (Constants.expoConfig?.extra as any).STRIPE_PUBLIC_KEY,
 	};
 	
-  constructor(rootStore: RootStoreType) {
+	@observable isAppReady: boolean = false;
+	
+  constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
 	
 	onInitiate() {
 		this.applyAppStateChangeListener();
 		this.getEnvs();
+		this.rootStore.subscriptionStore.getMySubscription({isActive: true})
+	
+		runInAction(() => {
+			this.isAppReady = true;
+		})
 	}
 	
 	@action async getEnvs() {
@@ -38,7 +43,17 @@ export class AppStateStore {
 					await Promise.all([
 						this.getEnvs(),
 						removeAllNotification(),
-					])
+						this.rootStore.subscriptionStore.getMySubscription({isActive: true})
+					]);
+					
+					runInAction(() => {
+						this.isAppReady = true;
+					})
+				}
+				if (nextState === 'background') {
+					runInAction(() => {
+						this.isAppReady = false;
+					})
 				}
 			}
 		);

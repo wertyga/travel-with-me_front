@@ -1,8 +1,7 @@
-import {RootStore} from "@/mobx/RootStore";
 import {makeObservable, observable, runInAction} from "mobx";
 import {fetchGuidesList} from "@/api";
 import {Guide, RootStoreType} from "@/types";
-import {CacheReq} from "@/utils";
+import {CacheReq} from "@/utils/cache_request";
 
 export class GuidesListStore {
 	@observable isLoading: boolean;

@@ -2,7 +2,7 @@ import { RootStore } from '@/mobx/RootStore';
 import {makeObservable, observable, runInAction} from 'mobx';
 import {Place} from "@/types";
 import {fetchPlace} from "@/api";
-import {CacheReq} from "@/utils";
+import {CacheReq} from "@/utils/cache_request";
 
 export class PlaceStore {
 	@observable isLoading: boolean;

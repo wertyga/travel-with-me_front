@@ -6,11 +6,16 @@ import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { GuideMap } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
-import { useAuthGuard, useFocus } from '@/hooks';
-import { useStores } from '@/hooks';
+import {
+  useAuthGuard,
+  useFocus,
+  useStores,
+  useSubscriptionGuard,
+} from '@/hooks';
 
 const GuideMapScreen = ({ route }) => {
   useAuthGuard();
+  useSubscriptionGuard();
 
   const navi = useNavigation();
   const {

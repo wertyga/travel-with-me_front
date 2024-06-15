@@ -1,8 +1,7 @@
 import {makeObservable, observable, runInAction} from 'mobx';
 import {City, RootStoreType} from "@/types";
-import {fetchGuide, fetchLightCityList} from '@/api';
-import {withLoading} from "@/mobx/store.utils";
-import {CacheReq} from "@/utils";
+import {fetchLightCityList} from '@/api';
+import {CacheReq} from "@/utils/cache_request";
 
 export class CitiesListStore {
   @observable isLoading: boolean;

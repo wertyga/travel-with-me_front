@@ -11,4 +11,3 @@ export * from './location';
 export * from './logger';
 export * from './number';
 export * from './notify.utils';
-export * from './cache_request';

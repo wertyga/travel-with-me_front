@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useFocus } from '@/hooks/useFocus';
 import { useStores } from '@/hooks/useStores';
 
 type Props = {
@@ -66,7 +67,7 @@ export const useSubscription = (props?: Props) => {
     fetchSubscriptions();
   }, [props?.withList]);
 
-  useEffect(() => {
+  useFocus(() => {
     if (!user) return;
 
     getMySubscription();
