@@ -33,11 +33,7 @@ export const PointMapMarkerPreviewComponent = ({
   onPressGoToPointDirections,
 }: Props) => {
   const { story, title, audioStory } = point;
-  const { liveCoords } = useStores(stores => ({
-    liveCoords: stores.locationStore.liveCoords,
-  }));
 
-  const distanceToPoint = calculateDistance(point.coords, liveCoords);
   return (
     <BackgroundGradient style={styles.container}>
       <TouchableOpacity onPress={onClose} style={styles.close}>
@@ -50,7 +46,6 @@ export const PointMapMarkerPreviewComponent = ({
         <GuideMapPointActions
           point={point}
           onOpenGallery={onToggleCarouselShow}
-          distanceToPoint={distanceToPoint as string}
           onPressGoToPointDirections={onPressGoToPointDirections}
         />
       </View>

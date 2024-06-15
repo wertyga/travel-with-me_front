@@ -6,4 +6,5 @@ export type EnvMap = {
   stripePk: string;
   minCloseDistance: number;
   cacheTime: number;
+  cacheDropIdentifier: string;
 };

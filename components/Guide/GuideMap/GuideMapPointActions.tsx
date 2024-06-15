@@ -1,43 +1,24 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Button from '@/components/Button';
-import { CText } from '@/components/CText';
-import { openGoogleMap } from '@/components/Map/Map.utils';
+import { PointGoToDirection } from '@/components/Point';
 import { Place } from '@/types';
 
 type Props = {
   point: Place;
   onOpenGallery: () => void;
-  distanceToPoint?: string;
   onPressGoToPointDirections?: (point: Place) => void;
 };
 
 export const GuideMapPointActions = ({
   point,
   onOpenGallery,
-  distanceToPoint,
   onPressGoToPointDirections,
 }: Props) => {
-  const onDirectionPress = async () => {
-    if (onPressGoToPointDirections) {
-      await onPressGoToPointDirections(point);
-    }
-
-    openGoogleMap(point.coords);
-  };
-
   return (
     <View style={styles.container}>
-      <Button
-        style={[styles.btn, !!distanceToPoint && { width: undefined }]}
-        onPress={onDirectionPress}
-      >
-        <MaterialIcons name="directions" size={24} color="white" />
-        {!!distanceToPoint && (
-          <CText style={{ marginLeft: 5 }}>{distanceToPoint}</CText>
-        )}
-      </Button>
+      <PointGoToDirection onPress={onPressGoToPointDirections} point={point} />
 
       {!!point.images.length && (
         <Button style={styles.btn} onPress={onOpenGallery}>

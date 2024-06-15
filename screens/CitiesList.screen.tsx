@@ -59,10 +59,10 @@ const CitiesListScreen = () => {
         source={SplashBgImage}
         style={StyleSheet.absoluteFillObject}
       >
-        <LinearGradient
-          colors={['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.7)']}
-          style={StyleSheet.absoluteFillObject}
-        ></LinearGradient>
+        {/*<LinearGradient*/}
+        {/*  colors={['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.7)']}*/}
+        {/*  style={StyleSheet.absoluteFillObject}*/}
+        {/*></LinearGradient>*/}
       </FastImageBackground>
 
       <View

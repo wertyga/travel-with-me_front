@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';

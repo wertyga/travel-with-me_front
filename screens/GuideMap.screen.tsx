@@ -12,6 +12,9 @@ import {
   useStores,
   useSubscriptionGuard,
 } from '@/hooks';
+import { showNotification } from '@/utils';
+import { Place } from '@/types';
+import { CONSTANTS } from '@/styles/constants';
 
 const GuideMapScreen = ({ route }) => {
   useAuthGuard();

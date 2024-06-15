@@ -1,4 +1,5 @@
 import * as Notifications from 'expo-notifications';
+import { PermissionStatus } from 'expo-notifications';
 import { NotificationRequestInput } from 'expo-notifications/src/Notifications.types';
 
 export const showNotification = async (
@@ -6,14 +7,31 @@ export const showNotification = async (
     trigger?: NotificationRequestInput['trigger'];
   }
 ) => {
+  const isNotificationAllowed = await checkForNotificationPermission();
+  if (!isNotificationAllowed) {
+    return;
+  }
+
+  const { content = {}, ...restData } = data;
   Notifications.scheduleNotificationAsync({
     trigger: null,
     content: {
-      vibrate: false,
-      ...(data.content || {}),
+      vibrate: [],
+      ...content,
     },
-    ...data,
+    ...restData,
   });
+};
+
+const checkForNotificationPermission = async () => {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  if (existingStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync();
+
+    return status === 'granted';
+  }
+
+  return existingStatus === 'granted';
 };
 
 export const removeAllNotification = async () => {

@@ -7,6 +7,7 @@ import { CountryPill } from '@/components/Country';
 import { LikeAction } from '@/components/LikeAction';
 import { FONTS, Place, SOCIAL_MODELS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
+import PointGoToDirection from '../PointGoToDirection/PointGoToDirection';
 
 type Props = {
   point: Place;
@@ -30,15 +31,16 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
 
   const {
     city: { title: cityTitle },
-    images,
   } = point;
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <View style={{ flexDirection: 'row', gap: 10 }}>
+        <View style={{ gap: 10 }}>
           <CountryPill title={cityTitle} icon="map-point-small" />
+          <PointGoToDirection point={point} />
         </View>
+
         <LikeAction
           modelType={SOCIAL_MODELS.Place}
           _id={point._id}
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
   },
   top: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     gap: 10,
     marginBottom: 20,

@@ -1,8 +1,8 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
-import { FastImage } from '@/components/FastImage';
+import { FastImage, FastImageBackground } from '@/components/FastImage';
 import { useNavigation } from '@/hooks';
 import { getHeight } from '@/utils';
 import { City, FONTS, SCREENS } from '@/types';
@@ -25,26 +25,30 @@ export const CityPreview = ({ city }: Props) => {
         })
       }
     >
-      <ImageBackgroundWithGradient
-        image={city.image}
-        contentStyle={styles.content}
-        gradient="top-bottom"
-        isFastImage
+      <FastImageBackground
+        source={city.image}
+        // image={city.image}
+        style={styles.image}
+        // gradient="top-bottom"
+        // locations={[0.2, 0.45, 0.8]}
+        // isFastImage
       >
-        <CountryPill
-          title={city.country.title}
-          style={styles.country}
-          icon="map-point-small"
-        />
-        <CText style={styles.header}>{city.title}</CText>
-      </ImageBackgroundWithGradient>
+        <View style={styles.content}>
+          <CountryPill
+            title={city.country.title}
+            style={styles.country}
+            icon="map-point-small"
+          />
+          <CText style={styles.header}>{city.title}</CText>
+        </View>
+      </FastImageBackground>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   preview: {
-    width: '100%',
+    width: '48%',
     height: getHeight(70, CONSTANTS.spaces.paddingHorizontal * 2),
     borderRadius: 15,
     overflow: 'hidden',
@@ -64,5 +68,9 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
+    flex: 1,
+  },
+  image: {
+    flex: 1,
   },
 });

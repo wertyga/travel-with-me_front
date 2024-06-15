@@ -22,5 +22,7 @@ const styles = StyleSheet.create({
   list: {
     gap: 10,
     paddingBottom: 200,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });

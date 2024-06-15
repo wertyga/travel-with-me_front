@@ -4,6 +4,7 @@ import {removeAllNotification} from "@/utils";
 import {EnvMap, RootStoreType} from "@/types";
 import {fetchEnvs} from "@/api";
 import Constants from "expo-constants";
+import {CacheReq} from "@/utils/cache_request";
 
 export class AppStateStore {
 	static ENV: Partial<EnvMap> = {
@@ -29,7 +30,12 @@ export class AppStateStore {
 	@action async getEnvs() {
 		try {
 			const envs = await fetchEnvs();
-			AppStateStore.ENV = envs;
+			if (AppStateStore.ENV?.cacheDropIdentifier !== envs?.cacheDropIdentifier) {
+				CacheReq.dropAll();
+			}
+			if (envs) {
+				AppStateStore.ENV = envs;
+			}
 		} catch (e) {
 		
 		}

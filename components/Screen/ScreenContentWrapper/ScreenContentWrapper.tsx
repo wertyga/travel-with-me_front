@@ -24,6 +24,7 @@ type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
   imageKey: string;
   defaultImage?: number;
   children?: React.ReactNode;
+  renderItem?: (data: { item: any }) => React.ReactNode;
 };
 
 export const ScreenContentWrapperComponent = <DATA,>({
@@ -32,12 +33,28 @@ export const ScreenContentWrapperComponent = <DATA,>({
   imageKey,
   children,
   defaultImage,
+  renderItem,
   imageStyle = {},
   ...carouselProps
 }: Props<DATA>) => {
   const { layoutHeight } = useStores(stores => ({
     layoutHeight: stores.domStore.layoutHeight,
   }));
+
+  const renderItemHandler = <DATA,>(data: { item: DATA }) => {
+    if (renderItem) {
+      return renderItem(data);
+    }
+
+    const imageSrc: string = (data.item as any)[imageKey] as string;
+    return (
+      <Image
+        key={imageSrc}
+        source={imageSrc ? { uri: imageSrc } : defaultImage}
+        style={[styles.image, imageStyle]}
+      />
+    );
+  };
 
   return (
     <ScrollView
@@ -49,17 +66,7 @@ export const ScreenContentWrapperComponent = <DATA,>({
       <CarouselNew<DATA>
         data={data}
         style={carouselStyles}
-        renderItem={({ item }) => {
-          const imageSrc: string = (item as any)[imageKey] as string;
-
-          return (
-            <Image
-              key={imageSrc}
-              source={imageSrc ? { uri: imageSrc } : defaultImage}
-              style={[styles.image, imageStyle]}
-            />
-          );
-        }}
+        renderItem={renderItemHandler}
         {...carouselProps}
       />
       {!!children && (

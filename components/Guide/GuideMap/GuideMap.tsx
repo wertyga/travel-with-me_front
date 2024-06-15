@@ -18,13 +18,12 @@ import { PointImagesCarousel } from './PointImagesCarousel';
 
 type Props = {
   guide: Guide;
-  onPressGoToPointDirections?: (point: Place) => void;
 };
 
 const { width: windowWidth } = Dimensions.get('window');
 const MAP_TOP = 120;
 
-const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
+const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
   const {
@@ -183,7 +182,6 @@ const GuideMap = ({ guide, onPressGoToPointDirections }: Props) => {
                   autoplayAudio={point.isChosen && !isGuideMuted}
                   onToggleCarouselShow={onToggleCarouselShow}
                   onPlaySound={onPlaySound}
-                  onPressGoToPointDirections={onPressGoToPointDirections}
                 />
               );
             }}
