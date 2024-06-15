@@ -28,6 +28,7 @@ export type CustomButtonProps = TouchableOpacityProps & {
   rectangle?: boolean;
   textable?: boolean;
   noPaddings?: boolean;
+  solid?: boolean;
   left?: boolean;
   right?: boolean;
 };
@@ -49,6 +50,7 @@ const CustomButton = ({
   noPaddings,
   left,
   right,
+  solid,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
@@ -77,9 +79,10 @@ const CustomButton = ({
         rectangle && styles.rectangle,
         textable && styles.textable,
         noPaddings && styles.noPaddings,
-        !!disabled && styles.disabled,
         left && { justifyContent: 'flex-start' },
         right && { justifyContent: 'flex-end' },
+        solid && styles.solid,
+        !!disabled && styles.disabled,
         ...(btnStyles as any),
       ]}
       onPress={handleOnPress}
@@ -162,8 +165,9 @@ const styles = StyleSheet.create({
   textDisabled: {
     color: CONSTANTS.colors.textDisabled,
   },
-  free: {
-    width: undefined,
+  solid: {
+    backgroundColor: CONSTANTS.colors.bg1,
+    borderColor: CONSTANTS.colors.bg1,
   },
 });
 

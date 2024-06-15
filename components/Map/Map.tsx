@@ -12,7 +12,7 @@ import MapView, {
   Region,
 } from 'react-native-maps';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { getMyLocation } from '@/mobx/stores/location/location.utils';
 import { observer } from 'mobx-react-lite';
 import Button from '@/components/Button';
@@ -132,7 +132,7 @@ export const MapComponent = ({
         onPress={onGetMyLocationClick}
         noPaddings
       >
-        <Ionicons name="man-sharp" size={18} color="white" />
+        <MaterialIcons name="location-searching" size={20} color="white" />
       </Button>
       {children}
     </View>

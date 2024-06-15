@@ -12,9 +12,6 @@ import {
   useStores,
   useSubscriptionGuard,
 } from '@/hooks';
-import { showNotification } from '@/utils';
-import { Place } from '@/types';
-import { CONSTANTS } from '@/styles/constants';
 
 const GuideMapScreen = ({ route }) => {
   useAuthGuard();
@@ -30,6 +27,7 @@ const GuideMapScreen = ({ route }) => {
     dropFollowingGuide,
     toggleMuteGuideSound,
     setIsFollowingGuide,
+    isFollowingToGuide,
   } = useStores(stores => ({
     getGuide: stores.guideStore.getGuide,
     guide: stores.guideStore.guide,
@@ -38,6 +36,7 @@ const GuideMapScreen = ({ route }) => {
     dropFollowingGuide: stores.guideStore.dropFollowingGuide,
     toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
     setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
+    isFollowingToGuide: stores.guideStore.isFollowingToGuide,
     updateGuidePointWithLiveCoords:
       stores.guideStore.updateGuidePointWithLiveCoords,
   }));
@@ -55,7 +54,6 @@ const GuideMapScreen = ({ route }) => {
       });
       navi.goBack();
     }
-
     toggleMuteGuideSound(!!route.params?.isOnlyMap);
 
     getGuide({ slug: route.params?.guide?.slug, withStory: true });
@@ -65,8 +63,14 @@ const GuideMapScreen = ({ route }) => {
     if (!guide) return;
 
     setIsFollowingGuide(!route.params?.isOnlyMap);
-    onStartWatchingLocation(watchingLocationCallback);
-  }, [guide]);
+  }, [guide?._id]);
+
+  useEffect(() => {
+    if (isFollowingToGuide) {
+      dropLocationStore();
+      onStartWatchingLocation(watchingLocationCallback);
+    }
+  }, [isFollowingToGuide]);
 
   useFocus(() => {
     return () => {

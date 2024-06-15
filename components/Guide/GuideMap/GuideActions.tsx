@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { observer } from 'mobx-react-lite';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -49,39 +49,38 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
       contentContainerStyle={styles.actions}
       edge={CONSTANTS.spaces.paddingHorizontal}
     >
-      <Button
-        style={styles.actionBtn}
-        disabled={!liveCoords}
-        onPress={() => toggleMuteGuideSound()}
-      >
-        <Ionicons name={volumeIcon} size={18} color="white" />
-      </Button>
-      <Button
-        style={[styles.actionBtn, isFollowingToGuide && styles.activeBtn]}
-        onPress={onToggleFollowGuide}
-        disabled={!liveCoords}
-      >
-        {!isFollowingToGuide && (
-          <FontAwesome5 name="walking" size={18} color="white" />
-        )}
-        {isFollowingToGuide && (
-          <>
-            <Octicons
-              name="stop"
-              size={22}
-              color="white"
-              style={{ marginRight: 10 }}
-            />
-          </>
-        )}
-        {!!nearestPoint && (
-          <CText>
-            {`Nearest point: ${nearestPoint.point?.title} ${nearestPoint.distance.toFixed(
-              2
-            )} km`}
-          </CText>
-        )}
-      </Button>
+      {isFollowingToGuide && (
+        <Button
+          style={styles.actionBtn}
+          disabled={!liveCoords}
+          onPress={() => toggleMuteGuideSound()}
+          solid
+        >
+          <Ionicons name={volumeIcon} size={18} color="white" />
+        </Button>
+      )}
+      {isFollowingToGuide && (
+        <Button
+          style={[styles.actionBtn, isFollowingToGuide && styles.activeBtn]}
+          onPress={onToggleFollowGuide}
+          solid
+          disabled={!liveCoords}
+        >
+          <FontAwesome5
+            name="walking"
+            size={18}
+            color="white"
+            style={{ marginRight: 10 }}
+          />
+          {!!nearestPoint && (
+            <CText>
+              {`${nearestPoint.point?.title} ${nearestPoint.distance.toFixed(
+                2
+              )} km`}
+            </CText>
+          )}
+        </Button>
+      )}
     </ScrollHorizontalNoEdges>
   );
 };
@@ -104,11 +103,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 40,
     minWidth: 40,
-    backgroundColor: CONSTANTS.colors.bg1,
   },
   activeBtn: {
-    backgroundColor: CONSTANTS.colors.bg1,
-    borderColor: CONSTANTS.colors.bg1,
     width: undefined,
   },
   pointBtn: {

@@ -1,7 +1,7 @@
 import { NavigationProp } from '@react-navigation/core/src/types';
 import { useNavigation as useNativeNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/app/Navigator';
-import { SCREENS } from '@/types';
+import { SCREENS, getLastRoute } from '@/types';
 
 export const useNavigation = () => {
   const navi = useNativeNavigation<NavigationProp<RootStackParamList>>();
@@ -9,6 +9,17 @@ export const useNavigation = () => {
   return {
     ...navi,
     navigate: (screen: SCREENS, params?: Record<string, any>) => {
+      const state = navi.getState();
+      const { name, params: lastRouteParams } = getLastRoute(state);
+
+      if (
+        name === screen &&
+        JSON.stringify(params || null) ===
+          JSON.stringify(lastRouteParams || null)
+      ) {
+        return;
+      }
+
       // @ts-ignore
       return navi.navigate(screen, params);
     },
