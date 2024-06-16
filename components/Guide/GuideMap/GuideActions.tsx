@@ -53,7 +53,7 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
         <Button
           style={styles.actionBtn}
           disabled={!liveCoords}
-          onPress={() => toggleMuteGuideSound()}
+          // onPress={() => toggleMuteGuideSound()}
           solid
         >
           <Ionicons name={volumeIcon} size={18} color="white" />
