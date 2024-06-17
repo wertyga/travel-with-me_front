@@ -11,7 +11,7 @@ const ENV = {
   },
 };
 
-const version = 12;
+const version = 14;
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
@@ -85,7 +85,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'android.permission.ACCESS_FINE_LOCATION',
       'android.permission.FOREGROUND_SERVICE',
       'android.permission.ACCESS_FINE_LOCATION',
-      'android.permission.ACCESS_BACKGROUND_LOCATION',
     ],
   },
   extra: {

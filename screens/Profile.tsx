@@ -1,20 +1,12 @@
-import React, { useCallback, useState } from 'react';
-import {
-  AppState,
-  Dimensions,
-  Linking,
-  StyleSheet,
-  Switch,
-  View,
-} from 'react-native';
-import * as Location from 'expo-location';
+import React from 'react';
+import { Dimensions, Linking, StyleSheet, Switch, View } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import {
   useAuthGuard,
-  useFocus,
+  useForegroundPermissions,
   useNavigation,
   useSubscription,
 } from '@/hooks';
@@ -25,69 +17,23 @@ const ProfileScreen = () => {
   useAuthGuard();
 
   const navi = useNavigation();
-  const { user, logout, getSelf } = useStores(stores => ({
+  const { user, logout } = useStores(stores => ({
     user: stores.userStore.user,
-    getSelf: stores.userStore.getSelf,
     logout: stores.authStore.logout,
   }));
 
-  const { subscription } = useSubscription();
+  const { granted } = useForegroundPermissions();
 
-  const [state, setState] = useState({
-    foreground: {
-      isDenied: false,
-      isGranted: false,
-    },
-  });
+  const { subscription } = useSubscription();
 
   const handleLogout = () => {
     navi.navigate(SCREENS.CitiesList);
     logout();
   };
 
-  const stateListener = useCallback((state: string) => {
-    if (state == 'active') {
-      getPermissions();
-    }
-  }, []);
-
-  const getPermissions = async () => {
-    const [{ status: foregroundStatus }] = await Promise.all([
-      Location.getForegroundPermissionsAsync(),
-    ]);
-
-    setState(prev => ({
-      ...prev,
-      foreground: {
-        isDenied: foregroundStatus === 'denied',
-        isGranted: foregroundStatus === 'granted',
-      },
-    }));
+  const changePermissions = async () => {
+    await Linking.openSettings();
   };
-
-  const onChangePermission = (aim: 'background' | 'foreground') => async () => {
-    const { isGranted, isDenied } = state[aim];
-
-    if (isGranted || isDenied) {
-      await Linking.openSettings();
-      await getPermissions();
-
-      return;
-    }
-
-    if (aim === 'foreground') {
-      Location.requestForegroundPermissionsAsync();
-    }
-  };
-
-  useFocus(() => {
-    getPermissions();
-    const subscription = AppState.addEventListener('change', stateListener);
-
-    return () => {
-      subscription.remove();
-    };
-  });
 
   if (!user) return null;
 
@@ -100,13 +46,9 @@ const ProfileScreen = () => {
         <CText style={styles.edit}>Edit</CText>
       </Button>
 
-      <Button
-        style={styles.item}
-        noPaddings
-        onPress={onChangePermission('foreground')}
-      >
+      <Button style={styles.item} noPaddings onPress={changePermissions}>
         <CText>Foreground position permission</CText>
-        <Switch value={state.foreground.isGranted} />
+        <Switch value={granted} onChange={changePermissions} />
       </Button>
 
       {!!subscription && (

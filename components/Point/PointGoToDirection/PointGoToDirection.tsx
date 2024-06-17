@@ -18,13 +18,11 @@ type Props = {
 };
 
 const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
-  const { liveCoords, isWatching, dropLocationStore, onStartWatchingLocation } =
-    useStores(stores => ({
-      liveCoords: stores.locationStore.liveCoords,
-      isWatching: stores.locationStore.isWatching,
-      dropLocationStore: stores.locationStore.dropStore,
-      onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
-    }));
+  const { liveCoords, dropLocationStore } = useStores(stores => ({
+    liveCoords: stores.locationStore.liveCoords,
+    isWatching: stores.locationStore.isWatching,
+    dropLocationStore: stores.locationStore.dropStore,
+  }));
 
   const onDirectionPress = async () => {
     if (onPress) {
@@ -46,12 +44,6 @@ const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
       dropLocationStore();
     };
   }, []);
-
-  useEffect(() => {
-    if (!isWatching) {
-      onStartWatchingLocation();
-    }
-  }, [isWatching]);
 
   const distanceToPoint = calculateDistance(point.coords, liveCoords);
   const stylesArrayed = Array.isArray(style) ? style : [style];

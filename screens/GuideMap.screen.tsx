@@ -28,11 +28,13 @@ const GuideMapScreen = ({ route }) => {
     toggleMuteGuideSound,
     setIsFollowingGuide,
     isFollowingToGuide,
+    requestForWatchingLocation,
   } = useStores(stores => ({
     getGuide: stores.guideStore.getGuide,
     guide: stores.guideStore.guide,
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     dropLocationStore: stores.locationStore.dropStore,
+    requestForWatchingLocation: stores.locationStore.requestForWatchingLocation,
     dropFollowingGuide: stores.guideStore.dropFollowingGuide,
     toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
     setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
@@ -59,16 +61,15 @@ const GuideMapScreen = ({ route }) => {
     getGuide({ slug: route.params?.guide?.slug, withStory: true });
   }, []);
 
-  useEffect(() => {
+  useFocus(() => {
     if (!guide) return;
 
     setIsFollowingGuide(!route.params?.isOnlyMap);
   }, [guide?._id]);
 
-  useEffect(() => {
+  useFocus(() => {
     if (isFollowingToGuide) {
-      dropLocationStore();
-      onStartWatchingLocation(watchingLocationCallback);
+      requestForWatchingLocation(watchingLocationCallback);
     }
   }, [isFollowingToGuide]);
 

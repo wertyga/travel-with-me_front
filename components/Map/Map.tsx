@@ -127,13 +127,15 @@ export const MapComponent = ({
           );
         })}
       </MapView>
-      <Button
-        style={styles.showMyLocationBtn}
-        onPress={onGetMyLocationClick}
-        noPaddings
-      >
-        <MaterialIcons name="location-searching" size={20} color="white" />
-      </Button>
+      {!!liveCoords && (
+        <Button
+          style={styles.showMyLocationBtn}
+          onPress={onGetMyLocationClick}
+          noPaddings
+        >
+          <MaterialIcons name="location-searching" size={20} color="white" />
+        </Button>
+      )}
       {children}
     </View>
   );

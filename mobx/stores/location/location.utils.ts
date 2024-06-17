@@ -5,14 +5,13 @@ import { Path } from '@/types';
 const LOCATION_TASK_NAME = 'background-location-task';
 
 export const getLocationPermission = async () => {
-  let { status } = await Location.getForegroundPermissionsAsync();
+  let data = await Location.getForegroundPermissionsAsync();
 
-  if (status === 'undetermined') {
-    const data = await Location.requestForegroundPermissionsAsync();
-    status = data.status;
+  if (data.status === 'undetermined') {
+    data = await Location.requestForegroundPermissionsAsync();
   }
 
-  return status;
+  return data;
 };
 
 export const getBackgroundLocationPermission = async () => {
@@ -62,22 +61,6 @@ export const startWatchToLiveLocation = async (
   callback: (coords: Path) => void,
   minDistance?: number
 ) => {
-  // Get fg permission
-  let status = await getLocationPermission();
-  if (status !== 'granted') {
-    const data = await Location.requestForegroundPermissionsAsync();
-    status = data.status;
-  }
-
-  if (status !== 'granted') return;
-
-  // Get bg permission
-  let bgStatus = await getBackgroundLocationPermission();
-
-  if (bgStatus !== 'granted') {
-    await Location.requestBackgroundPermissionsAsync();
-  }
-
   return Location.watchPositionAsync(
     {
       accuracy: Location.LocationAccuracy.BestForNavigation,

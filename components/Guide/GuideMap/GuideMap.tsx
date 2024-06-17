@@ -6,11 +6,13 @@ import CarouselEx from 'react-native-snap-carousel';
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
+import Button from '@/components/Button';
+import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
 import { Map } from '@/components/Map';
 import { DEFAULT_DELTA } from '@/components/Map/Map';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
-import { useStores } from '@/hooks';
-import { Guide, Place } from '@/types';
+import { useForegroundPermissions, useStores } from '@/hooks';
+import { FONTS, Guide, Place, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 import { GuideActions } from './GuideActions';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
@@ -26,17 +28,21 @@ const MAP_TOP = 120;
 const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
+  const { granted } = useForegroundPermissions();
+
   const {
     layoutHeight,
     visiblePoint,
     isGuideMuted,
     isFollowingToGuide,
     updateDomState,
+    liveCoords,
   } = useStores(stores => {
     return {
       layoutHeight: stores.domStore.layoutHeight,
       visiblePoint: stores.guideStore.visiblePoint,
       isGuideMuted: stores.guideStore.isGuideMuted,
+      liveCoords: stores.locationStore.liveCoords,
       isFollowingToGuide: stores.guideStore.isFollowingToGuide,
       updateDomState: stores.domStore.updateDomState,
     };
@@ -128,6 +134,9 @@ const GuideMap = ({ guide }: Props) => {
   return (
     <>
       {!!state.pointShowing && <StatusBar style="dark" />}
+
+      <PermissionRequestPopup />
+
       <Map
         points={guide.points}
         chosenPoint={state.pointShowing}
@@ -145,12 +154,21 @@ const GuideMap = ({ guide }: Props) => {
           !!state.pointShowing && styles.mapWithChosenPoint,
         ]}
       >
-        <GuideActions isWithPreviewOpened={!!state.pointShowing} />
-
-        <GuideMapGoToNearestPointBtn
-          guide={guide}
-          onPointChoose={onPointChoose}
-        />
+        {!granted && (
+          <Button style={styles.accessReminder} href={SCREENS.Profile}>
+            You have disabled access to your location to follow the guide. You
+            can grant the access back in your profile menu
+          </Button>
+        )}
+        {!!liveCoords && (
+          <>
+            <GuideActions isWithPreviewOpened={!!state.pointShowing} />
+            <GuideMapGoToNearestPointBtn
+              guide={guide}
+              onPointChoose={onPointChoose}
+            />
+          </>
+        )}
       </Map>
 
       <View
@@ -240,6 +258,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 9,
     left: 10,
+  },
+  accessReminder: {
+    color: CONSTANTS.colors.bg1,
+    fontFamily: FONTS.OpenSansBold,
+    backgroundColor: 'white',
+    borderRadius: 6,
+    padding: 10,
+    marginTop: 5,
+    marginHorizontal: 5,
+    fontSize: 13,
   },
 });
 
