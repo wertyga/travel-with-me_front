@@ -38,7 +38,7 @@ export class LocationStore {
     if (this.isWatching) return;
     
     // Get fg permission
-    const {granted, status} = await getLocationPermission();
+    const {granted} = await getLocationPermission();
   
     if (!granted) return;
   

@@ -5,6 +5,7 @@ import Toast from 'react-native-toast-message';
 import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { GuideMap } from '@/components/Guide';
+import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
 import { SafeLoader } from '@/components/SafeLoader';
 import {
   useAuthGuard,
@@ -86,6 +87,7 @@ const GuideMapScreen = ({ route }) => {
 
   return (
     <MainLayout headerTitle={guide.title} bgImage={guide.vImage} noFooter>
+      <PermissionRequestPopup />
       <GuideMap guide={guide} />
     </MainLayout>
   );

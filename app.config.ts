@@ -11,7 +11,7 @@ const ENV = {
   },
 };
 
-const version = 14;
+const version = 15;
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
@@ -32,14 +32,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     icon: './assets/notification_logo.png',
   },
   plugins: [
-    [
-      'expo-location',
-      {
-        locationAlwaysAndWhenInUsePermission:
-          'Allow Travel With Me to use your location.',
-        isAndroidBackgroundLocationEnabled: true,
-      },
-    ],
+    ['expo-location'],
     [
       'expo-notifications',
       {
@@ -84,7 +77,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'android.permission.ACCESS_COARSE_LOCATION',
       'android.permission.ACCESS_FINE_LOCATION',
       'android.permission.FOREGROUND_SERVICE',
-      'android.permission.ACCESS_FINE_LOCATION',
     ],
   },
   extra: {

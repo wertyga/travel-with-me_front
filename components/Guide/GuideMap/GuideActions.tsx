@@ -42,6 +42,9 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
   const volumeIcon = isGuideMuted
     ? 'volume-medium-outline'
     : 'volume-mute-outline';
+  const nearestPointLabel =
+    nearestPoint &&
+    `${nearestPoint.point?.title} ${nearestPoint.distance.toFixed(2)} km`;
 
   return (
     <ScrollHorizontalNoEdges
@@ -49,38 +52,31 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
       contentContainerStyle={styles.actions}
       edge={CONSTANTS.spaces.paddingHorizontal}
     >
-      {isFollowingToGuide && (
-        <Button
-          style={styles.actionBtn}
-          disabled={!liveCoords}
-          onPress={() => toggleMuteGuideSound()}
-          solid
-        >
-          <Ionicons name={volumeIcon} size={18} color="white" />
-        </Button>
-      )}
-      {isFollowingToGuide && (
-        <Button
-          style={[styles.actionBtn, isFollowingToGuide && styles.activeBtn]}
-          // onPress={onToggleFollowGuide}
-          solid
-          disabled={!liveCoords}
-        >
-          <FontAwesome5
-            name="walking"
-            size={18}
-            color="white"
-            style={{ marginRight: 10 }}
-          />
-          {!!nearestPoint && (
-            <CText>
-              {`${nearestPoint.point?.title} ${nearestPoint.distance.toFixed(
-                2
-              )} km`}
-            </CText>
-          )}
-        </Button>
-      )}
+      <Button
+        style={styles.actionBtn}
+        disabled={!liveCoords}
+        onPress={() => toggleMuteGuideSound()}
+        squareSize={40}
+        solid
+      >
+        <Ionicons name={volumeIcon} size={18} color="white" />
+      </Button>
+      <Button
+        style={[styles.actionBtn, !!nearestPoint && styles.activeBtn]}
+        onPress={onToggleFollowGuide}
+        solid
+        squareSize={!nearestPoint && !!liveCoords && 40}
+        disabled={!liveCoords}
+        free={!!nearestPoint}
+      >
+        <FontAwesome5 name="walking" size={18} color="white" />
+        {!liveCoords && (
+          <CText style={{ marginLeft: 10 }}>Loading location...</CText>
+        )}
+        {!!nearestPoint && (
+          <CText style={{ marginLeft: 10 }}>{nearestPointLabel}</CText>
+        )}
+      </Button>
     </ScrollHorizontalNoEdges>
   );
 };
@@ -99,13 +95,19 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   actionBtn: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     height: 40,
-    minWidth: 40,
+    // paddingHorizontal: 0,
+    // paddingVertical: 0,
+    // width: 40,
+    // minWidth: 40,
+    // maxWidth: 40,
   },
   activeBtn: {
-    width: undefined,
+    // width: undefined,
+    // minWidth: undefined,
+    // maxWidth: undefined,
   },
   pointBtn: {
     marginLeft: 5,

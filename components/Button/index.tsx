@@ -20,6 +20,7 @@ export type CustomButtonProps = TouchableOpacityProps & {
   onPress?: () => void;
   href?: SCREENS;
   hrefParams?: Record<string, any>;
+  squareSize?: number;
   wide?: boolean;
   fluid?: boolean;
   outlined?: boolean;
@@ -31,6 +32,7 @@ export type CustomButtonProps = TouchableOpacityProps & {
   solid?: boolean;
   left?: boolean;
   right?: boolean;
+  free?: boolean;
 };
 
 const CustomButton = ({
@@ -51,6 +53,8 @@ const CustomButton = ({
   left,
   right,
   solid,
+  free,
+  squareSize,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
@@ -83,6 +87,14 @@ const CustomButton = ({
         right && { justifyContent: 'flex-end' },
         solid && styles.solid,
         !!disabled && styles.disabled,
+        free && styles.free,
+        squareSize && {
+          width: squareSize,
+          minWidth: squareSize,
+          maxWidth: squareSize,
+          height: squareSize,
+          minHeight: squareSize,
+        },
         ...(btnStyles as any),
       ]}
       onPress={handleOnPress}
@@ -168,6 +180,11 @@ const styles = StyleSheet.create({
   solid: {
     backgroundColor: CONSTANTS.colors.bg1,
     borderColor: CONSTANTS.colors.bg1,
+  },
+  free: {
+    width: null,
+    minWidth: null,
+    maxWidth: null,
   },
 });
 

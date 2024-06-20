@@ -6,6 +6,9 @@ import { CText } from '@/components/CText';
 import { useStores } from '@/hooks';
 import { CONSTANTS } from '@/styles/constants';
 
+const PHRASE =
+  'We need to access your location to activate the tour guide feature that will take you through the entire guide';
+
 export const PermissionRequestPopup = () => {
   const {
     isRequestLocationPopupShown,
@@ -45,10 +48,7 @@ export const PermissionRequestPopup = () => {
           />
         </View>
         <CText style={styles.title}>Access to your location</CText>
-        <CText style={styles.text}>
-          We need to access your location to activate the tour guide feature
-          that will take you through the entire guide
-        </CText>
+        <CText style={styles.text}>{PHRASE}</CText>
 
         <View style={styles.actions}>
           <Button high style={styles.action} onPress={handleDeny}>
