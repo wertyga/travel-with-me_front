@@ -161,6 +161,7 @@ const GuideMap = ({ guide }: Props) => {
           styles.map,
           !!state.pointShowing && {
             height: mapHeightSmall,
+            top: 0,
           },
         ]}
       >
@@ -244,6 +245,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10,
     ...StyleSheet.absoluteFillObject,
+    top: 120,
   },
   carouselWrapper: {
     width: Dimensions.get('window').width,

@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   container: {
     left: 10,
     right: 10,
-    top: 50,
+    top: 20,
     position: 'absolute',
     zIndex: 5,
   },
