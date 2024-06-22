@@ -2,7 +2,6 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
-import { FastImage, FastImageBackground } from '@/components/FastImage';
 import { useNavigation } from '@/hooks';
 import { getHeight } from '@/utils';
 import { City, FONTS, SCREENS } from '@/types';
@@ -26,7 +25,6 @@ export const CityPreview = ({ city }: Props) => {
       }
     >
       <ImageBackgroundWithGradient
-        // source={city.image}
         image={city.image}
         style={styles.image}
         gradient="top-bottom"

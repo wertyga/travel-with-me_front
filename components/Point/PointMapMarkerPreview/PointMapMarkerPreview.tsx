@@ -1,19 +1,28 @@
 import React from 'react';
+
 import {
+  Image,
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
+
 import { AntDesign } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
+import { CText } from '@/components/CText';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
-import { useStores } from '@/hooks';
-import { calculateDistance } from '@/utils/map';
+
 import { Place } from '@/types';
+
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   point: Place;
@@ -22,6 +31,7 @@ type Props = {
   autoplayAudio?: boolean;
   onPlaySound?: (state: boolean) => void;
   onPressGoToPointDirections?: (point: Place) => void;
+  style?: ViewStyle;
 };
 
 export const PointMapMarkerPreviewComponent = ({
@@ -31,11 +41,12 @@ export const PointMapMarkerPreviewComponent = ({
   autoplayAudio,
   onPlaySound,
   onPressGoToPointDirections,
+  style,
 }: Props) => {
   const { story, title, audioStory } = point;
 
   return (
-    <BackgroundGradient style={styles.container}>
+    <BackgroundGradient style={[styles.container, style]}>
       <TouchableOpacity onPress={onClose} style={styles.close}>
         <AntDesign name="close" size={24} color="white" />
       </TouchableOpacity>
@@ -51,7 +62,7 @@ export const PointMapMarkerPreviewComponent = ({
       </View>
 
       <ScrollView style={styles.descriptionContainer}>
-        <Text style={styles.description}>{story}</Text>
+        <CText style={styles.description}>{story}</CText>
       </ScrollView>
 
       {!!audioStory && (
@@ -66,12 +77,12 @@ export const PointMapMarkerPreviewComponent = ({
 };
 
 const styles = StyleSheet.create({
+  wrapper: {},
   container: {
-    padding: 10,
-    paddingTop: 20,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
     width: '100%',
-    height: '100%',
-    zIndex: 150,
+    zIndex: 50,
   },
   close: {
     position: 'absolute',
@@ -98,6 +109,7 @@ const styles = StyleSheet.create({
   description: {
     color: 'white',
     lineHeight: 20,
+    fontSize: 14,
   },
 });
 

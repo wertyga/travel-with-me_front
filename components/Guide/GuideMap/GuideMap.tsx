@@ -1,18 +1,27 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+
 import { Dimensions, StyleSheet, View } from 'react-native';
+
 import { Region } from 'react-native-maps';
 import CarouselEx from 'react-native-snap-carousel';
+
 import { StatusBar } from 'expo-status-bar';
+
 import { observer } from 'mobx-react-lite';
+
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import Button from '@/components/Button';
+import { GestureUp } from '@/components/Gestures/GestureUp';
 import { Map } from '@/components/Map';
 import { DEFAULT_DELTA } from '@/components/Map/Map';
 import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import { useForegroundPermissions, useStores } from '@/hooks';
+
 import { FONTS, Guide, Place, SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
+
 import { GuideActions } from './GuideActions';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
 import { PointImagesCarousel } from './PointImagesCarousel';
@@ -22,7 +31,8 @@ type Props = {
 };
 
 const { width: windowWidth } = Dimensions.get('window');
-const MAP_TOP = 120;
+const MAX_PREVIEW_SWIPE_TOP = 50;
+const PREVIEW_INITIAL_HEIGHT = 300;
 
 const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
@@ -93,8 +103,6 @@ const GuideMap = ({ guide }: Props) => {
     }));
   };
 
-  const onRegionChange = (region: Region) => {};
-
   const onPlaySound = (value: boolean) => {
     setState(prev => ({ ...prev, isAudioPlaying: value }));
   };
@@ -118,19 +126,25 @@ const GuideMap = ({ guide }: Props) => {
     });
   }, [state.pointShowing]);
 
+  useEffect(() => {
+    setState(prev => ({
+      ...prev,
+      pointShowing: guide.points[0],
+    }));
+  }, []);
+
   const pointsWithChosen = guide.points.map(point => ({
     ...point,
     isChosen: point._id === visiblePoint?._id,
   }));
 
-  const PREVIEW_HEIGHT = layoutHeight / 2.5;
-  const mapHeight = !!state.pointShowing
-    ? layoutHeight - PREVIEW_HEIGHT
-    : layoutHeight - MAP_TOP - 5;
+  const previewHeight = layoutHeight - (MAX_PREVIEW_SWIPE_TOP + 35);
+  const mapHeightSmall = layoutHeight - (PREVIEW_INITIAL_HEIGHT + 35);
   const isLocationDenied = status === 'denied';
+
   return (
     <>
-      {!!state.pointShowing && <StatusBar style="dark" />}
+      <StatusBar style="dark" />
 
       <Map
         points={guide.points}
@@ -142,11 +156,12 @@ const GuideMap = ({ guide }: Props) => {
           latitudeDelta: DEFAULT_DELTA,
           longitudeDelta: DEFAULT_DELTA,
         }}
-        onRegionChange={onRegionChange}
-        mapMarkerSize={30}
+        mapMarkerSize={40}
         mapStyles={[
-          { ...styles.map, height: mapHeight },
-          !!state.pointShowing && styles.mapWithChosenPoint,
+          styles.map,
+          !!state.pointShowing && {
+            height: mapHeightSmall,
+          },
         ]}
       >
         {isLocationDenied && (
@@ -157,7 +172,7 @@ const GuideMap = ({ guide }: Props) => {
         )}
         {granted && (
           <>
-            <GuideActions isWithPreviewOpened={!!state.pointShowing} />
+            <GuideActions />
             <GuideMapGoToNearestPointBtn
               guide={guide}
               onPointChoose={onPointChoose}
@@ -166,43 +181,53 @@ const GuideMap = ({ guide }: Props) => {
         )}
       </Map>
 
-      <View
-        style={[
-          styles.pointPreview,
-          { height: PREVIEW_HEIGHT },
-          !!state.pointShowing && {
-            top: layoutHeight - PREVIEW_HEIGHT,
-          },
-        ]}
-      >
-        <BackgroundGradient style={styles.carouselWrapper}>
-          <CarouselEx
-            layout="tinder"
-            ref={c => {
-              // @ts-ignore
-              carouselRef.current = c;
-            }}
-            data={pointsWithChosen as any}
-            disableIntervalMomentum={true}
-            onSnapToItem={onSlidePoint}
-            // @ts-ignore
-            renderItem={({ item: point }: { item: Place; index: number }) => {
-              return (
-                <PointMapMarkerPreview
-                  point={point}
-                  onClose={onClose}
-                  key={point._id}
-                  autoplayAudio={point.isChosen && !isGuideMuted}
-                  onToggleCarouselShow={onToggleCarouselShow}
-                  onPlaySound={onPlaySound}
+      {!!state.pointShowing && (
+        <GestureUp
+          initialHeight={PREVIEW_INITIAL_HEIGHT}
+          maxTop={MAX_PREVIEW_SWIPE_TOP}
+        >
+          {Trigger => {
+            return (
+              <BackgroundGradient style={styles.carouselWrapper}>
+                <Trigger style={styles.swipeTrigger} />
+                <CarouselEx
+                  layout="tinder"
+                  ref={c => {
+                    // @ts-ignore
+                    carouselRef.current = c;
+                  }}
+                  data={pointsWithChosen as any}
+                  disableIntervalMomentum={true}
+                  onSnapToItem={onSlidePoint}
+                  // @ts-ignore
+                  renderItem={({
+                    item: point,
+                  }: {
+                    item: Place;
+                    index: number;
+                  }) => {
+                    return (
+                      <PointMapMarkerPreview
+                        point={point}
+                        onClose={onClose}
+                        key={point._id}
+                        autoplayAudio={point.isChosen && !isGuideMuted}
+                        onToggleCarouselShow={onToggleCarouselShow}
+                        onPlaySound={onPlaySound}
+                        style={{
+                          height: previewHeight,
+                        }}
+                      />
+                    );
+                  }}
+                  sliderWidth={windowWidth}
+                  itemWidth={windowWidth}
                 />
-              );
-            }}
-            sliderWidth={windowWidth}
-            itemWidth={windowWidth}
-          />
-        </BackgroundGradient>
-      </View>
+              </BackgroundGradient>
+            );
+          }}
+        </GestureUp>
+      )}
 
       {state.isShowCarouselImages && !!state.pointShowing && (
         <PointImagesCarousel
@@ -217,11 +242,8 @@ const GuideMap = ({ guide }: Props) => {
 const styles = StyleSheet.create({
   map: {
     position: 'absolute',
-    top: MAP_TOP,
-    left: 5,
-    right: 5,
     zIndex: 10,
-    borderRadius: 6,
+    ...StyleSheet.absoluteFillObject,
   },
   carouselWrapper: {
     width: Dimensions.get('window').width,
@@ -236,13 +258,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     borderRadius: 0,
-  },
-  pointPreview: {
-    position: 'absolute',
-    left: 0,
-    top: Dimensions.get('screen').height,
-    backgroundColor: 'grey',
-    zIndex: 10,
   },
   soundBtn: {
     alignItems: 'center',
@@ -263,6 +278,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginHorizontal: 5,
     fontSize: 13,
+  },
+  swipeTrigger: {
+    paddingBottom: 20,
   },
 });
 

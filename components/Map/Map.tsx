@@ -5,22 +5,29 @@ import React, {
   useRef,
   useState,
 } from 'react';
+
 import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
+
 import MapView, {
   MapViewProps,
   PROVIDER_GOOGLE,
   Region,
 } from 'react-native-maps';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import { MaterialIcons } from '@expo/vector-icons';
+
 import { getMyLocation } from '@/mobx/stores/location/location.utils';
 import { observer } from 'mobx-react-lite';
+
 import Button from '@/components/Button';
 import { customMapStyles } from '@/components/Map/Map.utils';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
 import { useStores } from '@/hooks';
+
 import { Place } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = MapViewProps & {
@@ -49,6 +56,7 @@ export const MapComponent = ({
   ...mapViewProps
 }: Props) => {
   const mapRef = useRef();
+  const regionRef = useRef<Region>({} as Region);
 
   const { liveCoords } = useStores(stores => ({
     liveCoords: stores.locationStore.liveCoords,
@@ -74,14 +82,18 @@ export const MapComponent = ({
     });
   };
 
+  const handleRegionChange = data => {
+    regionRef.current = data;
+  };
+
   useEffect(() => {
     if (!chosenPoint) return;
 
     setCurrentRegion({
       longitude: chosenPoint.coords.lng,
       latitude: chosenPoint.coords.lat,
-      latitudeDelta: DEFAULT_DELTA,
-      longitudeDelta: DEFAULT_DELTA,
+      latitudeDelta: regionRef.current?.latitudeDelta || DEFAULT_DELTA,
+      longitudeDelta: regionRef.current?.latitudeDelta || DEFAULT_DELTA,
     });
   }, [chosenPoint]);
 
@@ -107,7 +119,7 @@ export const MapComponent = ({
         zoomEnabled
         zoomTapEnabled
         region={currentRegion}
-        onRegionChange={onRegionChange}
+        onRegionChange={handleRegionChange}
         toolbarEnabled={false}
         initialRegion={initialRegion}
         {...mapViewProps}
@@ -144,7 +156,6 @@ export const MapComponent = ({
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    height: Dimensions.get('window').height,
   },
   map: {
     ...StyleSheet.absoluteFillObject,

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CText } from '@/components/CText';
+import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
 import { FastImageBackground } from '@/components/FastImage';
 import { useNavigation } from '@/hooks';
@@ -32,37 +33,30 @@ export const GuidePreview = ({ guide, country }: Props) => {
   };
 
   return (
-    <FastImageBackground
-      resizeMode="cover"
+    <ImageBackgroundWithGradient
+      gradient="top-bottom"
       style={styles.container}
-      source={guide.hImage || defaultGuideImage}
+      image={guide.hImage || defaultGuideImage}
+      contentStyle={styles.content}
+      isFastImage
     >
-      <LinearGradient
-        colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
-        start={{
-          x: 0.5,
-          y: 0.6,
-        }}
-        style={styles.content}
+      <TouchableOpacity
+        onPress={navigateToGuide}
+        activeOpacity={1}
+        style={styles.guide}
       >
-        <TouchableOpacity
-          onPress={navigateToGuide}
-          activeOpacity={1}
-          style={styles.guide}
-        >
-          <CountryPill title={country} />
+        <CountryPill title={country} />
 
-          <View>
-            <CText style={styles.title}>{guide.title}</CText>
-            {!!guide.pointsCount && <Text>{guide.pointsCount}</Text>}
+        <View>
+          <CText style={styles.title}>{guide.title}</CText>
+          {!!guide.pointsCount && <Text>{guide.pointsCount}</Text>}
 
-            <CText numberOfLines={3} style={styles.description}>
-              {guide.description}
-            </CText>
-          </View>
-        </TouchableOpacity>
-      </LinearGradient>
-    </FastImageBackground>
+          <CText numberOfLines={3} style={styles.description}>
+            {guide.description}
+          </CText>
+        </View>
+      </TouchableOpacity>
+    </ImageBackgroundWithGradient>
   );
 };
 

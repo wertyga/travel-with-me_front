@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
+
 import { useNavigation } from '@react-navigation/native';
+
 import Toast from 'react-native-toast-message';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import { GuideMap } from '@/components/Guide';
 import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
@@ -22,30 +26,28 @@ const GuideMapScreen = ({ route }) => {
   const {
     getGuide,
     guide,
-    onStartWatchingLocation,
     updateGuidePointWithLiveCoords,
     dropLocationStore,
     dropFollowingGuide,
     toggleMuteGuideSound,
     setIsFollowingGuide,
-    isFollowingToGuide,
     requestForWatchingLocation,
+    liveCoords,
   } = useStores(stores => ({
     getGuide: stores.guideStore.getGuide,
     guide: stores.guideStore.guide,
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     dropLocationStore: stores.locationStore.dropStore,
+    liveCoords: stores.locationStore.liveCoords,
     requestForWatchingLocation: stores.locationStore.requestForWatchingLocation,
     dropFollowingGuide: stores.guideStore.dropFollowingGuide,
     toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
     setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
-    isFollowingToGuide: stores.guideStore.isFollowingToGuide,
     updateGuidePointWithLiveCoords:
       stores.guideStore.updateGuidePointWithLiveCoords,
   }));
 
   const watchingLocationCallback = () => {
-    if (route.params?.isOnlyMap) return;
     updateGuidePointWithLiveCoords(guide);
   };
 
@@ -69,17 +71,13 @@ const GuideMapScreen = ({ route }) => {
   }, [guide?._id]);
 
   useFocus(() => {
-    if (isFollowingToGuide) {
-      requestForWatchingLocation(watchingLocationCallback);
-    }
-  }, [isFollowingToGuide]);
+    requestForWatchingLocation(watchingLocationCallback);
 
-  useFocus(() => {
     return () => {
       dropLocationStore();
       dropFollowingGuide();
     };
-  });
+  }, []);
 
   if (!guide) {
     return <SafeLoader />;

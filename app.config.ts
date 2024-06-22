@@ -11,14 +11,14 @@ const ENV = {
   },
 };
 
-const version = 15;
+const version = '18.0.0';
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Travel With Me',
   slug: 'travel-with-me',
-  version: `${version}.0.0`,
+  version: version,
   orientation: 'portrait',
   icon: './assets/logo2.png',
   userInterfaceStyle: 'light',
@@ -62,7 +62,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   scheme: 'travel-with-me',
   android: {
-    versionCode: version,
+    versionCode: parseInt(version),
     config: {
       googleMaps: {
         apiKey: envs.GOOGLE_MAPS_API_KEY,

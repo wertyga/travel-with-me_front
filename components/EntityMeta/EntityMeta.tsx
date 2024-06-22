@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import {
   Dimensions,
   ImageBackground,
@@ -6,18 +7,23 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+
 import { useFocusEffect } from '@react-navigation/native';
+
 import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
+import { LinearGradient } from 'expo-linear-gradient';
+
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CText } from '@/components/CText';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
-import { updateDomAction, useSelector } from '@/stores';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useStores } from '@/hooks';
+
 import { FONTS } from '@/types';
 
 const UPPER_CONTENT_HEIGHT = 300;
@@ -54,9 +60,10 @@ export const EntityMeta = ({
   imageUri,
 }: Props) => {
   const [opened, setOpened] = useState(false);
-  const layoutHeight = useSelector(
-    ({ domStore }) => domStore?.layout?.height || 0
-  );
+  const { layoutHeight, updateDomState } = useStores(stores => ({
+    layoutHeight: stores.domStore.layoutHeight,
+    updateDomState: stores.domStore.updateDomState,
+  }));
 
   const refState = useRef({
     initialState: {
@@ -125,12 +132,12 @@ export const EntityMeta = ({
 
   useEffect(() => {
     if (opened) {
-      updateDomAction({
+      updateDomState({
         footer: { hidden: true },
         header: withHeaderHide ? { hidden: true } : {},
       });
     } else {
-      updateDomAction({
+      updateDomState({
         footer: { hidden: false },
         header: { hidden: false },
       });
@@ -144,7 +151,7 @@ export const EntityMeta = ({
       return () => {
         swipeValues.value = refState.current.initialState;
         setOpened(false);
-        updateDomAction({
+        updateDomState({
           footer: { hidden: false },
           header: { hidden: false },
         });

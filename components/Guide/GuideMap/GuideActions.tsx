@@ -1,11 +1,16 @@
 import * as React from 'react';
+
 import { StyleSheet } from 'react-native';
+
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useStores } from '@/hooks';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -46,9 +51,11 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
     nearestPoint &&
     `${nearestPoint.point?.title} ${nearestPoint.distance.toFixed(2)} km`;
 
+  const isDisabledFollowGuide =
+    !liveCoords || (!!liveCoords && isFollowingToGuide && !nearestPoint);
   return (
     <ScrollHorizontalNoEdges
-      style={[styles.container, isWithPreviewOpened && { top: 30 }]}
+      style={[styles.container]}
       contentContainerStyle={styles.actions}
       edge={CONSTANTS.spaces.paddingHorizontal}
     >
@@ -66,7 +73,7 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
         onPress={onToggleFollowGuide}
         solid
         squareSize={!nearestPoint && !!liveCoords && 40}
-        disabled={!liveCoords}
+        disabled={isDisabledFollowGuide}
         free={!!nearestPoint}
       >
         <FontAwesome5 name="walking" size={18} color="white" />
@@ -85,7 +92,7 @@ const styles = StyleSheet.create({
   container: {
     left: 10,
     right: 10,
-    top: 10,
+    top: 50,
     position: 'absolute',
     zIndex: 5,
   },
@@ -95,20 +102,9 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   actionBtn: {
-    // alignItems: 'center',
-    // justifyContent: 'center',
     height: 40,
-    // paddingHorizontal: 0,
-    // paddingVertical: 0,
-    // width: 40,
-    // minWidth: 40,
-    // maxWidth: 40,
   },
-  activeBtn: {
-    // width: undefined,
-    // minWidth: undefined,
-    // maxWidth: undefined,
-  },
+  activeBtn: {},
   pointBtn: {
     marginLeft: 5,
     color: 'white',

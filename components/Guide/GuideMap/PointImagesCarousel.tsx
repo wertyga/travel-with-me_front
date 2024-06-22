@@ -1,20 +1,27 @@
 import { useState } from 'react';
+
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
+
 import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
 import { AntDesign } from '@expo/vector-icons';
+
 import { LinearGradient } from 'expo-linear-gradient';
+
 import { observer } from 'mobx-react-lite';
+
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { CarouselDots } from '@/components/Carousel';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { useStores } from '@/hooks';
+
 import { FONTS, Place } from '@/types';
 
 type Props = {
@@ -25,6 +32,7 @@ type Props = {
 const TRANSLATION_Y_OFFSET = 150;
 
 const { width: windowWidth } = Dimensions.get('window');
+
 export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
   const { layoutHeight } = useStores(stores => ({
     layoutHeight: stores.domStore.layoutHeight,

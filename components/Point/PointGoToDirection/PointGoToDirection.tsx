@@ -1,14 +1,21 @@
 import React, { useEffect } from 'react';
+
 import { StyleSheet } from 'react-native';
+
 import { MaterialIcons } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import Button, { CustomButtonProps } from '@/components/Button';
 import { CText } from '@/components/CText';
 import { openGoogleMap } from '@/components/Map/Map.utils';
 import { useStores } from '@/hooks';
+
 import { showNotification } from '@/utils';
 import { calculateDistance } from '@/utils/map';
+
 import { Place } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -18,10 +25,9 @@ type Props = {
 };
 
 const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
-  const { liveCoords, dropLocationStore } = useStores(stores => ({
+  const { liveCoords } = useStores(stores => ({
     liveCoords: stores.locationStore.liveCoords,
     isWatching: stores.locationStore.isWatching,
-    dropLocationStore: stores.locationStore.dropStore,
   }));
 
   const onDirectionPress = async () => {
@@ -38,12 +44,6 @@ const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
 
     openGoogleMap(point.coords);
   };
-
-  useEffect(() => {
-    return () => {
-      dropLocationStore();
-    };
-  }, []);
 
   const distanceToPoint = calculateDistance(point.coords, liveCoords);
   const stylesArrayed = Array.isArray(style) ? style : [style];

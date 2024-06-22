@@ -1,5 +1,7 @@
 import { AppStateStore } from '@/mobx/stores/AppStateStore';
+
 import { calculateDistance, getNearestPoint } from '@/utils/map';
+
 import { Path, Place } from '@/types';
 
 export type NearestPoint = {
