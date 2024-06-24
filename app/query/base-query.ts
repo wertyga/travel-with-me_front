@@ -1,7 +1,10 @@
 import Toast from 'react-native-toast-message';
+
 import Constants from 'expo-constants';
+
 import { AxiosRequestConfig } from 'axios';
 import axios from 'axios/index';
+
 import { storage } from '@/utils';
 
 export const baseQuery = async ({
@@ -26,7 +29,7 @@ export const baseQuery = async ({
 
     return { data: data?.data } as any;
   } catch (e: any) {
-    if (!silentError) {
+    if (!silentError && e.response?.status !== 403) {
       Toast.show({
         type: 'error',
         text1: e.response?.data.message || e.message,
