@@ -65,7 +65,11 @@ export class SubscriptionStore {
 				this.mySubscription = subscription;
 			})
 		} catch (e) {
-		
+			if (e.response?.status === 403) {
+				runInAction(() => {
+					this.rootStore.authStore.logout();
+				})
+			}
 		}
 	}
 	
