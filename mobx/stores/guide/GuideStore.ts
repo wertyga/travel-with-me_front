@@ -1,4 +1,4 @@
-import {makeObservable, observable, runInAction, action} from 'mobx';
+import { makeObservable, observable, runInAction, action, reaction } from 'mobx';
 import { fetchGuide } from '@/api';
 import {Guide, Place, RootStoreType} from "@/types";
 import {getTheNearestVisiblePoint, NearestPoint} from "./guide.utils";
@@ -15,6 +15,17 @@ export class GuideStore {
 	
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
+		
+		reaction(() => {
+			if (!this.isGuideMuted && this.isFollowingToGuide && this.visiblePoint) {
+				return this.guide.points.find(point => point._id === this.visiblePoint._id)
+			}
+			 return false;
+		}, (pointToBePlayed) => {
+			if (!pointToBePlayed || !pointToBePlayed.audioStory) return;
+			
+			this.rootStore.soundStore.playSound(pointToBePlayed.audioStory, pointToBePlayed.title)
+		})
   }
 	
 	async getGuide(params: {

@@ -1,11 +1,18 @@
 import * as React from 'react';
+
 import { StyleSheet } from 'react-native';
+
 import { FontAwesome6 } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import Button from '@/components/Button';
 import { useStores } from '@/hooks';
+
 import { getNearestPoint } from '@/utils/map';
+
 import { Guide, Place } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -40,6 +47,8 @@ export const GuideMapGoToNearestPointBtnComponent = ({
       noPaddings
       rectangle
       onPress={chooseNearestPoint}
+      squareSize={40}
+      rounded
     >
       <FontAwesome6 name="person-walking-arrow-right" size={18} color="white" />
     </Button>
@@ -49,12 +58,12 @@ export const GuideMapGoToNearestPointBtnComponent = ({
 const styles = StyleSheet.create({
   closestBtn: {
     backgroundColor: CONSTANTS.colors.bg1,
-    position: 'absolute',
-    bottom: 10,
-    right: 55,
-    width: 40,
-    height: 40,
-    borderRadius: 60,
+    // position: 'absolute',
+    // bottom: 10,
+    // right: 55,
+    // width: 40,
+    // height: 40,
+    // borderRadius: 60,
   },
 });
 

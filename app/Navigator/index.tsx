@@ -1,10 +1,13 @@
 import React from 'react';
+
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import { observer } from 'mobx-react-lite';
+
 import { useStores } from '@/hooks';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import CitiesListScreen from '@/screens/CitiesList.screen';
@@ -20,24 +23,8 @@ import ProfileScreen from '@/screens/Profile';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import SubscriptionsScreen from '@/screens/Subscriptions';
 import TransitionScreen from '@/screens/TransitionScreen';
-import { City, Guide, SCREENS } from '@/types';
 
-export type RootStackParamList = {
-  [SCREENS.City]: { city?: City; isFromError?: boolean } | undefined;
-  [SCREENS.ChangeEmail]: undefined;
-  [SCREENS.RecoveryPassword]: undefined;
-  [SCREENS.Login]: undefined;
-  [SCREENS.Guide]: { guide: Guide };
-  [SCREENS.CitiesList]: undefined;
-  [SCREENS.GuideMap]: { guideSlug: string; isOnlyMap?: boolean };
-  [SCREENS.Subscriptions]: undefined;
-  [SCREENS.Favorite]: undefined;
-  [SCREENS.Profile]: undefined;
-  [SCREENS.WorldGuidesMap]: undefined;
-  [SCREENS.Contact]: undefined;
-  [SCREENS.Place]: { placeSlug: string; autoplay?: boolean };
-  [SCREENS.Error]: { error: string };
-};
+import { RootStackParamList, SCREENS } from '@/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

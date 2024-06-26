@@ -38,7 +38,8 @@ type Props = MapViewProps & {
   onPointPress: (point: Place & { isChosen?: boolean }) => void;
   mapMarkerSize?: number;
   children?: React.ReactNode;
-  mapStyles?: StyleProp<ViewStyle>;
+  mapStyles?: ViewStyle;
+  showMyLocationBtnStyle?: ViewStyle;
 };
 
 export const DEFAULT_DELTA = 0.2;
@@ -53,6 +54,7 @@ export const MapComponent = ({
   onRegionChange,
   mapStyles,
   initialRegion,
+  showMyLocationBtnStyle,
   ...mapViewProps
 }: Props) => {
   const mapRef = useRef();
@@ -141,9 +143,11 @@ export const MapComponent = ({
       </MapView>
       {!!liveCoords && (
         <Button
-          style={styles.showMyLocationBtn}
+          style={[styles.showMyLocationBtn, showMyLocationBtnStyle]}
           onPress={onGetMyLocationClick}
           noPaddings
+          squareSize={40}
+          rounded
         >
           <MaterialIcons name="location-searching" size={20} color="white" />
         </Button>
@@ -164,9 +168,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    width: 40,
-    height: 40,
-    borderRadius: 50,
     backgroundColor: CONSTANTS.colors.bg1,
   },
 });

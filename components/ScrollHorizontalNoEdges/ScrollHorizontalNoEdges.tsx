@@ -1,4 +1,4 @@
-import { ScrollView, ScrollViewProps } from 'react-native';
+import { ScrollView, ScrollViewProps, StyleSheet } from 'react-native';
 
 type Props = ScrollViewProps & {
   edge?: number;
@@ -21,15 +21,22 @@ export const ScrollHorizontalNoEdges = ({
         paddingHorizontal: edge,
       }
     : undefined;
+
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       {...scrollProps}
-      style={[style, editedStyles]}
+      style={[styles.container, style, editedStyles]}
       contentContainerStyle={[contentContainerStyle, editedContentStyles]}
     >
       {children}
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    minWidth: '100%',
+  },
+});

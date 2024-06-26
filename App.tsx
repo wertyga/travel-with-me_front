@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import {
   CrimsonText_400Regular as Crimson,
   CrimsonText_700Bold as CrimsonBold,
@@ -10,27 +11,23 @@ import {
   OpenSans_700Bold as OpenSansBold,
   OpenSans_600SemiBold as OpenSansSemiBold,
 } from '@expo-google-fonts/open-sans';
+
 import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+
 import { StoreProvider } from '@/mobx/StoreProvider';
 import * as stores from '@/mobx/stores';
+
 import { Toast } from '@/components/Toast';
 import { NativeWindStyleSheet } from 'nativewind';
+
 import Navigator from './app/Navigator';
 
 SplashScreen.preventAutoHideAsync();
 
 NativeWindStyleSheet.setOutput({
   default: 'native',
-});
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
 });
 
 function App() {

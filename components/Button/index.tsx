@@ -1,15 +1,20 @@
 import React from 'react';
+
 import {
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
+  View,
   ViewStyle,
 } from 'react-native';
+
 import { getArrayedButtonStyles } from '@/components/Button/Button.utils';
 import { CText } from '@/components/CText';
 import { CTextStyleProp } from '@/components/CText/CText';
 import { useNavigation } from '@/hooks';
-import { FONTS, SCREENS } from '@/types';
+
+import { FONTS, ParamsListType, SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 export type ButtonStylesProp = ViewStyle & CTextStyleProp;
@@ -19,7 +24,7 @@ export type CustomButtonProps = TouchableOpacityProps & {
   style?: ButtonStylesProp | ButtonStylesProp[];
   onPress?: () => void;
   href?: SCREENS;
-  hrefParams?: Record<string, any>;
+  hrefParams?: ParamsListType<CustomButtonProps['href']>;
   squareSize?: number;
   wide?: boolean;
   fluid?: boolean;
@@ -33,6 +38,8 @@ export type CustomButtonProps = TouchableOpacityProps & {
   left?: boolean;
   right?: boolean;
   free?: boolean;
+  rounded?: boolean;
+  transparent?: boolean;
 };
 
 const CustomButton = ({
@@ -55,6 +62,8 @@ const CustomButton = ({
   solid,
   free,
   squareSize,
+  rounded,
+  transparent,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
@@ -70,6 +79,8 @@ const CustomButton = ({
       navi.navigate(href, hrefParams);
     }
   };
+
+  const ChildWrapperComponent = typeof children === 'string' ? CText : View;
 
   return (
     <TouchableOpacity
@@ -94,7 +105,9 @@ const CustomButton = ({
           maxWidth: squareSize,
           height: squareSize,
           minHeight: squareSize,
+          ...(rounded ? { borderRadius: squareSize } : {}),
         },
+        transparent && styles.transparent,
         ...(btnStyles as any),
       ]}
       onPress={handleOnPress}
@@ -103,7 +116,7 @@ const CustomButton = ({
     >
       {typeof children !== 'string' && children}
       {typeof children === 'string' && (
-        <CText
+        <ChildWrapperComponent
           style={[
             styles.text,
             filled && styles.textFilled,
@@ -112,7 +125,7 @@ const CustomButton = ({
           ]}
         >
           {children}
-        </CText>
+        </ChildWrapperComponent>
       )}
     </TouchableOpacity>
   );
@@ -185,6 +198,9 @@ const styles = StyleSheet.create({
     width: null,
     minWidth: null,
     maxWidth: null,
+  },
+  transparent: {
+    backgroundColor: 'transparent',
   },
 });
 

@@ -3,19 +3,16 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Dimensions, StyleSheet, View } from 'react-native';
 
-import { Region } from 'react-native-maps';
 import CarouselEx from 'react-native-snap-carousel';
 
 import { StatusBar } from 'expo-status-bar';
 
 import { observer } from 'mobx-react-lite';
 
-import { BackgroundGradient } from '@/components/BackgroundGradient';
 import Button from '@/components/Button';
 import { GestureUp } from '@/components/Gestures/GestureUp';
 import { Map } from '@/components/Map';
 import { DEFAULT_DELTA } from '@/components/Map/Map';
-import { PointMapMarkerPreview } from '@/components/Point/PointMapMarkerPreview/PointMapMarkerPreview';
 import { useForegroundPermissions, useStores } from '@/hooks';
 
 import { FONTS, Guide, Place, SCREENS } from '@/types';
@@ -24,36 +21,31 @@ import { CONSTANTS } from '@/styles/constants';
 
 import { GuideActions } from './GuideActions';
 import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
+import GuideMapPointPreview from './GuideMapPointPreview';
 import { PointImagesCarousel } from './PointImagesCarousel';
 
 type Props = {
   guide: Guide;
 };
 
-const { width: windowWidth } = Dimensions.get('window');
 const MAX_PREVIEW_SWIPE_TOP = 50;
-const PREVIEW_INITIAL_HEIGHT = 300;
+const PREVIEW_INITIAL_HEIGHT = 180;
+const MAP_MARKER_SIZE = 40;
 
 const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
   const { granted, status } = useForegroundPermissions();
 
-  const {
-    layoutHeight,
-    visiblePoint,
-    isGuideMuted,
-    isFollowingToGuide,
-    updateDomState,
-  } = useStores(stores => {
-    return {
-      layoutHeight: stores.domStore.layoutHeight,
-      visiblePoint: stores.guideStore.visiblePoint,
-      isGuideMuted: stores.guideStore.isGuideMuted,
-      isFollowingToGuide: stores.guideStore.isFollowingToGuide,
-      updateDomState: stores.domStore.updateDomState,
-    };
-  });
+  const { visiblePoint, isFollowingToGuide, updateDomState } = useStores(
+    stores => {
+      return {
+        visiblePoint: stores.guideStore.visiblePoint,
+        isFollowingToGuide: stores.guideStore.isFollowingToGuide,
+        updateDomState: stores.domStore.updateDomState,
+      };
+    }
+  );
 
   const [state, setState] = useState({
     pointShowing: undefined,
@@ -62,7 +54,7 @@ const GuideMap = ({ guide }: Props) => {
     isBgPermissionDenied: false,
   });
 
-  const onPointChoose = (point: Place & { isChosen?: boolean }) => {
+  const onPointChoose = (point: Place) => {
     const pointIndex = guide.points.findIndex(p => p._id === point._id);
     carouselRef.current?.snapToItem(pointIndex, false);
 
@@ -72,23 +64,6 @@ const GuideMap = ({ guide }: Props) => {
         pointShowing: point,
       }));
     }
-  };
-
-  const onClose = () => {
-    setState(prev => ({
-      ...prev,
-      pointShowing: undefined,
-    }));
-  };
-
-  const onSlidePoint = (index: number) => {
-    const pointShowing = guide.points.find((_, i) => i === index) || undefined;
-
-    setState(prev => ({
-      ...prev,
-      pointShowing,
-      isShowCarouselImages: false,
-    }));
   };
 
   const handleSlideToPoint = (point: Place) => {
@@ -103,20 +78,19 @@ const GuideMap = ({ guide }: Props) => {
     }));
   };
 
-  const onPlaySound = (value: boolean) => {
-    setState(prev => ({ ...prev, isAudioPlaying: value }));
-  };
-
   useEffect(() => {
     if (!visiblePoint || !isFollowingToGuide) return;
 
+    const fulfilledPoint = guide.points.find(
+      ({ _id }) => _id === visiblePoint?._id
+    );
     setState(prev => ({
       ...prev,
-      pointShowing: visiblePoint,
+      pointShowing: fulfilledPoint || visiblePoint,
       isShowCarouselImages: true,
     }));
     handleSlideToPoint(visiblePoint);
-  }, [visiblePoint?._id, isFollowingToGuide]);
+  }, [visiblePoint?._id, isFollowingToGuide, guide]);
 
   useEffect(() => {
     updateDomState({
@@ -131,15 +105,8 @@ const GuideMap = ({ guide }: Props) => {
       ...prev,
       pointShowing: guide.points[0],
     }));
-  }, []);
+  }, [guide]);
 
-  const pointsWithChosen = guide.points.map(point => ({
-    ...point,
-    isChosen: point._id === visiblePoint?._id,
-  }));
-
-  const previewHeight = layoutHeight - (MAX_PREVIEW_SWIPE_TOP + 35);
-  const mapHeightSmall = layoutHeight - (PREVIEW_INITIAL_HEIGHT + 35);
   const isLocationDenied = status === 'denied';
 
   return (
@@ -156,14 +123,9 @@ const GuideMap = ({ guide }: Props) => {
           latitudeDelta: DEFAULT_DELTA,
           longitudeDelta: DEFAULT_DELTA,
         }}
-        mapMarkerSize={40}
-        mapStyles={[
-          styles.map,
-          !!state.pointShowing && {
-            height: mapHeightSmall,
-            top: 0,
-          },
-        ]}
+        mapMarkerSize={MAP_MARKER_SIZE}
+        mapStyles={styles.map}
+        showMyLocationBtnStyle={styles.showMyLocationBtnStyle}
       >
         {isLocationDenied && (
           <Button style={styles.accessReminder} href={SCREENS.Profile}>
@@ -172,13 +134,11 @@ const GuideMap = ({ guide }: Props) => {
           </Button>
         )}
         {granted && (
-          <>
-            <GuideActions />
-            <GuideMapGoToNearestPointBtn
-              guide={guide}
-              onPointChoose={onPointChoose}
-            />
-          </>
+          <GuideActions
+            guide={guide}
+            onPointChoose={onPointChoose}
+            style={styles.mapActions}
+          />
         )}
       </Map>
 
@@ -189,42 +149,12 @@ const GuideMap = ({ guide }: Props) => {
         >
           {Trigger => {
             return (
-              <BackgroundGradient style={styles.carouselWrapper}>
-                <Trigger style={styles.swipeTrigger} />
-                <CarouselEx
-                  layout="tinder"
-                  ref={c => {
-                    // @ts-ignore
-                    carouselRef.current = c;
-                  }}
-                  data={pointsWithChosen as any}
-                  disableIntervalMomentum={true}
-                  onSnapToItem={onSlidePoint}
-                  // @ts-ignore
-                  renderItem={({
-                    item: point,
-                  }: {
-                    item: Place;
-                    index: number;
-                  }) => {
-                    return (
-                      <PointMapMarkerPreview
-                        point={point}
-                        onClose={onClose}
-                        key={point._id}
-                        autoplayAudio={point.isChosen && !isGuideMuted}
-                        onToggleCarouselShow={onToggleCarouselShow}
-                        onPlaySound={onPlaySound}
-                        style={{
-                          height: previewHeight,
-                        }}
-                      />
-                    );
-                  }}
-                  sliderWidth={windowWidth}
-                  itemWidth={windowWidth}
-                />
-              </BackgroundGradient>
+              <GuideMapPointPreview
+                point={state.pointShowing}
+                Trigger={Trigger}
+                guide={guide}
+                onPointChange={onPointChoose}
+              />
             );
           }}
         </GestureUp>
@@ -243,12 +173,16 @@ const GuideMap = ({ guide }: Props) => {
 const styles = StyleSheet.create({
   map: {
     position: 'absolute',
-    zIndex: 10,
+    zIndex: 1,
     ...StyleSheet.absoluteFillObject,
-    top: 120,
   },
-  carouselWrapper: {
-    width: Dimensions.get('window').width,
+  showMyLocationBtnStyle: {
+    bottom: PREVIEW_INITIAL_HEIGHT + 50,
+  },
+  mapActions: {
+    position: 'absolute',
+    top: 100,
+    paddingHorizontal: 10,
   },
   pointActions: {
     position: 'absolute',
@@ -280,9 +214,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginHorizontal: 5,
     fontSize: 13,
-  },
-  swipeTrigger: {
-    paddingBottom: 20,
   },
 });
 

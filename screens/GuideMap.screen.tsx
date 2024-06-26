@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useLayoutEffect } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Toast from 'react-native-toast-message';
 
@@ -18,7 +18,9 @@ import {
   useSubscriptionGuard,
 } from '@/hooks';
 
-const GuideMapScreen = ({ route }) => {
+import { PageScreen, SCREENS } from '@/types';
+
+const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
   useAuthGuard();
   useSubscriptionGuard();
 
@@ -32,13 +34,11 @@ const GuideMapScreen = ({ route }) => {
     toggleMuteGuideSound,
     setIsFollowingGuide,
     requestForWatchingLocation,
-    liveCoords,
   } = useStores(stores => ({
     getGuide: stores.guideStore.getGuide,
     guide: stores.guideStore.guide,
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     dropLocationStore: stores.locationStore.dropStore,
-    liveCoords: stores.locationStore.liveCoords,
     requestForWatchingLocation: stores.locationStore.requestForWatchingLocation,
     dropFollowingGuide: stores.guideStore.dropFollowingGuide,
     toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
@@ -68,7 +68,7 @@ const GuideMapScreen = ({ route }) => {
     if (!guide) return;
 
     setIsFollowingGuide(!route.params?.isOnlyMap);
-  }, [guide?._id]);
+  }, [guide]);
 
   useFocus(() => {
     requestForWatchingLocation(watchingLocationCallback);
@@ -84,7 +84,12 @@ const GuideMapScreen = ({ route }) => {
   }
 
   return (
-    <MainLayout headerTitle={guide.title} bgImage={guide.vImage} noFooter>
+    <MainLayout
+      headerTitle={guide.title}
+      bgImage={guide.vImage}
+      noFooter
+      isHeaderDark
+    >
       <PermissionRequestPopup />
       <GuideMap guide={guide} />
     </MainLayout>

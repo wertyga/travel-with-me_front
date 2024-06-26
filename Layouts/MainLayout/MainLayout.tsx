@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+
 import {
   Image,
   StyleSheet,
@@ -6,9 +7,13 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import { LinearGradient } from 'expo-linear-gradient';
+
 import { observer } from 'mobx-react-lite';
+
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
@@ -16,6 +21,7 @@ import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
 import { Loader } from '@/components/Loader';
 import { useStores } from '@/hooks';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -26,7 +32,6 @@ type Props = {
   bgImage?: string | number;
   noFooter?: boolean;
   isLoading?: boolean;
-  noBackBtn?: boolean;
   headerTitle?: string;
   floatingTitle?: boolean;
   withHeaderShadow?: boolean;
@@ -52,9 +57,6 @@ export const MainLayoutComponent = ({
   isHeaderDark,
   onBgPress,
   bgContent,
-  fetchError,
-  reFetchMethod,
-  noBackBtn,
   withHeaderShadow,
   bgColors,
 }: Props) => {
@@ -93,7 +95,6 @@ export const MainLayoutComponent = ({
               title={headerTitle}
               isDark={isHeaderDark}
               menu={menu}
-              noBackBtn={noBackBtn}
             />
           </LinearGradient>
         )}

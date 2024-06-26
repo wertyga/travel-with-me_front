@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, StyleSheet } from 'react-native';
 
 import Animated, {
   runOnJS,
@@ -19,6 +19,7 @@ import { BackgroundGradient } from '@/components/BackgroundGradient';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { CarouselDots } from '@/components/Carousel';
+import { ShowToSlideTop } from '@/components/Common';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { useStores } from '@/hooks';
 
@@ -190,6 +191,8 @@ export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
         colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
         style={styles.actionsContainer}
       >
+        <ShowToSlideTop />
+
         <Button style={styles.scrollToCloseBtn} onPress={onClose} noPaddings>
           <AntDesign name="up" size={24} color="white" />
         </Button>

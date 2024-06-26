@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
+
 import { StyleSheet, View } from 'react-native';
+
 import { useRoute } from '@react-navigation/native';
+
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
@@ -14,7 +17,9 @@ import { CountryPill } from '@/components/Country';
 import { GuidesSlideList } from '@/components/Guide';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation } from '@/hooks';
+
 import { City, FONTS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -60,7 +65,7 @@ export const CityScreenMeta = ({ city }: Props) => {
   return (
     <>
       <View style={styles.top}>
-        <CountryPill title={city.country.title} />
+        <CountryPill title={city.country.title} icon="map-point-small" />
       </View>
 
       <ScrollHorizontalNoEdges edge={CONSTANTS.spaces.paddingHorizontal}>
@@ -70,7 +75,7 @@ export const CityScreenMeta = ({ city }: Props) => {
               style={styles.aboutText}
               key={title}
               onPress={onChangeTextData(title)}
-              outlined={chosenCityTab !== title}
+              outlined={state.chosenCityTab !== title}
             >
               {icon}
               <CText style={{ marginLeft: 5 }}>{title}</CText>

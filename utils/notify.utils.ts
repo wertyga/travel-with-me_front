@@ -1,5 +1,4 @@
 import * as Notifications from 'expo-notifications';
-import { PermissionStatus } from 'expo-notifications';
 import { NotificationRequestInput } from 'expo-notifications/src/Notifications.types';
 
 export const showNotification = async (
@@ -39,6 +38,8 @@ export const removeAllNotification = async () => {
 };
 
 export const removeNotification = async (id: string) => {
+  if (!id) return;
+
   await Notifications.dismissNotificationAsync(id);
 };
 

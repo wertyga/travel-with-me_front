@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
 
 import Animated, {
   runOnJS,
@@ -11,15 +11,22 @@ import Animated, {
 
 import { GesturesContainer } from './Gestures';
 
-const ACTIVATE_THRESHOLD = 50;
-const MAX_TOP = 50;
 const FCKING_TRANSITION_LAG = 20;
 
-export const GestureUp = ({
+export type GestureUpProps = {
+  initialHeight: number;
+  maxTop?: number;
+  activateThreshold?: number;
+  children: (
+    Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>
+  ) => React.ReactNode;
+};
+
+export const GestureUp: React.FC<GestureUpProps> = ({
   children,
   initialHeight = 200,
-  maxTop = MAX_TOP,
-  activateThreshold = ACTIVATE_THRESHOLD,
+  maxTop = 50,
+  activateThreshold = 50,
 }) => {
   const currentStateRef = useRef({
     initialTop: Dimensions.get('window').height - initialHeight,
@@ -27,25 +34,26 @@ export const GestureUp = ({
   });
 
   const swipeTop = useSharedValue(currentStateRef.current.currentTop);
-  const isFinished = useSharedValue(false);
   const isOpened = useSharedValue(false);
   const canBeActivate = useSharedValue(false);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      top: isFinished.value
-        ? withTiming(swipeTop.value, { duration: 100 })
-        : swipeTop.value,
+      top: swipeTop.value,
     };
   });
 
   const handleClose = () => {
-    swipeTop.value = currentStateRef.current.initialTop;
+    swipeTop.value = withTiming(currentStateRef.current.initialTop, {
+      duration: 150,
+    });
     isOpened.value = false;
   };
 
   const handleOpen = () => {
-    swipeTop.value = maxTop;
+    swipeTop.value = withTiming(maxTop, {
+      duration: 150,
+    });
     isOpened.value = true;
   };
 
@@ -68,8 +76,6 @@ export const GestureUp = ({
       return;
     }
 
-    isFinished.value = true;
-
     if (isOpened.value) {
       runOnJS(handleClose)();
     } else {
@@ -77,14 +83,16 @@ export const GestureUp = ({
     }
   };
 
-  const onStart = () => {
-    isFinished.value = false;
-  };
+  const onStart = () => {};
 
-  const Trigger = ({ style = {} }) => (
+  const Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }> = ({
+    style = {},
+    children,
+  }) => (
     <GesturesContainer onUpdate={onUpdate} onEnd={onEnd} onStart={onStart}>
       <View style={[styles.triggerWrapper, style]}>
         <View style={styles.trigger} />
+        {children}
       </View>
     </GesturesContainer>
   );

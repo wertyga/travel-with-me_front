@@ -1,36 +1,39 @@
 import React, { useEffect, useState } from 'react';
+
 import { StyleSheet } from 'react-native';
+
 import { useRoute } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
-import { RootStackParamList } from '@/app/Navigator';
 import { GuideMeta } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
 import { useNavigation, useStores } from '@/hooks';
+
 import { defaultGuideImage } from '@/utils';
-import { Guide, SCREENS } from '@/types';
+
+import { Guide, PageScreen, SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = NativeStackScreenProps<RootStackParamList, SCREENS.Guide>;
-
-const GuideScreen = ({ route }: Props) => {
+const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
   const navi = useNavigation();
   const router = useRoute();
 
   const [guides, setGuides] = useState([]);
   const [fetchedCityId, setFetchedCityId] = useState('');
 
-  const { getGuide, guide, isLoading, getCity, isCityLoading, city } =
-    useStores(stores => ({
+  const { getGuide, guide, isLoading, getCity, isCityLoading } = useStores(
+    stores => ({
       guide: stores.guideStore.guide,
       getGuide: stores.guideStore.getGuide,
       isLoading: stores.guideStore.isLoading,
       getCity: stores.cityStore.getCity,
-      city: stores.cityStore.city,
       isCityLoading: stores.cityStore.isLoading,
-    }));
+    })
+  );
 
   const currentGuide = (router.params as any)?.guide;
 

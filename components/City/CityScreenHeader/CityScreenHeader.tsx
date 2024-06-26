@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react';
+
 import { Dimensions, StyleSheet, TextStyle, ViewStyle } from 'react-native';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import { FontAwesome } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import {
@@ -16,13 +21,13 @@ import {
 } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
+
 import { FONTS, SCREENS } from '@/types';
 
 type Props = {
   style?: StyleProp<ViewStyle | TextStyle>;
   title: string;
   isDark?: boolean;
-  noBackBtn?: boolean;
   menu?: HeaderMenuProps['items'];
 };
 
@@ -31,7 +36,6 @@ export const CityScreenHeaderComponent = ({
   title,
   menu,
   isDark,
-  noBackBtn,
 }: Props) => {
   const navi = useNavigation();
   const { header } = useStores(stores => ({
@@ -61,16 +65,6 @@ export const CityScreenHeaderComponent = ({
 
   return (
     <Animated.View style={[styles.container, viewStyle, animatedStyles]}>
-      {!noBackBtn && (
-        <Button style={styles.btn} onPress={goBack}>
-          <FontAwesome
-            name="angle-left"
-            size={30}
-            color={isDark ? 'black' : 'white'}
-          />
-        </Button>
-      )}
-
       <CText style={[styles.title, isDark && styles.dark]} numberOfLines={2}>
         {title}
       </CText>
@@ -95,13 +89,13 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 10,
   },
   title: {
     fontFamily: FONTS.CrimsonBold,
     fontSize: 30,
     textAlign: 'center',
-    marginHorizontal: 5,
-    width: Dimensions.get('window').width - 120, // 40 + 40 - buttons + paddingHorizontal * 2 * 15 + marginHorizontal * 2 * 10
+    flex: 1,
   },
   dark: {
     color: 'black',

@@ -11,3 +11,4 @@ export { GuidesListStore } from './GuidesListStore';
 export { PlaceStore } from './PlaceStore';
 export { LocationStore } from './location/LocationStore';
 export { AppStateStore } from './AppStateStore';
+export { SoundStore } from './SoundStore';

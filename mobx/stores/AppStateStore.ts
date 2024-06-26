@@ -1,6 +1,6 @@
 import {action, makeObservable, observable, runInAction} from 'mobx';
 import {AppState} from "react-native";
-import {removeAllNotification} from "@/utils";
+import { getNotificationAsync, removeAllNotification } from '@/utils';
 import {EnvMap, RootStoreType} from "@/types";
 import {fetchEnvs} from "@/api";
 import Constants from "expo-constants";
@@ -41,14 +41,17 @@ export class AppStateStore {
 		}
 	}
 	
+	
+	
 	applyAppStateChangeListener() {
 		AppState.addEventListener(
 			'change',
 			async (nextState) => {
+	
 				if (nextState === 'active') {
 					await Promise.all([
 						this.getEnvs(),
-						removeAllNotification(),
+						this.rootStore.soundStore.stopPointPlaybackIfNoNotification(),
 						this.rootStore.subscriptionStore.getMySubscription({isActive: true})
 					]);
 					

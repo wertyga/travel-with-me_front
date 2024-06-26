@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
 
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 
@@ -8,16 +8,25 @@ import { observer } from 'mobx-react-lite';
 
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { GuideMapGoToNearestPointBtn } from '@/components/Guide/GuideMap/GuideMapGoToNearestPointBtn';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useStores } from '@/hooks';
+
+import { Guide, Place } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
-  isWithPreviewOpened?: boolean;
+  guide: Guide;
+  onPointChoose: (point: Place, force?: boolean) => void;
+  style?: ViewStyle;
 };
 
-export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
+export const GuideActionsComponent = ({
+  guide,
+  onPointChoose,
+  style,
+}: Props) => {
   const {
     isFollowingToGuide,
     isGuideMuted,
@@ -41,6 +50,7 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
       dropFollowingGuide();
     } else {
       setIsFollowingGuide(true);
+      toggleMuteGuideSound(false);
     }
   };
 
@@ -55,19 +65,22 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
     !liveCoords || (!!liveCoords && isFollowingToGuide && !nearestPoint);
   return (
     <ScrollHorizontalNoEdges
-      style={[styles.container]}
+      style={[styles.container, style]}
       contentContainerStyle={styles.actions}
-      edge={CONSTANTS.spaces.paddingHorizontal}
     >
-      <Button
-        style={styles.actionBtn}
-        disabled={!liveCoords}
-        onPress={() => toggleMuteGuideSound()}
-        squareSize={40}
-        solid
-      >
-        <Ionicons name={volumeIcon} size={18} color="white" />
-      </Button>
+      {/*<Button*/}
+      {/*  style={styles.actionBtn}*/}
+      {/*  disabled={!liveCoords}*/}
+      {/*  onPress={() => toggleMuteGuideSound()}*/}
+      {/*  solid*/}
+      {/*>*/}
+      {/*  <CText>{isGuideMuted ? 'UNMUTE' : 'MUTE'}</CText>*/}
+      {/*  <Ionicons name={volumeIcon} size={18} color="white" />*/}
+      {/*</Button>*/}
+      <GuideMapGoToNearestPointBtn
+        guide={guide}
+        onPointChoose={onPointChoose}
+      />
       <Button
         style={[styles.actionBtn, !!nearestPoint && styles.activeBtn]}
         onPress={onToggleFollowGuide}
@@ -89,20 +102,16 @@ export const GuideActionsComponent = ({ isWithPreviewOpened }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    left: 10,
-    right: 10,
-    top: 20,
-    position: 'absolute',
-    zIndex: 5,
-  },
+  container: {},
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    paddingRight: 20,
   },
   actionBtn: {
     height: 40,
+    gap: 10,
   },
   activeBtn: {},
   pointBtn: {
