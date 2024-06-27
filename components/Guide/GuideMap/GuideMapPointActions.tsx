@@ -25,15 +25,19 @@ export const GuideMapPointActions = ({
     <View style={styles.container}>
       <PointGoToDirection onPress={onPressGoToPointDirections} point={point} />
 
+      <Button
+        href={SCREENS.Place}
+        hrefParams={{ placeSlug: point.slug }}
+        noPaddings
+        squareSize={40}
+        rounded
+      >
+        <MaterialIcons name="attractions" size={24} color="white" />
+      </Button>
+
       {!!point.images.length && (
-        <Button
-          href={SCREENS.Place}
-          hrefParams={{ placeSlug: point.slug }}
-          noPaddings
-          squareSize={40}
-          rounded
-        >
-          <MaterialIcons name="attractions" size={24} color="white" />
+        <Button noPaddings squareSize={40} rounded onPress={onOpenGallery}>
+          <Ionicons name="image" size={24} color="white" />
         </Button>
       )}
     </View>

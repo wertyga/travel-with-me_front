@@ -1,12 +1,23 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { Dimensions, Image, ScrollView } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useAuthGuard, useStores, useSubscriptionGuard } from '@/hooks';
+
+const DOUBLE_TAP_DELAY = 300; // Adjust as needed for your use case (in milliseconds)
 
 const PlaceScreen = ({ route }) => {
   useAuthGuard();
@@ -14,12 +25,25 @@ const PlaceScreen = ({ route }) => {
 
   const { params: { placeSlug } = {} as any } = route;
 
+  const lastTapTimeRef = useRef(null);
+  const [fullImageWidth, setFullImageWidth] = useState(-1);
+
   const { layoutHeight, getPlace, place, isLoading } = useStores(stores => ({
     layoutHeight: stores.domStore.layoutHeight,
     place: stores.placeStore.place,
     getPlace: stores.placeStore.getPlace,
     isLoading: stores.placeStore.isLoading,
   }));
+
+  const toggleFullWidth = (index: number) => () => {
+    const now = new Date().getTime();
+
+    if (now - lastTapTimeRef.current < DOUBLE_TAP_DELAY) {
+      setFullImageWidth(fullImageWidth === index ? -1 : index);
+    }
+
+    lastTapTimeRef.current = now;
+  };
 
   useEffect(() => {
     if (!placeSlug) return;
@@ -49,17 +73,23 @@ const PlaceScreen = ({ route }) => {
           }}
           data={place.images}
           cardWidth={windowWidth}
+          onChange={() => setFullImageWidth(-1)}
           renderItem={({ item, index }) => {
             return (
-              <Image
+              <TouchableOpacity
                 key={item}
-                source={{ uri: item }}
-                style={{
-                  width: windowWidth,
-                  objectFit: 'cover',
-                  height: layoutHeight - 300,
-                }}
-              />
+                activeOpacity={1}
+                onPress={toggleFullWidth(index)}
+              >
+                <Image
+                  source={{ uri: item }}
+                  style={{
+                    width: windowWidth,
+                    objectFit: fullImageWidth === index ? 'contain' : 'cover',
+                    height: layoutHeight - 300,
+                  }}
+                />
+              </TouchableOpacity>
             );
           }}
         />

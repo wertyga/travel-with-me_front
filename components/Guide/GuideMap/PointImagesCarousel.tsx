@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Dimensions, Image, StyleSheet } from 'react-native';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 
 import Animated, {
   runOnJS,
@@ -191,11 +191,13 @@ export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
         colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
         style={styles.actionsContainer}
       >
-        <ShowToSlideTop />
+        {/*<Button style={styles.scrollToCloseBtn} onPress={onClose} noPaddings>*/}
+        {/*  <AntDesign name="up" size={24} color="white" />*/}
+        {/*</Button>*/}
+        <View style={styles.showToTop}>
+          <ShowToSlideTop />
+        </View>
 
-        <Button style={styles.scrollToCloseBtn} onPress={onClose} noPaddings>
-          <AntDesign name="up" size={24} color="white" />
-        </Button>
         <CarouselDots
           style={styles.dots}
           totalCount={point.images.length}
@@ -253,6 +255,11 @@ const styles = StyleSheet.create({
     bottom: 10,
     left: 0,
     width: Dimensions.get('window').width,
+  },
+  showToTop: {
+    position: 'absolute',
+    right: 20,
+    bottom: 40,
   },
 });
 

@@ -12,7 +12,6 @@ import { observer } from 'mobx-react-lite';
 
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
-import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { GuideMapPointActions } from '@/components/Guide';
 import { PointListSmall } from '@/components/Point';
@@ -26,14 +25,14 @@ type Props = {
   point: Place;
   guide: Guide;
   Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>;
-  // onPlaySound?: (state: boolean) => void;
   onPointChange: (point: Place) => void;
+  onOpenGallery: () => void;
 };
 
 const GuideMapPointPreview = ({
   point,
   Trigger,
-  // onPlaySound,
+  onOpenGallery,
   guide,
   onPointChange,
 }: Props) => {
@@ -61,14 +60,12 @@ const GuideMapPointPreview = ({
         />
 
         <View style={styles.actions}>
-          <GuideMapPointActions point={point} onOpenGallery={() => {}} />
+          <GuideMapPointActions point={point} onOpenGallery={onOpenGallery} />
 
           {!!point.audioStory && (
             <AudioPlayer
               audioUrl={point.audioStory}
               title={point.title}
-              // autoplay={autoplay}
-              // onPlay={onPlaySound}
               simple
               small
             />

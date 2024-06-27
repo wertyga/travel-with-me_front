@@ -25,7 +25,7 @@ type Props = {
 };
 
 const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
-  const { liveCoords } = useStores(stores => ({
+  const { liveCoords, isWatching } = useStores(stores => ({
     liveCoords: stores.locationStore.liveCoords,
     isWatching: stores.locationStore.isWatching,
   }));
@@ -51,14 +51,9 @@ const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
   return (
     // @ts-ignore
     <Button
-      style={[
-        styles.container,
-        {
-          width: !!distanceToPoint ? undefined : 40,
-          maxWidth: !!distanceToPoint ? undefined : 40,
-        },
-        ...stylesArrayed,
-      ]}
+      style={[styles.container, ...stylesArrayed]}
+      squareSize={!distanceToPoint && 40}
+      free={!!distanceToPoint}
       noPaddings={!distanceToPoint}
       onPress={onDirectionPress}
     >

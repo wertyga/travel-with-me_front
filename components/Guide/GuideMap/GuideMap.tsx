@@ -20,7 +20,6 @@ import { FONTS, Guide, Place, SCREENS } from '@/types';
 import { CONSTANTS } from '@/styles/constants';
 
 import { GuideActions } from './GuideActions';
-import { GuideMapGoToNearestPointBtn } from './GuideMapGoToNearestPointBtn';
 import GuideMapPointPreview from './GuideMapPointPreview';
 import { PointImagesCarousel } from './PointImagesCarousel';
 
@@ -71,10 +70,11 @@ const GuideMap = ({ guide }: Props) => {
     carouselRef.current?.snapToItem(pointIndex, false, false);
   };
 
-  const onToggleCarouselShow = () => {
+  const onToggleCarouselShow = (value?: boolean) => {
     setState(prev => ({
       ...prev,
-      isShowCarouselImages: !prev.isShowCarouselImages,
+      isShowCarouselImages:
+        typeof value !== 'boolean' ? value : !prev.isShowCarouselImages,
     }));
   };
 
@@ -154,6 +154,7 @@ const GuideMap = ({ guide }: Props) => {
                 Trigger={Trigger}
                 guide={guide}
                 onPointChange={onPointChoose}
+                onOpenGallery={() => onToggleCarouselShow(true)}
               />
             );
           }}
