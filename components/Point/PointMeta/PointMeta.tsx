@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import * as React from 'react';
 
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
+
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { AudioPlayer } from '@/components/AudioPlayer';
+import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { StarRating } from '@/components/Common/StarRating/StarRating';
 import { CountryPill } from '@/components/Country';
+import { Icon, IconNames } from '@/components/Icon';
 import { LikeAction } from '@/components/LikeAction';
+import { gotoPointDirection } from '@/components/Point/PointGoToDirection/PointGoToDirection.utils';
+import { Expander } from '@/components/UI/Expander';
 
 import { FONTS, Place, SOCIAL_MODELS } from '@/types';
 
@@ -27,6 +34,9 @@ const META_TEXT = {
   story: {
     title: 'The story',
   },
+  contact: {
+    title: 'Contact',
+  },
 };
 
 export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
@@ -36,14 +46,41 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
 
   const {
     city: { title: cityTitle },
+    address,
+    phone,
+    email,
+    website,
+    rating,
+    workTime,
   } = point;
+
+  const contactData = {
+    phone,
+    email,
+    website,
+    workTime,
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <View style={{ gap: 10 }}>
+        <View style={{ gap: 20 }}>
           <CountryPill title={cityTitle} icon="map-point-small" />
-          <PointGoToDirection point={point} />
+
+          <StarRating rating={point.rating} />
+
+          {!!address && (
+            <Button onPress={() => gotoPointDirection(point)}>
+              <MaterialIcons name="directions" size={24} color="white" />
+              <CText style={styles.directionText}>{address}</CText>
+            </Button>
+            // <CountryPill
+            //   title={address}
+            //   icon="map-point-small"
+            //   onPress={() => gotoPointDirection(point)}
+            // />
+          )}
+          {!address && <PointGoToDirection point={point} />}
         </View>
 
         <LikeAction
@@ -55,42 +92,55 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
       </View>
 
       <View style={styles.titles}>
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => setState(prev => ({ ...prev, chosen: 'description' }))}
-        >
-          <CText
-            style={[
-              styles.aboutText,
-              state.chosen === 'description' && styles.activeTitle,
-            ]}
-          >
-            {META_TEXT.description.title}
-          </CText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => setState(prev => ({ ...prev, chosen: 'story' }))}
-        >
-          <CText
-            style={[
-              styles.aboutText,
-              state.chosen === 'story' && styles.activeTitle,
-            ]}
-          >
-            {META_TEXT.story.title}
-          </CText>
-        </TouchableOpacity>
+        <Expander title={META_TEXT.description.title} defaultState={true}>
+          <CText>{point.description}</CText>
+        </Expander>
+        <Expander title={META_TEXT.story.title} style={styles.aboutTextNext}>
+          <CText>{point.story}</CText>
+        </Expander>
+        <Expander title={META_TEXT.contact.title} style={styles.aboutTextNext}>
+          {!!contactData.phone && (
+            <CText
+              style={[styles.description]}
+              onPress={() => {
+                Linking.openURL(`tel:${contactData.phone}`);
+              }}
+            >{`Phone: ${contactData.phone}`}</CText>
+          )}
+          {!!contactData.email && (
+            <CText
+              style={[styles.description]}
+              onPress={() => {
+                Linking.openURL(`mailto:${contactData.email}`);
+              }}
+            >{`E-mail: ${contactData.email}`}</CText>
+          )}
+          {!!contactData.website && (
+            <CText
+              style={[styles.description]}
+              onPress={() => {
+                Linking.openURL(contactData.website);
+              }}
+            >{`Website: ${contactData.website}`}</CText>
+          )}
+        </Expander>
+        {!!contactData.workTime?.length && (
+          <Expander title="Work time" style={styles.aboutTextNext}>
+            {contactData.workTime.map(time => {
+              return (
+                <CText key={time} style={styles.description}>
+                  {time}
+                </CText>
+              );
+            })}
+          </Expander>
+        )}
       </View>
 
       <>
-        <CText style={styles.description}>
-          {state.chosen === 'story' ? point.story : point.description}
-        </CText>
-
         {!!point.audioStory && (
           <>
-            <CText style={styles.aboutText}>Audio play of the story</CText>
+            <CText style={styles.aboutTitle}>Audio play of the story</CText>
             <AudioPlayer
               audioUrl={point.audioStory}
               autoplay={autoplay}
@@ -113,10 +163,13 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
   },
-  aboutText: {
+  aboutTitle: {
     fontFamily: FONTS.CrimsonSemiBold,
     fontSize: 22,
-    marginBottom: 15,
+    paddingVertical: 10,
+  },
+  aboutTextNext: {
+    borderTopColor: 'transparent',
   },
   top: {
     flexDirection: 'row',
@@ -126,13 +179,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   titles: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginBottom: 20,
   },
   activeTitle: {
     textDecorationLine: 'underline',
   },
   description: {
     marginBottom: 20,
+  },
+  directionText: {
+    fontSize: 14,
+    fontFamily: FONTS.OpenSansSemiBold,
+    marginLeft: 7,
   },
 });

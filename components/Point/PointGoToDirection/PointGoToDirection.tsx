@@ -8,15 +8,12 @@ import { observer } from 'mobx-react-lite';
 
 import Button, { CustomButtonProps } from '@/components/Button';
 import { CText } from '@/components/CText';
-import { openGoogleMap } from '@/components/Map/Map.utils';
+import { gotoPointDirection } from '@/components/Point/PointGoToDirection/PointGoToDirection.utils';
 import { useStores } from '@/hooks';
 
-import { showNotification } from '@/utils';
 import { calculateDistance } from '@/utils/map';
 
 import { Place } from '@/types';
-
-import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   style?: CustomButtonProps['style'];
@@ -35,14 +32,7 @@ const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
       await onPress(point);
     }
 
-    await showNotification({
-      content: {
-        title: point.title,
-        color: CONSTANTS.colors.bg1,
-      },
-    });
-
-    openGoogleMap(point.coords);
+    await gotoPointDirection(point);
   };
 
   const distanceToPoint = calculateDistance(point.coords, liveCoords);

@@ -3,12 +3,10 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import Animated, {
-  Easing,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withRepeat,
-  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 

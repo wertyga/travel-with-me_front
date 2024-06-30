@@ -1,6 +1,18 @@
 import * as Notifications from 'expo-notifications';
 import { NotificationRequestInput } from 'expo-notifications/src/Notifications.types';
 
+export const IDENTIFIERS = {
+  point: {
+    category: 'point-playback-category',
+    baseID: 'point-playback',
+    stopAction: 'stop-playback',
+  },
+  default: {
+    action: 'expo.modules.notifications.actions.DEFAULT',
+  },
+  pointDirection: 'point-direction',
+};
+
 export const showNotification = async (
   data: Omit<NotificationRequestInput, 'trigger'> & {
     trigger?: NotificationRequestInput['trigger'];

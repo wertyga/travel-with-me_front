@@ -1,20 +1,11 @@
 import { Audio } from 'expo-av';
 import { action, makeObservable, observable, reaction, runInAction } from 'mobx';
 import { RootStoreType } from '@/types';
-import { getNotificationAsync, removeNotification, showNotification, storage } from '@/utils';
+import { getNotificationAsync, IDENTIFIERS, removeNotification, showNotification, storage } from '@/utils';
 import { CONSTANTS } from '@/styles/constants';
 import * as Notifications from 'expo-notifications';
 
-const IDENTIFIERS = {
-  point: {
-    category: 'point-playback-category',
-    baseID: 'point-playback',
-    stopAction: 'stop-playback',
-  },
-  default: {
-    action: 'expo.modules.notifications.actions.DEFAULT'
-  }
-}
+
 
 export class SoundStore {
   private audio: Audio.Sound | null = null;

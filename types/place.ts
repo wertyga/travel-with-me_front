@@ -21,6 +21,14 @@ export type Place = {
   likes: Like;
   isChosen?: boolean;
   city: City;
+  // Trip adviser data
+  address?: string;
+  email?: string;
+  phone?: string;
+  website?: string;
+  rating?: number;
+  workTime?: string[];
+  //
 };
 
 export type GetPlaceResponse = {
