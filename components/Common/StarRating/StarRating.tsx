@@ -16,7 +16,7 @@ export const StarRating: React.FC<Props> = ({ rating }) => {
       <StarRatingEx
         rating={rating}
         onChange={() => {}}
-        maxStars={5}
+        maxStars={1}
         starSize={20}
         color="white"
       />
@@ -29,6 +29,5 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
   },
 });

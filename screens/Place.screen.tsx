@@ -1,13 +1,7 @@
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Dimensions, Image, ScrollView, TouchableOpacity } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -17,15 +11,12 @@ import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useAuthGuard, useStores, useSubscriptionGuard } from '@/hooks';
 
-const DOUBLE_TAP_DELAY = 300; // Adjust as needed for your use case (in milliseconds)
-
 const PlaceScreen = ({ route }) => {
   useAuthGuard();
   useSubscriptionGuard();
 
   const { params: { placeSlug } = {} as any } = route;
 
-  const lastTapTimeRef = useRef(null);
   const [fullImageWidth, setFullImageWidth] = useState(-1);
 
   const { layoutHeight, getPlace, place, isLoading } = useStores(stores => ({
@@ -36,13 +27,7 @@ const PlaceScreen = ({ route }) => {
   }));
 
   const toggleFullWidth = (index: number) => () => {
-    const now = new Date().getTime();
-
-    if (now - lastTapTimeRef.current < DOUBLE_TAP_DELAY) {
-      setFullImageWidth(fullImageWidth === index ? -1 : index);
-    }
-
-    lastTapTimeRef.current = now;
+    setFullImageWidth(fullImageWidth === index ? -1 : index);
   };
 
   useEffect(() => {

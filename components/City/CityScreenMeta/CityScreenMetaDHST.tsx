@@ -1,11 +1,16 @@
 import { useMemo } from 'react';
+
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
+
 import { Entypo } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+
 import { City } from '@/types';
 
 type Props = {
@@ -95,13 +100,13 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
           >
             {filteredApps.map(({ name, link, description }) => {
               return (
-                <View style={styles.row} key={name}>
+                <Button style={styles.row} key={name} outlined>
                   <Entypo name="google-play" size={24} color="white" />
 
                   <CText onPress={onApp(link)} style={styles.rowText}>
                     {name}
                   </CText>
-                </View>
+                </Button>
               );
             })}
           </ScrollView>

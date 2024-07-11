@@ -40,10 +40,6 @@ const META_TEXT = {
 };
 
 export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
-  const [state, setState] = useState({
-    chosen: 'description' as keyof typeof META_TEXT,
-  });
-
   const {
     city: { title: cityTitle },
     address,
@@ -64,23 +60,10 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <View style={{ gap: 20 }}>
+        <View style={{ gap: 10, flexDirection: 'row', alignItems: 'center' }}>
           <CountryPill title={cityTitle} icon="map-point-small" />
 
-          <StarRating rating={point.rating} />
-
-          {!!address && (
-            <Button onPress={() => gotoPointDirection(point)}>
-              <MaterialIcons name="directions" size={24} color="white" />
-              <CText style={styles.directionText}>{address}</CText>
-            </Button>
-            // <CountryPill
-            //   title={address}
-            //   icon="map-point-small"
-            //   onPress={() => gotoPointDirection(point)}
-            // />
-          )}
-          {!address && <PointGoToDirection point={point} />}
+          <StarRating rating={rating} />
         </View>
 
         <LikeAction
@@ -89,6 +72,21 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
           initialLike={point.likes}
           parentFetching={isFetching}
         />
+      </View>
+
+      <View style={styles.address}>
+        {!!address && (
+          <Button
+            onPress={() => gotoPointDirection(point)}
+            style={{ flexDirection: 'row', justifyContent: 'flex-start' }}
+          >
+            <MaterialIcons name="directions" size={24} color="white" />
+            <CText style={styles.directionText} numberOfLines={2}>
+              {address}
+            </CText>
+          </Button>
+        )}
+        {!address && <PointGoToDirection point={point} />}
       </View>
 
       <View style={styles.titles}>
@@ -191,5 +189,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: FONTS.OpenSansSemiBold,
     marginLeft: 7,
+    paddingRight: 10,
+  },
+  address: {
+    marginBottom: 20,
+    overflow: 'hidden',
   },
 });
