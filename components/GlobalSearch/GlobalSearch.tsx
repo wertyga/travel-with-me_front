@@ -1,11 +1,17 @@
 import { useState } from 'react';
+
 import { ScrollView, StyleSheet, View } from 'react-native';
+
 import { AntDesign } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import { GlobalSearchItem } from '@/components/GlobalSearch/GlobalSearchItem';
 import Search from '@/components/Search';
 import { useStores } from '@/hooks';
+
 import { SCREENS } from '@/types';
+
 import CityPlaceholder from '@/assets/images/city_placeholder.png';
 import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
 
@@ -78,11 +84,7 @@ export const GlobalSearchComponent = () => {
                   return (
                     <GlobalSearchItem
                       key={guide._id}
-                      image={
-                        !!guide.hImage
-                          ? { uri: guide.hImage }
-                          : GuidePlaceholder
-                      }
+                      image={guide.hImage || GuidePlaceholder}
                       title={guide.title}
                       description={guide.city.title}
                       href={SCREENS.Guide}
@@ -98,11 +100,7 @@ export const GlobalSearchComponent = () => {
                   return (
                     <GlobalSearchItem
                       key={place._id}
-                      image={
-                        !!place.images?.[0]
-                          ? { uri: place.images[0] }
-                          : CityPlaceholder
-                      }
+                      image={place.images?.[0] || CityPlaceholder}
                       title={place.title}
                       description={place.city.title}
                       href={SCREENS.Place}

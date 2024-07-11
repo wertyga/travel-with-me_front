@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import {
   ActivityIndicator,
   Image,
@@ -6,6 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
 import { handleCacheImage } from '@/components/FastImage/FastImage.utils';
 
 type Props = Omit<ImageProps, 'style' | 'source'> & {

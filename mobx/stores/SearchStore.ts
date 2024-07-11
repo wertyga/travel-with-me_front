@@ -20,7 +20,7 @@ export class SearchStore {
 	@withLoading async getGlobalSearch(...params: Parameters<typeof fetchGlobalSearch>) {
 		try {
 		  const data = await fetchGlobalSearch(...params);
-	
+
 			runInAction(() => {
 				this.global = data;
 			})
