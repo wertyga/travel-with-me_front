@@ -13,7 +13,7 @@ const ENV = {
   },
 };
 
-const version = '24.0.9';
+const version = '24.0.10';
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
