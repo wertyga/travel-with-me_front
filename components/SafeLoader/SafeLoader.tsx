@@ -1,12 +1,10 @@
-import {
-  ActivityIndicator,
-  ImageBackground,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+
 import { CText } from '@/components/CText';
 import { FastImageBackground } from '@/components/FastImage';
+
 import { FONTS } from '@/types';
+
 import safeLoaderImage from '@/assets/splash.png';
 
 type Props = {

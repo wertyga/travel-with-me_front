@@ -8,3 +8,4 @@ export * from './subscription.api';
 export * from './place.api';
 export * from './like.api';
 export * from './tech.api';
+export * from './logs.api';

@@ -12,14 +12,15 @@ import {
   OpenSans_600SemiBold as OpenSansSemiBold,
 } from '@expo-google-fonts/open-sans';
 
-import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import * as Updates from 'expo-updates';
 
 import { StoreProvider } from '@/mobx/StoreProvider';
 import * as stores from '@/mobx/stores';
 
 import { Toast } from '@/components/Toast';
+import UpdatesChecker from '@/components/UpdatesChecker/UpdatesChecker';
 import { NativeWindStyleSheet } from 'nativewind';
 
 import Navigator from './app/Navigator';
@@ -55,6 +56,7 @@ function App() {
       <StatusBar style="light" />
       <Navigator />
       <Toast />
+      <UpdatesChecker />
     </StoreProvider>
   );
 }

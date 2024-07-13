@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CText } from '@/components/CText';
-import { GuideMapPointActions } from '@/components/Guide';
+import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 import { PointListSmall } from '@/components/Point';
 import { useStores } from '@/hooks';
 

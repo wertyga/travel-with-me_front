@@ -10,8 +10,7 @@
     "web": "expo start --web",
     "ts:check": "tsc",
     "build:android:production": "eas build -p android --profile production --local",
-    "build:android:preview": "NODE_ENV=production eas build --local --platform android --profile preview",
-    "postinstall": "rndebugger-open"
+    "build:android:preview": "NODE_ENV=production eas build --local --platform android --profile preview"
   },
   "dependencies": {
     "@expo-google-fonts/crimson-text": "^0.2.3",

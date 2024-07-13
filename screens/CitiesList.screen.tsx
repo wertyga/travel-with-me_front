@@ -1,7 +1,9 @@
 import { useState } from 'react';
+
 import { StyleSheet, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
@@ -9,8 +11,11 @@ import { FastImageBackground } from '@/components/FastImage';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useFocus, useStores } from '@/hooks';
+
 import { FONTS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
+
 import SplashBgImage from '@/assets/splash.png';
 
 const HEADERS_LIST = [
