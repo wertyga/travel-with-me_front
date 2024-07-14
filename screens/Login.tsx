@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+
 import { ScrollView, StyleSheet } from 'react-native';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import { SignInForm, SignUpForm } from '@/components/Auth';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { Version } from '@/components/Common';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
+
 import { AuthCommonRequest, SCREENS } from '@/types';
 
 const Login = () => {
@@ -72,6 +77,7 @@ const Login = () => {
           Forgot password?
         </Button>
       </ScrollView>
+      <Version />
     </MainLayout>
   );
 };

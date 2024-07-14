@@ -7,4 +7,5 @@ export type EnvMap = {
   minCloseDistance: number;
   cacheTime: number;
   cacheDropIdentifier: string;
+  runtimeVersion: string;
 };

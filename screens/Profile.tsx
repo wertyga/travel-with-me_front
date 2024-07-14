@@ -1,9 +1,14 @@
 import React from 'react';
+
 import { Dimensions, Linking, StyleSheet, Switch, View } from 'react-native';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { Version } from '@/components/Common';
+import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
 import {
   useAuthGuard,
   useForegroundPermissions,
@@ -11,15 +16,18 @@ import {
   useSubscription,
 } from '@/hooks';
 import { useStores } from '@/hooks';
+
 import { SCREENS } from '@/types';
 
 const ProfileScreen = () => {
   useAuthGuard();
 
   const navi = useNavigation();
-  const { user, logout } = useStores(stores => ({
+
+  const { user, logout, isUpdateAvailable } = useStores(stores => ({
     user: stores.userStore.user,
     logout: stores.authStore.logout,
+    isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
   }));
 
   const { granted } = useForegroundPermissions();
@@ -75,6 +83,14 @@ const ProfileScreen = () => {
       <Button onPress={handleLogout} high style={styles.logoutBtn}>
         Logout
       </Button>
+
+      {isUpdateAvailable && (
+        <Button onPress={handleUpdateApp} high style={styles.logoutBtn}>
+          Update app
+        </Button>
+      )}
+
+      <Version />
     </MainLayout>
   );
 };
