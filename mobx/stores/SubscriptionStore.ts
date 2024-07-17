@@ -17,10 +17,6 @@ export class SubscriptionStore {
 	
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
-		
-		reaction(() => this.mySubscription?._id, () => {
-			CacheReq.dropAll();
-		})
   }
 	
 	@withLoading async createSubscription(...data: Parameters<typeof createSubscriptionPayment>) {
@@ -63,7 +59,8 @@ export class SubscriptionStore {
 			
 			runInAction(() => {
 				this.mySubscription = subscription;
-			})
+			});
+			CacheReq.dropAll();
 		} catch (e) {
 			if (e.response?.status === 403) {
 				runInAction(() => {

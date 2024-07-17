@@ -10,7 +10,7 @@ import { MainLayout } from '@/Layouts';
 import { GuideMeta } from '@/components/Guide';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
-import { useNavigation, useStores } from '@/hooks';
+import { useNavigation, useStores, useSubscription } from '@/hooks';
 
 import { defaultGuideImage } from '@/utils';
 
@@ -21,6 +21,7 @@ import { CONSTANTS } from '@/styles/constants';
 const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
   const navi = useNavigation();
   const router = useRoute();
+  const { subscription } = useSubscription();
 
   const [guides, setGuides] = useState([]);
   const [fetchedCityId, setFetchedCityId] = useState('');
@@ -41,7 +42,7 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
     if (!currentGuide?.slug) return;
 
     getGuide({ slug: currentGuide.slug });
-  }, [currentGuide?.slug]);
+  }, [currentGuide?.slug, !!subscription]);
 
   useEffect(() => {
     const cityId =

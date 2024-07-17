@@ -28,7 +28,9 @@ export class AppStateStore {
 		
 		runInAction(() => {
 			this.isAppReady = true;
-		})
+		});
+		
+		await this.checkForUpdates();
 	}
 	
 	@action async checkForUpdates() {

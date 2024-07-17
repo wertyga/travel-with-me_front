@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
+import { IMageModalWithZoom } from '@/components/Common/IMageModalWithZoom/IMageModalWithZoom';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useAuthGuard, useStores, useSubscriptionGuard } from '@/hooks';
@@ -70,7 +71,7 @@ const PlaceScreen = ({ route }) => {
                   source={{ uri: item }}
                   style={{
                     width: windowWidth,
-                    objectFit: fullImageWidth === index ? 'contain' : 'cover',
+                    objectFit: 'cover',
                     height: layoutHeight - 300,
                   }}
                 />
@@ -81,6 +82,13 @@ const PlaceScreen = ({ route }) => {
 
         <PointMeta point={place} />
       </ScrollView>
+
+      {fullImageWidth !== -1 && (
+        <IMageModalWithZoom
+          uri={place.images[fullImageWidth]}
+          onClose={toggleFullWidth(fullImageWidth)}
+        />
+      )}
     </MainLayout>
   );
 };
