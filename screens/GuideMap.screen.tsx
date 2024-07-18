@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useLayoutEffect } from 'react';
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import Toast from 'react-native-toast-message';
 

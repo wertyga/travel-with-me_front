@@ -15,7 +15,6 @@ import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CText } from '@/components/CText';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 import { PointListSmall } from '@/components/Point';
-import { useStores } from '@/hooks';
 
 import { Guide, Place } from '@/types';
 
@@ -27,6 +26,7 @@ type Props = {
   Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>;
   onPointChange: (point: Place) => void;
   onOpenGallery: () => void;
+  isBig?: boolean;
 };
 
 const GuideMapPointPreview = ({
@@ -35,15 +35,8 @@ const GuideMapPointPreview = ({
   onOpenGallery,
   guide,
   onPointChange,
+  isBig,
 }: Props) => {
-  const { isGuideMuted, visiblePoint } = useStores(stores => {
-    return {
-      isGuideMuted: stores.guideStore.isGuideMuted,
-      visiblePoint: stores.guideStore.visiblePoint,
-    };
-  });
-
-  const autoplay = !isGuideMuted && visiblePoint?._id === point?._id;
   return (
     <BackgroundGradient style={styles.carouselWrapper}>
       <Trigger style={styles.swipeTrigger}>
@@ -57,6 +50,7 @@ const GuideMapPointPreview = ({
           points={guide.points}
           chosenPointId={point._id}
           onPointChange={onPointChange}
+          isBig={isBig}
         />
 
         <View style={styles.actions}>

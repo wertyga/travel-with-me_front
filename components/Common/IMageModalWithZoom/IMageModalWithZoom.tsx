@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   image: {
     width: windowWidth,

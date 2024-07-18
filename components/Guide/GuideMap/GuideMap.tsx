@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import CarouselEx from 'react-native-snap-carousel';
 
@@ -51,6 +51,7 @@ const GuideMap = ({ guide }: Props) => {
     isShowCarouselImages: false,
     isAudioPlaying: false,
     isBgPermissionDenied: false,
+    isMetaOpened: false,
   });
 
   const onPointChoose = (point: Place) => {
@@ -146,6 +147,9 @@ const GuideMap = ({ guide }: Props) => {
         <GestureUp
           initialHeight={PREVIEW_INITIAL_HEIGHT}
           maxTop={MAX_PREVIEW_SWIPE_TOP}
+          onOpen={(isMetaOpened: boolean) => {
+            setState(prev => ({ ...prev, isMetaOpened }));
+          }}
         >
           {Trigger => {
             return (
@@ -155,6 +159,7 @@ const GuideMap = ({ guide }: Props) => {
                 guide={guide}
                 onPointChange={onPointChoose}
                 onOpenGallery={() => onToggleCarouselShow(true)}
+                isBig={state.isMetaOpened}
               />
             );
           }}

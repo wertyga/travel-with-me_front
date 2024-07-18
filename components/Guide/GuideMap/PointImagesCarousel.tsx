@@ -1,7 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -9,18 +14,14 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { AntDesign } from '@expo/vector-icons';
-
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { observer } from 'mobx-react-lite';
 
-import { BackgroundGradient } from '@/components/BackgroundGradient';
-import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { CarouselDots } from '@/components/Carousel';
 import { ShowToSlideTop } from '@/components/Common';
-import { GesturesContainer } from '@/components/Gestures/Gestures';
+import { ZoomImage } from '@/components/Common/ZoomImage/ZoomImage';
 import { useStores } from '@/hooks';
 
 import { FONTS, Place } from '@/types';
@@ -28,49 +29,50 @@ import { FONTS, Place } from '@/types';
 type Props = {
   point: Place;
   onClose: () => void;
+  initialIndex?: number;
 };
 
 const TRANSLATION_Y_OFFSET = 150;
 
 const { width: windowWidth } = Dimensions.get('window');
 
-export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
+export const PointImagesCarouselComponent = ({
+  point,
+  onClose,
+  initialIndex = 0,
+}: Props) => {
   const { layoutHeight } = useStores(stores => ({
     layoutHeight: stores.domStore.layoutHeight,
   }));
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const swipeTranslateX = useSharedValue(0);
+  const swipeTranslateY = useSharedValue(0);
   const swipeTopValue = useSharedValue({
-    translateX: 0,
-    translateY: 0,
-    imageSlide: false,
     currentIndex: 0,
-    isFinished: false,
   });
 
   const animatedWrapperStyles = useAnimatedStyle(() => {
-    const { translateY, translateX, imageSlide, isFinished } =
-      swipeTopValue.value;
-
-    if (Math.abs(translateY) >= layoutHeight) {
+    if (Math.abs(swipeTranslateY.value) >= layoutHeight) {
       runOnJS(onClose)();
+      return {};
     }
-
-    const valueX = imageSlide
-      ? translateX
-      : withTiming(translateX, { duration: 100 });
 
     return {
       transform: [
         {
-          translateY: isFinished
-            ? withTiming(translateY, { duration: 100 })
-            : translateY,
+          translateY: swipeTranslateY.value,
         },
-        { translateX: valueX },
+        { translateX: swipeTranslateX.value },
       ],
     } as any;
   });
+
+  const goToIndex = (index: number) => {
+    swipeTranslateX.value = index * -windowWidth;
+    setCurrentIndex(index);
+  };
 
   const onUpdate = e => {
     const { translationY, translationX } = e;
@@ -78,13 +80,10 @@ export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
     const { currentIndex } = swipeTopValue.value;
     const currentTranslateX = currentIndex * -windowWidth;
 
-    swipeTopValue.value = {
-      ...swipeTopValue.value,
-      imageSlide: true,
-      translateY: isByY ? translationY : 0,
-      translateX: !isByY ? currentTranslateX + translationX : currentTranslateX,
-      isFinished: false,
-    };
+    swipeTranslateX.value = !isByY
+      ? currentTranslateX + translationX
+      : currentTranslateX;
+    swipeTranslateY.value = isByY ? translationY : 0;
   };
 
   const onFinalize = e => {
@@ -94,23 +93,15 @@ export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
     const currentTranslateX = currentIndex * -windowWidth;
 
     if (isByY) {
+      swipeTranslateX.value = withTiming(currentTranslateX, { duration: 100 });
+
       // translationY - negative, slide to top
       if (translationY <= -TRANSLATION_Y_OFFSET) {
-        swipeTopValue.value = {
-          ...swipeTopValue.value,
-          imageSlide: false,
-          translateX: currentTranslateX,
-          translateY: -layoutHeight - 100,
-          isFinished: true,
-        };
+        swipeTranslateY.value = withTiming(-layoutHeight - 100, {
+          duration: 100,
+        });
       } else {
-        swipeTopValue.value = {
-          ...swipeTopValue.value,
-          imageSlide: false,
-          translateX: currentTranslateX,
-          translateY: 0,
-          isFinished: true,
-        };
+        swipeTranslateY.value = withTiming(0, { duration: 100 });
       }
     } else {
       const isLeft = translationX <= -30;
@@ -126,59 +117,68 @@ export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
         index = currentIndex - 1 < 0 ? 0 : currentIndex - 1;
       }
 
-      swipeTopValue.value = {
-        currentIndex: index,
-        imageSlide: false,
-        translateY: 0,
-        translateX: windowWidth * -index,
-        isFinished: true,
-      };
+      swipeTranslateX.value = withTiming(windowWidth * -index, {
+        duration: 100,
+      });
+      swipeTranslateY.value = withTiming(0, { duration: 100 });
+      swipeTopValue.value = { currentIndex: index };
+
       runOnJS(setCurrentIndex)(index);
     }
   };
 
+  const gesture = Gesture.Pan()
+    .onUpdate(onUpdate)
+    .onFinalize(onFinalize)
+    .maxPointers(1);
+
+  useEffect(() => {
+    goToIndex(initialIndex);
+  }, [initialIndex]);
+
   return (
-    <BackgroundGradient
+    <View
       style={{
         ...styles.container,
         width: point.images.length * windowWidth,
         height: layoutHeight,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
       }}
     >
-      <GesturesContainer
-        onFinalize={onFinalize}
-        onUpdate={onUpdate}
+      <GestureHandlerRootView
         style={[
           {
             height: layoutHeight,
           },
         ]}
       >
-        <Animated.View
-          style={[
-            styles.gallery,
-            {
-              height: layoutHeight,
-              width: point.images.length * windowWidth,
-            },
-            animatedWrapperStyles,
-          ]}
-        >
-          {point.images.map(image => {
-            return (
-              <Image
-                key={image}
-                source={{ uri: image }}
-                style={{
-                  width: windowWidth,
-                  height: '100%',
-                  objectFit: 'contain',
-                }}
-              />
-            );
-          })}
-        </Animated.View>
-      </GesturesContainer>
+        <GestureDetector gesture={gesture}>
+          <Animated.View
+            style={[
+              styles.gallery,
+              {
+                height: layoutHeight,
+                width: point.images.length * windowWidth,
+              },
+              animatedWrapperStyles,
+            ]}
+          >
+            {point.images.map(image => {
+              return (
+                <ZoomImage
+                  key={image}
+                  uri={image}
+                  imageStyle={{
+                    width: windowWidth,
+                    height: '100%',
+                    objectFit: 'contain',
+                  }}
+                />
+              );
+            })}
+          </Animated.View>
+        </GestureDetector>
+      </GestureHandlerRootView>
 
       <LinearGradient
         colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']}
@@ -191,9 +191,6 @@ export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
         colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
         style={styles.actionsContainer}
       >
-        {/*<Button style={styles.scrollToCloseBtn} onPress={onClose} noPaddings>*/}
-        {/*  <AntDesign name="up" size={24} color="white" />*/}
-        {/*</Button>*/}
         <View style={styles.showToTop}>
           <ShowToSlideTop />
         </View>
@@ -204,7 +201,7 @@ export const PointImagesCarouselComponent = ({ point, onClose }: Props) => {
           currentIndex={currentIndex}
         />
       </LinearGradient>
-    </BackgroundGradient>
+    </View>
   );
 };
 

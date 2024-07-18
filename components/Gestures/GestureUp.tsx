@@ -20,6 +20,7 @@ export type GestureUpProps = {
   children: (
     Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>
   ) => React.ReactNode;
+  onOpen?: (isOpened: boolean) => void;
 };
 
 export const GestureUp: React.FC<GestureUpProps> = ({
@@ -27,6 +28,7 @@ export const GestureUp: React.FC<GestureUpProps> = ({
   initialHeight = 200,
   maxTop = 50,
   activateThreshold = 50,
+  onOpen,
 }) => {
   const currentStateRef = useRef({
     initialTop: Dimensions.get('window').height - initialHeight,
@@ -48,6 +50,9 @@ export const GestureUp: React.FC<GestureUpProps> = ({
       duration: 150,
     });
     isOpened.value = false;
+    setTimeout(() => {
+      onOpen?.(false);
+    });
   };
 
   const handleOpen = () => {
@@ -55,6 +60,9 @@ export const GestureUp: React.FC<GestureUpProps> = ({
       duration: 150,
     });
     isOpened.value = true;
+    setTimeout(() => {
+      onOpen?.(true);
+    });
   };
 
   const onUpdate = e => {
