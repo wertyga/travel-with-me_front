@@ -1,8 +1,12 @@
 import { Dimensions } from 'react-native';
-import { CONSTANTS } from '@/styles/constants';
 
-export const getCompressedUrl = (url: string, width?: number) => {
-  return width ? `${url}?width=${width}` : url;
+const { width: windowWidth } = Dimensions.get('window');
+
+export const getCompressedUrl = (
+  url: string | number,
+  width: number = windowWidth
+) => {
+  return typeof url === 'number' ? url : `${url}?width=${Math.ceil(width)}`;
 };
 
 export const getHeight = (percent: number, sidePadding: number = 0) => {

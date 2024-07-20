@@ -18,6 +18,7 @@ import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
+import { FastImage } from '@/components/FastImage';
 import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
 import { Loader } from '@/components/Loader';
 import { useStores } from '@/hooks';
@@ -65,8 +66,6 @@ export const MainLayoutComponent = ({
     updateDomState: stores.domStore.updateDomState,
   }));
 
-  const imageSource = typeof bgImage === 'string' ? { uri: bgImage } : bgImage;
-
   return (
     <View
       style={[styles.main, containerStyle]}
@@ -107,7 +106,7 @@ export const MainLayoutComponent = ({
             style={[StyleSheet.absoluteFillObject, { height: layoutHeight }]}
             activeOpacity={1}
           >
-            <Image source={imageSource} style={styles.bgImage} />
+            <FastImage source={bgImage} style={styles.bgImage} />
             <LinearGradient
               colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
               style={[StyleSheet.absoluteFillObject]}

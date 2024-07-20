@@ -12,6 +12,7 @@ export async function findImageInCache(uri) {
   try {
     const cacheUri = getCacheDirectoryForUri(uri);
     let info = await FileSystem.getInfoAsync(cacheUri);
+
     return { ...info, err: false };
   } catch (error) {
     return {

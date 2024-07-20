@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import {
   ActivityIndicator,
   Image,
@@ -8,31 +6,27 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { handleCacheImage } from '@/components/FastImage/FastImage.utils';
+import { useFastImage } from '@/components/FastImage/FastImage.utils';
 
 type Props = Omit<ImageProps, 'style' | 'source'> & {
   source: string | number;
   style?: ImageProps['style'] | ViewStyle;
+  imageWidth?: number;
 };
 
-export const FastImage = ({ source, style = {}, ...imageProps }: Props) => {
-  const isLocalImage = typeof source === 'number';
-
-  const [imgUri, setUri] = useState('');
-
-  useEffect(() => {
-    if (isLocalImage) return;
-
-    handleCacheImage(source, setUri);
-  }, []);
-
-  const isRenderImage = isLocalImage || !!imgUri;
+export const FastImage = ({
+  source,
+  style = {},
+  imageWidth,
+  ...imageProps
+}: Props) => {
+  const imgSource = useFastImage(source, imageWidth);
 
   return (
     <>
-      {isRenderImage ? (
+      {!!imgSource ? (
         <Image
-          source={isLocalImage ? source : { uri: imgUri }}
+          source={imgSource}
           style={style as ImageProps['style']}
           {...imageProps}
         />

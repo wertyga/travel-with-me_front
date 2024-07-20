@@ -1,10 +1,14 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
+
 import { CText } from '@/components/CText';
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
 import { useNavigation } from '@/hooks';
+
 import { getHeight } from '@/utils';
+
 import { City, FONTS, SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {

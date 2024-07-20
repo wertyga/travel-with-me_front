@@ -1,4 +1,8 @@
-import { cacheImage, findImageInCache } from '@/utils';
+import { useEffect, useState } from 'react';
+
+import { ImageSourcePropType } from 'react-native';
+
+import { cacheImage, findImageInCache, getCompressedUrl } from '@/utils';
 
 export const handleCacheImage = async (
   uri: string,
@@ -21,4 +25,22 @@ export const handleCacheImage = async (
   }
 
   setUri(uri);
+};
+
+export const useFastImage = (
+  source: string | number,
+  width?: number
+): ImageSourcePropType => {
+  const isLocalImage = typeof source === 'number';
+
+  const [imgUri, setUri] = useState(isLocalImage ? '' : source);
+
+  useEffect(() => {
+    if (isLocalImage) return;
+
+    const compressedUrl = getCompressedUrl(source, width) as string;
+    handleCacheImage(compressedUrl, setUri);
+  }, []);
+
+  return isLocalImage ? source : { uri: imgUri };
 };
