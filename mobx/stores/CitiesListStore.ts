@@ -1,4 +1,4 @@
-import {makeObservable, observable, runInAction} from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import {City, RootStoreType} from "@/types";
 import {fetchLightCityList} from '@/api';
 import {cacheWrap} from "@/utils/cache_request";
@@ -12,8 +12,13 @@ export class CitiesListStore {
     makeObservable(this);
   }
   
-  async getCityLightList() {
+  @action async getCityLightList() {
     try {
+      if (!this.rootStore.appStateStore.isNetConnected) {
+        // It set up in OfflineStore
+        return;
+      }
+      
       const cachedReq = cacheWrap.apply(this, [fetchLightCityList]);
       const {cities, total} = await cachedReq.withLoading().invoke();
 

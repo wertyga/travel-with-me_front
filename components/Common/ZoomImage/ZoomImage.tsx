@@ -63,6 +63,7 @@ export const ZoomImage = ({ uri, imageStyle }) => {
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
+    // @ts-ignore
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },

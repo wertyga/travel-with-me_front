@@ -37,7 +37,6 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
   );
 
   const currentGuide = (router.params as any)?.guide;
-
   useEffect(() => {
     if (!currentGuide?.slug) return;
 

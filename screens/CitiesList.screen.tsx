@@ -30,9 +30,10 @@ const HEADERS_LIST = [
 ];
 
 const CitiesListScreen = () => {
-  const { cities, getCityLightList } = useStores(stores => ({
+  const { cities, getCityLightList, isNetConnected } = useStores(stores => ({
     cities: stores.citiesListStore.cityLightList,
     getCityLightList: stores.citiesListStore.getCityLightList,
+    isNetConnected: stores.appStateStore.isNetConnected,
   }));
 
   const [state, setState] = useState({
@@ -49,7 +50,7 @@ const CitiesListScreen = () => {
     return () => {
       setState(prev => ({ ...prev, tab: 'list' }));
     };
-  }, []);
+  }, [isNetConnected]);
 
   if (!cities.length) {
     return <SafeLoader />;
@@ -59,16 +60,12 @@ const CitiesListScreen = () => {
     <MainLayout
       style={styles.layout}
       bgColors={[CONSTANTS.colors.bg1, CONSTANTS.colors.bg3]}
+      headerTitle={!isNetConnected && 'Offline Mode'}
     >
       <FastImageBackground
         source={SplashBgImage}
         style={StyleSheet.absoluteFillObject}
-      >
-        {/*<LinearGradient*/}
-        {/*  colors={['rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.7)']}*/}
-        {/*  style={StyleSheet.absoluteFillObject}*/}
-        {/*></LinearGradient>*/}
-      </FastImageBackground>
+      />
 
       <View
         style={{
@@ -79,7 +76,7 @@ const CitiesListScreen = () => {
           zIndex: 1,
         }}
       >
-        <GlobalSearch />
+        {isNetConnected && <GlobalSearch />}
         <View style={styles.headers}>
           {HEADERS_LIST.map(({ title, id }) => {
             return (

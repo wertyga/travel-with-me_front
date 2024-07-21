@@ -24,17 +24,22 @@ const ProfileScreen = () => {
 
   const navi = useNavigation();
 
-  const { user, logout, isUpdateAvailable } = useStores(stores => ({
-    user: stores.userStore.user,
-    logout: stores.authStore.logout,
-    isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
-  }));
+  const { user, logout, isUpdateAvailable, isNetConnected } = useStores(
+    stores => ({
+      user: stores.userStore.user,
+      logout: stores.authStore.logout,
+      isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
+      isNetConnected: stores.appStateStore.isNetConnected,
+    })
+  );
 
   const { granted } = useForegroundPermissions();
 
   const { subscription } = useSubscription();
 
   const handleLogout = () => {
+    if (!isNetConnected) return;
+
     navi.navigate(SCREENS.CitiesList);
     logout();
   };
@@ -45,13 +50,22 @@ const ProfileScreen = () => {
 
   if (!user) return null;
 
+  const editLabel = isNetConnected ? 'Edit' : 'Offline';
+  const getHelpLabel = isNetConnected ? 'Get Help' : 'Offline';
+  const isShowSubscriptionBtn = isNetConnected && !subscription;
+  const isShowUpdateBtn = isNetConnected && isUpdateAvailable;
+
   return (
     <MainLayout headerTitle="Profile" style={styles.container}>
       <CText style={styles.item}>{user.username}</CText>
 
-      <Button style={styles.item} href={SCREENS.ChangeEmail} noPaddings>
+      <Button
+        style={styles.item}
+        href={isNetConnected && SCREENS.ChangeEmail}
+        noPaddings
+      >
         <CText>{user.email}</CText>
-        <CText style={styles.edit}>Edit</CText>
+        <CText style={styles.edit}>{editLabel}</CText>
       </Button>
 
       <Button style={styles.item} noPaddings onPress={changePermissions}>
@@ -60,31 +74,41 @@ const ProfileScreen = () => {
       </Button>
 
       {!!subscription && (
-        <Button style={styles.item} href={SCREENS.Subscriptions} noPaddings>
+        <Button
+          style={styles.item}
+          href={isNetConnected && SCREENS.Subscriptions}
+          noPaddings
+        >
           <CText>Subscription</CText>
           <CText style={styles.edit}>
             {new Date(subscription.validUntil).toLocaleDateString()}
           </CText>
-          <CText style={styles.edit}>Edit</CText>
+          <CText style={styles.edit}>{editLabel}</CText>
         </Button>
       )}
 
-      <Button style={styles.item} href={SCREENS.Contact} noPaddings>
+      <Button
+        style={styles.item}
+        href={isNetConnected && SCREENS.Contact}
+        noPaddings
+      >
         <CText>Support</CText>
-        <CText style={styles.edit}>Get Help</CText>
+        <CText style={styles.edit}>{getHelpLabel}</CText>
       </Button>
 
-      {!subscription && (
+      {isShowSubscriptionBtn && (
         <Button high href={SCREENS.Subscriptions}>
           Buy subscription
         </Button>
       )}
 
-      <Button onPress={handleLogout} high style={styles.logoutBtn}>
-        Logout
-      </Button>
+      {isNetConnected && (
+        <Button onPress={handleLogout} high style={styles.logoutBtn}>
+          Logout
+        </Button>
+      )}
 
-      {isUpdateAvailable && (
+      {isShowUpdateBtn && (
         <Button onPress={handleUpdateApp} high style={styles.logoutBtn}>
           Update app
         </Button>

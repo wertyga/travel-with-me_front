@@ -18,7 +18,7 @@ import { PointListSmall } from '@/components/Point';
 
 import { Guide, Place } from '@/types';
 
-const TRIGGER_HEIGHT = 280;
+const TRIGGER_HEIGHT = 380;
 
 type Props = {
   point: Place;

@@ -1,6 +1,5 @@
-import { RootStore } from '@/mobx/RootStore';
-import { makeObservable, observable, runInAction} from 'mobx';
-import {City} from "@/types";
+import { action, makeObservable, observable, runInAction } from 'mobx';
+import { City, RootStoreType } from '@/types';
 import {fetchCity} from "@/api";
 import {cacheWrap} from "@/utils/cache_request";
 
@@ -9,12 +8,18 @@ export class CityStore {
 	@observable city: City | null = null;
 	@observable isLoading: boolean;
 	
-  constructor(rootStore: RootStore) {
+  constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
 	
-	async getCity(...params: Parameters<typeof fetchCity>) {
+	@action async getCity(...params: Parameters<typeof fetchCity>) {
 		try {
+			if (!this.rootStore.appStateStore.isNetConnected) {
+				this.city = this.rootStore.offlineStore.getCity(params[0].slug || params[0]._id);
+				
+				return this.city;
+			}
+			
 			const cachedReq = cacheWrap.apply(this, [fetchCity, params]);
 		  const {city} = await cachedReq.withLoading().invoke();
 
@@ -24,7 +29,7 @@ export class CityStore {
 
 			return city;
 		} catch (e) {
-		
+		console.log({e});
 		}
 	}
 }

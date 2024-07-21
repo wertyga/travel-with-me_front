@@ -2,10 +2,14 @@ import { useMemo, useState } from 'react';
 
 import { StyleSheet, View } from 'react-native';
 
-import { useRoute } from '@react-navigation/native';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+
+import { OFFLINE_KEYS } from '@/mobx/stores/OfflineStore';
+import { observer } from 'mobx-react-lite';
 
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { CityDownloader } from '@/components/City';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import {
   CITY_TABS,
@@ -16,7 +20,6 @@ import { CityScreenMetaDHST } from '@/components/City/CityScreenMeta/CityScreenM
 import { CountryPill } from '@/components/Country';
 import { GuidesSlideList } from '@/components/Guide';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
-import { useNavigation } from '@/hooks';
 
 import { City, FONTS } from '@/types';
 
@@ -26,8 +29,7 @@ type Props = {
   city: City;
 };
 
-export const CityScreenMeta = ({ city }: Props) => {
-  const chosenCityTab = CITY_TABS[0].title;
+const CityScreenMeta = ({ city }: Props) => {
   const [state, setState] = useState({
     filterByCategory: '',
     chosenCityTab: CITY_TABS[0].title,
@@ -66,6 +68,8 @@ export const CityScreenMeta = ({ city }: Props) => {
     <>
       <View style={styles.top}>
         <CountryPill title={city.country.title} icon="map-point-small" />
+
+        <CityDownloader city={city} />
       </View>
 
       <ScrollHorizontalNoEdges edge={CONSTANTS.spaces.paddingHorizontal}>
@@ -99,6 +103,8 @@ export const CityScreenMeta = ({ city }: Props) => {
     </>
   );
 };
+
+export default observer(CityScreenMeta);
 
 const styles = StyleSheet.create({
   top: {

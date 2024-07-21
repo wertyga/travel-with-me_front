@@ -20,6 +20,7 @@ export enum SCREENS {
   Favorite = 'Favorite',
   WorldGuidesMap = 'WorldGuidesMap',
   Contact = 'Contact',
+  Offline = 'Offline',
 }
 
 export type RootStackParamList = {
@@ -34,6 +35,7 @@ export type RootStackParamList = {
   [SCREENS.Favorite]: undefined;
   [SCREENS.Profile]: undefined;
   [SCREENS.WorldGuidesMap]: undefined;
+  [SCREENS.Offline]: undefined;
   [SCREENS.Contact]: undefined;
   [SCREENS.Place]: { placeSlug: string; autoplay?: boolean };
   [SCREENS.Error]: { error: string };

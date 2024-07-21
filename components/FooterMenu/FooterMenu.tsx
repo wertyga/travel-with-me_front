@@ -1,23 +1,29 @@
 import { useEffect } from 'react';
+
 import { StyleSheet, TouchableOpacity } from 'react-native';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
 import { CText } from '@/components/CText';
 import { FOOTER_MENU } from '@/components/FooterMenu/FooterMenu.utils';
 import { Icon, IconNames } from '@/components/Icon';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
+
 import { SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 export const FooterMenu = () => {
   const navi = useNavigation();
 
-  const { footer } = useStores(stores => ({
+  const { footer, isNetConnected } = useStores(stores => ({
     footer: stores.domStore.footer,
+    isNetConnected: stores.appStateStore.isNetConnected,
   }));
 
   const translateY = useSharedValue(0);

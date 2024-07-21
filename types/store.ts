@@ -16,4 +16,5 @@ export type RootStoreType = RootStoreTypeRoot<{
   locationStore: stores.LocationStore;
   appStateStore: stores.AppStateStore;
   soundStore: stores.SoundStore;
+  offlineStore: stores.OfflineStore;
 }>;

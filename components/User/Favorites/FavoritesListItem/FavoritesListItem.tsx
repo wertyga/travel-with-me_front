@@ -1,13 +1,18 @@
 import { StyleSheet, View } from 'react-native';
+
 import Animated from 'react-native-reanimated';
+
 import { FontAwesome } from '@expo/vector-icons';
+
 import { setLike } from '@/api';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { FastImage } from '@/components/FastImage';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { useSlideLeft, useStores } from '@/hooks';
+
 import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
+
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
 
@@ -19,6 +24,7 @@ type Props = {
   slug: string;
   _id: string;
   city?: string;
+  isRemoveDisabled?: boolean;
 };
 
 export const FavoritesListItem = ({
@@ -29,6 +35,7 @@ export const FavoritesListItem = ({
   _id,
   slug,
   city,
+  isRemoveDisabled,
 }: Props) => {
   const { getFavorites } = useStores(stores => ({
     getFavorites: stores.userStore.getFavorites,
@@ -64,12 +71,22 @@ export const FavoritesListItem = ({
     leftSideTranslation: -80,
   });
 
+  const gestureHandlers = isRemoveDisabled
+    ? {
+        onUpdate: () => {},
+        onFinalize: () => {},
+      }
+    : {
+        onUpdate,
+        onFinalize,
+      };
+
   return (
-    <GesturesContainer onUpdate={onUpdate} onFinalize={onFinalize}>
+    <GesturesContainer {...gestureHandlers}>
       <Animated.View style={[animatedStyles, styles.wrapper]}>
         <Button
           href={href}
-          hrefParams={hrefParams}
+          hrefParams={hrefParams as any}
           style={styles.container}
           activeOpacity={1}
           rectangle

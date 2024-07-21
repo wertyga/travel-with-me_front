@@ -8,7 +8,7 @@ import { Guide } from '@/types';
 
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 import { GuideMetaActions } from './GuideMetaActions';
-import { GuideMetaTitle } from './GuideMetaTitle';
+import GuideMetaTitle from './GuideMetaTitle';
 
 type Props = {
   guide: Guide;

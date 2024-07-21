@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { useFocus } from '@/hooks/useFocus';
 import { useStores } from '@/hooks/useStores';
 
@@ -12,6 +13,7 @@ export const useSubscription = (props?: Props) => {
   const [state, setState] = useState({
     isLoading: false,
   });
+
   const {
     user,
     createSubscription,
@@ -70,8 +72,14 @@ export const useSubscription = (props?: Props) => {
   useFocus(() => {
     if (!user) return;
 
-    getMySubscription();
-  }, [user]);
+    const isSubscriptionValid =
+      mySubscription &&
+      new Date(mySubscription.validUntil).getTime() > Date.now();
+
+    if (!isSubscriptionValid) {
+      getMySubscription();
+    }
+  }, [user, mySubscription]);
 
   return {
     user,
@@ -81,5 +89,8 @@ export const useSubscription = (props?: Props) => {
     createSubscription,
     renewMySubscription,
     isLoading: state.isLoading || isLoading,
+    isSubscriptionValid:
+      mySubscription &&
+      new Date(mySubscription.validUntil).getTime() > Date.now(),
   };
 };

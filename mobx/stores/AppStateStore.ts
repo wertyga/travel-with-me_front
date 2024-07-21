@@ -1,25 +1,30 @@
-import {action, makeObservable, observable, runInAction} from 'mobx';
+import { action, makeObservable, observable, reaction, runInAction } from 'mobx';
 import * as Updates from 'expo-updates';
 import {AppState} from "react-native";
 import { IDENTIFIERS, removeNotification } from '@/utils';
-import {EnvMap, RootStoreType} from "@/types";
-import { fetchEnvs, sendLogs } from '@/api';
+import { EnvMap, RootStoreType, SCREENS } from '@/types';
+import { fetchEnvs } from '@/api';
 import Constants from "expo-constants";
 import {CacheReq} from "@/utils/cache_request";
+import { addEventListener, NetInfoSubscription } from '@react-native-community/netinfo';
 
 export class AppStateStore {
 	static ENV: Partial<EnvMap> = {
 		stripePk: (Constants.expoConfig?.extra as any).STRIPE_PUBLIC_KEY,
 	};
 	
+	netConnectionUnsubscribe: NetInfoSubscription;
+	
 	@observable isAppReady: boolean = false;
 	@observable isUpdateAvailable: boolean = false;
+	@observable isNetConnected: boolean = undefined;
 	
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
 	
 	async onInitiate() {
+		this.applyNetConnectionListener();
 		this.applyAppStateChangeListener();
 		await Promise.all([
 			this.getEnvs(),
@@ -31,6 +36,14 @@ export class AppStateStore {
 		});
 		
 		await this.checkForUpdates();
+	}
+	
+	@action setIsNetConnected(value: boolean) {
+		this.isNetConnected = value;
+
+		if (!value) {
+			this.rootStore.offlineStore.populateOfflineStore();
+		}
 	}
 	
 	@action async checkForUpdates() {
@@ -65,7 +78,7 @@ export class AppStateStore {
 		}
 	}
 	
-	applyAppStateChangeListener() {
+	@action applyAppStateChangeListener() {
 		AppState.addEventListener(
 			'change',
 			async (nextState) => {
@@ -90,5 +103,11 @@ export class AppStateStore {
 				}
 			}
 		);
+	}
+	
+	@action applyNetConnectionListener() {
+		this.netConnectionUnsubscribe = addEventListener(state => {
+			this.setIsNetConnected(state.isConnected);
+		});
 	}
 }

@@ -1,11 +1,17 @@
 import { useState } from 'react';
+
 import { StyleSheet } from 'react-native';
+
 import Toast from 'react-native-toast-message';
+
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import { setLike } from '@/api';
 import Button from '@/components/Button';
 import { useStores } from '@/hooks';
+
 import { Like, SOCIAL_MODELS } from '@/types';
 
 type Props = {
@@ -24,8 +30,9 @@ export const LikeActionComponent = ({
   const [isLoading, setLoading] = useState(false);
   const [state, setState] = useState<Like>({ isInteracted, count: 0 });
 
-  const { user } = useStores(stores => ({
+  const { user, isNetConnected } = useStores(stores => ({
     user: stores.userStore.user,
+    isNetConnected: stores.appStateStore.isNetConnected,
   }));
 
   const handleLike = async () => {
@@ -49,6 +56,8 @@ export const LikeActionComponent = ({
       setLoading(false);
     }
   };
+
+  if (!isNetConnected) return null;
 
   return (
     <Button

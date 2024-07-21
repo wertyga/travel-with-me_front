@@ -1,29 +1,47 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+
+import { StyleSheet } from 'react-native';
+
 import { useRoute } from '@react-navigation/native';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
-import { CityScreenMeta } from '@/components/City/CityScreenMeta/CityScreenMeta';
+import { CityScreenMeta } from '@/components/City';
+import { CityMapForDownload } from '@/components/City/CityMapForDownload/CityMapForDownload';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
-import { useNavigation } from '@/hooks';
+import { useFocus, useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
+import _flatten from 'lodash/flatten';
+
 import { City } from '@/types';
 
 const CityScreen = () => {
   const navi = useNavigation();
   const router = useRoute();
 
-  const { getCityLightList, getCity, cityLightList, city, isLoading } =
-    useStores(stores => ({
-      getCityLightList: stores.citiesListStore.getCityLightList,
-      cityLightList: stores.citiesListStore.cityLightList,
-      getCity: stores.cityStore.getCity,
-      city: stores.cityStore.city,
-      isLoading: stores.cityStore.isLoading,
-    }));
-
   const currentCity = (router.params as any)?.city;
+
+  const {
+    getCityLightList,
+    getCity,
+    cityLightList,
+    city,
+    isLoading,
+    isCitySaved,
+    setIsCitySaved,
+    cachedCity,
+  } = useStores(stores => ({
+    getCityLightList: stores.citiesListStore.getCityLightList,
+    cityLightList: stores.citiesListStore.cityLightList,
+    getCity: stores.cityStore.getCity,
+    city: stores.cityStore.city,
+    isLoading: stores.cityStore.isLoading,
+    isCitySaved: stores.offlineStore.isCitySaved,
+    setIsCitySaved: stores.offlineStore.setIsCitySaved,
+    cachedCity: stores.offlineStore.getCity(currentCity?.slug),
+  }));
 
   const onChangeCity = async ({
     index,
@@ -49,6 +67,12 @@ const CityScreen = () => {
     getCity({ slug: currentCity?.slug });
   }, [currentCity, cityLightList.length]);
 
+  useFocus(() => {
+    return () => {
+      setIsCitySaved(false);
+    };
+  }, []);
+
   if (!city || !cityLightList.length) {
     return (
       <SafeLoader
@@ -62,6 +86,7 @@ const CityScreen = () => {
   const initialCityIndex = cityLightList.findIndex(
     ({ _id }) => _id === currentCity?._id
   );
+  const points = _flatten(cachedCity?.guides.map(guide => guide.points)) || [];
 
   return (
     <MainLayout
@@ -81,6 +106,8 @@ const CityScreen = () => {
       >
         {!isLoading && <CityScreenMeta city={city} />}
       </ScreenContentWrapper>
+
+      {isCitySaved && <CityMapForDownload points={points} />}
     </MainLayout>
   );
 };

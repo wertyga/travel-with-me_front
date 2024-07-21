@@ -1,6 +1,8 @@
 import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import { runInAction } from 'mobx';
 
+const DEFAULT_CACHE_TIME = 86400000; // 24h
+
 export class CacheReq {
   private static cache = new Map<string, Record<'data' | 'expiredAt', any>>();
 
@@ -35,7 +37,7 @@ export class CacheReq {
   static setCacheByKey(key: string, data: any) {
     const cacheTimeActual = !Number.isNaN(Number(AppStateStore.ENV?.cacheTime))
       ? AppStateStore.ENV?.cacheTime
-      : 86400000;
+      : DEFAULT_CACHE_TIME;
 
     return CacheReq.cache.set(key, {
       data,
@@ -72,6 +74,7 @@ class CacheHandler {
 
   async invoke() {
     const cachedResult = CacheReq.getCacheByKey(this.key);
+
     if (cachedResult) {
       return cachedResult;
     }

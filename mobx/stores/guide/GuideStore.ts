@@ -28,11 +28,17 @@ export class GuideStore {
 		})
   }
 	
-	async getGuide(params: {
+	@action async getGuide(params: {
 		slug: string;
 		withStory?: boolean;
 	}) {
 		try {
+			if (!this.rootStore.appStateStore.isNetConnected) {
+				this.guide = this.rootStore.offlineStore.getGuide(params.slug);
+				return;
+			}
+			
+			
 			const cachedReq = cacheWrap.apply(this, [fetchGuide, params]);
 			const guide = await cachedReq.withLoading().invoke();
 			

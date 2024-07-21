@@ -13,15 +13,17 @@ import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   city: City;
+  disabled: boolean;
 };
 
-export const CityPreview = ({ city }: Props) => {
+export const CityPreview = ({ city, disabled }: Props) => {
   const navi = useNavigation();
 
   return (
     <TouchableOpacity
       key={city._id}
-      style={styles.preview}
+      style={[styles.preview, disabled && styles.disabled]}
+      disabled={disabled}
       onPress={() =>
         navi.navigate(SCREENS.City, {
           city,
@@ -54,6 +56,9 @@ const styles = StyleSheet.create({
     height: getHeight(70, CONSTANTS.spaces.paddingHorizontal * 2),
     borderRadius: 15,
     overflow: 'hidden',
+  },
+  disabled: {
+    opacity: 0.3,
   },
   header: {
     fontSize: 22,

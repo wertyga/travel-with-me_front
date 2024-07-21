@@ -1,4 +1,4 @@
-import {action, makeObservable, observable} from 'mobx';
+import { action, makeObservable } from 'mobx';
 import {NavigationContainerRefWithCurrent} from "@react-navigation/native";
 import {RootStoreType, SCREENS} from "@/types";
 

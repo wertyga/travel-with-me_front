@@ -15,7 +15,6 @@ import { observer } from 'mobx-react-lite';
 
 import { CText } from '@/components/CText';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
-import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
 import { useStores } from '@/hooks';
 
 import { storage } from '@/utils';
@@ -24,10 +23,11 @@ import { FONTS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
+import { STORAGE_KEY, handleUpdateApp } from './UpdateApp.utils';
+
 const CLOSED_TRANSLATE_X_VALUE = Dimensions.get('screen').width + 100;
 const OPENED_TRANSLATION_X = CONSTANTS.spaces.paddingHorizontal;
 const ANIMATION_TIMEOUT = 200;
-export const STORAGE_KEY = 'isNoNeedToUpdate';
 
 const UpdateApp = () => {
   const { isAppReady, isUpdateAvailable } = useStores(stores => ({

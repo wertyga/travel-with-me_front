@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import {
   NavigationContainer,
@@ -8,20 +8,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { observer } from 'mobx-react-lite';
 
+import { onLineScreens } from '@/app/Navigator/navigator.utils';
 import { useStores } from '@/hooks';
-import ChangeEmailScreen from '@/screens/ChangeEmail';
-import CitiesListScreen from '@/screens/CitiesList.screen';
-import CityScreen from '@/screens/City.screen';
-import ContactScreen from '@/screens/Contact.screen';
-import ErrorScreen from '@/screens/Error';
-import FavoritesScreen from '@/screens/Favorites.screen';
-import GuideScreen from '@/screens/Guide.screen';
-import GuideMapScreen from '@/screens/GuideMap.screen';
-import LoginScreen from '@/screens/Login';
-import PlaceScreen from '@/screens/Place.screen';
-import ProfileScreen from '@/screens/Profile';
-import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
-import SubscriptionsScreen from '@/screens/Subscriptions';
 import TransitionScreen from '@/screens/TransitionScreen';
 
 import { RootStackParamList, SCREENS } from '@/types';
@@ -31,14 +19,27 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
 
-  const { onRouterStoreReady, isAuthLoading } = useStores(stores => ({
-    onRouterStoreReady: stores.routerStore.onReady,
-    isAuthLoading: stores.authStore.isInitialLoading,
-  }));
+  const { onRouterStoreReady, isAuthLoading, isNetConnected } = useStores(
+    stores => ({
+      onRouterStoreReady: stores.routerStore.onReady,
+      isAuthLoading: stores.authStore.isInitialLoading,
+      isNetConnected: stores.appStateStore.isNetConnected,
+    })
+  );
 
   const onReady = async () => {
     onRouterStoreReady(navigationRef);
+
+    if (!isNetConnected) {
+      navigationRef.current.navigate(SCREENS.CitiesList as never);
+    }
   };
+
+  useEffect(() => {
+    if (isNetConnected || !navigationRef.current) return;
+
+    navigationRef.current.navigate(SCREENS.CitiesList as never);
+  }, [isNetConnected]);
 
   if (isAuthLoading) {
     return <TransitionScreen />;
@@ -54,28 +55,15 @@ const Navigator = () => {
           headerShown: false,
         }}
       >
-        <Stack.Screen name={SCREENS.CitiesList} component={CitiesListScreen} />
-        <Stack.Screen name={SCREENS.City} component={CityScreen} />
-        <Stack.Screen name={SCREENS.Profile} component={ProfileScreen} />
-        <Stack.Screen name={SCREENS.Place} component={PlaceScreen} />
-        <Stack.Screen name={SCREENS.GuideMap} component={GuideMapScreen} />
-        <Stack.Screen name={SCREENS.Guide} component={GuideScreen} />
-        <Stack.Screen
-          name={SCREENS.Subscriptions}
-          component={SubscriptionsScreen}
-        />
-        <Stack.Screen name={SCREENS.Error} component={ErrorScreen} />
-        <Stack.Screen name={SCREENS.Login} component={LoginScreen} />
-        <Stack.Screen name={SCREENS.Favorite} component={FavoritesScreen} />
-        <Stack.Screen name={SCREENS.Contact} component={ContactScreen} />
-        <Stack.Screen
-          name={SCREENS.RecoveryPassword}
-          component={RecoveryPasswordScreen}
-        />
-        <Stack.Screen
-          name={SCREENS.ChangeEmail}
-          component={ChangeEmailScreen}
-        />
+        {onLineScreens.map(route => {
+          return (
+            <Stack.Screen
+              key={route.name}
+              name={route.name}
+              component={route.component}
+            />
+          );
+        })}
       </Stack.Navigator>
     </NavigationContainer>
   );

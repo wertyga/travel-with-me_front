@@ -1,4 +1,4 @@
-import {makeObservable, action, observable, runInAction, reaction} from 'mobx';
+import { makeObservable, action, observable, runInAction, reaction, computed } from 'mobx';
 import {
 	cancelMySubscription as cancelMySubscriptionApi,
 	createSubscriptionPayment,
@@ -55,12 +55,19 @@ export class SubscriptionStore {
 	
 	@action async getMySubscription(...params: Parameters<typeof fetchMySubscription>) {
 		try {
+			if (!this.rootStore.appStateStore.isNetConnected) return;
+			
 			const {subscription} = await fetchMySubscription(...params);
+			
+			if (subscription?._id !== this.mySubscription?._id) {
+				CacheReq.dropAll();
+			}
 			
 			runInAction(() => {
 				this.mySubscription = subscription;
+				this.rootStore.offlineStore.saveUserSubscription(subscription)
 			});
-			CacheReq.dropAll();
+		
 		} catch (e) {
 			if (e.response?.status === 403) {
 				runInAction(() => {

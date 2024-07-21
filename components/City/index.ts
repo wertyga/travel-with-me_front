@@ -1,3 +1,6 @@
 export { CityPreview } from './CityPreview/CityPreview';
-export { CitiesList } from './CitiesList/CitiesList';
+export { default as CitiesList } from './CitiesList/CitiesList';
 export { CitiesMap } from './CitiesMap/CitiesMap';
+export { default as CityScreenMeta } from './CityScreenMeta/CityScreenMeta';
+export { default as CityDownloader } from './CityDownloader/CityDownloader';
+export { default as CityMapForDownload } from './CityMapForDownload/CityMapForDownload';

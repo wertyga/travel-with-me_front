@@ -2,9 +2,9 @@ import { Linking, Platform } from 'react-native';
 
 import Constants from 'expo-constants';
 
-import { STORAGE_KEY } from '@/components/UpdateApp/UpdateApp';
-
 import { storage } from '@/utils';
+
+export const STORAGE_KEY = 'isNoNeedToUpdate';
 
 export const handleUpdateApp = () => {
   const link =

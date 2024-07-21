@@ -6,14 +6,14 @@ import React, {
   useState,
 } from 'react';
 
-import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import MapView, {
+  AnimatedRegion,
   MapViewProps,
   PROVIDER_GOOGLE,
   Region,
 } from 'react-native-maps';
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -34,7 +34,7 @@ type Props = MapViewProps & {
   points: Place[];
   initialRegion?: Region;
   onRegionChange?: (region: Region) => void;
-  chosenPoint?: Place;
+  chosenPoint?: Place & { regionDelta?: number };
   onPointPress: (point: Place & { isChosen?: boolean }) => void;
   mapMarkerSize?: number;
   children?: React.ReactNode;
@@ -55,6 +55,7 @@ export const MapComponent = ({
   mapStyles,
   initialRegion,
   showMyLocationBtnStyle,
+  withAnimationRegionChange,
   ...mapViewProps
 }: Props) => {
   const mapRef = useRef();
@@ -91,12 +92,20 @@ export const MapComponent = ({
   useEffect(() => {
     if (!chosenPoint) return;
 
-    setCurrentRegion({
+    const region = {
       longitude: chosenPoint.coords.lng,
       latitude: chosenPoint.coords.lat,
-      latitudeDelta: regionRef.current?.latitudeDelta || DEFAULT_DELTA,
-      longitudeDelta: regionRef.current?.latitudeDelta || DEFAULT_DELTA,
-    });
+      latitudeDelta:
+        chosenPoint.regionDelta ||
+        regionRef.current?.latitudeDelta ||
+        DEFAULT_DELTA,
+      longitudeDelta:
+        chosenPoint.regionDelta ||
+        regionRef.current?.latitudeDelta ||
+        DEFAULT_DELTA,
+    };
+
+    setCurrentRegion(region);
   }, [chosenPoint]);
 
   const { formattedPoints } = useMemo(() => {
@@ -132,7 +141,7 @@ export const MapComponent = ({
           const { coords, title, description, images, isChosen } = point;
           return (
             <MapMarker
-              key={title}
+              key={title + index}
               onPress={handlePointPress(point)}
               markerSize={mapMarkerSize}
               isChosenExists={!!chosenPoint}

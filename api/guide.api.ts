@@ -1,4 +1,5 @@
 import { baseQuery } from '@/app/query';
+
 import {
   City,
   GetCitiesListRequest,
@@ -20,6 +21,7 @@ export const fetchGuideCategories = async (): Promise<{
 export const fetchGuide = async (params: {
   slug: string;
   withStory?: boolean;
+  withFullPoints?: boolean;
 }): Promise<Guide> => {
   const { data } = await baseQuery({
     method: 'get',
