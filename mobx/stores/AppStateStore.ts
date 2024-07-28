@@ -1,9 +1,9 @@
-import { action, makeObservable, observable, reaction, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import * as Updates from 'expo-updates';
 import {AppState} from "react-native";
 import { IDENTIFIERS, removeNotification } from '@/utils';
-import { EnvMap, RootStoreType, SCREENS } from '@/types';
-import { fetchEnvs } from '@/api';
+import { EnvMap, RootStoreType } from '@/types';
+import { fetchEnvs } from '@/api/tech.api';
 import Constants from "expo-constants";
 import {CacheReq} from "@/utils/cache_request";
 import { addEventListener, NetInfoSubscription } from '@react-native-community/netinfo';
@@ -12,6 +12,7 @@ export class AppStateStore {
 	static ENV: Partial<EnvMap> = {
 		stripePk: (Constants.expoConfig?.extra as any).STRIPE_PUBLIC_KEY,
 	};
+	static isNetConnected = true;
 	
 	netConnectionUnsubscribe: NetInfoSubscription;
 	
@@ -39,7 +40,10 @@ export class AppStateStore {
 	}
 	
 	@action setIsNetConnected(value: boolean) {
+		if (this.isNetConnected === value) return;
+
 		this.isNetConnected = value;
+		AppStateStore.isNetConnected = value;
 
 		if (!value) {
 			this.rootStore.offlineStore.populateOfflineStore();
@@ -63,19 +67,18 @@ export class AppStateStore {
 			if (AppStateStore.ENV?.cacheDropIdentifier !== envs?.cacheDropIdentifier) {
 				CacheReq.dropAll();
 			}
+
+			if (envs) {
+				AppStateStore.ENV = envs;
+				this.rootStore.offlineStore.saveEnv(envs);
+			}
 			
 			runInAction(() => {
 				this.isUpdateAvailable = !!Constants.manifest2?.runtimeVersion &&
 					!!envs.runtimeVersion &&
 					envs.runtimeVersion !== Constants.manifest2.runtimeVersion
 			})
-			
-			if (envs) {
-				AppStateStore.ENV = envs;
-			}
-		} catch (e) {
-		
-		}
+		} catch (e) {}
 	}
 	
 	@action applyAppStateChangeListener() {

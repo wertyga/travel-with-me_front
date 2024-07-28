@@ -71,6 +71,10 @@ export const PointImagesCarouselComponent = ({
 
   const goToIndex = (index: number) => {
     swipeTranslateX.value = index * -windowWidth;
+    swipeTopValue.value = {
+      ...swipeTopValue.value,
+      currentIndex: index,
+    };
     setCurrentIndex(index);
   };
 

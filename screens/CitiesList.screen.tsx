@@ -10,9 +10,9 @@ import { CitiesList, CitiesMap } from '@/components/City';
 import { FastImageBackground } from '@/components/FastImage';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import { SafeLoader } from '@/components/SafeLoader';
-import { useFocus, useStores } from '@/hooks';
+import { useFocus, useNavigation, useStores } from '@/hooks';
 
-import { FONTS } from '@/types';
+import { FONTS, SCREENS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
@@ -30,6 +30,8 @@ const HEADERS_LIST = [
 ];
 
 const CitiesListScreen = () => {
+  const navi = useNavigation();
+
   const { cities, getCityLightList, isNetConnected } = useStores(stores => ({
     cities: stores.citiesListStore.cityLightList,
     getCityLightList: stores.citiesListStore.getCityLightList,
@@ -51,6 +53,12 @@ const CitiesListScreen = () => {
       setState(prev => ({ ...prev, tab: 'list' }));
     };
   }, [isNetConnected]);
+
+  useFocus(() => {
+    if (isNetConnected === false && !cities.length) {
+      navi.navigate(SCREENS.Offline);
+    }
+  }, [isNetConnected, cities]);
 
   if (!cities.length) {
     return <SafeLoader />;

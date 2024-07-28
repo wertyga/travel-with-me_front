@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Dimensions, Linking, StyleSheet, Switch, View } from 'react-native';
+import { Dimensions, Linking, StyleSheet, Switch } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -24,14 +24,14 @@ const ProfileScreen = () => {
 
   const navi = useNavigation();
 
-  const { user, logout, isUpdateAvailable, isNetConnected } = useStores(
-    stores => ({
+  const { user, logout, isUpdateAvailable, isNetConnected, cachedCitiesIds } =
+    useStores(stores => ({
       user: stores.userStore.user,
       logout: stores.authStore.logout,
       isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
       isNetConnected: stores.appStateStore.isNetConnected,
-    })
-  );
+      cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
+    }));
 
   const { granted } = useForegroundPermissions();
 
@@ -54,6 +54,7 @@ const ProfileScreen = () => {
   const getHelpLabel = isNetConnected ? 'Get Help' : 'Offline';
   const isShowSubscriptionBtn = isNetConnected && !subscription;
   const isShowUpdateBtn = isNetConnected && isUpdateAvailable;
+  const isShowOfflineStorage = !!cachedCitiesIds.length;
 
   return (
     <MainLayout headerTitle="Profile" style={styles.container}>
@@ -95,6 +96,13 @@ const ProfileScreen = () => {
         <CText>Support</CText>
         <CText style={styles.edit}>{getHelpLabel}</CText>
       </Button>
+
+      {isShowOfflineStorage && (
+        <Button style={styles.item} href={SCREENS.OfflineStorage} noPaddings>
+          <CText>Offline Storage</CText>
+          <CText style={styles.edit}>{editLabel}</CText>
+        </Button>
+      )}
 
       {isShowSubscriptionBtn && (
         <Button high href={SCREENS.Subscriptions}>

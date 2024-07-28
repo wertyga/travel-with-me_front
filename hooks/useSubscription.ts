@@ -24,19 +24,26 @@ export const useSubscription = (props?: Props) => {
     getMySubscription,
     renewMySubscription,
     mySubscription,
+    mySubHasBeenFetched,
+    setMySubHasBeenFetched,
   } = useStores(stores => ({
     user: stores.userStore.user,
     createSubscription: stores.subscriptionStore.createSubscription,
     getSubscriptionsList: stores.subscriptionStore.getSubscriptionsList,
     cancelSubscription: stores.subscriptionStore.cancelSubscription,
     renewMySubscription: stores.subscriptionStore.renewMySubscription,
-    getMySubscription: () => stores.subscriptionStore.getMySubscription({}),
+    getMySubscription: () =>
+      stores.subscriptionStore.getMySubscription({ isActive: true }),
     isLoading: stores.subscriptionStore.isLoading,
     subscriptions: stores.subscriptionStore.subscriptions,
     mySubscription: stores.subscriptionStore.mySubscription,
+    mySubHasBeenFetched: stores.subscriptionStore.mySubHasBeenFetched,
+    setMySubHasBeenFetched: stores.subscriptionStore.setMySubHasBeenFetched,
   }));
 
-  useEffect(() => {
+  const loading = state.isLoading || isLoading;
+
+  useFocus(() => {
     if (!props?.withRetrySubscriptionFetching && timer.current) {
       clearInterval(timer.current);
       timer.current = null;
@@ -47,7 +54,7 @@ export const useSubscription = (props?: Props) => {
     }
 
     timer.current = setInterval(async () => {
-      if (state.isLoading) return;
+      if (loading) return;
       await getMySubscription();
     }, 2000);
 
@@ -55,7 +62,7 @@ export const useSubscription = (props?: Props) => {
       clearInterval(timer.current);
       timer.current = null;
     };
-  }, [props?.withRetrySubscriptionFetching, state.isLoading]);
+  }, [props?.withRetrySubscriptionFetching]);
 
   useEffect(() => {
     if (!props?.withList) return;
@@ -70,16 +77,16 @@ export const useSubscription = (props?: Props) => {
   }, [props?.withList]);
 
   useFocus(() => {
-    if (!user) return;
+    if (!user || loading) return;
 
-    const isSubscriptionValid =
-      mySubscription &&
-      new Date(mySubscription.validUntil).getTime() > Date.now();
+    const isExpired =
+      !!mySubscription &&
+      new Date(mySubscription.validUntil).getTime() < Date.now();
 
-    if (!isSubscriptionValid) {
+    if (!mySubHasBeenFetched || isExpired) {
       getMySubscription();
     }
-  }, [user, mySubscription]);
+  }, [user, mySubHasBeenFetched, mySubscription]);
 
   return {
     user,
@@ -88,7 +95,7 @@ export const useSubscription = (props?: Props) => {
     cancelSubscription,
     createSubscription,
     renewMySubscription,
-    isLoading: state.isLoading || isLoading,
+    isLoading: loading,
     isSubscriptionValid:
       mySubscription &&
       new Date(mySubscription.validUntil).getTime() > Date.now(),

@@ -22,8 +22,10 @@ export class AuthStore {
   @withLoading async signIn(...data: Parameters<typeof signInRequest>) {
     try {
       const { user } = await signInRequest(...data);
+      
       this.rootStore.userStore.setUser(user);
-
+      this.rootStore.subscriptionStore.dropStore();
+      
       return !!user;
     } catch (e) {
       console.error(e);

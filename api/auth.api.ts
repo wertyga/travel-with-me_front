@@ -1,4 +1,5 @@
-import { baseQuery } from '@/app/query';
+import { baseQuery } from '@/app/query/base-query';
+
 import {
   ChangeEmailRequest,
   RecoveryPasswordInitRequest,

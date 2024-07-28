@@ -9,6 +9,8 @@ import FavoritesScreen from '@/screens/Favorites.screen';
 import GuideScreen from '@/screens/Guide.screen';
 import GuideMapScreen from '@/screens/GuideMap.screen';
 import LoginScreen from '@/screens/Login';
+import OfflineScreen from '@/screens/Offline.screen';
+import OfflineStorageScreen from '@/screens/OfflineStorage.screen';
 import PlaceScreen from '@/screens/Place.screen';
 import ProfileScreen from '@/screens/Profile';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
@@ -23,10 +25,6 @@ type ScreenType = {
 
 export const onLineScreens: ScreenType[] = [
   {
-    name: SCREENS.Profile,
-    component: ProfileScreen,
-  },
-  {
     name: SCREENS.CitiesList,
     component: CitiesListScreen,
   },
@@ -34,10 +32,10 @@ export const onLineScreens: ScreenType[] = [
     name: SCREENS.City,
     component: CityScreen,
   },
-  // {
-  //   name: SCREENS.Profile,
-  //   component: ProfileScreen,
-  // },
+  {
+    name: SCREENS.Profile,
+    component: ProfileScreen,
+  },
   {
     name: SCREENS.Place,
     component: PlaceScreen,
@@ -77,6 +75,14 @@ export const onLineScreens: ScreenType[] = [
   {
     name: SCREENS.ChangeEmail,
     component: ChangeEmailScreen,
+  },
+  {
+    name: SCREENS.OfflineStorage,
+    component: OfflineStorageScreen,
+  },
+  {
+    name: SCREENS.Offline,
+    component: OfflineScreen,
   },
 ];
 

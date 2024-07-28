@@ -12,6 +12,7 @@ import {CacheReq} from "@/utils/cache_request";
 
 export class SubscriptionStore {
 	@observable isLoading: boolean;
+	@observable mySubHasBeenFetched: boolean = false;
 	@observable subscriptions: SubscriptionPreview[] = []
 	@observable mySubscription: UserSubscription | null = null;
 	
@@ -19,9 +20,15 @@ export class SubscriptionStore {
     makeObservable(this);
   }
 	
+	@action setMySubHasBeenFetched(value: boolean) {
+		this.mySubHasBeenFetched = value;
+	}
+	
 	@withLoading async createSubscription(...data: Parameters<typeof createSubscriptionPayment>) {
 		try {
 		  const subscription = await createSubscriptionPayment(...data);
+			
+			this.setMySubHasBeenFetched(false);
 			
 			return subscription;
 		} catch (e) {
@@ -46,7 +53,7 @@ export class SubscriptionStore {
 			const {success} = await cancelMySubscriptionApi();
 			
 			if (success) {
-				await this.getMySubscription({})
+				await this.getMySubscription({isActive: true})
 			}
 		} catch (e) {
 		
@@ -66,6 +73,7 @@ export class SubscriptionStore {
 			runInAction(() => {
 				this.mySubscription = subscription;
 				this.rootStore.offlineStore.saveUserSubscription(subscription)
+				this.setMySubHasBeenFetched(true);
 			});
 		
 		} catch (e) {
@@ -82,7 +90,7 @@ export class SubscriptionStore {
 			const {success} = await renewMySubscriptionApi(...params);
 			
 			if (success) {
-				this.getMySubscription({});
+				this.getMySubscription({isActive: true});
 			}
 		} catch (e) {
 		
@@ -91,6 +99,7 @@ export class SubscriptionStore {
 	
 	@action dropStore() {
 		this.isLoading = false;
+		this.mySubHasBeenFetched = false;
 		this.subscriptions = [];
 		this.mySubscription = null;
 	}

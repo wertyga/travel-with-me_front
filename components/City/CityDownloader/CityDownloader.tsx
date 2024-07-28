@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 
@@ -23,33 +23,38 @@ const CityDownloader = ({ city }: Props) => {
   const {
     saveCityToOffline,
     isOfflineStoreLoading,
-    offlineCities,
+    cachedCitiesIds,
     isNetConnected,
   } = useStores(stores => ({
     saveCityToOffline: stores.offlineStore.saveCity,
     isOfflineStoreLoading: stores.offlineStore.isLoading,
-    offlineCities: stores.offlineStore.cities,
+    cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
     isNetConnected: stores.appStateStore.isNetConnected,
   }));
 
-  const isCityDownloaded = !!offlineCities.find(c => c._id === city._id);
+  const isCityDownloaded = cachedCitiesIds.includes(city._id);
   const isRenderDownloadBtn = isSubscriptionValid && isNetConnected;
 
   if (!isRenderDownloadBtn) {
     return null;
   }
 
+  const isShowCircle = isOfflineStoreLoading || isCityDownloaded;
+
   return (
     <Button
       rectangle
-      noPaddings={!isCityDownloaded}
-      squareSize={!isCityDownloaded && BTN_SIZE}
+      noPaddings={!isShowCircle}
+      squareSize={!isShowCircle && BTN_SIZE}
       disabled={isOfflineStoreLoading}
       onPress={() => saveCityToOffline(city.slug)}
       style={styles.action}
     >
       <FontAwesome5 name="cloud-download-alt" size={24} color="white" />
-      {isCityDownloaded && <Ionicons name="reload" size={24} color="white" />}
+      {isOfflineStoreLoading && <ActivityIndicator />}
+      {isCityDownloaded && !isOfflineStoreLoading && (
+        <Ionicons name="reload" size={20} color="white" />
+      )}
     </Button>
   );
 };

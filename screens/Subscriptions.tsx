@@ -1,15 +1,20 @@
 import { StyleSheet } from 'react-native';
+
 import Toast from 'react-native-toast-message';
+
 import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
+
 import { AppStateStore } from '@/mobx/stores';
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { SubscriptionList } from '@/components/Subscription';
 import { useNavigation, useSubscription } from '@/hooks';
 import { StripeProvider, usePaymentSheet } from '@stripe/stripe-react-native';
+
 import { SCREENS } from '@/types';
 
 const Subscriptions = () => {
@@ -43,14 +48,14 @@ const Subscriptions = () => {
       return;
     }
 
-    const { error } = await initPaymentSheet({
+    const initData = await initPaymentSheet({
       customerId: customer,
       customerEphemeralKeySecret: ephemeralKey,
       paymentIntentClientSecret: clientSecret,
       merchantDisplayName: 'Travel With Me',
     });
 
-    if (error) throw error;
+    if (initData.error) throw initData.error;
   };
 
   const onBuy = async (subscriptionId: string) => {

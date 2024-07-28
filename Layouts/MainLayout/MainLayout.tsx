@@ -37,6 +37,7 @@ type Props = {
   floatingTitle?: boolean;
   withHeaderShadow?: boolean;
   loaderTextColor?: string;
+  numberOfLinesTitle?: number;
   menu?: HeaderMenuProps['items'];
   onBgPress?: () => void;
   bgContent?: ReactNode;
@@ -60,6 +61,7 @@ export const MainLayoutComponent = ({
   bgContent,
   withHeaderShadow,
   bgColors,
+  numberOfLinesTitle,
 }: Props) => {
   const { layoutHeight, updateDomState } = useStores(stores => ({
     layoutHeight: stores.domStore.layoutHeight,
@@ -94,6 +96,7 @@ export const MainLayoutComponent = ({
               title={headerTitle}
               isDark={isHeaderDark}
               menu={menu}
+              numberOfLines={numberOfLinesTitle}
             />
           </LinearGradient>
         )}

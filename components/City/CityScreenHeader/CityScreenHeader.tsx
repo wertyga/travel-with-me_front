@@ -28,6 +28,7 @@ type Props = {
   style?: StyleProp<ViewStyle | TextStyle>;
   title: string;
   isDark?: boolean;
+  numberOfLines?: number;
   menu?: HeaderMenuProps['items'];
 };
 
@@ -36,6 +37,7 @@ export const CityScreenHeaderComponent = ({
   title,
   menu,
   isDark,
+  numberOfLines = 2,
 }: Props) => {
   const navi = useNavigation();
   const { header } = useStores(stores => ({
@@ -65,7 +67,10 @@ export const CityScreenHeaderComponent = ({
 
   return (
     <Animated.View style={[styles.container, viewStyle, animatedStyles]}>
-      <CText style={[styles.title, isDark && styles.dark]} numberOfLines={2}>
+      <CText
+        style={[styles.title, isDark && styles.dark]}
+        numberOfLines={numberOfLines}
+      >
         {title}
       </CText>
 

@@ -87,6 +87,7 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
     <MainLayout
       headerTitle={guide.title}
       bgImage={guide.vImage}
+      numberOfLinesTitle={1}
       noFooter
       isHeaderDark
     >

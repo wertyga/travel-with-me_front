@@ -3,7 +3,8 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 const ENV = {
   development: {
     GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-    // API_BASE_URL: 'https://7932-213-134-190-202.ngrok-free.app',
+    // API_BASE_URL:
+    // 'https://5ae2-2a02-a31a-803b-7380-d55a-a67-f240-2f70.ngrok-free.app',
     API_BASE_URL: 'https://api.underhood.space',
   },
   production: {
@@ -12,7 +13,7 @@ const ENV = {
   },
 };
 
-const version = '25.0.0';
+const version = '26.0.0';
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
@@ -95,9 +96,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'https://play.google.com/store/apps/details?id=com.wertyga.travelwithme',
     APP_MARKET_URL: '',
   },
-  runtimeVersion: {
-    policy: 'appVersion',
-  },
+  runtimeVersion: version,
   updates: {
     url: 'https://u.expo.dev/a4baaa78-7e41-475d-882f-f9add4d911c3',
   },

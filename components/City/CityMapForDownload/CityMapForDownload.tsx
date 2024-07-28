@@ -16,6 +16,9 @@ type Props = {
   points: Place[];
 };
 
+const TIMEOUT = 500;
+const REGION_DELTA = 0.02;
+
 export const CityMapForDownload = ({ points }: Props) => {
   const timer = useRef<any>();
 
@@ -27,7 +30,7 @@ export const CityMapForDownload = ({ points }: Props) => {
 
   const [region, setRegion] = useState({
     ...points[0],
-    regionDelta: 0.01,
+    regionDelta: REGION_DELTA,
   });
 
   const changeRegionForCache = async () => {
@@ -36,7 +39,7 @@ export const CityMapForDownload = ({ points }: Props) => {
     timer.current = setInterval(() => {
       setRegion({
         ...points[index],
-        regionDelta: 0.01,
+        regionDelta: REGION_DELTA,
       });
       index += 1;
 
@@ -47,7 +50,7 @@ export const CityMapForDownload = ({ points }: Props) => {
         timer.current = null;
         setIsCitySaved(false);
       }
-    }, 500);
+    }, TIMEOUT);
   };
 
   useEffect(() => {

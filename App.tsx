@@ -20,17 +20,12 @@ import * as stores from '@/mobx/stores';
 
 import { Toast } from '@/components/Toast';
 import UpdateApp from '@/components/UpdateApp/UpdateApp';
-import { NativeWindStyleSheet } from 'nativewind';
 
 import { initiateConsoleTime } from '@/utils';
 
 import Navigator from './app/Navigator';
 
 SplashScreen.preventAutoHideAsync();
-
-NativeWindStyleSheet.setOutput({
-  default: 'native',
-});
 
 initiateConsoleTime();
 

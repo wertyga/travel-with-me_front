@@ -2,21 +2,18 @@ import { useMemo, useState } from 'react';
 
 import { StyleSheet, View } from 'react-native';
 
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
-
-import { OFFLINE_KEYS } from '@/mobx/stores/OfflineStore';
 import { observer } from 'mobx-react-lite';
 
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
-import { CityDownloader } from '@/components/City';
+import CityDownloader from '@/components/City/CityDownloader/CityDownloader';
 import { CityGuidesCategories } from '@/components/City/CityGuidesCategories/CityGuidesCategories';
 import {
   CITY_TABS,
   getCityMetaData,
   getGuidesCategories,
 } from '@/components/City/CityScreenMeta/CityScreenMeta.utils';
-import { CityScreenMetaDHST } from '@/components/City/CityScreenMeta/CityScreenMetaDHST';
+import { CityScreenMetaDHST } from '@/components/City/CityScreenMeta/CityScreenMetaDHST/CityScreenMetaDHST';
 import { CountryPill } from '@/components/Country';
 import { GuidesSlideList } from '@/components/Guide';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
