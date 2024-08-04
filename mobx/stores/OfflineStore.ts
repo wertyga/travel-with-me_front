@@ -91,7 +91,6 @@ export class OfflineStore {
             return stats.size || 0
           })
           .catch((err) => {
-            console.log({err});
             return 0;
           })
       })).then(sizes => sizes.reduce((acc, size) => acc + size, 0));

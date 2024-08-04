@@ -29,7 +29,6 @@ export class CityStore {
 
 			return city;
 		} catch (e) {
-		console.log({e});
 		}
 	}
 }

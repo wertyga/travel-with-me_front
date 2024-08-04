@@ -53,7 +53,7 @@ export class AppStateStore {
 	@action async checkForUpdates() {
 		try {
 			const update = await Updates.checkForUpdateAsync();
-			
+
 			if (update.isAvailable) {
 				await Updates.fetchUpdateAsync();
 				await Updates.reloadAsync();

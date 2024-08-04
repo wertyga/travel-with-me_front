@@ -12,15 +12,17 @@ type Props = Omit<ImageProps, 'style' | 'source'> & {
   source: string | number;
   style?: ImageProps['style'] | ViewStyle;
   imageWidth?: number;
+  withBlur?: boolean;
 };
 
 export const FastImage = ({
   source,
   style = {},
   imageWidth,
+  withBlur,
   ...imageProps
 }: Props) => {
-  const imgSource = useFastImage(source, imageWidth);
+  const imgSource = useFastImage(source, imageWidth, withBlur);
 
   return (
     <>

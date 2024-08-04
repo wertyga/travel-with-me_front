@@ -17,6 +17,7 @@ export const baseQuery = async ({
 
   try {
     const token = await storage.get('token');
+
     const authHeader: AxiosRequestConfig['headers'] = {};
     if (token) {
       authHeader['Authorization'] = `Bearer ${token}`;

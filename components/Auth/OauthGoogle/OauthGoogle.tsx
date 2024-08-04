@@ -1,48 +1,64 @@
-import { useEffect, useState } from 'react';
-import { Button, View } from 'react-native';
+import { useState } from 'react';
+
+import { StyleSheet } from 'react-native';
+
 import Toast from 'react-native-toast-message';
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
-import { useOauthGoogleMutation } from '@/api';
-import { useAuth } from '@/context';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-import axios from 'axios';
 
-const GOOGLE_URL = 'https://googleapis.com/userinfo/v2/me';
+import { FontAwesome } from '@expo/vector-icons';
 
-WebBrowser.maybeCompleteAuthSession();
+import { observer } from 'mobx-react-lite';
 
-export const OauthGoogle = () => {
-  const [accessToken, setAccessToken] = useState('');
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
-    iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
+import Button from '@/components/Button';
+import { CText } from '@/components/CText';
+import { useStores } from '@/hooks';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+import { FONTS } from '@/types';
+
+const OauthGoogle = () => {
+  useState(() => {
+    GoogleSignin.configure();
   });
 
-  const [fetchForGoogleUser, { isLoading }] = useOauthGoogleMutation();
+  const { isLoading, oauthGoogleRegister } = useStores(stores => ({
+    oauthGoogleRegister: stores.authStore.oauthGoogleRegister,
+    isLoading: stores.authStore.isLoading,
+  }));
 
-  useEffect(() => {
-    if (response?.type === 'success') {
-      setAccessToken(response.authentication?.accessToken || '');
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const { user } = await GoogleSignin.signIn();
+
+      await oauthGoogleRegister({ email: user.email, username: user.name });
+    } catch (e) {
+      Toast.show({
+        type: 'error',
+        text1: e.message,
+      });
     }
-  }, [response]);
-
-  const fetchUserInfo = async () => {
-    await promptAsync();
   };
 
   return (
-    <View>
-      <Button
-        title="Google oauth"
-        disabled={isLoading}
-        onPress={fetchUserInfo}
-      />
-    </View>
+    <Button
+      high
+      solid
+      onPress={signIn}
+      style={styles.container}
+      isLoading={isLoading}
+    >
+      <FontAwesome name="google" size={28} color="white" />
+      <CText style={styles.text}>Sign in with Google</CText>
+    </Button>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {},
+  text: {
+    marginLeft: 10,
+    fontFamily: FONTS.OpenSansSemiBold,
+  },
+});
+
+export default observer(OauthGoogle);

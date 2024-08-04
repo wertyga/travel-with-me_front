@@ -1,13 +1,17 @@
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
 import { PointDistance } from '@/components/Point';
 import { useNavigation } from '@/hooks';
+
 import { getHeight } from '@/utils';
+
 import { Guide, Place, SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
-// @ts-ignore
-import GuidePlaceholder from '@/assets/images/guide_placeholder.png';
+
+import PointPlaceholder from '@/assets/images/default_point_image.png';
 
 type Props = {
   points: (Place & { distance?: string })[];
@@ -29,9 +33,8 @@ export const GuidePointsList = ({ points }: Props) => {
             }
           >
             <ImageBackgroundWithGradient
-              image={point.images[0] || GuidePlaceholder}
+              image={point.images[0] || PointPlaceholder}
               style={styles.imageWrapper}
-              isFastImage
             >
               {!!point.distance && (
                 <PointDistance

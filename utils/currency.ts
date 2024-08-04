@@ -7,6 +7,9 @@ export const getCurrencyMeta = (currency: CURRENCY) => {
     case CURRENCY.Usd:
       sign = '$';
       break;
+    case CURRENCY.Eur:
+      sign = '€';
+      break;
 
     default:
       break;

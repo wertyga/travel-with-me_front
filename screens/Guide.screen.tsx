@@ -107,6 +107,7 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
         defaultImage={defaultGuideImage}
         noDots
         isFullScreen
+        isFastImage
       >
         {!loading && <GuideMeta guide={guide} />}
       </ScreenContentWrapper>

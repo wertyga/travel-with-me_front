@@ -1,4 +1,3 @@
-import { NearestPoint } from '@/stores/guide/guide.utils';
 import { City } from '@/types/city';
 import { Country } from '@/types/country';
 import { Like } from '@/types/likes';
@@ -13,6 +12,7 @@ export enum GUIDE_TAGS {
 
 export enum CURRENCY {
   Usd = 'usd',
+  Eur = 'eur',
 }
 
 export type Price = {
@@ -42,12 +42,4 @@ export type Guide = {
   points: Place[];
   createdAt: string;
   pointsCount?: number;
-};
-
-export type GuideStore = {
-  visiblePoint?: Place;
-  nearestPoint?: NearestPoint;
-  isGuideMuted?: boolean;
-  isFollowingToGuide?: boolean;
-  _followingGuide?: Guide;
 };

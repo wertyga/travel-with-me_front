@@ -7,7 +7,5 @@ export const sendLogs = async (data: any): Promise<void> => {
       url: '/logs',
       data,
     });
-  } catch (e) {
-    console.log({ e });
-  }
+  } catch (e) {}
 };

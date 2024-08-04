@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
-import { SignInForm, SignUpForm } from '@/components/Auth';
+import { OauthGoogle, SignInForm, SignUpForm } from '@/components/Auth';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Version } from '@/components/Common';
@@ -16,11 +16,12 @@ import { AuthCommonRequest, SCREENS } from '@/types';
 
 const Login = () => {
   const navigation = useNavigation();
-  const { signUp, signIn, isLoading, navigator } = useStores(stores => ({
+  const { signUp, signIn, isLoading, navigator, user } = useStores(stores => ({
     signIn: stores.authStore.signIn,
     signUp: stores.authStore.signUp,
     isLoading: stores.authStore.isLoading,
     navigator: stores.routerStore.navigator,
+    user: stores.userStore.user,
   }));
 
   const [state, setState] = useState({
@@ -69,6 +70,10 @@ const Login = () => {
         {screen === 'signup' && <SignUpForm onSubmit={onSignUp} />}
         {screen === 'signin' && <SignInForm onSubmit={onSignIn} />}
 
+        <View style={styles.oauth}>
+          <OauthGoogle />
+        </View>
+
         <Button
           textable
           href={SCREENS.RecoveryPassword}
@@ -97,6 +102,9 @@ const styles = StyleSheet.create({
   forgotText: {
     justifyContent: 'flex-end',
     marginTop: 20,
+  },
+  oauth: {
+    marginTop: 30,
   },
 });
 

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
@@ -40,6 +41,7 @@ export type CustomButtonProps = TouchableOpacityProps & {
   free?: boolean;
   rounded?: boolean;
   transparent?: boolean;
+  isLoading?: boolean;
 };
 
 const CustomButton = ({
@@ -64,6 +66,7 @@ const CustomButton = ({
   squareSize,
   rounded,
   transparent,
+  isLoading,
   ...rest
 }: CustomButtonProps) => {
   const navi = useNavigation();
@@ -97,7 +100,7 @@ const CustomButton = ({
         left && { justifyContent: 'flex-start' },
         right && { justifyContent: 'flex-end' },
         solid && styles.solid,
-        !!disabled && styles.disabled,
+        (disabled || isLoading) && styles.disabled,
         free && styles.free,
         squareSize && {
           width: squareSize,
@@ -111,9 +114,10 @@ const CustomButton = ({
         ...(btnStyles as any),
       ]}
       onPress={handleOnPress}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       {...rest}
     >
+      {isLoading && <ActivityIndicator style={styles.loadingIndicator} />}
       {typeof children !== 'string' && children}
       {typeof children === 'string' && (
         <ChildWrapperComponent
@@ -140,6 +144,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  loadingIndicator: {
+    marginRight: 10,
   },
   text: {
     color: 'white',

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Dimensions,
   Image,
@@ -7,14 +8,19 @@ import {
   StyleSheet,
   ViewStyle,
 } from 'react-native';
+
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import { observer } from 'mobx-react-lite';
+
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import {
   CarouselNew,
   Props as CarouselProps,
 } from '@/components/CarouselNew/CarouselNew';
+import { FastImage } from '@/components/FastImage';
 import { useStores } from '@/hooks';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
@@ -23,6 +29,7 @@ type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
   imageStyle?: StyleProp<ImageStyle>;
   imageKey: string;
   defaultImage?: number;
+  isFastImage?: boolean;
   children?: React.ReactNode;
   renderItem?: (data: { item: any }) => React.ReactNode;
 };
@@ -34,6 +41,7 @@ export const ScreenContentWrapperComponent = <DATA,>({
   children,
   defaultImage,
   renderItem,
+  isFastImage,
   imageStyle = {},
   ...carouselProps
 }: Props<DATA>) => {
@@ -47,11 +55,23 @@ export const ScreenContentWrapperComponent = <DATA,>({
     }
 
     const imageSrc: string = (data.item as any)[imageKey] as string;
+
+    if (isFastImage) {
+      return (
+        <FastImage
+          key={imageSrc}
+          source={imageSrc}
+          style={[styles.image, imageStyle]}
+          defaultSource={defaultImage}
+        />
+      );
+    }
     return (
       <Image
         key={imageSrc}
-        source={imageSrc ? { uri: imageSrc } : defaultImage}
+        source={{ uri: imageSrc }}
         style={[styles.image, imageStyle]}
+        defaultSource={defaultImage}
       />
     );
   };
