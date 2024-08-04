@@ -6,7 +6,9 @@ export const getCompressedUrl = (
   url: string | number,
   width: number = windowWidth
 ) => {
-  return typeof url === 'number' ? url : `${url}?width=${Math.ceil(width)}`;
+  if (typeof url === 'number') return url;
+
+  return `${url}${!!width ? `?width=${Math.ceil(width)}` : ''}`;
 };
 
 export const getHeight = (percent: number, sidePadding: number = 0) => {

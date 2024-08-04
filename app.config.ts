@@ -3,13 +3,12 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 const ENV = {
   development: {
     GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-    // API_BASE_URL:
-    // 'https://5ae2-2a02-a31a-803b-7380-d55a-a67-f240-2f70.ngrok-free.app',
-    API_BASE_URL: 'https://api.underhood.space',
+    // API_BASE_URL: 'https://api.traveljet.org',
+    API_BASE_URL: 'https://579b-89-64-86-231.ngrok-free.app',
   },
   production: {
     GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-    API_BASE_URL: 'https://api.underhood.space',
+    API_BASE_URL: 'https://api.traveljet.org',
   },
 };
 
@@ -44,7 +43,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       '@stripe/stripe-react-native',
       {
-        merchantIdentifier: 'com.wertyga.travel-with-me',
+        merchantIdentifier: 'com.wertyga.travelwithme',
         enableGooglePay: false,
       },
     ],
@@ -54,7 +53,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         username: 'wertyga13',
       },
     ],
+    [
+      '@react-native-google-signin/google-signin',
+      {
+        iosUrlScheme:
+          'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
+      },
+    ],
   ],
+  experiments: {
+    tsconfigPaths: true,
+  },
+  scheme: 'travel-with-me',
   ios: {
     config: {
       googleMapsApiKey: envs.GOOGLE_MAPS_API_KEY,
@@ -65,10 +75,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       UIBackgroundModes: ['audio', 'location', 'fetch', 'remote-notification'],
     },
   },
-  experiments: {
-    tsconfigPaths: true,
-  },
-  scheme: 'travel-with-me',
   android: {
     versionCode: parseInt(version),
     config: {

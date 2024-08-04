@@ -7,7 +7,7 @@ import {
 	renewMySubscription as renewMySubscriptionApi
 } from '@/api';
 import { withLoading } from '../store.utils';
-import {RootStoreType, SubscriptionPreview, UserSubscription} from "@/types";
+import { CreateSubscriptionResponse, RootStoreType, SubscriptionPreview, UserSubscription } from '@/types';
 import {CacheReq} from "@/utils/cache_request";
 
 export class SubscriptionStore {
@@ -24,7 +24,7 @@ export class SubscriptionStore {
 		this.mySubHasBeenFetched = value;
 	}
 	
-	@withLoading async createSubscription(...data: Parameters<typeof createSubscriptionPayment>) {
+	@withLoading async createSubscription(...data: Parameters<typeof createSubscriptionPayment>): Promise<CreateSubscriptionResponse | { error: any }> {
 		try {
 		  const subscription = await createSubscriptionPayment(...data);
 			
@@ -32,7 +32,7 @@ export class SubscriptionStore {
 			
 			return subscription;
 		} catch (e) {
-		
+			return { error: e };
 		}
 	}
 	
@@ -62,7 +62,8 @@ export class SubscriptionStore {
 	
 	@action async getMySubscription(...params: Parameters<typeof fetchMySubscription>) {
 		try {
-			if (!this.rootStore.appStateStore.isNetConnected) return;
+			const { appStateStore: { isNetConnected }, userStore: { user } } = this.rootStore;
+			if (!isNetConnected || !user) return;
 			
 			const {subscription} = await fetchMySubscription(...params);
 			

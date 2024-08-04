@@ -1,10 +1,15 @@
 import { StyleSheet } from 'react-native';
-import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+
+import { Ionicons } from '@expo/vector-icons';
+
 import { observer } from 'mobx-react-lite';
+
 import { CountryPill } from '@/components/Country';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation, useSubscription } from '@/hooks';
+
 import { Guide, SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -30,7 +35,7 @@ export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
       {!!subscription && (
         <>
           <CountryPill
-            title="Follow"
+            title="Explore"
             onPress={() =>
               navi.navigate(SCREENS.GuideMap, {
                 guide,
@@ -39,16 +44,6 @@ export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
             customIcon={
               <Ionicons name="play-circle-outline" size={20} color="white" />
             }
-          />
-          <CountryPill
-            title="Open map"
-            onPress={() =>
-              navi.navigate(SCREENS.GuideMap, {
-                guide,
-                isOnlyMap: true,
-              })
-            }
-            customIcon={<SimpleLineIcons name="map" size={18} color="white" />}
           />
         </>
       )}

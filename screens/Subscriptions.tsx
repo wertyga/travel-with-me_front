@@ -40,8 +40,13 @@ const Subscriptions = () => {
       subscription: subscriptionId,
     });
 
-    const { customer, ephemeralKey, clientSecret } = data || {};
+    if ((data as any).error) {
+      throw (data as any).error;
+    }
+
     if (!data) return;
+
+    const { customer, ephemeralKey, clientSecret } = data as any;
 
     if (!clientSecret) {
       // If no clientSecret - it mean that payment has been takes from the user's stripe available balance

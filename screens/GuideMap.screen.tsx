@@ -28,11 +28,11 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
   const {
     getGuide,
     guide,
-    updateGuidePointWithLiveCoords,
+    // updateGuidePointWithLiveCoords,
     dropLocationStore,
-    dropFollowingGuide,
-    toggleMuteGuideSound,
-    setIsFollowingGuide,
+    // dropFollowingGuide,
+    // toggleMuteGuideSound,
+    // setIsFollowingGuide,
     requestForWatchingLocation,
   } = useStores(stores => ({
     getGuide: stores.guideStore.getGuide,
@@ -40,16 +40,16 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     dropLocationStore: stores.locationStore.dropStore,
     requestForWatchingLocation: stores.locationStore.requestForWatchingLocation,
-    dropFollowingGuide: stores.guideStore.dropFollowingGuide,
-    toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
-    setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
-    updateGuidePointWithLiveCoords:
-      stores.guideStore.updateGuidePointWithLiveCoords,
+    // dropFollowingGuide: stores.guideStore.dropFollowingGuide,
+    // toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
+    // setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
+    // updateGuidePointWithLiveCoords:
+    //   stores.guideStore.updateGuidePointWithLiveCoords,
   }));
 
-  const watchingLocationCallback = () => {
-    updateGuidePointWithLiveCoords(guide);
-  };
+  // const watchingLocationCallback = () => {
+  //   updateGuidePointWithLiveCoords(guide);
+  // };
 
   useLayoutEffect(() => {
     if (!route.params?.guide) {
@@ -59,23 +59,23 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
       });
       navi.goBack();
     }
-    toggleMuteGuideSound(!!route.params?.isOnlyMap);
+    // toggleMuteGuideSound(!!route.params?.isOnlyMap);
 
     getGuide({ slug: route.params?.guide?.slug, withStory: true });
   }, []);
 
-  useFocus(() => {
-    if (!guide) return;
+  // useFocus(() => {
+  //   if (!guide) return;
+  //
+  //   setIsFollowingGuide(!route.params?.isOnlyMap);
+  // }, [guide]);
 
-    setIsFollowingGuide(!route.params?.isOnlyMap);
-  }, [guide]);
-
   useFocus(() => {
-    requestForWatchingLocation(watchingLocationCallback);
+    // requestForWatchingLocation(watchingLocationCallback);
 
     return () => {
       dropLocationStore();
-      dropFollowingGuide();
+      // dropFollowingGuide();
     };
   }, []);
 

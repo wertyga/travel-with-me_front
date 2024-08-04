@@ -1,17 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-
-import { useFocusEffect } from '@react-navigation/native';
-
-import { Ionicons } from '@expo/vector-icons';
-
-import { Audio } from 'expo-av';
+import { StyleSheet, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
 import { PlaySoundIconButton } from '@/components/Common';
-import { useFocus, useStores } from '@/hooks';
+import { useStores } from '@/hooks';
 
 import { AudioLine } from './AudioLine';
 

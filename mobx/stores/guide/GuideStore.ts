@@ -15,17 +15,18 @@ export class GuideStore {
 	
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
-		
-		reaction(() => {
-			if (!this.isGuideMuted && this.isFollowingToGuide && this.visiblePoint) {
-				return this.guide.points.find(point => point._id === this.visiblePoint._id)
-			}
-			 return false;
-		}, (pointToBePlayed) => {
-			if (!pointToBePlayed || !pointToBePlayed.audioStory) return;
-			
-			this.rootStore.soundStore.playSound(pointToBePlayed.audioStory, pointToBePlayed.title)
-		})
+	  
+	  // *** DEPRECATED ***
+	// 	reaction(() => {
+	// 		if (!this.isGuideMuted && this.isFollowingToGuide && this.visiblePoint) {
+	// 			return this.guide.points.find(point => point._id === this.visiblePoint._id)
+	// 		}
+	// 		 return false;
+	// 	}, (pointToBePlayed) => {
+	// 		if (!pointToBePlayed || !pointToBePlayed.audioStory) return;
+	//
+	// 		this.rootStore.soundStore.playSound(pointToBePlayed.audioStory, pointToBePlayed.title)
+	// 	})
   }
 	
 	@action async getGuide(params: {
@@ -48,53 +49,60 @@ export class GuideStore {
 		} catch (e) {}
 	}
 	
-	@action updateGuidePointWithLiveCoords(guide: Guide) {
-		const { liveCoords } = this.rootStore.locationStore;
-		
-		if (this._followingGuide?._id !== guide._id) {
-			this._followingGuide = guide;
-		}
-		
-		if (!this.isFollowingToGuide) {
-			this.nearestPoint = null;
-			return;
-		}
-		
-		this.nearestPoint = getTheNearestVisiblePoint(guide.points, liveCoords);
-		this.isFollowingToGuide = true;
-		
-		if (this.nearestPoint.becameVisible) {
-			this.visiblePoint = this.nearestPoint.point;
-		} else if (this.nearestPoint.becameVisible === false) {
-			this.visiblePoint = null;
-		}
-	}
+	// *** DEPRECATED ***
+	// @action updateGuidePointWithLiveCoords(guide: Guide) {
+	// 	const { liveCoords } = this.rootStore.locationStore;
+	//
+	// 	if (this._followingGuide?._id !== guide._id) {
+	// 		this._followingGuide = guide;
+	// 	}
+	//
+	// 	if (!this.isFollowingToGuide) {
+	// 		this.nearestPoint = null;
+	// 		return;
+	// 	}
+	//
+	// 	this.nearestPoint = getTheNearestVisiblePoint(guide.points, liveCoords);
+	// 	this.isFollowingToGuide = true;
+	//
+	// 	if (this.nearestPoint.becameVisible) {
+	// 		this.visiblePoint = this.nearestPoint.point;
+	// 	} else if (this.nearestPoint.becameVisible === false) {
+	// 		this.visiblePoint = null;
+	// 	}
+	// }
 	
-	@action renewFollowingGuide(guide: Guide) {
-		this.isFollowingToGuide = true;
-		this.updateGuidePointWithLiveCoords(guide);
-	}
+	// *** DEPRECATED ***
+	// @action renewFollowingGuide(guide: Guide) {
+	// 	this.isFollowingToGuide = true;
+	// 	this.updateGuidePointWithLiveCoords(guide);
+	// }
 	
-	@action dropFollowingGuide() {
-		this.isFollowingToGuide = false;
-		this._followingGuide = null;
-		this.nearestPoint = null;
-		this.visiblePoint = null;
-	}
+	// *** DEPRECATED ***
+	// @action dropFollowingGuide() {
+	// 	this.isFollowingToGuide = false;
+	// 	this._followingGuide = null;
+	// 	this.nearestPoint = null;
+	// 	this.visiblePoint = null;
+	// }
 	
-	@action setIsFollowingGuide(value: boolean) {
-		this.isFollowingToGuide = value
-	}
+	// *** DEPRECATED ***
+	// @action setIsFollowingGuide(value: boolean) {
+	// 	this.isFollowingToGuide = value
+	// }
 	
-	@action toggleMuteGuideSound(value?: boolean) {
-		const actualValue =
-			typeof value !== 'undefined' ? value : !this.isGuideMuted;
-		
-		this.isGuideMuted = actualValue;
-	}
+	// *** DEPRECATED ***
+	// @action toggleMuteGuideSound(value?: boolean) {
+	// 	const actualValue =
+	// 		typeof value !== 'undefined' ? value : !this.isGuideMuted;
+	//
+	// 	this.isGuideMuted = actualValue;
+	// }
 	
 	@action dropStore() {
 		this.guide = null;
-		this.dropFollowingGuide()
+		
+		// *** DEPRECATED ***
+		// this.dropFollowingGuide()
 	}
 }

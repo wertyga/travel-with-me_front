@@ -1,6 +1,6 @@
 import Toast from 'react-native-toast-message';
 import {
-  changeEmail as changeEmailApi,
+  changeEmail as changeEmailApi, oauthGoogleRegister,
   recoveryPassword as recoveryPasswordApi,
   recoveryPasswordInit as recoveryPasswordInitApi,
   signInRequest,
@@ -10,6 +10,7 @@ import { withLoading } from '@/mobx/store.utils';
 import { action, makeObservable, observable } from 'mobx';
 import { storage } from '@/utils';
 import { RootStoreType } from '@/types';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export class AuthStore {
   @observable isLoading: boolean;
@@ -50,10 +51,19 @@ export class AuthStore {
   }
 
   @action async logout() {
-    await storage.delete('token');
-
-    this.rootStore.userStore.dropStore();
-    this.rootStore.subscriptionStore.dropStore();
+    try {
+      await storage.delete('token');
+      
+      this.rootStore.userStore.dropStore();
+      this.rootStore.subscriptionStore.dropStore();
+      
+      const googleUser = GoogleSignin.getCurrentUser();
+      if (googleUser) {
+        await GoogleSignin.revokeAccess();
+        await GoogleSignin.signOut();
+      }
+    } catch (e) {
+    }
   }
 
   @withLoading async changeEmail(...data: Parameters<typeof changeEmailApi>) {
@@ -81,6 +91,20 @@ export class AuthStore {
       const response = await recoveryPasswordApi(...data);
 
       return response
+    } catch (e) {}
+  }
+  
+  @withLoading async oauthGoogleRegister(...data: Parameters<typeof oauthGoogleRegister>) {
+    try {
+      const { user } = await oauthGoogleRegister(...data);
+   
+      this.rootStore.userStore.setUser(user);
+      this.rootStore.subscriptionStore.dropStore();
+      
+      if (this.rootStore.routerStore.navigator.canGoBack()) {
+        this.rootStore.routerStore.navigator.goBack();
+      }
+      
     } catch (e) {}
   }
 }

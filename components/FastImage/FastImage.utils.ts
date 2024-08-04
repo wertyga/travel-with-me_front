@@ -30,17 +30,22 @@ export const handleCacheImage = async (
 export const useFastImage = (
   source: string | number,
   width?: number
-): ImageSourcePropType => {
+): ImageSourcePropType | '' => {
   const isLocalImage = typeof source === 'number';
 
-  const [imgUri, setUri] = useState(isLocalImage ? '' : source);
+  const [imgUri, setUri] = useState('');
 
   useEffect(() => {
     if (isLocalImage) return;
 
     const compressedUrl = getCompressedUrl(source, width) as string;
+
     handleCacheImage(compressedUrl, setUri);
   }, []);
 
-  return isLocalImage ? source : { uri: imgUri };
+  if (isLocalImage) {
+    return source;
+  }
+
+  return !!imgUri ? { uri: imgUri } : '';
 };
