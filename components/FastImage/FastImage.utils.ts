@@ -2,50 +2,54 @@ import { useEffect, useState } from 'react';
 
 import { ImageSourcePropType } from 'react-native';
 
-import { cacheImage, findImageInCache, getCompressedUrl } from '@/utils';
+import {
+  findImageInCache,
+  getCompressedUrl,
+  getImageFromCacheOrSaveImageToCache,
+} from '@/utils';
 
 export const handleCacheImage = async (
   uri: string,
-  setUri: (cachedUri: string) => void
+  setUri: (cachedUri: string) => void,
+  withBlur?: boolean
 ) => {
-  const { exists, uri: cachedUri } = await findImageInCache(uri);
+  try {
+    if (withBlur) {
+      const { exists } = await findImageInCache(uri);
 
-  if (exists && cachedUri) {
+      if (!exists) {
+        setUri(`${uri}?blur=100`);
+      }
+    }
+
+    const cachedUri = await getImageFromCacheOrSaveImageToCache(uri);
+
     setUri(cachedUri);
-
-    return;
+  } catch (e) {
+    setUri(uri);
   }
-
-  const { cached, uri: path } = await cacheImage(uri);
-
-  if (cached && path) {
-    setUri(path);
-
-    return;
-  }
-
-  setUri(uri);
 };
 
 export const useFastImage = (
   source: string | number,
-  width?: number
-): ImageSourcePropType | '' => {
+  width?: number,
+  withBlur?: boolean
+): ImageSourcePropType | null => {
   const isLocalImage = typeof source === 'number';
 
-  const [imgUri, setUri] = useState('');
+  const [imgUri, setUri] = useState(null);
 
   useEffect(() => {
     if (isLocalImage) return;
 
     const compressedUrl = getCompressedUrl(source, width) as string;
 
-    handleCacheImage(compressedUrl, setUri);
+    handleCacheImage(compressedUrl, setUri, withBlur);
   }, []);
 
   if (isLocalImage) {
     return source;
   }
 
-  return !!imgUri ? { uri: imgUri } : '';
+  return !!imgUri ? { uri: imgUri } : null;
 };

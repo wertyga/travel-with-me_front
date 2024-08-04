@@ -63,7 +63,7 @@ export const GuidePreview = ({ guide, country }: Props) => {
 const styles = StyleSheet.create({
   container: {
     width,
-    aspectRatio: 1,
+    height: width,
     borderRadius: 20,
     overflow: 'hidden',
     marginRight: 10,

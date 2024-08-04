@@ -1,14 +1,14 @@
 import * as FileSystem from 'expo-file-system';
 
-const getFileNameFromUri = (uri: string) => {
-  return uri.split('/').pop();
-};
-
 const getCacheDirectoryForUri = (uri: string) => {
-  return `${FileSystem.cacheDirectory}${getFileNameFromUri(uri)}`;
+  const cacheFilenameWithQueryParams = uri.split('?').slice(1).join('-');
+  const clearFilename = uri.split('/').pop();
+  const filename = `${clearFilename}${cacheFilenameWithQueryParams}`;
+
+  return `${FileSystem.cacheDirectory}${filename}`;
 };
 
-export async function findImageInCache(uri) {
+export async function findImageInCache(uri: string) {
   try {
     const cacheUri = getCacheDirectoryForUri(uri);
     let info = await FileSystem.getInfoAsync(cacheUri);
@@ -24,7 +24,7 @@ export async function findImageInCache(uri) {
   }
 }
 
-export async function cacheImage(uri) {
+export async function cacheImage(uri: string) {
   try {
     const cacheUri = getCacheDirectoryForUri(uri);
     const downloadImage = FileSystem.createDownloadResumable(uri, cacheUri, {});

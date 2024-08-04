@@ -103,6 +103,7 @@ const CityScreen = () => {
         imageKey="image"
         noDots
         isFullScreen
+        isFastImage
       >
         {!isLoading && <CityScreenMeta city={city} />}
       </ScreenContentWrapper>

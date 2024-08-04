@@ -1,11 +1,6 @@
 import { Dimensions } from 'react-native';
 
-const { width: windowWidth } = Dimensions.get('window');
-
-export const getCompressedUrl = (
-  url: string | number,
-  width: number = windowWidth
-) => {
+export const getCompressedUrl = (url: string | number, width?: number) => {
   if (typeof url === 'number') return url;
 
   return `${url}${!!width ? `?width=${Math.ceil(width)}` : ''}`;

@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   ImageBackgroundProps,
+  StyleSheet,
   View,
   ViewStyle,
 } from 'react-native';
@@ -12,15 +13,17 @@ type Props = Omit<ImageBackgroundProps, 'style' | 'source'> & {
   source: string | number;
   style?: ImageBackgroundProps['style'] | ViewStyle;
   imageWidth?: number;
+  withBlur?: boolean;
 };
 
 export const FastImageBackground = ({
   source,
   style = {},
   imageWidth,
+  withBlur,
   ...imageProps
 }: Props) => {
-  const imgSource = useFastImage(source, imageWidth);
+  const imgSource = useFastImage(source, imageWidth, withBlur);
 
   return (
     <>
@@ -34,7 +37,13 @@ export const FastImageBackground = ({
             justifyContent: 'center',
           }}
         >
-          <ActivityIndicator size={33} />
+          {imageProps.children}
+          <ActivityIndicator
+            size={33}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+            }}
+          />
         </View>
       )}
     </>

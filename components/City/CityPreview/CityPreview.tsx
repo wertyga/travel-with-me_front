@@ -13,7 +13,7 @@ import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   city: City;
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 export const CityPreview = ({ city, disabled }: Props) => {

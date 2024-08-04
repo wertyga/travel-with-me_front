@@ -21,18 +21,20 @@ type Props = Pick<LinearGradientProps, 'locations'> & {
   contentStyle?: StyleProp<ViewStyle>;
   gradient?: keyof typeof gradientDirections | LinearGradientProps['colors'];
   isFastImage?: boolean;
+  withBlur?: boolean;
   imageWidth?: number;
 };
 
 export const ImageBackgroundWithGradient = ({
   children,
   image,
-  style,
+  style = {},
   contentStyle,
   gradient = 'top',
   locations,
   imageWidth,
   isFastImage,
+  withBlur,
 }: Props) => {
   const gradientValue =
     typeof gradient === 'string' ? gradientDirections[gradient] : gradient;
@@ -47,8 +49,10 @@ export const ImageBackgroundWithGradient = ({
   return (
     <ComponentWrapper
       source={source as any}
-      style={[styles.container, style]}
+      style={style}
       imageWidth={imageWidth}
+      withBlur={withBlur}
+      resizeMode="cover"
     >
       <LinearGradient
         colors={gradientValue}
@@ -62,11 +66,6 @@ export const ImageBackgroundWithGradient = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
   gradient: {
     ...StyleSheet.absoluteFillObject,
   },

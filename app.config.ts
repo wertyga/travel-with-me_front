@@ -3,8 +3,8 @@ import { ConfigContext, ExpoConfig } from 'expo/config';
 const ENV = {
   development: {
     GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-    // API_BASE_URL: 'https://api.traveljet.org',
-    API_BASE_URL: 'https://579b-89-64-86-231.ngrok-free.app',
+    API_BASE_URL: 'https://api.traveljet.org',
+    // API_BASE_URL: 'https://579b-89-64-86-231.ngrok-free.app',
   },
   production: {
     GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
