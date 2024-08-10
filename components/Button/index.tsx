@@ -115,6 +115,7 @@ const CustomButton = ({
       ]}
       onPress={handleOnPress}
       disabled={disabled || isLoading}
+      activeOpacity={!!href ? 0 : 1}
       {...rest}
     >
       {isLoading && <ActivityIndicator style={styles.loadingIndicator} />}
