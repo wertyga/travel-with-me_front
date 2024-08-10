@@ -83,7 +83,7 @@ export const useSubscription = (props?: Props) => {
       !!mySubscription &&
       new Date(mySubscription.validUntil).getTime() < Date.now();
 
-    if (!mySubHasBeenFetched || isExpired) {
+    if (!mySubHasBeenFetched || isExpired || !mySubscription) {
       getMySubscription();
     }
   }, [user, mySubHasBeenFetched, mySubscription]);

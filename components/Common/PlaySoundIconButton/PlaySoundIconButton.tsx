@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -22,20 +22,15 @@ export const PlaySoundIconButton: React.FC<Props> = ({
   const iconSize = small ? 36 : 40;
 
   return (
-    <TouchableOpacity onPress={playSound} disabled={isLoading}>
-      {isPlaying && !isPaused && (
-        <Ionicons
-          name="pause-circle-outline"
-          size={iconSize}
-          color={isLoading ? 'rgba(255, 255, 255, 0.40)' : 'white'}
-        />
+    <TouchableOpacity onPress={playSound} disabled={!!isLoading}>
+      {!!isLoading && (
+        <ActivityIndicator size={36} color="white" style={{ marginTop: 2 }} />
       )}
-      {(!isPlaying || isPaused) && (
-        <Ionicons
-          name="play-circle-outline"
-          size={iconSize}
-          color={isLoading ? 'rgba(255, 255, 255, 0.40)' : 'white'}
-        />
+      {isPlaying && !isPaused && !isLoading && (
+        <Ionicons name="pause-circle-outline" size={iconSize} color={'white'} />
+      )}
+      {(!isPlaying || isPaused) && !isLoading && (
+        <Ionicons name="play-circle-outline" size={iconSize} color={'white'} />
       )}
     </TouchableOpacity>
   );

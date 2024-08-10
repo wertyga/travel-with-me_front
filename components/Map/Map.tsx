@@ -55,7 +55,6 @@ export const MapComponent = ({
   mapStyles,
   initialRegion,
   showMyLocationBtnStyle,
-  withAnimationRegionChange,
   ...mapViewProps
 }: Props) => {
   const mapRef = useRef();

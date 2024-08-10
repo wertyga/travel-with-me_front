@@ -49,28 +49,27 @@ export class GuideStore {
 		} catch (e) {}
 	}
 	
-	// *** DEPRECATED ***
-	// @action updateGuidePointWithLiveCoords(guide: Guide) {
-	// 	const { liveCoords } = this.rootStore.locationStore;
-	//
-	// 	if (this._followingGuide?._id !== guide._id) {
-	// 		this._followingGuide = guide;
-	// 	}
-	//
-	// 	if (!this.isFollowingToGuide) {
-	// 		this.nearestPoint = null;
-	// 		return;
-	// 	}
-	//
-	// 	this.nearestPoint = getTheNearestVisiblePoint(guide.points, liveCoords);
-	// 	this.isFollowingToGuide = true;
-	//
-	// 	if (this.nearestPoint.becameVisible) {
-	// 		this.visiblePoint = this.nearestPoint.point;
-	// 	} else if (this.nearestPoint.becameVisible === false) {
-	// 		this.visiblePoint = null;
-	// 	}
-	// }
+	@action updateGuidePointWithLiveCoords(guide: Guide) {
+		const { liveCoords } = this.rootStore.locationStore;
+
+		if (this._followingGuide?._id !== guide._id) {
+			this._followingGuide = guide;
+		}
+
+		if (!this.isFollowingToGuide) {
+			this.nearestPoint = null;
+			return;
+		}
+
+		this.nearestPoint = getTheNearestVisiblePoint(guide.points, liveCoords);
+		this.isFollowingToGuide = true;
+
+		if (this.nearestPoint.becameVisible) {
+			this.visiblePoint = this.nearestPoint.point;
+		} else if (this.nearestPoint.becameVisible === false) {
+			this.visiblePoint = null;
+		}
+	}
 	
 	// *** DEPRECATED ***
 	// @action renewFollowingGuide(guide: Guide) {
@@ -86,10 +85,9 @@ export class GuideStore {
 	// 	this.visiblePoint = null;
 	// }
 	
-	// *** DEPRECATED ***
-	// @action setIsFollowingGuide(value: boolean) {
-	// 	this.isFollowingToGuide = value
-	// }
+	@action setIsFollowingGuide(value: boolean) {
+		this.isFollowingToGuide = value
+	}
 	
 	// *** DEPRECATED ***
 	// @action toggleMuteGuideSound(value?: boolean) {

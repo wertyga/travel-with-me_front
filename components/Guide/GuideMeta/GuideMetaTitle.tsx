@@ -8,7 +8,7 @@ import { CText } from '@/components/CText';
 import { CountryPill } from '@/components/Country';
 import { LikeAction } from '@/components/LikeAction';
 
-import { FONTS, Guide, SOCIAL_MODELS } from '@/types';
+import { FONTS, Guide, SCREENS, SOCIAL_MODELS } from '@/types';
 
 type Props = {
   guide: Guide;
@@ -19,7 +19,12 @@ const GuideMetaTitle = ({ guide, isFetching }: Props) => {
   return (
     <View style={styles.title}>
       <View>
-        <CountryPill title={guide.city.title} icon="map-point-small" />
+        <CountryPill
+          title={guide.city.title}
+          icon="map-point-small"
+          href={SCREENS.City}
+          hrefParams={{ city: guide.city }}
+        />
         <CText style={styles.aboutText}>About the guide</CText>
       </View>
 
@@ -37,7 +42,6 @@ export default observer(GuideMetaTitle);
 
 const styles = StyleSheet.create({
   title: {
-    marginBottom: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
   aboutText: {
     fontFamily: FONTS.CrimsonSemiBold,
     fontSize: 22,
-    marginTop: 5,
+    marginTop: 20,
     marginBottom: 10,
   },
 });

@@ -1,21 +1,19 @@
-import { useState } from 'react';
 import * as React from 'react';
 
-import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { AudioPlayer } from '@/components/AudioPlayer';
+import { AudioContainer } from '@/components/Audio';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { StarRating } from '@/components/Common/StarRating/StarRating';
 import { CountryPill } from '@/components/Country';
-import { Icon, IconNames } from '@/components/Icon';
 import { LikeAction } from '@/components/LikeAction';
 import { gotoPointDirection } from '@/components/Point/PointGoToDirection/PointGoToDirection.utils';
 import { Expander } from '@/components/UI/Expander';
 
-import { FONTS, Place, SOCIAL_MODELS } from '@/types';
+import { FONTS, Place, SCREENS, SOCIAL_MODELS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
@@ -23,7 +21,6 @@ import PointGoToDirection from '../PointGoToDirection/PointGoToDirection';
 
 type Props = {
   point: Place;
-  autoplay?: boolean;
   isFetching?: boolean;
 };
 
@@ -39,7 +36,7 @@ const META_TEXT = {
   },
 };
 
-export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
+export const PointMeta = ({ point, isFetching }: Props) => {
   const {
     city: { title: cityTitle },
     address,
@@ -61,7 +58,12 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
     <View style={styles.container}>
       <View style={styles.top}>
         <View style={{ gap: 10, flexDirection: 'row', alignItems: 'center' }}>
-          <CountryPill title={cityTitle} icon="map-point-small" />
+          <CountryPill
+            title={cityTitle}
+            icon="map-point-small"
+            href={SCREENS.City}
+            hrefParams={{ city: point.city }}
+          />
 
           <StarRating rating={rating} />
         </View>
@@ -139,10 +141,11 @@ export const PointMeta = ({ point, autoplay, isFetching }: Props) => {
         {!!point.audioStory && (
           <>
             <CText style={styles.aboutTitle}>Audio play of the story</CText>
-            <AudioPlayer
+            <AudioContainer
               audioUrl={point.audioStory}
-              autoplay={autoplay}
               title={point.title}
+              checkTitles
+              defaultOpenState={true}
             />
           </>
         )}

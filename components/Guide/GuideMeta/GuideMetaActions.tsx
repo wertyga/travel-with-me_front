@@ -1,16 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
 import { observer } from 'mobx-react-lite';
 
 import { CountryPill } from '@/components/Country';
-import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation, useSubscription } from '@/hooks';
 
 import { Guide, SCREENS } from '@/types';
-
-import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   travelTime?: string;
@@ -22,11 +19,7 @@ export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
   const { subscription } = useSubscription();
 
   return (
-    <ScrollHorizontalNoEdges
-      contentContainerStyle={styles.container}
-      style={styles.scrollView}
-      edge={CONSTANTS.spaces.paddingHorizontal}
-    >
+    <View style={[styles.scrollView, styles.container]}>
       {!!travelTime && <CountryPill title={travelTime} icon="clock" />}
       <CountryPill
         title={`${guide.pointsCount} points`}
@@ -47,7 +40,7 @@ export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
           />
         </>
       )}
-    </ScrollHorizontalNoEdges>
+    </View>
   );
 };
 

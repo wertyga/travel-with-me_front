@@ -98,6 +98,10 @@ export class SubscriptionStore {
 		}
 	}
 	
+	@computed get isSubscriptionExists() {
+		return !this.isLoading && this.mySubHasBeenFetched && !!this.mySubscription;
+	}
+	
 	@action dropStore() {
 		this.isLoading = false;
 		this.mySubHasBeenFetched = false;

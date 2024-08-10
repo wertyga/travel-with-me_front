@@ -1,12 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -15,13 +9,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { observer } from 'mobx-react-lite';
 
 import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
+import { AudioContainer } from '@/components/Audio';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { FastImage } from '@/components/FastImage';
-import { FooterMenu } from '@/components/FooterMenu/FooterMenu';
+import { FooterMenu } from '@/components/FooterMenu';
 import { Loader } from '@/components/Loader';
 import { useStores } from '@/hooks';
+
+import { SCREENS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
@@ -63,10 +60,32 @@ export const MainLayoutComponent = ({
   bgColors,
   numberOfLinesTitle,
 }: Props) => {
-  const { layoutHeight, updateDomState } = useStores(stores => ({
+  const {
+    layoutHeight,
+    updateDomState,
+    isPaused,
+    isPlaceScreen,
+    isPlaying,
+    place,
+    audioTitle,
+  } = useStores(stores => ({
     layoutHeight: stores.domStore.layoutHeight,
     updateDomState: stores.domStore.updateDomState,
+    place: stores.placeStore.place,
+    isPlaying: stores.soundStore.isPlaying,
+    isPaused: stores.soundStore.isPaused,
+    audioTitle: stores.soundStore.audioTitle,
+    isAudioLoaded: stores.soundStore.isAudioLoaded,
+    isPlaceScreen: stores.routerStore.currentRoute?.name === SCREENS.Place,
+    isGuideMapScreen:
+      stores.routerStore.currentRoute?.name === SCREENS.GuideMap,
   }));
+
+  const isInAction = isPlaying || isPaused;
+  const isShowOnPlaceScreen =
+    isPlaceScreen && !!place && place.title !== audioTitle;
+  const showAudioContainer =
+    (!isPlaceScreen && isInAction) || (isShowOnPlaceScreen && isInAction);
 
   return (
     <View
@@ -121,6 +140,14 @@ export const MainLayoutComponent = ({
           {children}
         </View>
 
+        {showAudioContainer && (
+          <AudioContainer
+            withTitle
+            withClose
+            absolute
+            containerStyle={styles.audioContainer}
+          />
+        )}
         {!noFooter && <FooterMenu />}
       </>
     </View>
@@ -134,6 +161,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {},
+  audioContainer: {
+    zIndex: 2,
+    top: 95,
+    backgroundColor: CONSTANTS.colors.bg2,
+  },
+  openedStyleAudio: {
+    left: 15,
+    paddingLeft: 15,
+    paddingRight: 10,
+  },
+  contentStyles: {
+    backgroundColor: 'transparent',
+    width: 50,
+    height: 50,
+    borderWidth: 1,
+    borderColor: 'red',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
   bgGradient: {
     height: '100%',
     width: '100%',

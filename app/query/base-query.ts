@@ -2,18 +2,17 @@ import Toast from 'react-native-toast-message';
 
 import Constants from 'expo-constants';
 
-import { AppStateStore } from '@/mobx/stores/AppStateStore';
-
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { storage } from '@/utils';
+import { getIsNetConnected } from '@/utils/etc';
 
 export const baseQuery = async ({
   headers,
   silentError,
   ...config
 }: AxiosRequestConfig & { silentError?: boolean }) => {
-  if (!AppStateStore.isNetConnected) return;
+  if (!getIsNetConnected()) return;
 
   try {
     const token = await storage.get('token');

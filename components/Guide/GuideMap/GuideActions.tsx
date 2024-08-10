@@ -31,28 +31,28 @@ export const GuideActionsComponent = ({
     isFollowingToGuide,
     isGuideMuted,
     nearestPoint,
-    dropFollowingGuide,
-    toggleMuteGuideSound,
+    // dropFollowingGuide,
+    // toggleMuteGuideSound,
     liveCoords,
-    setIsFollowingGuide,
+    // setIsFollowingGuide,
   } = useStores(stores => ({
     isGuideMuted: stores.guideStore.isGuideMuted,
     nearestPoint: stores.guideStore.nearestPoint,
     isFollowingToGuide: stores.guideStore.isFollowingToGuide,
-    dropFollowingGuide: stores.guideStore.dropFollowingGuide,
-    toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
-    setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
+    // dropFollowingGuide: stores.guideStore.dropFollowingGuide,
+    // toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
+    // setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
     liveCoords: stores.locationStore.liveCoords,
   }));
 
-  const onToggleFollowGuide = () => {
-    if (isFollowingToGuide) {
-      dropFollowingGuide();
-    } else {
-      setIsFollowingGuide(true);
-      toggleMuteGuideSound(false);
-    }
-  };
+  // const onToggleFollowGuide = () => {
+  //   if (isFollowingToGuide) {
+  //     dropFollowingGuide();
+  //   } else {
+  //     setIsFollowingGuide(true);
+  //     toggleMuteGuideSound(false);
+  //   }
+  // };
 
   const volumeIcon = isGuideMuted
     ? 'volume-medium-outline'
@@ -83,7 +83,7 @@ export const GuideActionsComponent = ({
       />
       <Button
         style={[styles.actionBtn, !!nearestPoint && styles.activeBtn]}
-        onPress={onToggleFollowGuide}
+        // onPress={onToggleFollowGuide}
         solid
         squareSize={!nearestPoint && !!liveCoords && 40}
         disabled={isDisabledFollowGuide}
@@ -93,7 +93,7 @@ export const GuideActionsComponent = ({
         {!liveCoords && (
           <CText style={{ marginLeft: 10 }}>Loading location...</CText>
         )}
-        {!!nearestPoint && (
+        {!!nearestPoint && !!liveCoords && (
           <CText style={{ marginLeft: 10 }}>{nearestPointLabel}</CText>
         )}
       </Button>

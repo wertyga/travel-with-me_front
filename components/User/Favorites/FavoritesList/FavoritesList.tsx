@@ -1,8 +1,12 @@
 import { ScrollView, StyleSheet } from 'react-native';
 
-import { Guide, Place, SOCIAL_MODELS } from '@/types';
+import { observer } from 'mobx-react-lite';
 
-import { FavoritesListItem } from '../FavoritesListItem/FavoritesListItem';
+import { useSubscription } from '@/hooks';
+
+import { Guide, Place, SCREENS, SOCIAL_MODELS } from '@/types';
+
+import FavoritesListItem from '../FavoritesListItem/FavoritesListItem';
 
 type Props = {
   guides: Guide[];
@@ -10,7 +14,8 @@ type Props = {
   isRemoveDisabled?: boolean;
 };
 
-export const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
+const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
+  const { isSubscriptionValid } = useSubscription();
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {guides.map(({ vImage, hImage, title, slug, city, _id }) => {
@@ -18,17 +23,30 @@ export const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
           <FavoritesListItem
             key={slug}
             title={title}
-            image={hImage || vImage}
+            image={hImage}
             subtitle={city.title}
             slug={slug}
             modelType={SOCIAL_MODELS.Guide}
             _id={_id}
             city={city as any}
             isRemoveDisabled={isRemoveDisabled}
+            href={SCREENS.Guide}
+            hrefParams={{
+              guide: {
+                title,
+                image: vImage,
+                _id,
+                slug,
+                city,
+              },
+            }}
           />
         );
       })}
       {places.map(({ images, title, slug, city, _id }) => {
+        const linkProps = isSubscriptionValid
+          ? { href: SCREENS.Place, hrefParams: { placeSlug: slug } }
+          : {};
         return (
           <FavoritesListItem
             key={slug}
@@ -39,12 +57,15 @@ export const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
             modelType={SOCIAL_MODELS.Place}
             _id={_id}
             isRemoveDisabled={isRemoveDisabled}
+            {...linkProps}
           />
         );
       })}
     </ScrollView>
   );
 };
+
+export default observer(FavoritesList);
 
 const styles = StyleSheet.create({
   container: {

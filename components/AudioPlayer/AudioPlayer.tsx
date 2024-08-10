@@ -77,6 +77,7 @@ const AudioPlayer = ({ audioUrl, autoplay, simple, small, title }: Props) => {
         <PlaySoundIconButton
           isPaused={isPaused}
           isPlaying={isPlaying}
+          isLoading={isLoading}
           playSound={handlePlay}
           small={small}
         />

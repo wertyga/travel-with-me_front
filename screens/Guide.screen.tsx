@@ -16,8 +16,6 @@ import { defaultGuideImage } from '@/utils';
 
 import { Guide, PageScreen, SCREENS } from '@/types';
 
-import { CONSTANTS } from '@/styles/constants';
-
 const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
   const navi = useNavigation();
   const router = useRoute();
@@ -119,7 +117,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
     paddingTop: 0,
-    paddingBottom: CONSTANTS.spaces.footerHeight,
   },
   guideImage: {
     width: '100%',

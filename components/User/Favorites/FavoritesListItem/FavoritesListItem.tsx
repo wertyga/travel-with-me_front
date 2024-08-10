@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { setLike } from '@/api';
-import Button from '@/components/Button';
+import Button, { CustomButtonProps } from '@/components/Button';
 import { CText } from '@/components/CText';
 import { FastImage } from '@/components/FastImage';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
@@ -16,7 +16,7 @@ import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
 
-type Props = {
+type Props = Pick<CustomButtonProps, 'href' | 'hrefParams'> & {
   title: string;
   subtitle: string;
   image: string;
@@ -27,15 +27,15 @@ type Props = {
   isRemoveDisabled?: boolean;
 };
 
-export const FavoritesListItem = ({
+const FavoritesListItem = ({
   title,
   subtitle,
   image,
   modelType,
   _id,
-  slug,
-  city,
   isRemoveDisabled,
+  href,
+  hrefParams,
 }: Props) => {
   const { getFavorites } = useStores(stores => ({
     getFavorites: stores.userStore.getFavorites,
@@ -49,20 +49,6 @@ export const FavoritesListItem = ({
     getFavorites();
   };
 
-  const href =
-    modelType === SOCIAL_MODELS.Guide ? SCREENS.Guide : SCREENS.Place;
-  const hrefParams =
-    modelType === SOCIAL_MODELS.Guide
-      ? {
-          guide: {
-            title,
-            image,
-            _id,
-            slug,
-            city,
-          },
-        }
-      : { placeSlug: slug };
   const defaultImage =
     modelType === SOCIAL_MODELS.Guide ? DefaultGuideImage : DefaultPlaceImage;
 
@@ -86,7 +72,7 @@ export const FavoritesListItem = ({
       <Animated.View style={[animatedStyles, styles.wrapper]}>
         <Button
           href={href}
-          hrefParams={hrefParams as any}
+          hrefParams={hrefParams}
           style={styles.container}
           activeOpacity={1}
           rectangle
@@ -110,6 +96,8 @@ export const FavoritesListItem = ({
     </GesturesContainer>
   );
 };
+
+export default FavoritesListItem;
 
 const styles = StyleSheet.create({
   wrapper: {

@@ -28,12 +28,13 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
   const {
     getGuide,
     guide,
-    // updateGuidePointWithLiveCoords,
+    updateGuidePointWithLiveCoords,
     dropLocationStore,
     // dropFollowingGuide,
     // toggleMuteGuideSound,
-    // setIsFollowingGuide,
+    setIsFollowingGuide,
     requestForWatchingLocation,
+    onStartWatchingLocation,
   } = useStores(stores => ({
     getGuide: stores.guideStore.getGuide,
     guide: stores.guideStore.guide,
@@ -42,9 +43,9 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
     requestForWatchingLocation: stores.locationStore.requestForWatchingLocation,
     // dropFollowingGuide: stores.guideStore.dropFollowingGuide,
     // toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
-    // setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
-    // updateGuidePointWithLiveCoords:
-    //   stores.guideStore.updateGuidePointWithLiveCoords,
+    setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
+    updateGuidePointWithLiveCoords:
+      stores.guideStore.updateGuidePointWithLiveCoords,
   }));
 
   // const watchingLocationCallback = () => {
@@ -71,6 +72,7 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
   // }, [guide]);
 
   useFocus(() => {
+    // onStartWatchingLocation();
     // requestForWatchingLocation(watchingLocationCallback);
 
     return () => {
@@ -78,6 +80,13 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
       // dropFollowingGuide();
     };
   }, []);
+
+  useFocus(() => {
+    if (!guide) return;
+
+    setIsFollowingGuide(true);
+    onStartWatchingLocation(() => updateGuidePointWithLiveCoords(guide));
+  }, [guide]);
 
   if (!guide) {
     return <SafeLoader />;

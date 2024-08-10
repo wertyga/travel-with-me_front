@@ -18,7 +18,8 @@ export type GestureUpProps = {
   maxTop?: number;
   activateThreshold?: number;
   children: (
-    Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>
+    Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>,
+    isOpened: boolean
   ) => React.ReactNode;
   onOpen?: (isOpened: boolean) => void;
 };
@@ -35,6 +36,8 @@ export const GestureUp: React.FC<GestureUpProps> = ({
     currentTop: Dimensions.get('window').height - initialHeight,
   });
 
+  const [stateIsOpened, setStateIsOpened] = useState(false);
+
   const swipeTop = useSharedValue(currentStateRef.current.currentTop);
   const isOpened = useSharedValue(false);
   const canBeActivate = useSharedValue(false);
@@ -50,7 +53,9 @@ export const GestureUp: React.FC<GestureUpProps> = ({
       duration: 150,
     });
     isOpened.value = false;
+
     setTimeout(() => {
+      setStateIsOpened(false);
       onOpen?.(false);
     });
   };
@@ -60,7 +65,9 @@ export const GestureUp: React.FC<GestureUpProps> = ({
       duration: 150,
     });
     isOpened.value = true;
+
     setTimeout(() => {
+      setStateIsOpened(true);
       onOpen?.(true);
     });
   };
@@ -118,7 +125,7 @@ export const GestureUp: React.FC<GestureUpProps> = ({
           animatedStyles,
         ]}
       >
-        {children(Trigger)}
+        {children(Trigger, stateIsOpened)}
       </Animated.View>
     </>
   );

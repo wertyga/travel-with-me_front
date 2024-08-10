@@ -89,7 +89,7 @@ export class AppStateStore {
 				if (nextState === 'active') {
 					await Promise.all([
 						this.getEnvs(),
-						this.rootStore.soundStore.stopPointPlaybackIfNoNotification(),
+						// this.rootStore.soundStore.stopPointPlaybackIfNoNotification(),
 						removeNotification(IDENTIFIERS.pointDirection),
 						this.rootStore.subscriptionStore.getMySubscription({isActive: true}),
 						this.checkForUpdates(),

@@ -46,20 +46,26 @@ const CityScreenMeta = ({ city }: Props) => {
     setState(prev => ({ ...prev, chosenCityTab }));
   };
 
-  const guidesCityCategories = getGuidesCategories(city.guides);
+  const guidesCityCategories = getGuidesCategories(city?.guides || []);
   const filteredGuides = !state.filterByCategory
-    ? city.guides
-    : city.guides.filter(({ categories }) =>
+    ? city?.guides || []
+    : city?.guides.filter(({ categories }) =>
         categories.includes(state.filterByCategory)
       );
 
   const cityMetaInfo = useMemo(() => {
+    if (!city) return {};
+
     return getCityMetaData(city);
   }, [city]);
 
   const cityTabs = CITY_TABS.filter(
     ({ title }) => !!(cityMetaInfo as any)[title]
   );
+
+  if (!city) {
+    return null;
+  }
 
   return (
     <>

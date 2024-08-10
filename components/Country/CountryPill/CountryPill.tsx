@@ -1,11 +1,14 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import Button from '@/components/Button';
+
+import Button, { CustomButtonProps } from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Icon, IconNames } from '@/components/Icon';
+
 import { FONTS } from '@/types';
 
-type Props = {
+type Props = Pick<CustomButtonProps, 'href' | 'hrefParams'> & {
   style?: StyleProp<ViewStyle>;
   title: string;
   icon?: IconNames;
@@ -19,15 +22,22 @@ export const CountryPill = ({
   customIcon,
   icon,
   onPress,
+  hrefParams,
+  href,
 }: Props) => {
   return (
-    <View style={[styles.container, style]}>
-      <Button onPress={onPress} style={styles.content}>
+    <TouchableOpacity style={[styles.container, style]} activeOpacity={1}>
+      <Button
+        onPress={onPress}
+        style={styles.content}
+        href={href}
+        hrefParams={hrefParams}
+      >
         {!!icon && <Icon name={icon as IconNames} />}
         {customIcon}
         <CText style={styles.title}>{title}</CText>
       </Button>
-    </View>
+    </TouchableOpacity>
   );
 };
 

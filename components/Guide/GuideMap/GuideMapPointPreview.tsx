@@ -10,7 +10,7 @@ import {
 
 import { observer } from 'mobx-react-lite';
 
-import { AudioPlayer } from '@/components/AudioPlayer';
+import { AudioContainer } from '@/components/Audio';
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CText } from '@/components/CText';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
@@ -19,6 +19,7 @@ import { PointListSmall } from '@/components/Point';
 import { Guide, Place } from '@/types';
 
 const TRIGGER_HEIGHT = 380;
+const SCROLL_VIEW_BOTTOM_SPACE = TRIGGER_HEIGHT + 50;
 
 type Props = {
   point: Place;
@@ -55,20 +56,20 @@ const GuideMapPointPreview = ({
 
         <View style={styles.actions}>
           <GuideMapPointActions point={point} onOpenGallery={onOpenGallery} />
-
-          {!!point.audioStory && (
-            <AudioPlayer
-              audioUrl={point.audioStory}
-              title={point.title}
-              simple
-              small
-            />
-          )}
         </View>
+
+        {!!point.audioStory && (
+          <AudioContainer
+            audioUrl={point.audioStory}
+            title={point.title}
+            checkTitles
+            defaultOpenState={true}
+          />
+        )}
 
         <ScrollView
           style={styles.descriptionContainer}
-          contentContainerStyle={{ paddingBottom: TRIGGER_HEIGHT }} // Height of the Trigger
+          contentContainerStyle={{ paddingBottom: SCROLL_VIEW_BOTTOM_SPACE }}
         >
           <CText style={styles.description}>{point.story}</CText>
         </ScrollView>
@@ -77,17 +78,20 @@ const GuideMapPointPreview = ({
   );
 };
 
+export default observer(GuideMapPointPreview);
+
 const styles = StyleSheet.create({
   carouselWrapper: {
     borderTopRightRadius: 6,
     borderTopLeftRadius: 6,
     overflow: 'hidden',
+    zIndex: 20,
   },
   swipeTrigger: {
     paddingHorizontal: 10,
     borderTopRightRadius: 6,
     borderTopLeftRadius: 6,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   pointTitle: {
     marginTop: 20,
@@ -100,7 +104,6 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     height: Dimensions.get('window').height,
     paddingBottom: 20,
-    paddingTop: 20,
   },
   description: {
     color: 'white',
@@ -114,7 +117,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    marginBottom: 10,
   },
 });
-
-export default observer(GuideMapPointPreview);

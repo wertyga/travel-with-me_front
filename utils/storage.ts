@@ -14,6 +14,10 @@ class Storage {
   async delete(name: string) {
     await AsyncStorage.removeItem(name);
   }
+
+  async clearAll() {
+    await AsyncStorage.clear();
+  }
 }
 
 export const storage = new Storage();
