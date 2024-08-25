@@ -7,7 +7,7 @@ import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { observer } from 'mobx-react-lite';
 
 import Button from '@/components/Button';
-import { useStores, useSubscription } from '@/hooks';
+import { useStores } from '@/hooks';
 
 import { City } from '@/types';
 
@@ -18,8 +18,6 @@ type Props = {
 const BTN_SIZE = 40;
 
 const CityDownloader = ({ city }: Props) => {
-  const { isSubscriptionValid } = useSubscription();
-
   const {
     saveCityToOffline,
     isOfflineStoreLoading,
@@ -33,9 +31,8 @@ const CityDownloader = ({ city }: Props) => {
   }));
 
   const isCityDownloaded = cachedCitiesIds.includes(city._id);
-  const isRenderDownloadBtn = isSubscriptionValid && isNetConnected;
 
-  if (!isRenderDownloadBtn) {
+  if (!isNetConnected) {
     return null;
   }
 

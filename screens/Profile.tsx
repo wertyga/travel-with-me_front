@@ -9,12 +9,7 @@ import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Version } from '@/components/Common';
 import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
-import {
-  useAuthGuard,
-  useForegroundPermissions,
-  useNavigation,
-  useSubscription,
-} from '@/hooks';
+import { useAuthGuard, useForegroundPermissions, useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
 
 import { SCREENS } from '@/types';
@@ -35,8 +30,6 @@ const ProfileScreen = () => {
 
   const { granted } = useForegroundPermissions();
 
-  const { subscription } = useSubscription();
-
   const handleLogout = () => {
     if (!isNetConnected) return;
 
@@ -52,7 +45,6 @@ const ProfileScreen = () => {
 
   const editLabel = isNetConnected ? 'Edit' : 'Offline';
   const getHelpLabel = isNetConnected ? 'Get Help' : 'Offline';
-  const isShowSubscriptionBtn = isNetConnected && !subscription;
   const isShowUpdateBtn = isNetConnected && isUpdateAvailable;
   const isShowOfflineStorage = !!cachedCitiesIds.length;
 
@@ -74,20 +66,6 @@ const ProfileScreen = () => {
         <Switch value={granted} onChange={changePermissions} />
       </Button>
 
-      {!!subscription && (
-        <Button
-          style={styles.item}
-          href={isNetConnected && SCREENS.Subscriptions}
-          noPaddings
-        >
-          <CText>Subscription</CText>
-          <CText style={styles.edit}>
-            {new Date(subscription.validUntil).toLocaleDateString()}
-          </CText>
-          <CText style={styles.edit}>{editLabel}</CText>
-        </Button>
-      )}
-
       <Button
         style={styles.item}
         href={isNetConnected && SCREENS.Contact}
@@ -101,12 +79,6 @@ const ProfileScreen = () => {
         <Button style={styles.item} href={SCREENS.OfflineStorage} noPaddings>
           <CText>Offline Storage</CText>
           <CText style={styles.edit}>{editLabel}</CText>
-        </Button>
-      )}
-
-      {isShowSubscriptionBtn && (
-        <Button high href={SCREENS.Subscriptions}>
-          Buy subscription
         </Button>
       )}
 

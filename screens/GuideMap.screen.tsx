@@ -11,18 +11,12 @@ import { MainLayout } from '@/Layouts';
 import { GuideMap } from '@/components/Guide';
 import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
 import { SafeLoader } from '@/components/SafeLoader';
-import {
-  useAuthGuard,
-  useFocus,
-  useStores,
-  useSubscriptionGuard,
-} from '@/hooks';
+import { useAuthGuard, useFocus, useStores } from '@/hooks';
 
 import { PageScreen, SCREENS } from '@/types';
 
 const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
   useAuthGuard();
-  useSubscriptionGuard();
 
   const navi = useNavigation();
   const {

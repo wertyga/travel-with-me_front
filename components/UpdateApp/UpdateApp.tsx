@@ -17,13 +17,15 @@ import { CText } from '@/components/CText';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { useStores } from '@/hooks';
 
-import { storage } from '@/utils';
-
 import { FONTS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
-import { STORAGE_KEY, handleUpdateApp } from './UpdateApp.utils';
+import {
+  getIsUserRefusedOfUpdate,
+  handleUpdateApp,
+  setIsUserRefusedOfUpdate,
+} from './UpdateApp.utils';
 
 const CLOSED_TRANSLATE_X_VALUE = Dimensions.get('screen').width + 100;
 const OPENED_TRANSLATION_X = CONSTANTS.spaces.paddingHorizontal;
@@ -52,7 +54,7 @@ const UpdateApp = () => {
       setIsOpened(false);
     }, ANIMATION_TIMEOUT);
 
-    storage.set(STORAGE_KEY, true);
+    setIsUserRefusedOfUpdate();
   };
 
   const onUpdate = e => {
@@ -71,7 +73,7 @@ const UpdateApp = () => {
 
   useEffect(() => {
     const checkForUpdate = async () => {
-      const isNoNeedToUpdate = await storage.get(STORAGE_KEY);
+      const isNoNeedToUpdate = await getIsUserRefusedOfUpdate();
       const isShowUpdate = !isNoNeedToUpdate && isUpdateAvailable && isAppReady;
 
       setIsOpened(isShowUpdate);
@@ -121,6 +123,8 @@ const UpdateApp = () => {
   );
 };
 
+export default observer(UpdateApp);
+
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
@@ -142,5 +146,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-
-export default observer(UpdateApp);

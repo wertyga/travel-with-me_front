@@ -9,7 +9,7 @@ export type RootStoreType = RootStoreTypeRoot<{
   citiesListStore: stores.CitiesListStore;
   searchStore: stores.SearchStore;
   cityStore: stores.CityStore;
-  subscriptionStore: stores.SubscriptionStore;
+  // subscriptionStore: stores.SubscriptionStore;
   guideStore: stores.GuideStore;
   guidesListStore: stores.GuidesListStore;
   placeStore: stores.PlaceStore;

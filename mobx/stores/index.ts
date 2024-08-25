@@ -5,7 +5,6 @@ export { DomStore } from './DomStore';
 export { CitiesListStore } from './CitiesListStore';
 export { SearchStore } from './SearchStore';
 export { CityStore } from './CityStore';
-export { SubscriptionStore } from './SubscriptionStore';
 export { GuideStore } from './guide/GuideStore';
 export { GuidesListStore } from './GuidesListStore';
 export { PlaceStore } from './PlaceStore';

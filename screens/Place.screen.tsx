@@ -10,11 +10,10 @@ import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
 import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { SafeLoader } from '@/components/SafeLoader';
-import { useAuthGuard, useStores, useSubscriptionGuard } from '@/hooks';
+import { useAuthGuard, useStores } from '@/hooks';
 
 const PlaceScreen = ({ route }) => {
   useAuthGuard();
-  useSubscriptionGuard();
 
   const { params: { placeSlug } = {} as any } = route;
 

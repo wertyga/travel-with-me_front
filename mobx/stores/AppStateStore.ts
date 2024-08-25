@@ -29,7 +29,7 @@ export class AppStateStore {
 		this.applyAppStateChangeListener();
 		await Promise.all([
 			this.getEnvs(),
-			this.rootStore.subscriptionStore.getMySubscription({isActive: true})
+			// this.rootStore.subscriptionStore.getMySubscription({isActive: true})
 		])
 		
 		runInAction(() => {
@@ -74,9 +74,9 @@ export class AppStateStore {
 			}
 			
 			runInAction(() => {
-				this.isUpdateAvailable = !!Constants.manifest2?.runtimeVersion &&
+				this.isUpdateAvailable = !!Constants.expoConfig?.extra?.VERSION &&
 					!!envs.runtimeVersion &&
-					envs.runtimeVersion !== Constants.manifest2.runtimeVersion
+					envs.runtimeVersion !== Constants.expoConfig?.extra?.VERSION
 			})
 		} catch (e) {}
 	}
@@ -91,7 +91,7 @@ export class AppStateStore {
 						this.getEnvs(),
 						// this.rootStore.soundStore.stopPointPlaybackIfNoNotification(),
 						removeNotification(IDENTIFIERS.pointDirection),
-						this.rootStore.subscriptionStore.getMySubscription({isActive: true}),
+						// this.rootStore.subscriptionStore.getMySubscription({isActive: true}),
 						this.checkForUpdates(),
 					]);
 					

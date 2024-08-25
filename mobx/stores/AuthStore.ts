@@ -25,7 +25,7 @@ export class AuthStore {
       const { user } = await signInRequest(...data);
       
       this.rootStore.userStore.setUser(user);
-      this.rootStore.subscriptionStore.dropStore();
+      // this.rootStore.subscriptionStore.dropStore();
       
       return !!user;
     } catch (e) {
@@ -55,13 +55,10 @@ export class AuthStore {
       await storage.delete('token');
       
       this.rootStore.userStore.dropStore();
-      this.rootStore.subscriptionStore.dropStore();
+      // this.rootStore.subscriptionStore.dropStore();
       
-      const googleUser = GoogleSignin.getCurrentUser();
-      if (googleUser) {
-        await GoogleSignin.revokeAccess();
-        await GoogleSignin.signOut();
-      }
+      await this.googleLogout();
+      
     } catch (e) {
     }
   }
@@ -99,12 +96,21 @@ export class AuthStore {
       const { user } = await oauthGoogleRegister(...data);
    
       this.rootStore.userStore.setUser(user);
-      this.rootStore.subscriptionStore.dropStore();
+      // this.rootStore.subscriptionStore.dropStore();
       
       if (this.rootStore.routerStore.navigator.canGoBack()) {
         this.rootStore.routerStore.navigator.goBack();
       }
       
     } catch (e) {}
+  }
+  
+  async googleLogout() {
+    const googleUser = GoogleSignin.getCurrentUser();
+    
+    if (googleUser) {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+    }
   }
 }

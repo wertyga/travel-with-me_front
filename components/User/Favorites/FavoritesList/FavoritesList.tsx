@@ -2,8 +2,6 @@ import { ScrollView, StyleSheet } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
-import { useSubscription } from '@/hooks';
-
 import { Guide, Place, SCREENS, SOCIAL_MODELS } from '@/types';
 
 import FavoritesListItem from '../FavoritesListItem/FavoritesListItem';
@@ -15,7 +13,6 @@ type Props = {
 };
 
 const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
-  const { isSubscriptionValid } = useSubscription();
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {guides.map(({ vImage, hImage, title, slug, city, _id }) => {
@@ -44,9 +41,10 @@ const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
         );
       })}
       {places.map(({ images, title, slug, city, _id }) => {
-        const linkProps = isSubscriptionValid
-          ? { href: SCREENS.Place, hrefParams: { placeSlug: slug } }
-          : {};
+        const linkProps = {
+          href: SCREENS.Place,
+          hrefParams: { placeSlug: slug },
+        };
         return (
           <FavoritesListItem
             key={slug}

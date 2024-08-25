@@ -5,12 +5,12 @@ import Constants from 'expo-constants';
 import { CText } from '@/components/CText';
 
 export const Version = () => {
-  if (!Constants.manifest2?.runtimeVersion) return null;
+  if (!Constants.expoConfig?.extra?.VERSION) return null;
 
   return (
     <View style={{ alignItems: 'flex-end', marginVertical: 5 }}>
       <CText style={{ fontSize: 12 }}>
-        {`v ${Constants.manifest2?.runtimeVersion}`}
+        {`v ${Constants.expoConfig?.extra?.VERSION}`}
       </CText>
     </View>
   );

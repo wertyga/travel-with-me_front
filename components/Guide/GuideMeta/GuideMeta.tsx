@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 
 import { CText } from '@/components/CText';
 import { GoToPayContentLink } from '@/components/GoToPayContentLink';
-import { useSubscription } from '@/hooks';
 
 import { Guide } from '@/types';
 
@@ -16,10 +15,8 @@ type Props = {
 };
 
 export const GuideMetaComponent = ({ guide, isFetching }: Props) => {
-  const { subscription } = useSubscription();
-
   const { travelTime } = guide;
-  const isRenderPointsList = !!guide.points?.length && !!subscription;
+  const isRenderPointsList = !!guide.points?.length;
 
   return (
     <>
@@ -29,15 +26,8 @@ export const GuideMetaComponent = ({ guide, isFetching }: Props) => {
       <CText style={{ marginBottom: 20 }}>{guide.description}</CText>
 
       <>
-        {!subscription && (
-          <GoToPayContentLink high style={{ marginTop: 20, marginBottom: 30 }}>
-            For more info get subscription
-          </GoToPayContentLink>
-        )}
         {isRenderPointsList && (
-          <>
-            <GuidePointsList points={guide.points} guide={guide} />
-          </>
+          <GuidePointsList points={guide.points} guide={guide} />
         )}
       </>
     </>

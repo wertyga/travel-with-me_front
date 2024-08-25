@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { observer } from 'mobx-react-lite';
 
 import { CountryPill } from '@/components/Country';
-import { useNavigation, useSubscription } from '@/hooks';
+import { useNavigation } from '@/hooks';
 
 import { Guide, SCREENS } from '@/types';
 
@@ -16,7 +16,6 @@ type Props = {
 
 export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
   const navi = useNavigation();
-  const { subscription } = useSubscription();
 
   return (
     <View style={[styles.scrollView, styles.container]}>
@@ -25,21 +24,17 @@ export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
         title={`${guide.pointsCount} points`}
         icon="map-point-small"
       />
-      {!!subscription && (
-        <>
-          <CountryPill
-            title="Explore"
-            onPress={() =>
-              navi.navigate(SCREENS.GuideMap, {
-                guide,
-              })
-            }
-            customIcon={
-              <Ionicons name="play-circle-outline" size={20} color="white" />
-            }
-          />
-        </>
-      )}
+      <CountryPill
+        title="Explore"
+        onPress={() =>
+          navi.navigate(SCREENS.GuideMap, {
+            guide,
+          })
+        }
+        customIcon={
+          <Ionicons name="play-circle-outline" size={20} color="white" />
+        }
+      />
     </View>
   );
 };

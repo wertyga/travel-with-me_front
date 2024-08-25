@@ -12,7 +12,7 @@ const ENV = {
   },
 };
 
-const version = '27.0.0';
+export const version = '27.0.0';
 
 const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
 
@@ -101,6 +101,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     PLAY_STORE_URL:
       'https://play.google.com/store/apps/details?id=com.wertyga.travelwithme',
     APP_MARKET_URL: '',
+    VERSION: version,
   },
   runtimeVersion: version,
   updates: {

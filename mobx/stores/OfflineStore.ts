@@ -247,7 +247,7 @@ export class OfflineStore {
     runInAction(() => {
       this.rootStore.citiesListStore.cityLightList = cachedCities || [];
       this.rootStore.userStore.setUser(cachedUser);
-      this.rootStore.subscriptionStore.mySubscription = mySubscription;
+      // this.rootStore.subscriptionStore.mySubscription = mySubscription;
       this.cities = cachedCities || [];
       AppStateStore.ENV = env;
     })

@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { observer } from 'mobx-react-lite';
 
+import { sendLogs } from '@/api';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { useStores } from '@/hooks';
@@ -32,6 +33,7 @@ const OauthGoogle = () => {
 
       await oauthGoogleRegister({ email: user.email, username: user.name });
     } catch (e) {
+      sendLogs(e);
       Toast.show({
         type: 'error',
         text1: e.message,
