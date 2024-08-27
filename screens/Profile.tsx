@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Dimensions, Linking, StyleSheet, Switch } from 'react-native';
+import { Dimensions, Linking, StyleSheet, Switch, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -8,8 +8,15 @@ import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Version } from '@/components/Common';
+import { Loader } from '@/components/Loader';
 import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
-import { useAuthGuard, useForegroundPermissions, useNavigation } from '@/hooks';
+import { Avatar } from '@/components/User/Avatar/Avatar';
+import {
+  useAuthGuard,
+  useFocus,
+  useForegroundPermissions,
+  useNavigation,
+} from '@/hooks';
 import { useStores } from '@/hooks';
 
 import { SCREENS } from '@/types';
@@ -19,14 +26,27 @@ const ProfileScreen = () => {
 
   const navi = useNavigation();
 
-  const { user, logout, isUpdateAvailable, isNetConnected, cachedCitiesIds } =
-    useStores(stores => ({
-      user: stores.userStore.user,
-      logout: stores.authStore.logout,
-      isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
-      isNetConnected: stores.appStateStore.isNetConnected,
-      cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
-    }));
+  const {
+    user,
+    logout,
+    isUpdateAvailable,
+    isNetConnected,
+    cachedCitiesIds,
+    hasUserChanged,
+    fetchUpdateUser,
+    resetUpdatedUser,
+    isLoading,
+  } = useStores(stores => ({
+    user: stores.userStore.user,
+    hasUserChanged: stores.userStore.hasUserChanged,
+    fetchUpdateUser: stores.userStore.fetchUpdateUser,
+    resetUpdatedUser: stores.userStore.resetUpdatedUser,
+    isLoading: stores.userStore.isLoading,
+    logout: stores.authStore.logout,
+    isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
+    isNetConnected: stores.appStateStore.isNetConnected,
+    cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
+  }));
 
   const { granted } = useForegroundPermissions();
 
@@ -41,6 +61,10 @@ const ProfileScreen = () => {
     await Linking.openSettings();
   };
 
+  useFocus(() => {
+    resetUpdatedUser();
+  }, []);
+
   if (!user) return null;
 
   const editLabel = isNetConnected ? 'Edit' : 'Offline';
@@ -50,7 +74,11 @@ const ProfileScreen = () => {
 
   return (
     <MainLayout headerTitle="Profile" style={styles.container}>
-      <CText style={styles.item}>{user.username}</CText>
+      {isLoading && <Loader />}
+      <View style={[styles.item, styles.avatarAndName]}>
+        <Avatar />
+        <CText style={styles.name}>{user.username}</CText>
+      </View>
 
       <Button
         style={styles.item}
@@ -79,6 +107,12 @@ const ProfileScreen = () => {
         <Button style={styles.item} href={SCREENS.OfflineStorage} noPaddings>
           <CText>Offline Storage</CText>
           <CText style={styles.edit}>{editLabel}</CText>
+        </Button>
+      )}
+
+      {hasUserChanged && (
+        <Button onPress={fetchUpdateUser} high style={styles.logoutBtn} solid>
+          Update Profile
         </Button>
       )}
 
@@ -122,6 +156,14 @@ const styles = StyleSheet.create({
   },
   optionText: {
     maxWidth: Dimensions.get('window').width * 0.7,
+  },
+  avatarAndName: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  name: {
+    marginLeft: 15,
   },
 });
 

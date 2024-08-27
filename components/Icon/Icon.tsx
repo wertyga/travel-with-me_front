@@ -1,5 +1,8 @@
 import { ViewStyle } from 'react-native';
+
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
+import City from './icons/city';
 import Clock from './icons/clock';
 import Heart from './icons/heart';
 import HeartFilled from './icons/heart-filled';
@@ -13,6 +16,7 @@ export const ICONS_MAP = {
   'map-point-small': MapPointSmall,
   'no-access': NoAccess,
   'heart-filled': HeartFilled,
+  city: City,
   profile: Profile,
   heart: Heart,
   clock: Clock,

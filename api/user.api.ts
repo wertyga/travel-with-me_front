@@ -1,4 +1,5 @@
 import { baseQuery } from '@/app/query';
+
 import { User, UserFavoritesResponse } from '@/types/user';
 
 export const fetchSelfUser = async (): Promise<User> => {
@@ -18,4 +19,16 @@ export const fetchFavorites = async (): Promise<UserFavoritesResponse> => {
   });
 
   return data;
+};
+
+export const updateSelf = async (userData: Partial<User>): Promise<User> => {
+  const {
+    data: { user },
+  } = await baseQuery({
+    method: 'put',
+    url: '/users/update',
+    data: userData,
+  });
+
+  return user;
 };

@@ -9,7 +9,6 @@ import React, {
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import MapView, {
-  AnimatedRegion,
   MapViewProps,
   PROVIDER_GOOGLE,
   Region,

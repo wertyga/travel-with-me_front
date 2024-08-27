@@ -45,7 +45,7 @@ const FooterMenu = () => {
   return (
     <Animated.View style={[styles.container, animatedStyles]}>
       <View style={styles.menu}>
-        {FOOTER_MENU.map(({ icon, screen, title }) => {
+        {FOOTER_MENU.map(({ icon, screen, title, iconSize }) => {
           return (
             <TouchableOpacity
               key={title}
@@ -53,7 +53,7 @@ const FooterMenu = () => {
               onPress={redirectTo(screen)}
             >
               {typeof icon === 'string' && (
-                <Icon name={icon as IconNames} color="white" />
+                <Icon name={icon as IconNames} color="white" size={iconSize} />
               )}
               {typeof icon === 'object' && icon}
 

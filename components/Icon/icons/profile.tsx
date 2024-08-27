@@ -1,13 +1,16 @@
 import * as React from 'react';
+
 import Svg, { Path } from 'react-native-svg';
 
 const SvgComponent = props => {
+  const size = props.size || 26;
+
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      width={27}
-      height={26}
+      width={size + 1}
+      height={size}
       {...props.style}
     >
       <Path

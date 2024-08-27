@@ -1,19 +1,21 @@
 import * as React from 'react';
+
 import Svg, { G, Mask, Path } from 'react-native-svg';
 
 const SvgComponent = props => {
+  const size = props.size || 25;
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width={25}
-      height={25}
+      width={size}
+      height={size}
       fill="none"
       {...props.style}
     >
       <Mask
         id="a"
-        width={25}
-        height={25}
+        width={size}
+        height={size}
         x={0}
         y={0}
         maskUnits="userSpaceOnUse"
@@ -26,8 +28,8 @@ const SvgComponent = props => {
       <G mask="url(#a)">
         <Mask
           id="b"
-          width={25}
-          height={25}
+          width={size}
+          height={size}
           x={0}
           y={0}
           maskUnits="userSpaceOnUse"

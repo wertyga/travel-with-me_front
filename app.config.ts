@@ -1,20 +1,54 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
-const ENV = {
-  development: {
-    GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-    API_BASE_URL: 'https://api.traveljet.org',
-    // API_BASE_URL: 'https://579b-89-64-86-231.ngrok-free.app',
-  },
-  production: {
-    GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-    API_BASE_URL: 'https://api.traveljet.org',
-  },
-};
-
 export const version = '27.0.0';
+export const PRODUCT_NAME = 'Travel With Me';
 
-const envs = (ENV as any)[process.env.NODE_ENV || 'development'];
+const appPlugins: ExpoConfig['plugins'] = [
+  ['expo-location'],
+  [
+    'expo-notifications',
+    {
+      icon: './assets/notification_logo.png',
+    },
+  ],
+  [
+    '@stripe/stripe-react-native',
+    {
+      merchantIdentifier: 'com.wertyga.travelwithme',
+      enableGooglePay: false,
+    },
+  ],
+  [
+    'expo-updates',
+    {
+      username: 'wertyga13',
+    },
+  ],
+  [
+    '@react-native-google-signin/google-signin',
+    {
+      iosUrlScheme:
+        'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
+    },
+  ],
+  [
+    'expo-media-library',
+    {
+      photosPermission: `Allow ${PRODUCT_NAME} to access your photos.`,
+      savePhotosPermission: `Allow ${PRODUCT_NAME} to save photos.`,
+      isAccessMediaLocationEnabled: true,
+    },
+  ],
+  [
+    'expo-image-picker',
+    {
+      photosPermission:
+        'The app accesses your photos to let you share them with your friends.',
+      cameraPermission:
+        'The app accesses your photos to let you share them with your friends.',
+    },
+  ],
+];
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Travel With Me',
@@ -32,42 +66,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   notification: {
     icon: './assets/notification_logo.png',
   },
-  plugins: [
-    ['expo-location'],
-    [
-      'expo-notifications',
-      {
-        icon: './assets/notification_logo.png',
-      },
-    ],
-    [
-      '@stripe/stripe-react-native',
-      {
-        merchantIdentifier: 'com.wertyga.travelwithme',
-        enableGooglePay: false,
-      },
-    ],
-    [
-      'expo-updates',
-      {
-        username: 'wertyga13',
-      },
-    ],
-    [
-      '@react-native-google-signin/google-signin',
-      {
-        iosUrlScheme:
-          'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
-      },
-    ],
-  ],
+  plugins: appPlugins,
   experiments: {
     tsconfigPaths: true,
   },
   scheme: 'travel-with-me',
   ios: {
     config: {
-      googleMapsApiKey: envs.GOOGLE_MAPS_API_KEY,
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     },
     supportsTablet: true,
     bundleIdentifier: 'com.wertyga.travelwithme',
@@ -79,7 +85,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     versionCode: parseInt(version),
     config: {
       googleMaps: {
-        apiKey: envs.GOOGLE_MAPS_API_KEY,
+        apiKey: process.env.GOOGLE_MAPS_API_KEY,
       },
     },
     adaptiveIcon: {
@@ -97,7 +103,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
-    API_BASE_URL: envs.API_BASE_URL,
+    API_BASE_URL: process.env.API_BASE_URL,
     PLAY_STORE_URL:
       'https://play.google.com/store/apps/details?id=com.wertyga.travelwithme',
     APP_MARKET_URL: '',

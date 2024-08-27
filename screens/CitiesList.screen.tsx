@@ -8,8 +8,8 @@ import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
 import { FastImageBackground } from '@/components/FastImage';
-import { GlobalSearch } from '@/components/GlobalSearch';
 import { SafeLoader } from '@/components/SafeLoader';
+import { GlobalSearch } from '@/components/Search';
 import { useFocus, useNavigation, useStores } from '@/hooks';
 
 import { FONTS, SCREENS } from '@/types';

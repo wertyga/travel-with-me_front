@@ -1,4 +1,5 @@
-import { FontAwesome } from '@expo/vector-icons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import { ICONS_MAP } from '@/components/Icon/Icon';
 
@@ -8,13 +9,15 @@ type FooterMuItemType = {
   icon: keyof typeof ICONS_MAP | React.ReactNode;
   screen: SCREENS;
   title: string;
+  iconSize?: number;
 };
 
 export const FOOTER_MENU: FooterMuItemType[] = [
   {
-    icon: <FontAwesome name="map-o" size={23} color="white" />,
+    icon: 'city',
     screen: SCREENS.CitiesList,
     title: 'Cities',
+    iconSize: 26,
   },
   {
     icon: 'heart',
