@@ -18,6 +18,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StoreProvider } from '@/mobx/StoreProvider';
 import * as stores from '@/mobx/stores';
 
+import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
 import { Toast } from '@/components/Toast';
 import UpdateApp from '@/components/UpdateApp/UpdateApp';
 
@@ -53,6 +54,7 @@ function App() {
     <StoreProvider store={stores}>
       <StatusBar style="light" />
       <Navigator />
+      <PermissionRequestPopup />
       <Toast />
       <UpdateApp />
     </StoreProvider>

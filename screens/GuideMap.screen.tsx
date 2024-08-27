@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,7 +9,6 @@ import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
 import { GuideMap } from '@/components/Guide';
-import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useAuthGuard, useFocus, useStores } from '@/hooks';
 
@@ -17,34 +16,15 @@ import { PageScreen, SCREENS } from '@/types';
 
 const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
   useAuthGuard();
-
   const navi = useNavigation();
-  const {
-    getGuide,
-    guide,
-    updateGuidePointWithLiveCoords,
-    dropLocationStore,
-    // dropFollowingGuide,
-    // toggleMuteGuideSound,
-    setIsFollowingGuide,
-    requestForWatchingLocation,
-    onStartWatchingLocation,
-  } = useStores(stores => ({
-    getGuide: stores.guideStore.getGuide,
-    guide: stores.guideStore.guide,
-    onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
-    dropLocationStore: stores.locationStore.dropStore,
-    requestForWatchingLocation: stores.locationStore.requestForWatchingLocation,
-    // dropFollowingGuide: stores.guideStore.dropFollowingGuide,
-    // toggleMuteGuideSound: stores.guideStore.toggleMuteGuideSound,
-    setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
-    updateGuidePointWithLiveCoords:
-      stores.guideStore.updateGuidePointWithLiveCoords,
-  }));
 
-  // const watchingLocationCallback = () => {
-  //   updateGuidePointWithLiveCoords(guide);
-  // };
+  const { getGuide, guide, setIsFollowingGuide, onStartWatchingLocation } =
+    useStores(stores => ({
+      getGuide: stores.guideStore.getGuide,
+      guide: stores.guideStore.guide,
+      setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
+      onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
+    }));
 
   useLayoutEffect(() => {
     if (!route.params?.guide) {
@@ -54,33 +34,19 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
       });
       navi.goBack();
     }
-    // toggleMuteGuideSound(!!route.params?.isOnlyMap);
-
+    onStartWatchingLocation();
     getGuide({ slug: route.params?.guide?.slug, withStory: true });
   }, []);
 
-  // useFocus(() => {
-  //   if (!guide) return;
-  //
-  //   setIsFollowingGuide(!route.params?.isOnlyMap);
-  // }, [guide]);
+  useEffect(() => {
+    setIsFollowingGuide(true);
+  }, [guide]);
 
   useFocus(() => {
-    // onStartWatchingLocation();
-    // requestForWatchingLocation(watchingLocationCallback);
-
     return () => {
-      dropLocationStore();
-      // dropFollowingGuide();
+      setIsFollowingGuide(false);
     };
   }, []);
-
-  useFocus(() => {
-    if (!guide) return;
-
-    setIsFollowingGuide(true);
-    onStartWatchingLocation(() => updateGuidePointWithLiveCoords(guide));
-  }, [guide]);
 
   if (!guide) {
     return <SafeLoader />;
@@ -94,7 +60,6 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
       noFooter
       isHeaderDark
     >
-      <PermissionRequestPopup />
       <GuideMap guide={guide} />
     </MainLayout>
   );
