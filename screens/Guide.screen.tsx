@@ -12,8 +12,6 @@ import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
 import { useNavigation, useStores } from '@/hooks';
 
-import { defaultGuideImage } from '@/utils';
-
 import { Guide, PageScreen, SCREENS } from '@/types';
 
 const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
@@ -33,18 +31,18 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
     })
   );
 
-  const currentGuide = (router.params as any)?.guide;
+  const guideFromParams = (router.params as any)?.guide;
   useEffect(() => {
-    if (!currentGuide?.slug) return;
+    if (!guideFromParams?.slug) return;
 
-    getGuide({ slug: currentGuide.slug });
-  }, [currentGuide?.slug]);
+    getGuide({ slug: guideFromParams.slug });
+  }, [guideFromParams?.slug]);
 
   useEffect(() => {
     const cityId =
-      typeof currentGuide?.city === 'string'
-        ? currentGuide.city
-        : currentGuide?.city._id;
+      typeof guideFromParams?.city === 'string'
+        ? guideFromParams.city
+        : guideFromParams?.city._id;
 
     if (fetchedCityId === cityId) {
       return;
@@ -60,7 +58,7 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
     };
 
     getCityGuides();
-  }, [currentGuide?.slug]);
+  }, [guideFromParams?.slug]);
 
   const onChangeGuide = async ({
     index,
@@ -77,7 +75,7 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
   if (!guide) {
     return (
       <SafeLoader
-        image={currentGuide?.vImage}
+        image={guideFromParams?.vImage}
         textColor="white"
         indicatorColor="white"
       />
@@ -92,7 +90,7 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
   return (
     <MainLayout
       style={styles.container}
-      headerTitle={guide.title}
+      headerTitle={guideFromParams.title}
       isLoading={isLoading}
       withHeaderShadow
     >
@@ -101,7 +99,6 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
         defaultIndex={initialGuideIndex}
         onChange={onChangeGuide}
         imageKey="vImage"
-        defaultImage={defaultGuideImage}
         noDots
         isFullScreen
         isFastImage

@@ -124,4 +124,8 @@ export class UserStore {
 	@computed get hasUserChanged() {
 		return JSON.stringify(this.user) !== JSON.stringify(this._user);
 	}
+	
+	@computed get isUserExists() {
+		return !!this.user?._id;
+	}
 }

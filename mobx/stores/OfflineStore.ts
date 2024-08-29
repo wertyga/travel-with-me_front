@@ -228,21 +228,21 @@ export class OfflineStore {
   }
   
   @withLoading async populateOfflineStore() {
-    const [cachedCities, cachedUser, mySubscription, env] = await Promise.all([
+    const [cachedCities, cachedUser, env] = await Promise.all([
       this.getCities(),
       storage.get(OFFLINE_KEYS.user),
-      storage.get(OFFLINE_KEYS.userSubscription),
+      // storage.get(OFFLINE_KEYS.userSubscription),
       storage.get(OFFLINE_KEYS.env),
     ]);
     
-    const isSubscriptionValid = !!mySubscription && new Date(mySubscription.validUntil).getTime() > Date.now();
-    if (!isSubscriptionValid) {
-      Toast.show({
-        type: 'error',
-        text1: 'Your subscription is expired',
-      });
-      return;
-    }
+    // const isSubscriptionValid = !!mySubscription && new Date(mySubscription.validUntil).getTime() > Date.now();
+    // if (!isSubscriptionValid) {
+    //   Toast.show({
+    //     type: 'error',
+    //     text1: 'Your subscription is expired',
+    //   });
+    //   return;
+    // }
     
     runInAction(() => {
       this.rootStore.citiesListStore.cityLightList = cachedCities || [];
