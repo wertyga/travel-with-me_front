@@ -22,6 +22,7 @@ export enum SCREENS {
   Contact = 'Contact',
   OfflineStorage = 'OfflineStorage',
   Offline = 'Offline',
+  Achievements = 'Achievements',
 }
 
 export type RootStackParamList = {
@@ -38,13 +39,13 @@ export type RootStackParamList = {
   [SCREENS.WorldGuidesMap]: undefined;
   [SCREENS.Contact]: undefined;
   [SCREENS.OfflineStorage]: undefined;
-  [SCREENS.Place]: { placeSlug: string; autoplay?: boolean };
+  [SCREENS.Achievements]: undefined;
+  [SCREENS.Place]: { placeSlug: string };
   [SCREENS.Error]: { error: string };
 };
 
-export type ParamsListType<DEPENDENCY> = DEPENDENCY extends SCREENS
-  ? RootStackParamList[DEPENDENCY]
-  : undefined;
+export type ParamsListType<HREF extends keyof typeof SCREENS> =
+  HREF extends keyof RootStackParamList ? RootStackParamList[HREF] : never;
 
 export type PageScreen<SCREEN extends keyof RootStackParamList> = React.FC<{
   route: RouteProp<RootStackParamList, SCREEN>;

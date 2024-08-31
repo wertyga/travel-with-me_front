@@ -8,12 +8,12 @@ import {
 } from '@/api';
 import { withLoading } from '../store.utils';
 import { CreateSubscriptionResponse, RootStoreType, SubscriptionPreview, UserSubscription } from '@/types';
-import {CacheReq} from "@/utils/cache_request";
+import {CacheReq} from "@/utils/cache_request"
 
 export class SubscriptionStore {
 	@observable isLoading: boolean;
 	@observable mySubHasBeenFetched: boolean = false;
-	@observable subscriptions: SubscriptionPreview[] = []
+	@observable subscriptions: SubscriptionPreview[] = [];
 	@observable mySubscription: UserSubscription | null = null;
 	
   constructor(public rootStore: RootStoreType) {
@@ -73,7 +73,7 @@ export class SubscriptionStore {
 			
 			runInAction(() => {
 				this.mySubscription = subscription;
-				this.rootStore.offlineStore.saveUserSubscription(subscription)
+				// this.rootStore.offlineStore.saveUserSubscription(subscription);
 				this.setMySubHasBeenFetched(true);
 			});
 		

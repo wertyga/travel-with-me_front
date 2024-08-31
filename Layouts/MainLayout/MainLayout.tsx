@@ -171,15 +171,6 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 10,
   },
-  contentStyles: {
-    backgroundColor: 'transparent',
-    width: 50,
-    height: 50,
-    borderWidth: 1,
-    borderColor: 'red',
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
   bgGradient: {
     height: '100%',
     width: '100%',

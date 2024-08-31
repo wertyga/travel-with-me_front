@@ -12,6 +12,9 @@ import Toast from 'react-native-toast-message';
 
 import * as ImagePicker from 'expo-image-picker';
 
+import { UploadChoice, UploadTypes } from '@/components/UI/UploadChoice';
+import { useModal } from '@/hooks';
+
 export type ImageStorage = {
   uri: string;
 };
@@ -22,6 +25,7 @@ type Props = {
   uri: string;
   onUpdate: (data: ImageStorage) => void;
   children?: React.ReactNode;
+  additionalContent?: React.ReactNode;
 };
 
 export const UploadImage = ({
@@ -30,8 +34,11 @@ export const UploadImage = ({
   uri,
   children,
   imageStyle,
+  additionalContent,
 }: Props) => {
-  const onPress = async () => {
+  const { toggleShow, createModal } = useModal();
+
+  const onLoadFromInnerStorage = async () => {
     try {
       const {
         assets: [{ uri }],
@@ -43,7 +50,12 @@ export const UploadImage = ({
       });
 
       onUpdate({ uri });
+      toggleShow();
     } catch (e) {
+      if (e.message?.includes('non-iterable instance.')) {
+        return;
+      }
+
       Toast.show({
         type: 'error',
         text1: e.message,
@@ -51,24 +63,59 @@ export const UploadImage = ({
     }
   };
 
+  const onLoadFromCamera = async () => {
+    try {
+      const {
+        assets: [{ uri }],
+      } = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      onUpdate({ uri });
+      toggleShow();
+    } catch (e) {
+      if (e.message?.includes('non-iterable instance.')) {
+        return;
+      }
+
+      Toast.show({
+        type: 'error',
+        text1: e.message,
+      });
+    }
+  };
+
+  const onChooseType = (type: UploadTypes) => {
+    if (type === 'folder') {
+      return onLoadFromInnerStorage();
+    }
+    if (type === 'camera') {
+      return onLoadFromCamera();
+    }
+  };
+
+  useEffect(() => {
+    createModal(<UploadChoice onChoose={onChooseType} />);
+  }, []);
+
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
+    <TouchableOpacity onPress={toggleShow} style={[styles.container, style]}>
       {!!uri && <Image source={{ uri }} style={[styles.image, imageStyle]} />}
       {!uri && children}
+      {additionalContent}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: 50,
-    height: 50,
-    borderColor: 'white',
-    borderWidth: 2,
-    borderRadius: 6,
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
   },
   image: {
     objectFit: 'cover',

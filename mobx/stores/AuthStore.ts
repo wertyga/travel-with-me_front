@@ -58,9 +58,8 @@ export class AuthStore {
       // this.rootStore.subscriptionStore.dropStore();
       
       await this.googleLogout();
-      
-    } catch (e) {
-    }
+      this.rootStore.runDropStores();
+    } catch (e) {}
   }
 
   @withLoading async changeEmail(...data: Parameters<typeof changeEmailApi>) {

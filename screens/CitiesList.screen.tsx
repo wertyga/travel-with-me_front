@@ -58,6 +58,8 @@ const CitiesListScreen = () => {
     if (isNetConnected === false && !cities.length) {
       navi.navigate(SCREENS.Offline);
     }
+
+    return () => {};
   }, [isNetConnected, cities]);
 
   if (!cities.length) {

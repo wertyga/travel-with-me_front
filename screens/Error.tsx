@@ -1,9 +1,12 @@
 import { StyleSheet, View } from 'react-native';
+
 import Toast from 'react-native-toast-message';
+
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { useNavigation } from '@/hooks';
+
 import { SCREENS } from '@/types';
 
 const Error = ({ route, navigation }) => {

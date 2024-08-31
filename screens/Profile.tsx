@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Dimensions, Linking, StyleSheet, Switch, View } from 'react-native';
 
@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Version } from '@/components/Common';
 import { Loader } from '@/components/Loader';
+import { UploadChoice } from '@/components/UI/UploadChoice';
 import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
 import { Avatar } from '@/components/User/Avatar/Avatar';
 import {
@@ -36,6 +37,8 @@ const ProfileScreen = () => {
     fetchUpdateUser,
     resetUpdatedUser,
     isLoading,
+    onStartWatchingLocation,
+    achievementsCount,
   } = useStores(stores => ({
     user: stores.userStore.user,
     hasUserChanged: stores.userStore.hasUserChanged,
@@ -46,6 +49,8 @@ const ProfileScreen = () => {
     isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
     isNetConnected: stores.appStateStore.isNetConnected,
     cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
+    onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
+    achievementsCount: stores.achievementsStore.achievementsCount,
   }));
 
   const { granted } = useForegroundPermissions();
@@ -65,6 +70,13 @@ const ProfileScreen = () => {
     resetUpdatedUser();
   }, []);
 
+  useEffect(() => {
+    if (!granted) return;
+
+    // The case when change permission settings
+    onStartWatchingLocation();
+  }, [granted]);
+
   if (!user) return null;
 
   const editLabel = isNetConnected ? 'Edit' : 'Offline';
@@ -73,63 +85,71 @@ const ProfileScreen = () => {
   const isShowOfflineStorage = !!cachedCitiesIds.length;
 
   return (
-    <MainLayout headerTitle="Profile" style={styles.container}>
-      {isLoading && <Loader />}
-      <View style={[styles.item, styles.avatarAndName]}>
-        <Avatar />
-        <CText style={styles.name}>{user.username}</CText>
-      </View>
+    <>
+      <MainLayout headerTitle="Profile" style={styles.container}>
+        {isLoading && <Loader />}
 
-      <Button
-        style={styles.item}
-        href={isNetConnected && SCREENS.ChangeEmail}
-        noPaddings
-      >
-        <CText>{user.email}</CText>
-        <CText style={styles.edit}>{editLabel}</CText>
-      </Button>
+        <View style={[styles.item, styles.avatarAndName]}>
+          <Avatar editable />
+          <CText style={styles.name}>{user.username}</CText>
+        </View>
 
-      <Button style={styles.item} noPaddings onPress={changePermissions}>
-        <CText>Foreground position permission</CText>
-        <Switch value={granted} onChange={changePermissions} />
-      </Button>
-
-      <Button
-        style={styles.item}
-        href={isNetConnected && SCREENS.Contact}
-        noPaddings
-      >
-        <CText>Support</CText>
-        <CText style={styles.edit}>{getHelpLabel}</CText>
-      </Button>
-
-      {isShowOfflineStorage && (
-        <Button style={styles.item} href={SCREENS.OfflineStorage} noPaddings>
-          <CText>Offline Storage</CText>
+        <Button
+          style={styles.item}
+          href={isNetConnected && SCREENS.ChangeEmail}
+          noPaddings
+        >
+          <CText>{user.email}</CText>
           <CText style={styles.edit}>{editLabel}</CText>
         </Button>
-      )}
 
-      {hasUserChanged && (
-        <Button onPress={fetchUpdateUser} high style={styles.logoutBtn} solid>
-          Update Profile
+        <Button style={styles.item} noPaddings onPress={changePermissions}>
+          <CText>Foreground position permission</CText>
+          <Switch value={granted} onChange={changePermissions} />
         </Button>
-      )}
 
-      {isNetConnected && (
-        <Button onPress={handleLogout} high style={styles.logoutBtn}>
-          Logout
+        {/*<Button style={styles.item} href={SCREENS.Achievements} noPaddings>*/}
+        {/*  <CText>Achievements</CText>*/}
+        {/*  <CText style={styles.edit}>{user.rank}</CText>*/}
+        {/*</Button>*/}
+
+        <Button
+          style={styles.item}
+          href={isNetConnected && SCREENS.Contact}
+          noPaddings
+        >
+          <CText>Support</CText>
+          <CText style={styles.edit}>{getHelpLabel}</CText>
         </Button>
-      )}
 
-      {isShowUpdateBtn && (
-        <Button onPress={handleUpdateApp} high style={styles.logoutBtn}>
-          Update app
-        </Button>
-      )}
+        {isShowOfflineStorage && (
+          <Button style={styles.item} href={SCREENS.OfflineStorage} noPaddings>
+            <CText>Offline Storage</CText>
+            <CText style={styles.edit}>{editLabel}</CText>
+          </Button>
+        )}
 
-      <Version />
-    </MainLayout>
+        {hasUserChanged && (
+          <Button onPress={fetchUpdateUser} high style={styles.logoutBtn} solid>
+            Update Profile
+          </Button>
+        )}
+
+        {isNetConnected && (
+          <Button onPress={handleLogout} high style={styles.logoutBtn}>
+            Logout
+          </Button>
+        )}
+
+        {isShowUpdateBtn && (
+          <Button onPress={handleUpdateApp} high style={styles.logoutBtn}>
+            Update app
+          </Button>
+        )}
+
+        <Version />
+      </MainLayout>
+    </>
   );
 };
 
@@ -158,9 +178,9 @@ const styles = StyleSheet.create({
     maxWidth: Dimensions.get('window').width * 0.7,
   },
   avatarAndName: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // justifyContent: 'flex-start',
   },
   name: {
     marginLeft: 15,

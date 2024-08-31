@@ -1,6 +1,6 @@
 import { makeObservable, observable, runInAction, action, reaction } from 'mobx';
 import { fetchGuide } from '@/api';
-import {Guide, Place, RootStoreType} from "@/types";
+import { Guide, Path, Place, RootStoreType } from '@/types';
 import {getTheNearestVisiblePoint, NearestPoint} from "./guide.utils";
 import {cacheWrap} from "@/utils/cache_request";
 
@@ -27,7 +27,17 @@ export class GuideStore {
 	//
 	// 		this.rootStore.soundStore.playSound(pointToBePlayed.audioStory, pointToBePlayed.title)
 	// 	})
+	 
+	 
   }
+	
+	onInitiate() {
+		reaction(() => this.isFollowingToGuide && !!this.guide && this.rootStore.locationStore.liveCoords, (liveCoords: Path) => {
+			if (!liveCoords) return;
+			
+			this.updateGuidePointWithLiveCoords(this.guide);
+		});
+	}
 	
 	@action async getGuide(params: {
 		slug: string;
@@ -99,6 +109,8 @@ export class GuideStore {
 	
 	@action dropStore() {
 		this.guide = null;
+		this._followingGuide = null;
+		this.setIsFollowingGuide(false);
 		
 		// *** DEPRECATED ***
 		// this.dropFollowingGuide()

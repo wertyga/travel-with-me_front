@@ -7,12 +7,15 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { storage } from '@/utils';
 import { getIsNetConnected } from '@/utils/etc';
 
-export const baseQuery = async ({
-  headers,
-  silentError,
-  ...config
-}: AxiosRequestConfig & { silentError?: boolean }) => {
-  if (!getIsNetConnected()) return;
+export const baseQuery = async (
+  {
+    headers,
+    silentError,
+    ...config
+  }: AxiosRequestConfig & { silentError?: boolean },
+  defaultResponse?: any
+) => {
+  if (!getIsNetConnected()) return defaultResponse;
 
   try {
     const token = await storage.get('token');
