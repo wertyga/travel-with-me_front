@@ -27,13 +27,17 @@ export class GuideStore {
 	//
 	// 		this.rootStore.soundStore.playSound(pointToBePlayed.audioStory, pointToBePlayed.title)
 	// 	})
-	  
-	  reaction(() => this.isFollowingToGuide && !!this.guide && this.rootStore.locationStore.liveCoords, (liveCoords: Path) => {
+	 
+	 
+  }
+	
+	onInitiate() {
+		reaction(() => this.isFollowingToGuide && !!this.guide && this.rootStore.locationStore.liveCoords, (liveCoords: Path) => {
 			if (!liveCoords) return;
 			
 			this.updateGuidePointWithLiveCoords(this.guide);
-	  })
-  }
+		});
+	}
 	
 	@action async getGuide(params: {
 		slug: string;

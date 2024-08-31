@@ -195,9 +195,7 @@ export const PointImagesCarouselComponent = ({
         colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
         style={styles.actionsContainer}
       >
-        <View style={styles.showToTop}>
-          <ShowToSlideTop />
-        </View>
+        <ShowToSlideTop style={styles.showToTop} />
 
         <CarouselDots
           style={styles.dots}

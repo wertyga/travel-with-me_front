@@ -3,7 +3,7 @@ import _flatten from 'lodash/flatten';
 import _flattenDeep from 'lodash/flattenDeep';
 import Toast from 'react-native-toast-message';
 
-import { City, Guide, Place, RootStoreType, UserSubscription } from '@/types';
+import { City, Guide, Place, RootStoreType } from '@/types';
 import { getCachedBunchImages, getImageFromCacheOrSaveImageToCache, storage, formatBytes } from '@/utils';
 import { fetchCity, fetchGuide } from '@/api';
 import { withLoading } from '@/mobx/store.utils';
@@ -21,7 +21,7 @@ export const OFFLINE_KEYS = {
 
 export class OfflineStore {
   @observable cities: City[] = [];
-  @observable userSubscription: UserSubscription | null = null;
+  // @observable userSubscription: UserSubscription | null = null;
   @observable cachedCitiesIds: string[] = [];
   
   @observable isLoading = false;
@@ -107,9 +107,9 @@ export class OfflineStore {
     return storage.get(OFFLINE_KEYS.user)
   }
   
-  saveUserSubscription(subscription: UserSubscription) {
-    storage.set(OFFLINE_KEYS.userSubscription, subscription)
-  }
+  // saveUserSubscription(subscription: UserSubscription) {
+  //   storage.set(OFFLINE_KEYS.userSubscription, subscription)
+  // }
   
   saveUser(user: User) {
     storage.set(OFFLINE_KEYS.user, user)
@@ -228,21 +228,21 @@ export class OfflineStore {
   }
   
   @withLoading async populateOfflineStore() {
-    const [cachedCities, cachedUser, mySubscription, env] = await Promise.all([
+    const [cachedCities, cachedUser, env] = await Promise.all([
       this.getCities(),
       storage.get(OFFLINE_KEYS.user),
-      storage.get(OFFLINE_KEYS.userSubscription),
+      // storage.get(OFFLINE_KEYS.userSubscription),
       storage.get(OFFLINE_KEYS.env),
     ]);
     
-    const isSubscriptionValid = !!mySubscription && new Date(mySubscription.validUntil).getTime() > Date.now();
-    if (!isSubscriptionValid) {
-      Toast.show({
-        type: 'error',
-        text1: 'Your subscription is expired',
-      });
-      return;
-    }
+    // const isSubscriptionValid = !!mySubscription && new Date(mySubscription.validUntil).getTime() > Date.now();
+    // if (!isSubscriptionValid) {
+    //   Toast.show({
+    //     type: 'error',
+    //     text1: 'Your subscription is expired',
+    //   });
+    //   return;
+    // }
     
     runInAction(() => {
       this.rootStore.citiesListStore.cityLightList = cachedCities || [];

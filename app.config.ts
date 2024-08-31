@@ -1,7 +1,14 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
-export const version = '27.0.0';
+export const version = '28.0.0';
 export const PRODUCT_NAME = 'Travel With Me';
+
+const ENV = {
+  API_BASE_URL:
+    'https://6c8d-2a02-a31a-80c7-8300-e47a-102e-cb52-3272.ngrok-free.app',
+  // API_BASE_URL: 'https://api.traveljet.org',
+  GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
+};
 
 const appPlugins: ExpoConfig['plugins'] = [
   ['expo-location'],
@@ -29,14 +36,6 @@ const appPlugins: ExpoConfig['plugins'] = [
     {
       iosUrlScheme:
         'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
-    },
-  ],
-  [
-    'expo-media-library',
-    {
-      photosPermission: `Allow ${PRODUCT_NAME} to access your photos.`,
-      savePhotosPermission: `Allow ${PRODUCT_NAME} to save photos.`,
-      isAccessMediaLocationEnabled: true,
     },
   ],
   [
@@ -73,7 +72,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: 'travel-with-me',
   ios: {
     config: {
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      googleMapsApiKey: ENV.GOOGLE_MAPS_API_KEY,
     },
     supportsTablet: true,
     bundleIdentifier: 'com.wertyga.travelwithme',
@@ -85,7 +84,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     versionCode: parseInt(version),
     config: {
       googleMaps: {
-        apiKey: process.env.GOOGLE_MAPS_API_KEY,
+        apiKey: ENV.GOOGLE_MAPS_API_KEY,
       },
     },
     adaptiveIcon: {
@@ -103,7 +102,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
-    API_BASE_URL: process.env.API_BASE_URL,
+    API_BASE_URL: ENV.API_BASE_URL,
     PLAY_STORE_URL:
       'https://play.google.com/store/apps/details?id=com.wertyga.travelwithme',
     APP_MARKET_URL: '',

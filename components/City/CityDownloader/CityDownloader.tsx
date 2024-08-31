@@ -23,7 +23,9 @@ const CityDownloader = ({ city }: Props) => {
     isOfflineStoreLoading,
     cachedCitiesIds,
     isNetConnected,
+    isUserExists,
   } = useStores(stores => ({
+    isUserExists: stores.userStore.isUserExists,
     saveCityToOffline: stores.offlineStore.saveCity,
     isOfflineStoreLoading: stores.offlineStore.isLoading,
     cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
@@ -32,7 +34,7 @@ const CityDownloader = ({ city }: Props) => {
 
   const isCityDownloaded = cachedCitiesIds.includes(city._id);
 
-  if (!isNetConnected) {
+  if (!isNetConnected || !isUserExists) {
     return null;
   }
 

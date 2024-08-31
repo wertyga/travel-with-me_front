@@ -1,5 +1,6 @@
 import { Guide } from '@/types/guide';
 import { Place } from '@/types/place';
+
 import { Like } from './likes';
 
 export enum USER_TAGS {
@@ -12,6 +13,11 @@ export enum USER_TYPES {
   RECOVERING = 'RECOVERING',
   USER = 'USER',
   ADMIN = 'ADMIN',
+}
+
+export enum USER_RANKS {
+  Wanderer = 'Wanderer', // Initial rank
+  Adventurer = 'Adventurer',
 }
 
 export type User = {
@@ -28,8 +34,10 @@ export type User = {
   subscriptions: Like;
   avatar: string;
   status: USER_TYPES;
+  rank: USER_RANKS;
   slug: string;
   story: string;
+  isVisible: boolean;
 };
 
 export type UserFavoritesResponse = {

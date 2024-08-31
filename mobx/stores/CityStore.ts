@@ -1,7 +1,8 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
-import { City, RootStoreType } from '@/types';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import { City, Place, RootStoreType } from '@/types';
 import {fetchCity} from "@/api";
 import {cacheWrap} from "@/utils/cache_request";
+import _flatten from 'lodash/flatten';
 
 
 export class CityStore {
@@ -20,7 +21,7 @@ export class CityStore {
 				return this.city;
 			}
 			
-			const cachedReq = cacheWrap.apply(this, [fetchCity, params]);
+			const cachedReq = cacheWrap.apply(this, [fetchCity, {...params[0], withPlaces: true}]);
 		  const {city} = await cachedReq.withLoading().invoke();
 
 			runInAction(() => {
@@ -30,5 +31,16 @@ export class CityStore {
 			return city;
 		} catch (e) {
 		}
+	}
+	
+	@action dropStore() {
+		this.city = null;
+		this.isLoading = false;
+	}
+	
+	@computed get currentCityPlaces(): Place[]  {
+		return _flatten(this.city?.guides.map(guide => {
+			return guide.points
+		}) || [])
 	}
 }

@@ -1,0 +1,24 @@
+const { withGradleProperties } = require('@expo/config-plugins');
+
+module.exports = config => {
+  return withGradleProperties(config, config => {
+    // Check if the property already exists
+    const existingPropertyIndex = config.modResults.findIndex(
+      item =>
+        item.type === 'property' && item.key === 'AsyncStorage_db_size_in_MB'
+    );
+
+    // Update the value if it exists, otherwise add a new property
+    if (existingPropertyIndex !== -1) {
+      config.modResults[existingPropertyIndex].value = '500';
+    } else {
+      config.modResults.push({
+        type: 'property',
+        key: 'AsyncStorage_db_size_in_MB',
+        value: '500',
+      });
+    }
+
+    return config;
+  });
+};

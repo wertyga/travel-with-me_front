@@ -15,7 +15,11 @@ type Props = {
 
 const CitiesList = ({ cities, style }: Props) => {
   return (
-    <ScrollView contentContainerStyle={styles.list} style={style}>
+    <ScrollView
+      contentContainerStyle={styles.list}
+      style={style}
+      showsVerticalScrollIndicator={false}
+    >
       {cities.map(city => {
         return <CityPreview city={city} key={city._id} />;
       })}

@@ -59,7 +59,7 @@ const Navigator = () => {
           return (
             <Stack.Screen
               key={route.name}
-              name={route.name}
+              name={route.name as any}
               component={route.component}
             />
           );

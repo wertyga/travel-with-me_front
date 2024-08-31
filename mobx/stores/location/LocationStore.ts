@@ -20,13 +20,15 @@ export class LocationStore {
     
     // Get fg permission
     const { granted } = await getLocationPermission();
-  
+ 
     if (!granted) return;
-  
+    
+    this.dropStore();
+    
     runInAction(() => {
       this.isWatching = true;
-    })
-    
+    });
+
     this.locationWatcher = await startWatchToLiveLocation(liveCoords => {
       runInAction(() => {
         this.liveCoords = liveCoords;
@@ -35,10 +37,11 @@ export class LocationStore {
   }
   
   @action async dropStore() {
-    await this.locationWatcher?.remove();
-    this.locationWatcher = null;
     this.liveCoords = null;
     this.isWatching = false;
     this.locationWatchingCallback = null;
+    
+    await this.locationWatcher?.remove();
+    this.locationWatcher = null;
   }
 }

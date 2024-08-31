@@ -21,6 +21,7 @@ import * as stores from '@/mobx/stores';
 import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
 import { Toast } from '@/components/Toast';
 import UpdateApp from '@/components/UpdateApp/UpdateApp';
+import ModalProvider from '@/context/ModalContext/ModalContext';
 
 import { initiateConsoleTime } from '@/utils';
 
@@ -52,11 +53,13 @@ function App() {
 
   return (
     <StoreProvider store={stores}>
-      <StatusBar style="light" />
-      <Navigator />
-      <PermissionRequestPopup />
-      <Toast />
-      <UpdateApp />
+      <ModalProvider>
+        <StatusBar style="light" />
+        <Navigator />
+        <PermissionRequestPopup />
+        <Toast />
+        <UpdateApp />
+      </ModalProvider>
     </StoreProvider>
   );
 }

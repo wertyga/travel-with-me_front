@@ -58,9 +58,8 @@ export class AuthStore {
       // this.rootStore.subscriptionStore.dropStore();
       
       await this.googleLogout();
-      
-    } catch (e) {
-    }
+      this.rootStore.runDropStores();
+    } catch (e) {}
   }
 
   @withLoading async changeEmail(...data: Parameters<typeof changeEmailApi>) {
@@ -92,17 +91,14 @@ export class AuthStore {
   }
   
   @withLoading async oauthGoogleRegister(...data: Parameters<typeof oauthGoogleRegister>) {
-    try {
-      const { user } = await oauthGoogleRegister(...data);
-   
-      this.rootStore.userStore.setUser(user);
-      // this.rootStore.subscriptionStore.dropStore();
-      
-      if (this.rootStore.routerStore.navigator.canGoBack()) {
-        this.rootStore.routerStore.navigator.goBack();
-      }
-      
-    } catch (e) {}
+    const { user } = await oauthGoogleRegister(...data);
+
+    this.rootStore.userStore.setUser(user);
+    // this.rootStore.subscriptionStore.dropStore();
+
+    if (this.rootStore.routerStore.navigator.canGoBack()) {
+      this.rootStore.routerStore.navigator.goBack();
+    }
   }
   
   async googleLogout() {

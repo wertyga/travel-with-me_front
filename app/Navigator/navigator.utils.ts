@@ -15,6 +15,7 @@ import PlaceScreen from '@/screens/Place.screen';
 import ProfileScreen from '@/screens/Profile';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import SubscriptionsScreen from '@/screens/Subscriptions';
+import UserAchievementsScreen from '@/screens/UserAchievements.screen';
 
 import { SCREENS } from '@/types';
 
@@ -83,6 +84,10 @@ export const onLineScreens: ScreenType[] = [
   {
     name: SCREENS.Offline,
     component: OfflineScreen,
+  },
+  {
+    name: SCREENS.Achievements,
+    component: UserAchievementsScreen,
   },
 ];
 

@@ -89,8 +89,13 @@ export class UserStore {
 	}
 	
 	@action setUser(user: User | null) {
-		// Fallback for broken base64 image
-		const clearedUser = {...user, avatar: user.avatar.length > 3000 ? '' : user.avatar}
+		let clearedUser = null;
+		
+		if (user) {
+			// Fallback for broken base64 image
+			clearedUser = {...user, avatar: user.avatar?.length > 3000 ? '' : user.avatar}
+		}
+		
 		this.user = clearedUser;
 		this._user = clearedUser;
 		this.token = user?.token;
@@ -99,7 +104,7 @@ export class UserStore {
 			storage.set('token', this.token);
 		}
 		
-		if (this.rootStore.appStateStore.isNetConnected) {
+		if (AppStateStore.isNetConnected) {
 			this.rootStore.offlineStore.saveUser(clearedUser);
 		}
 	}
@@ -123,5 +128,9 @@ export class UserStore {
 	
 	@computed get hasUserChanged() {
 		return JSON.stringify(this.user) !== JSON.stringify(this._user);
+	}
+	
+	@computed get isUserExists() {
+		return !!this.user?._id;
 	}
 }
