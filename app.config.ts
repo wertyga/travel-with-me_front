@@ -4,9 +4,9 @@ export const version = '28.0.0';
 export const PRODUCT_NAME = 'Travel With Me';
 
 const ENV = {
-  API_BASE_URL:
-    'https://6c8d-2a02-a31a-80c7-8300-e47a-102e-cb52-3272.ngrok-free.app',
-  // API_BASE_URL: 'https://api.traveljet.org',
+  // API_BASE_URL:
+  //   'https://b3d9-2a02-a31a-80c7-8300-5d80-19d9-dd6c-ab50.ngrok-free.app',
+  API_BASE_URL: 'https://api.traveljet.org',
   GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
 };
 
