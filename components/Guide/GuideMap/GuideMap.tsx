@@ -29,7 +29,7 @@ type Props = {
 
 const MAX_PREVIEW_SWIPE_TOP = 50;
 const PREVIEW_INITIAL_HEIGHT = 180;
-const MAP_MARKER_SIZE = 40;
+export const MAP_MARKER_SIZE = 40;
 
 const GuideMap = ({ guide }: Props) => {
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
@@ -112,8 +112,6 @@ const GuideMap = ({ guide }: Props) => {
 
   return (
     <>
-      <StatusBar style="dark" />
-
       <Map
         points={guide.points}
         chosenPoint={state.pointShowing}
@@ -127,6 +125,7 @@ const GuideMap = ({ guide }: Props) => {
         mapMarkerSize={MAP_MARKER_SIZE}
         mapStyles={styles.map}
         showMyLocationBtnStyle={styles.showMyLocationBtnStyle}
+        showMyLocation
       >
         {isLocationDenied && (
           <Button style={styles.accessReminder} href={SCREENS.Profile}>

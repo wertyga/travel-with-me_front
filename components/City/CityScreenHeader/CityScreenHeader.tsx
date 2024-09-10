@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Dimensions, StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 import Animated, {
   useAnimatedStyle,
@@ -9,20 +9,16 @@ import Animated, {
 } from 'react-native-reanimated';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import { FontAwesome } from '@expo/vector-icons';
-
 import { observer } from 'mobx-react-lite';
 
-import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import {
   HeaderMenu,
   HeaderMenuProps,
 } from '@/components/City/CityScreenHeader/HeaderMenu';
-import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
 
-import { FONTS, SCREENS } from '@/types';
+import { FONTS } from '@/types';
 
 type Props = {
   style?: StyleProp<ViewStyle | TextStyle>;
@@ -39,7 +35,6 @@ export const CityScreenHeaderComponent = ({
   isDark,
   numberOfLines = 2,
 }: Props) => {
-  const navi = useNavigation();
   const { header } = useStores(stores => ({
     header: stores.domStore.header,
   }));
@@ -54,14 +49,6 @@ export const CityScreenHeaderComponent = ({
   useEffect(() => {
     translateY.value = withTiming(header.hidden ? -150 : 0);
   }, [header.hidden]);
-
-  const goBack = () => {
-    if (navi.canGoBack()) {
-      navi.goBack();
-    } else {
-      navi.navigate(SCREENS.CitiesList);
-    }
-  };
 
   const { color, ...viewStyle } = style || ({} as any);
 

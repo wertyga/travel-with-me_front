@@ -1,9 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
+
 import { StyleSheet, Text, View } from 'react-native';
+
 import { Marker } from 'react-native-maps';
+
 import { FastImage } from '@/components/FastImage';
+
 import { Path } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
+
 import DefaultPointImage from '@/assets/images/default_point_image.png';
 
 type Props = {
@@ -12,6 +18,7 @@ type Props = {
   isChosen?: boolean;
   isChosenExists?: boolean;
   image?: string;
+  title?: string;
   markerSize?: number;
   children?: React.ReactNode;
   onPress: () => void;
@@ -28,6 +35,7 @@ export const MapMarker = React.memo(
     isChosen,
     isChosenExists,
     children,
+    title,
   }: Props) => {
     const [, setLoaded] = useState(false);
 
@@ -39,6 +47,7 @@ export const MapMarker = React.memo(
 
     const { rootMarkerSize, markerInnerSize, mainMarkerSize } = useMemo(() => {
       const realSize = isChosen ? markerSize + 5 : markerSize;
+
       return {
         mainMarkerSize: {
           height: realSize + 10,
@@ -58,7 +67,10 @@ export const MapMarker = React.memo(
       };
     }, [markerSize, isChosen]);
 
+    if (!coords?.lat || !coords?.lng) return null;
+
     const opacity = isChosenExists && !isChosen ? 0.6 : 1;
+
     return (
       <Marker
         coordinate={{ latitude: coords.lat, longitude: coords.lng }}
@@ -79,17 +91,24 @@ export const MapMarker = React.memo(
             style={[
               styles.marker,
               markerInnerSize,
+              { borderRadius: markerSize },
               isChosen && styles.chosenChild,
             ]}
           >
             <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
-            <FastImage
-              source={image || DefaultPointImage}
-              width={markerInnerSize.width}
-              style={styles.image}
-              key={image}
-              onLoad={onLoad}
-            />
+            {!!image && (
+              <FastImage
+                source={image || DefaultPointImage}
+                style={[styles.image, { borderRadius: markerSize }]}
+                key={image}
+                onLoad={onLoad}
+              />
+            )}
+            {!image && !!title && (
+              <View style={[styles.image, markerInnerSize]}>
+                <Text>{title.charAt(0).toUpperCase()}</Text>
+              </View>
+            )}
             {children}
           </View>
         </View>
@@ -128,7 +147,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    borderRadius: 50,
     backgroundColor: CONSTANTS.colors.blue,
   },
   image: {
@@ -136,6 +154,7 @@ const styles = StyleSheet.create({
     height: '100%',
     objectFit: 'cover',
     resizeMode: 'cover',
-    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

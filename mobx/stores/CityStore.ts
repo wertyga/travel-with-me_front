@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
-import { City, Place, RootStoreType } from '@/types';
+import { City, Path, Place, RootStoreType } from '@/types';
 import {fetchCity} from "@/api";
 import {cacheWrap} from "@/utils/cache_request";
 import _flatten from 'lodash/flatten';

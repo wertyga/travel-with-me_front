@@ -13,3 +13,4 @@ export { AppStateStore } from './AppStateStore';
 export { SoundStore } from './SoundStore';
 export { OfflineStore } from './OfflineStore';
 export { AchievementsStore } from './AchievementsStore';
+export { ChatsStore } from './ChatsStore';

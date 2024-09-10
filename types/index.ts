@@ -17,3 +17,4 @@ export * from './store';
 export * from './tech';
 export * from './navigation';
 export * from './achievements';
+export * from './chat';

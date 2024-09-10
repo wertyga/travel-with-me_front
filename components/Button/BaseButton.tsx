@@ -94,11 +94,10 @@ export const BaseButton = ({
         free && styles.free,
         squareSize && {
           width: squareSize,
-          minWidth: squareSize,
-          maxWidth: squareSize,
           height: squareSize,
           minHeight: squareSize,
           ...(rounded ? { borderRadius: squareSize } : {}),
+          ...(isLoading ? { width: squareSize + 30 } : {}),
         },
         transparent && styles.transparent,
         ...(btnStyles as any),

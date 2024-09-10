@@ -39,6 +39,7 @@ type Props = MapViewProps & {
   children?: React.ReactNode;
   mapStyles?: ViewStyle;
   showMyLocationBtnStyle?: ViewStyle;
+  showMyLocation?: boolean;
 };
 
 export const DEFAULT_DELTA = 0.2;
@@ -54,6 +55,7 @@ export const MapComponent = ({
   mapStyles,
   initialRegion,
   showMyLocationBtnStyle,
+  showMyLocation,
   ...mapViewProps
 }: Props) => {
   const mapRef = useRef();
@@ -133,7 +135,9 @@ export const MapComponent = ({
         initialRegion={initialRegion}
         {...mapViewProps}
       >
-        {!!liveCoords && <MyLocationMarker liveCoords={liveCoords} />}
+        {!!liveCoords && showMyLocation && (
+          <MyLocationMarker liveCoords={liveCoords} />
+        )}
 
         {formattedPoints.map((point, index) => {
           const { coords, title, description, images, isChosen } = point;

@@ -2,7 +2,8 @@ import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import Button, { CustomButtonProps } from '@/components/Button';
+import Button from '@/components/Button';
+import { CustomButtonProps } from '@/components/Button/BaseButton';
 import { CText } from '@/components/CText';
 import { Icon, IconNames } from '@/components/Icon';
 

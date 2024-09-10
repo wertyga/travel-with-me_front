@@ -1,12 +1,19 @@
 import { SortAndPaginationRequest } from '@/types/api';
 import { Country } from '@/types/country';
-import { Guide } from '@/types/guide';
+import { Guide, Path } from '@/types/guide';
 
 export enum CITY_TAGS {
   'City' = 'City',
   'List' = 'CitiesList',
   'LightList' = 'CitiesLightList',
 }
+
+export type SquareCoords = {
+  sw: Path;
+  se: Path;
+  nw: Path;
+  ne: Path;
+};
 
 export type CitySecurityType = {
   overview: string;
@@ -40,6 +47,7 @@ export type City = {
     lat: number;
     lng: number;
   };
+  squareCoords: SquareCoords;
 };
 
 export type GetCitiesListRequest = SortAndPaginationRequest & {};

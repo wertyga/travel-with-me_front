@@ -1,6 +1,7 @@
 import * as Location from 'expo-location';
 import { LocationAccuracy } from 'expo-location';
-import { Path, Place } from '@/types';
+
+import { Path, Place, SquareCoords } from '@/types';
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
@@ -57,3 +58,16 @@ export const getNearestPoint = (pointsList: Place[], coords2: Path): Place => {
     return acc;
   }, pointsList[0]);
 };
+
+export function isPointInSquare(
+  lat: number,
+  lng: number,
+  square: SquareCoords
+) {
+  const { nw, sw, se } = square;
+
+  const isLatInRange = lat >= sw.lat && lat <= nw.lat;
+  const isLngInRange = lng >= sw.lng && lng <= se.lng;
+
+  return isLatInRange && isLngInRange;
+}

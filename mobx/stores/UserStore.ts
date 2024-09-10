@@ -1,17 +1,21 @@
-import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, reaction, runInAction } from 'mobx';
 import {User, UserFavoritesResponse} from "@/types/user";
 import {storage} from "@/utils";
-import { fetchFavorites, fetchSelfUser, updateSelf } from '@/api';
-import {RootStoreType} from "@/types";
+import { fetchFavorites, fetchSelfUser, fetchUsersNearMe, updateSelf, updateSelfLastCoords } from '@/api';
+import { City, Path, RootStoreType } from '@/types';
 import {withLoading} from "@/mobx/store.utils";
 import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import * as FileSystem from 'expo-file-system';
+import { getIsNetConnected } from '@/utils/etc';
 
 export class UserStore {
 	@observable user: User | null = null;
 	@observable token: string
 	@observable isLoading: boolean;
+	@observable lastCoords: Path | null = null;
+	@observable lastCity: City | null = null;
 	@observable favorites: UserFavoritesResponse = {} as UserFavoritesResponse
+	@observable usersNearMe: User[] = []
 	
 	// Store default user data to restore
 	private _user: User | null = null;
@@ -22,6 +26,32 @@ export class UserStore {
 	
 	onInitiate() {
 		this.getSelf();
+		
+		reaction(() => (
+			this.isUserExists
+			&& this.user.isVisible
+			&& this.rootStore.locationStore.liveCoords
+		), liveCoords => {
+			if (!liveCoords) return;
+			
+			this.updateLastCoords(liveCoords);
+		})
+	}
+	
+	@action async updateLastCoords(coords: Path) {
+		if (!getIsNetConnected()) return;
+		
+		try {
+		  const data = await updateSelfLastCoords(coords);
+			
+			runInAction(() => {
+				this.lastCoords = coords;
+				this.lastCity = this.rootStore.citiesListStore.getCityByCoords(coords);
+			});
+			
+			return data;
+		} catch (e) {
+		}
 	}
 	
 	@action async getSelf() {
@@ -88,6 +118,32 @@ export class UserStore {
 		}
 	}
 	
+	@withLoading async fetchUpdateUserImmidiately(data: Partial<User>) {
+		try {
+			const user = await updateSelf(data);
+
+			this.setUser(user);
+		} catch (e) {
+		
+		}
+	}
+	
+	@action async getUsersNearMe() {
+		try {
+			if (!getIsNetConnected() || !this.user.isVisible) return;
+			
+			const { users } = await fetchUsersNearMe();
+
+			runInAction(() => {
+				this.usersNearMe = users;
+			});
+			
+			return users;
+		} catch (e) {
+			console.log({e});
+		}
+	}
+	
 	@action setUser(user: User | null) {
 		let clearedUser = null;
 		
@@ -120,6 +176,9 @@ export class UserStore {
 		this.user = null;
 		this._user = null;
 		this.token = undefined;
+		this.lastCoords = null;
+		this.lastCity = null;
+		this.usersNearMe = [];
 	}
 	
 	@action resetUpdatedUser() {
@@ -132,5 +191,12 @@ export class UserStore {
 	
 	@computed get isUserExists() {
 		return !!this.user?._id;
+	}
+	
+	 getMyCity() {
+		const {liveCoords} = this.rootStore.locationStore;
+		if (!liveCoords) return null;
+		
+		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
 	}
 }

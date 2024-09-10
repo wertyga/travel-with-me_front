@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
 
 import { observer } from 'mobx-react-lite';
 
@@ -96,6 +97,7 @@ export const MainLayoutComponent = ({
         });
       }}
     >
+      {isHeaderDark && <StatusBar style="dark" />}
       {!bgImage && (
         <BackgroundGradient style={styles.bgGradient} colors={bgColors} />
       )}
@@ -136,7 +138,16 @@ export const MainLayoutComponent = ({
           </TouchableOpacity>
         )}
 
-        <View style={[styles.content, !noFooter && styles.withFooter, style]}>
+        <View
+          style={[
+            styles.content,
+            !noFooter && styles.withFooter,
+            {
+              paddingTop: !!headerTitle ? 100 : 50,
+            },
+            style,
+          ]}
+        >
           {children}
         </View>
 
@@ -182,7 +193,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
     flex: 1,
-    paddingTop: 100,
   },
   bgImage: {
     objectFit: 'cover',

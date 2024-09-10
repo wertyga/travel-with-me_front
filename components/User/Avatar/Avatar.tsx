@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  Image,
-  ImageBackground,
-  ImageStyle,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import Feather from '@expo/vector-icons/Feather';
 
@@ -14,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 
 import { CText } from '@/components/CText';
 import { ImageStorage, UploadImage } from '@/components/UI';
-import { UploadChoice } from '@/components/UI/UploadChoice';
+import { Avatar as UIAvatar } from '@/components/UI/Avatar';
 import { useStores } from '@/hooks';
 
 type Props = {
@@ -39,23 +33,7 @@ export const Avatar = ({ size = 70, editable }: Props) => {
   };
 
   if (!editable) {
-    return (
-      <View
-        style={{
-          ...styles.container,
-          ...{
-            width: size,
-            height: size,
-          },
-        }}
-      >
-        {!!avatar && (
-          <Image source={{ uri: avatar }} style={styles.imageStyle} />
-        )}
-
-        {!avatar && <CText style={styles.text}>{firstUsernameLetter}</CText>}
-      </View>
-    );
+    return <UIAvatar size={size} avatar={avatar} username={user.username} />;
   }
 
   return (

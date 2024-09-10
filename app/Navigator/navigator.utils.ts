@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ChangeEmailScreen from '@/screens/ChangeEmail';
+import ChatScreen from '@/screens/Chat.screen';
 import CitiesListScreen from '@/screens/CitiesList.screen';
 import CityScreen from '@/screens/City.screen';
 import ContactScreen from '@/screens/Contact.screen';
@@ -16,6 +17,7 @@ import ProfileScreen from '@/screens/Profile';
 import RecoveryPasswordScreen from '@/screens/RecoveryPassword';
 import SubscriptionsScreen from '@/screens/Subscriptions';
 import UserAchievementsScreen from '@/screens/UserAchievements.screen';
+import UsersNearMeScreen from '@/screens/UsersNearMe.screen';
 
 import { SCREENS } from '@/types';
 
@@ -88,6 +90,14 @@ export const onLineScreens: ScreenType[] = [
   {
     name: SCREENS.Achievements,
     component: UserAchievementsScreen,
+  },
+  {
+    name: SCREENS.UsersNearMe,
+    component: UsersNearMeScreen,
+  },
+  {
+    name: SCREENS.Chat,
+    component: ChatScreen,
   },
 ];
 

@@ -9,9 +9,10 @@ import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Version } from '@/components/Common';
 import { Loader } from '@/components/Loader';
-import { UploadChoice } from '@/components/UI/UploadChoice';
 import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
 import { Avatar } from '@/components/User/Avatar/Avatar';
+import ChangeVisibilityButton from '@/components/User/ChangeVisibilityButton/ChangeVisibilityButton';
+import UsersNearMeButton from '@/components/User/UsersNearMeButton/UsersNearMeButton';
 import {
   useAuthGuard,
   useFocus,
@@ -19,6 +20,8 @@ import {
   useNavigation,
 } from '@/hooks';
 import { useStores } from '@/hooks';
+
+import { getIsNetConnected } from '@/utils/etc';
 
 import { SCREENS } from '@/types';
 
@@ -31,26 +34,25 @@ const ProfileScreen = () => {
     user,
     logout,
     isUpdateAvailable,
-    isNetConnected,
     cachedCitiesIds,
     hasUserChanged,
     fetchUpdateUser,
     resetUpdatedUser,
     isLoading,
     onStartWatchingLocation,
-    achievementsCount,
+    // achievementsCount,
   } = useStores(stores => ({
     user: stores.userStore.user,
     hasUserChanged: stores.userStore.hasUserChanged,
     fetchUpdateUser: stores.userStore.fetchUpdateUser,
     resetUpdatedUser: stores.userStore.resetUpdatedUser,
+    lastCoords: stores.userStore.lastCoords,
     isLoading: stores.userStore.isLoading,
     logout: stores.authStore.logout,
     isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
-    isNetConnected: stores.appStateStore.isNetConnected,
     cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
-    achievementsCount: stores.achievementsStore.achievementsCount,
+    // achievementsCount: stores.achievementsStore.achievementsCount,
   }));
 
   const { granted } = useForegroundPermissions();
@@ -79,6 +81,7 @@ const ProfileScreen = () => {
 
   if (!user) return null;
 
+  const isNetConnected = getIsNetConnected();
   const editLabel = isNetConnected ? 'Edit' : 'Offline';
   const getHelpLabel = isNetConnected ? 'Get Help' : 'Offline';
   const isShowUpdateBtn = isNetConnected && isUpdateAvailable;
@@ -108,19 +111,25 @@ const ProfileScreen = () => {
           <Switch value={granted} onChange={changePermissions} />
         </Button>
 
+        {isNetConnected && <ChangeVisibilityButton />}
+
+        {isNetConnected && <UsersNearMeButton />}
+
         {/*<Button style={styles.item} href={SCREENS.Achievements} noPaddings>*/}
         {/*  <CText>Achievements</CText>*/}
         {/*  <CText style={styles.edit}>{user.rank}</CText>*/}
         {/*</Button>*/}
 
-        <Button
-          style={styles.item}
-          href={isNetConnected && SCREENS.Contact}
-          noPaddings
-        >
-          <CText>Support</CText>
-          <CText style={styles.edit}>{getHelpLabel}</CText>
-        </Button>
+        {isNetConnected && (
+          <Button
+            style={styles.item}
+            href={isNetConnected && SCREENS.Contact}
+            noPaddings
+          >
+            <CText>Support</CText>
+            <CText style={styles.edit}>{getHelpLabel}</CText>
+          </Button>
+        )}
 
         {isShowOfflineStorage && (
           <Button style={styles.item} href={SCREENS.OfflineStorage} noPaddings>
@@ -130,19 +139,24 @@ const ProfileScreen = () => {
         )}
 
         {hasUserChanged && (
-          <Button onPress={fetchUpdateUser} high style={styles.logoutBtn} solid>
+          <Button
+            onPress={fetchUpdateUser}
+            high
+            style={styles.separateBtn}
+            solid
+          >
             Update Profile
           </Button>
         )}
 
         {isNetConnected && (
-          <Button onPress={handleLogout} high style={styles.logoutBtn}>
+          <Button onPress={handleLogout} high style={styles.separateBtn}>
             Logout
           </Button>
         )}
 
         {isShowUpdateBtn && (
-          <Button onPress={handleUpdateApp} high style={styles.logoutBtn}>
+          <Button onPress={handleUpdateApp} high style={styles.separateBtn}>
             Update app
           </Button>
         )}
@@ -157,34 +171,28 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: 40,
   },
+  avatarAndName: {
+    alignItems: 'center',
+  },
   item: {
     marginBottom: 25,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: 'transparent',
   },
   edit: {
     fontSize: 10,
-    padding: 10,
+    paddingTop: 5,
+    paddingRight: 10,
   },
-  logoutBtn: {
+  separateBtn: {
     marginTop: 25,
-  },
-  optionSubtext: {
-    marginTop: 10,
-  },
-  optionText: {
-    maxWidth: Dimensions.get('window').width * 0.7,
-  },
-  avatarAndName: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'flex-start',
   },
   name: {
     marginLeft: 15,
   },
+  helpBtn: {},
 });
 
 export default observer(ProfileScreen);

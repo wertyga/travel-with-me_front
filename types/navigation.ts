@@ -2,6 +2,9 @@ import React from 'react';
 
 import { RouteProp } from '@react-navigation/core';
 
+import { Chat } from '@/types/chat';
+import { User } from '@/types/user';
+
 import { City } from './city';
 import { Guide } from './guide';
 
@@ -23,6 +26,8 @@ export enum SCREENS {
   OfflineStorage = 'OfflineStorage',
   Offline = 'Offline',
   Achievements = 'Achievements',
+  UsersNearMe = 'UsersNearMe',
+  Chat = 'Chat',
 }
 
 export type RootStackParamList = {
@@ -40,6 +45,8 @@ export type RootStackParamList = {
   [SCREENS.Contact]: undefined;
   [SCREENS.OfflineStorage]: undefined;
   [SCREENS.Achievements]: undefined;
+  [SCREENS.UsersNearMe]: undefined;
+  [SCREENS.Chat]: { withUser: User };
   [SCREENS.Place]: { placeSlug: string };
   [SCREENS.Error]: { error: string };
 };

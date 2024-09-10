@@ -1,4 +1,5 @@
-import { Guide } from '@/types/guide';
+import { City } from '@/types/city';
+import { Guide, Path } from '@/types/guide';
 import { Place } from '@/types/place';
 
 import { Like } from './likes';
@@ -38,6 +39,8 @@ export type User = {
   slug: string;
   story: string;
   isVisible: boolean;
+  lastCoords?: Path;
+  lastCity?: City;
 };
 
 export type UserFavoritesResponse = {
