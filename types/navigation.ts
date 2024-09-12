@@ -28,6 +28,7 @@ export enum SCREENS {
   Achievements = 'Achievements',
   UsersNearMe = 'UsersNearMe',
   Chat = 'Chat',
+  ChatList = 'ChatList',
 }
 
 export type RootStackParamList = {
@@ -46,6 +47,7 @@ export type RootStackParamList = {
   [SCREENS.OfflineStorage]: undefined;
   [SCREENS.Achievements]: undefined;
   [SCREENS.UsersNearMe]: undefined;
+  [SCREENS.ChatList]: undefined;
   [SCREENS.Chat]: { withUser: User };
   [SCREENS.Place]: { placeSlug: string };
   [SCREENS.Error]: { error: string };

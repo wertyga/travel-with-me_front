@@ -2,6 +2,7 @@ import React from 'react';
 
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import ChatScreen from '@/screens/Chat.screen';
+import ChatListScreen from '@/screens/ChatList.screen';
 import CitiesListScreen from '@/screens/CitiesList.screen';
 import CityScreen from '@/screens/City.screen';
 import ContactScreen from '@/screens/Contact.screen';
@@ -98,6 +99,10 @@ export const onLineScreens: ScreenType[] = [
   {
     name: SCREENS.Chat,
     component: ChatScreen,
+  },
+  {
+    name: SCREENS.ChatList,
+    component: ChatListScreen,
   },
 ];
 

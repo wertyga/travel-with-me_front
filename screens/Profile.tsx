@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Dimensions, Linking, StyleSheet, Switch, View } from 'react-native';
+import { Linking, StyleSheet, Switch, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -18,8 +18,8 @@ import {
   useFocus,
   useForegroundPermissions,
   useNavigation,
+  useStores,
 } from '@/hooks';
-import { useStores } from '@/hooks';
 
 import { getIsNetConnected } from '@/utils/etc';
 
@@ -40,6 +40,8 @@ const ProfileScreen = () => {
     resetUpdatedUser,
     isLoading,
     onStartWatchingLocation,
+    getMyChats,
+    myChatsCount,
     // achievementsCount,
   } = useStores(stores => ({
     user: stores.userStore.user,
@@ -52,6 +54,8 @@ const ProfileScreen = () => {
     isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
     cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
+    getMyChats: stores.chatsStore.getMyChats,
+    myChatsCount: stores.chatsStore.myChatsCount,
     // achievementsCount: stores.achievementsStore.achievementsCount,
   }));
 
@@ -70,6 +74,7 @@ const ProfileScreen = () => {
 
   useFocus(() => {
     resetUpdatedUser();
+    getMyChats();
   }, []);
 
   useEffect(() => {
@@ -111,9 +116,18 @@ const ProfileScreen = () => {
           <Switch value={granted} onChange={changePermissions} />
         </Button>
 
-        {isNetConnected && <ChangeVisibilityButton />}
+        {isNetConnected && (
+          <>
+            <ChangeVisibilityButton />
+            <UsersNearMeButton />
+          </>
+        )}
 
-        {isNetConnected && <UsersNearMeButton />}
+        {!!myChatsCount && (
+          <Button href={SCREENS.ChatList} high style={{ marginBottom: 20 }}>
+            {`Chats (${myChatsCount})`}
+          </Button>
+        )}
 
         {/*<Button style={styles.item} href={SCREENS.Achievements} noPaddings>*/}
         {/*  <CText>Achievements</CText>*/}

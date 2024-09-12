@@ -5,6 +5,8 @@ import { StyleSheet, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { Avatar } from '@/components/UI/Avatar';
 
+import { getBeautifyDateTime } from '@/utils';
+
 type Props = {
   isOwner?: boolean;
   avatar: string;
@@ -28,18 +30,7 @@ export const ChatMessage = ({
       };
     }
 
-    return {
-      date: new Date(timestamp)
-        .toLocaleDateString()
-        .split('.')
-        .slice(0, 2)
-        .join('.'),
-      time: new Date(timestamp)
-        .toLocaleTimeString()
-        .split(':')
-        .slice(0, 2)
-        .join(':'),
-    };
+    return getBeautifyDateTime(timestamp);
   }, [timestamp]);
 
   return (

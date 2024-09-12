@@ -2,15 +2,14 @@ import { baseQuery } from '@/app/query';
 
 import { Chat } from '@/types';
 
-export const fetchMyChats = async (params: {
-  slug?: string;
-  _id?: string;
-  withPlaces?: boolean;
-}): Promise<Chat[]> => {
-  const { data } = await baseQuery({
-    method: 'get',
-    url: '/chat/my-chats',
-  });
+export const fetchMyChats = async (): Promise<Chat[]> => {
+  const { data } = await baseQuery(
+    {
+      method: 'get',
+      url: '/chat/my-chats',
+    },
+    []
+  );
 
   return data;
 };

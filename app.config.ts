@@ -5,7 +5,7 @@ export const PRODUCT_NAME = 'Travel With Me';
 
 const ENV = {
   API_BASE_URL:
-    'https://890f-2a02-a31a-80c7-8300-d5b8-84c3-d194-dcc0.ngrok-free.app',
+    'https://181d-2a02-a31a-80c7-8300-f9f1-4028-ba88-bb51.ngrok-free.app',
   // API_BASE_URL: 'https://api.traveljet.org',
   GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
 };

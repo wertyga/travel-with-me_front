@@ -1,12 +1,13 @@
-import { makeObservable, observable } from 'mobx';
+import { computed, makeObservable, observable, runInAction } from 'mobx';
 
-import { fetchChatByUser, sendMessage as sendMessageApi } from '@/api';
+import { fetchChatByUser, fetchMyChats, sendMessage as sendMessageApi } from '@/api';
 
-import { RootStoreType } from '@/types';
+import { Chat, RootStoreType } from '@/types';
 import { withLoading } from '@/mobx/store.utils';
 
 export class ChatsStore {
   @observable isLoading = false;
+  @observable myChats: Chat[] = [];
   
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
@@ -28,5 +29,21 @@ export class ChatsStore {
     } catch (e) {
     
     }
+  }
+  
+   async getMyChats() {
+    try {
+      const chats = await fetchMyChats();
+
+      runInAction(() => {
+        this.myChats = chats;
+      });
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  @computed get myChatsCount() {
+    return this.myChats.length;
   }
 }
