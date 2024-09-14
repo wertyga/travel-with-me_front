@@ -125,7 +125,7 @@ const ProfileScreen = () => {
 
         {!!myChatsCount && (
           <Button href={SCREENS.ChatList} high style={{ marginBottom: 20 }}>
-            {`Chats (${myChatsCount})`}
+            Chats
           </Button>
         )}
 

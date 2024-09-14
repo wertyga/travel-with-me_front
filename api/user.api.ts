@@ -48,10 +48,13 @@ export const updateSelfLastCoords = async (
 };
 
 export const fetchUsersNearMe = async (): Promise<{ users: User[] }> => {
-  const { data } = await baseQuery({
-    method: 'get',
-    url: '/users/users-near-me',
-  });
+  const { data } = await baseQuery(
+    {
+      method: 'get',
+      url: '/users/users-near-me',
+    },
+    { users: [] }
+  );
 
   return data;
 };

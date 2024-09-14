@@ -130,7 +130,7 @@ export class UserStore {
 	
 	@action async getUsersNearMe() {
 		try {
-			if (!getIsNetConnected() || !this.user.isVisible) return;
+			if (!this.user.isVisible) return { users: [] };
 			
 			const { users } = await fetchUsersNearMe();
 

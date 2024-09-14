@@ -27,8 +27,8 @@ export const ChangeVisibilityButton = () => {
       <View style={{ flex: 1 }}>
         <CText>Show me for other people</CText>
         <CText style={styles.optionSubtext}>
-          This option will be showing you at the map for other users who is in
-          the same city as you and allow them to write to you
+          This option will show you for other users who is in the same city as
+          you and allow them to write to you
         </CText>
       </View>
       <Switch value={user.isVisible} onChange={onChangeVisibility} />
