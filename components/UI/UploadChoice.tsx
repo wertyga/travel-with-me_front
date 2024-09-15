@@ -3,7 +3,6 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 
 import { CText } from '@/components/CText';
-import { useModal } from '@/hooks';
 
 import { CONSTANTS } from '@/styles/constants';
 
@@ -45,7 +44,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content: {
-    // backgroundColor: CONSTANTS.colors.bg1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

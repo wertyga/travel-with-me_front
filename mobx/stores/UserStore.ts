@@ -1,21 +1,31 @@
 import { action, computed, makeObservable, observable, reaction, runInAction } from 'mobx';
-import {User, UserFavoritesResponse} from "@/types/user";
+import { Language, User, UserFavoritesResponse } from '@/types/user';
 import {storage} from "@/utils";
-import { fetchFavorites, fetchSelfUser, fetchUsersNearMe, updateSelf, updateSelfLastCoords } from '@/api';
+import {
+	fetchFavorites,
+	fetchLanguages,
+	fetchSelfUser,
+	fetchUsersNearMe,
+	updateSelf,
+	updateSelfLastCoords,
+} from '@/api';
 import { City, Path, RootStoreType } from '@/types';
 import {withLoading} from "@/mobx/store.utils";
 import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import * as FileSystem from 'expo-file-system';
 import { getIsNetConnected } from '@/utils/etc';
+import { cacheWrap } from '@/utils/cache_request';
 
 export class UserStore {
 	@observable user: User | null = null;
 	@observable token: string
 	@observable isLoading: boolean;
-	@observable lastCoords: Path | null = null;
 	@observable lastCity: City | null = null;
 	@observable favorites: UserFavoritesResponse = {} as UserFavoritesResponse
 	@observable usersNearMe: User[] = []
+	@observable languages: Language[] = []
+	
+	lastCoords: Path | null = null;
 	
 	// Store default user data to restore
 	private _user: User | null = null;
@@ -26,6 +36,7 @@ export class UserStore {
 	
 	onInitiate() {
 		this.getSelf();
+		this.getLanguages();
 		
 		reaction(() => (
 			this.isUserExists
@@ -72,7 +83,7 @@ export class UserStore {
 			}
 			
 			const user = await fetchSelfUser();
-			
+			console.log({user: user.languages});
 			this.setUser(user);
 		} catch (e) {
 		
@@ -130,7 +141,7 @@ export class UserStore {
 	
 	@action async getUsersNearMe() {
 		try {
-			if (!this.user.isVisible) return { users: [] };
+			if (!this.user.isVisible) return [];
 			
 			const { users } = await fetchUsersNearMe();
 
@@ -141,6 +152,8 @@ export class UserStore {
 			return users;
 		} catch (e) {
 			console.log({e});
+			
+			return [];
 		}
 	}
 	
@@ -198,5 +211,18 @@ export class UserStore {
 		if (!liveCoords) return null;
 		
 		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
+	}
+	
+	async getLanguages() {
+		try {
+			const cachedReq = cacheWrap.apply(this, [fetchLanguages]);
+			const { languages } = await cachedReq.withLoading().invoke();
+			
+			runInAction(() => {
+				this.languages = languages;
+			})
+		} catch (e) {
+		
+		}
 	}
 }

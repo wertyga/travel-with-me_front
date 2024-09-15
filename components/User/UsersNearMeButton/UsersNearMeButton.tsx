@@ -46,12 +46,7 @@ export const UsersNearMeButton = () => {
   if (!isShowUsersNearMe) return null;
 
   return (
-    <Button
-      high
-      style={{ marginBottom: 20 }}
-      isLoading={isLoading}
-      onPress={onPress}
-    >
+    <Button high isLoading={isLoading} onPress={onPress}>
       {`${title} • ${myCity.title}`}
     </Button>
   );

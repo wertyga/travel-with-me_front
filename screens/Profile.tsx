@@ -12,6 +12,7 @@ import { Loader } from '@/components/Loader';
 import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
 import { Avatar } from '@/components/User/Avatar/Avatar';
 import ChangeVisibilityButton from '@/components/User/ChangeVisibilityButton/ChangeVisibilityButton';
+import { LanguagesSelect } from '@/components/User/LanguagesSelect/LanguagesSelect';
 import UsersNearMeButton from '@/components/User/UsersNearMeButton/UsersNearMeButton';
 import {
   useAuthGuard,
@@ -42,13 +43,11 @@ const ProfileScreen = () => {
     onStartWatchingLocation,
     getMyChats,
     myChatsCount,
-    // achievementsCount,
   } = useStores(stores => ({
     user: stores.userStore.user,
     hasUserChanged: stores.userStore.hasUserChanged,
     fetchUpdateUser: stores.userStore.fetchUpdateUser,
     resetUpdatedUser: stores.userStore.resetUpdatedUser,
-    lastCoords: stores.userStore.lastCoords,
     isLoading: stores.userStore.isLoading,
     logout: stores.authStore.logout,
     isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
@@ -56,7 +55,6 @@ const ProfileScreen = () => {
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     getMyChats: stores.chatsStore.getMyChats,
     myChatsCount: stores.chatsStore.myChatsCount,
-    // achievementsCount: stores.achievementsStore.achievementsCount,
   }));
 
   const { granted } = useForegroundPermissions();
@@ -123,8 +121,16 @@ const ProfileScreen = () => {
           </>
         )}
 
+        <View style={{ marginTop: 10 }}>
+          <LanguagesSelect />
+        </View>
+
         {!!myChatsCount && (
-          <Button href={SCREENS.ChatList} high style={{ marginBottom: 20 }}>
+          <Button
+            href={SCREENS.ChatList}
+            high
+            style={{ marginBottom: 20, marginTop: 10 }}
+          >
             Chats
           </Button>
         )}
@@ -136,7 +142,7 @@ const ProfileScreen = () => {
 
         {isNetConnected && (
           <Button
-            style={styles.item}
+            style={[styles.item, { marginTop: 15 }]}
             href={isNetConnected && SCREENS.Contact}
             noPaddings
           >
@@ -152,7 +158,7 @@ const ProfileScreen = () => {
           </Button>
         )}
 
-        {hasUserChanged && (
+        {hasUserChanged && isNetConnected && (
           <Button
             onPress={fetchUpdateUser}
             high

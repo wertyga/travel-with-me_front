@@ -1,7 +1,7 @@
 import { baseQuery } from '@/app/query';
 
 import { Path, SuccessResponse } from '@/types';
-import { User, UserFavoritesResponse } from '@/types/user';
+import { Language, User, UserFavoritesResponse } from '@/types/user';
 
 export const fetchSelfUser = async (): Promise<User> => {
   const { data } = await baseQuery({
@@ -54,6 +54,18 @@ export const fetchUsersNearMe = async (): Promise<{ users: User[] }> => {
       url: '/users/users-near-me',
     },
     { users: [] }
+  );
+
+  return data;
+};
+
+export const fetchLanguages = async (): Promise<{ languages: Language[] }> => {
+  const { data } = await baseQuery(
+    {
+      method: 'get',
+      url: '/users/languages',
+    },
+    { languages: [] }
   );
 
   return data;

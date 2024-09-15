@@ -21,6 +21,11 @@ export enum USER_RANKS {
   Adventurer = 'Adventurer',
 }
 
+export type Language = {
+  language: string;
+  flag: string;
+};
+
 export type User = {
   createdAt: string;
   updatedAt: string;
@@ -38,6 +43,7 @@ export type User = {
   rank: USER_RANKS;
   slug: string;
   story: string;
+  languages: Language[];
   isVisible: boolean;
   lastCoords?: Path;
   lastCity?: City;

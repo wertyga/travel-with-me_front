@@ -10,6 +10,7 @@ import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Avatar as UIAvatar } from '@/components/UI/Avatar';
+import { AvatarWithName } from '@/components/UI/AvatarWithName';
 import { useAuthGuard, useFocus, useNavigation, useStores } from '@/hooks';
 
 import { SCREENS } from '@/types';
@@ -74,20 +75,13 @@ const UsersNearMeScreen = () => {
               style={styles.user}
               onPress={() => onPressGoToChat(user)}
             >
-              <UIAvatar
+              <AvatarWithName
                 size={50}
                 avatar={user.avatar}
                 username={user.username}
-                style={styles.avatar}
+                underNameText={user.lastCity?.title}
+                verticalAlign="center"
               />
-
-              <View>
-                <View style={styles.onlineWrapper}>
-                  <CText>{user.username}</CText>
-                  {/*<View style={styles.online} />*/}
-                </View>
-                <CText style={styles.lastCity}>{user.lastCity?.title}</CText>
-              </View>
             </Button>
           );
         })}
@@ -106,9 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingVertical: 10,
   },
-  avatar: {
-    marginRight: 10,
-  },
   onlineWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -116,12 +107,6 @@ const styles = StyleSheet.create({
   },
   lastCity: {
     fontSize: 12,
-  },
-  online: {
-    width: 10,
-    height: 10,
-    borderRadius: 10,
-    backgroundColor: 'green',
   },
   reload: {
     paddingBottom: 20,

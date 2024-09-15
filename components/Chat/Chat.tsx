@@ -93,6 +93,7 @@ const Chat = ({ mainUser, guestUser }: Props) => {
           username={guestUser.username}
           style={styles.avatar}
           containerStyle={styles.avatarContainer}
+          underNameText={guestUser.languages?.map(({ flag }) => flag).join(' ')}
         />
 
         <ChatMessagesList chat={chat} mainUser={mainUser} />

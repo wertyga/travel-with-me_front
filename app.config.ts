@@ -1,12 +1,12 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
-export const version = '28.0.0';
+export const version = '29.0.0';
 export const PRODUCT_NAME = 'Travel With Me';
 
 const ENV = {
-  // API_BASE_URL:
-  //   'https://b04d-2a02-a31a-80c7-8300-d9b-dc65-72c3-801c.ngrok-free.app',
-  API_BASE_URL: 'https://api.traveljet.org',
+  API_BASE_URL:
+    'https://e048-2a02-a31a-80c7-8300-7d28-d1c5-cd22-e653.ngrok-free.app',
+  // API_BASE_URL: 'https://api.traveljet.org',
   GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
 };
 
