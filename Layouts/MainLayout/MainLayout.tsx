@@ -193,15 +193,16 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
     flex: 1,
+    flexGrow: 1,
+  },
+  withFooter: {
+    marginBottom: CONSTANTS.spaces.footerHeight,
   },
   bgImage: {
     objectFit: 'cover',
     width: '100%',
     height: '100%',
     ...StyleSheet.absoluteFillObject,
-  },
-  withFooter: {
-    paddingBottom: CONSTANTS.spaces.footerHeight,
   },
   header: {
     top: 0,

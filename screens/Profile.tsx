@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Linking, StyleSheet, Switch, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Switch, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -95,102 +95,106 @@ const ProfileScreen = () => {
       <MainLayout headerTitle="Profile" style={styles.container}>
         {isLoading && <Loader />}
 
-        <View style={[styles.item, styles.avatarAndName]}>
-          <Avatar editable />
-          <CText style={styles.name}>{user.username}</CText>
-        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={[styles.item, styles.avatarAndName]}>
+            <Avatar editable />
+            <CText style={styles.name}>{user.username}</CText>
+          </View>
 
-        <Button
-          style={styles.item}
-          href={isNetConnected && SCREENS.ChangeEmail}
-          noPaddings
-        >
-          <CText>{user.email}</CText>
-          <CText style={styles.edit}>{editLabel}</CText>
-        </Button>
-
-        <Button style={styles.item} noPaddings onPress={changePermissions}>
-          <CText>Foreground position permission</CText>
-          <Switch value={granted} onChange={changePermissions} />
-        </Button>
-
-        {isNetConnected && (
-          <>
-            <ChangeVisibilityButton />
-            <UsersNearMeButton />
-          </>
-        )}
-
-        <View style={{ marginTop: 10 }}>
-          <LanguagesSelect />
-        </View>
-
-        {!!myChatsCount && (
           <Button
-            href={SCREENS.ChatList}
-            high
-            style={{ marginBottom: 20, marginTop: 10 }}
-          >
-            Chats
-          </Button>
-        )}
-
-        {/*<Button style={styles.item} href={SCREENS.Achievements} noPaddings>*/}
-        {/*  <CText>Achievements</CText>*/}
-        {/*  <CText style={styles.edit}>{user.rank}</CText>*/}
-        {/*</Button>*/}
-
-        {isNetConnected && (
-          <Button
-            style={[styles.item, { marginTop: 15 }]}
-            href={isNetConnected && SCREENS.Contact}
+            style={styles.item}
+            href={isNetConnected && SCREENS.ChangeEmail}
             noPaddings
           >
-            <CText>Support</CText>
-            <CText style={styles.edit}>{getHelpLabel}</CText>
-          </Button>
-        )}
-
-        {isShowOfflineStorage && (
-          <Button style={styles.item} href={SCREENS.OfflineStorage} noPaddings>
-            <CText>Offline Storage</CText>
+            <CText>{user.email}</CText>
             <CText style={styles.edit}>{editLabel}</CText>
           </Button>
-        )}
 
-        {hasUserChanged && isNetConnected && (
-          <Button
-            onPress={fetchUpdateUser}
-            high
-            style={styles.separateBtn}
-            solid
-          >
-            Update Profile
+          <Button style={styles.item} noPaddings onPress={changePermissions}>
+            <CText>Foreground position permission</CText>
+            <Switch value={granted} onChange={changePermissions} />
           </Button>
-        )}
 
-        {isNetConnected && (
-          <Button onPress={handleLogout} high style={styles.separateBtn}>
-            Logout
-          </Button>
-        )}
+          {isNetConnected && (
+            <>
+              <ChangeVisibilityButton />
+              <UsersNearMeButton />
+            </>
+          )}
 
-        {isShowUpdateBtn && (
-          <Button onPress={handleUpdateApp} high style={styles.separateBtn}>
-            Update app
-          </Button>
-        )}
+          <View style={{ marginTop: 10 }}>
+            <LanguagesSelect />
+          </View>
 
-        <Version />
+          {!!myChatsCount && (
+            <Button
+              href={SCREENS.ChatList}
+              high
+              style={{ marginBottom: 20, marginTop: 10 }}
+            >
+              Chats
+            </Button>
+          )}
+
+          {/*<Button style={styles.item} href={SCREENS.Achievements} noPaddings>*/}
+          {/*  <CText>Achievements</CText>*/}
+          {/*  <CText style={styles.edit}>{user.rank}</CText>*/}
+          {/*</Button>*/}
+
+          {isNetConnected && (
+            <Button
+              style={[styles.item, { marginTop: 15 }]}
+              href={isNetConnected && SCREENS.Contact}
+              noPaddings
+            >
+              <CText>Support</CText>
+              <CText style={styles.edit}>{getHelpLabel}</CText>
+            </Button>
+          )}
+
+          {isShowOfflineStorage && (
+            <Button
+              style={styles.item}
+              href={SCREENS.OfflineStorage}
+              noPaddings
+            >
+              <CText>Offline Storage</CText>
+              <CText style={styles.edit}>{editLabel}</CText>
+            </Button>
+          )}
+
+          {hasUserChanged && isNetConnected && (
+            <Button
+              onPress={fetchUpdateUser}
+              high
+              style={styles.separateBtn}
+              solid
+            >
+              Update Profile
+            </Button>
+          )}
+
+          {isNetConnected && (
+            <Button onPress={handleLogout} high style={styles.separateBtn}>
+              Logout
+            </Button>
+          )}
+
+          {isShowUpdateBtn && (
+            <Button onPress={handleUpdateApp} high style={styles.separateBtn}>
+              Update app
+            </Button>
+          )}
+
+          <Version />
+        </ScrollView>
       </MainLayout>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 40,
-  },
+  container: {},
   avatarAndName: {
     alignItems: 'center',
   },

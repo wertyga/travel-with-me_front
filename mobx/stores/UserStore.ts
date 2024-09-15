@@ -83,7 +83,7 @@ export class UserStore {
 			}
 			
 			const user = await fetchSelfUser();
-			console.log({user: user.languages});
+	
 			this.setUser(user);
 		} catch (e) {
 		
