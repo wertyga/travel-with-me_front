@@ -75,7 +75,7 @@ export class SoundStore {
   //     identifier: id,
   //     content: {
   //       title: title,
-  //       color: CONSTANTS.colors.bg1,
+  //       color: CONSTANTS.colors.bgLight,
   //       categoryIdentifier: IDENTIFIERS.point.category,
   //       autoDismiss: false,
   //     },

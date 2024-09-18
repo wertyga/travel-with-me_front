@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   textFilled: {
-    color: CONSTANTS.colors.bgDark,
+    color: CONSTANTS.colors.bgDarkest,
     fontFamily: FONTS.OpenSansBold,
   },
   textable: {
@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
     color: CONSTANTS.colors.textDisabled,
   },
   solid: {
-    backgroundColor: CONSTANTS.colors.bg1,
-    borderColor: CONSTANTS.colors.bg1,
+    backgroundColor: CONSTANTS.colors.bgLight,
+    borderColor: CONSTANTS.colors.bgLight,
   },
   free: {
     width: null,

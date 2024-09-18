@@ -128,13 +128,13 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   chosenParent: {
-    backgroundColor: CONSTANTS.colors.bg2,
+    backgroundColor: CONSTANTS.colors.bgMiddle,
   },
   chosenMarker: {},
   chosenDot: {
     width: 6,
     height: 6,
-    backgroundColor: CONSTANTS.colors.bg2,
+    backgroundColor: CONSTANTS.colors.bgMiddle,
     borderRadius: 8,
     position: 'absolute',
     bottom: 0,

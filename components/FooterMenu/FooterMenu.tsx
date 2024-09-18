@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     height: CONSTANTS.spaces.footerHeight,
     width: '100%',
-    backgroundColor: CONSTANTS.colors.bg2,
+    backgroundColor: CONSTANTS.colors.bgMiddle,
     zIndex: 200,
   },
   menu: {

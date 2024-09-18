@@ -115,7 +115,7 @@ const UpdateApp = () => {
           activeOpacity={1}
           onPress={handleUpdateApp}
         >
-          <Entypo name="download" size={20} color={CONSTANTS.colors.bg1} />
+          <Entypo name="download" size={20} color={CONSTANTS.colors.bgLight} />
           <CText style={styles.text}>Update is available</CText>
         </TouchableOpacity>
       </Animated.View>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   text: {
-    color: CONSTANTS.colors.bg1,
+    color: CONSTANTS.colors.bgLight,
     fontFamily: FONTS.OpenSansBold,
     marginLeft: 10,
     marginRight: 10,

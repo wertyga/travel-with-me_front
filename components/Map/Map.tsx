@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: CONSTANTS.colors.bg1,
+    backgroundColor: CONSTANTS.colors.bgLight,
   },
 });
 

@@ -62,7 +62,7 @@ export const Modal = ({
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: CONSTANTS.colors.bg2,
+    backgroundColor: CONSTANTS.colors.bgMiddle,
     padding: CONSTANTS.spaces.paddingHorizontal,
     paddingBottom: 20,
     flex: 1,

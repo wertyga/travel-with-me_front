@@ -69,7 +69,7 @@ const CitiesListScreen = () => {
   return (
     <MainLayout
       style={styles.layout}
-      bgColors={[CONSTANTS.colors.bg1, CONSTANTS.colors.bg3]}
+      bgColors={[CONSTANTS.colors.bgLight, CONSTANTS.colors.bgDark]}
       headerTitle={!isNetConnected && 'Offline Mode'}
     >
       <FastImageBackground

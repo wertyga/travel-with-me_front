@@ -1,6 +1,6 @@
 export const CONSTANTS = {
   colors: {
-    bgDark: '#152e31',
+    bgDarkest: '#152e31',
     bg: '#f0f1f1',
     accent: '#ed522e',
     dark: '#101010',
@@ -10,10 +10,10 @@ export const CONSTANTS = {
     blue: '#19b9dd',
     ultramarine: '#30D5C8',
     ultramarine1: '#28a99f',
-    bg1: '#036068',
-    bg2: '#00353B',
-    bg3: '#17282E',
-    bg4: '#182E2F',
+    bgLight: '#036068',
+    bgMiddle: '#00353B',
+    bgDark: '#17282E',
+    bgDark2: '#182E2F',
   },
   spaces: {
     paddingTop: 50,

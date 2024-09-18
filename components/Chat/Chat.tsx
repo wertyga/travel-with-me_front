@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   avatar: {},
   avatarContainer: {
-    backgroundColor: CONSTANTS.colors.bg1,
+    backgroundColor: CONSTANTS.colors.bgLight,
     paddingVertical: 10,
     marginHorizontal: -CONSTANTS.spaces.paddingHorizontal,
     paddingLeft: CONSTANTS.spaces.paddingHorizontal,

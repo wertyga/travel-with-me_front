@@ -1,8 +1,13 @@
 import React from 'react';
+
 import { StyleSheet, View } from 'react-native';
+
 import { Marker } from 'react-native-maps';
+
 import { FontAwesome5 } from '@expo/vector-icons';
+
 import { Path } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -29,7 +34,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 50,
-    backgroundColor: CONSTANTS.colors.bg1,
+    backgroundColor: CONSTANTS.colors.bgLight,
     alignItems: 'center',
     justifyContent: 'center',
   },

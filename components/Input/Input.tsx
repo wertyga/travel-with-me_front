@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   StyleSheet,
   Text,
@@ -7,7 +8,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = Omit<TextInputProps, 'error' | 'onChangeText'> & {
@@ -28,7 +31,7 @@ export const Input = ({
     <View style={[styles.container, style]}>
       <TextInput
         style={[styles.input, inputStyle]}
-        placeholderTextColor={CONSTANTS.colors.bgDark}
+        placeholderTextColor={CONSTANTS.colors.bgDarkest}
         onChangeText={onChange}
         {...inputProps}
       />

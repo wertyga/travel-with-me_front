@@ -41,7 +41,7 @@ const CLOSED_WIDTH = 60;
 const SLIDER_THEME = {
   disableMinTrackTintColor: '#fff',
   maximumTrackTintColor: '#fff',
-  minimumTrackTintColor: CONSTANTS.colors.bg1,
+  minimumTrackTintColor: CONSTANTS.colors.bgLight,
   cacheTrackTintColor: '#333',
   bubbleBackgroundColor: '#666',
   heartbeatColor: '#999',

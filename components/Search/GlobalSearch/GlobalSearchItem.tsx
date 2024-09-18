@@ -1,8 +1,11 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+
 import { CText } from '@/components/CText';
 import { FastImage } from '@/components/FastImage';
 import { useNavigation } from '@/hooks';
+
 import { FONTS, SCREENS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   title: {
-    color: CONSTANTS.colors.bgDark,
+    color: CONSTANTS.colors.bgDarkest,
     fontFamily: FONTS.OpenSansBold,
     fontSize: 14,
   },

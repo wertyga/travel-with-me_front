@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   item: {
-    backgroundColor: CONSTANTS.colors.bg3,
+    backgroundColor: CONSTANTS.colors.bgDark,
     width: '45%',
     aspectRatio: 1,
     borderColor: 'white',

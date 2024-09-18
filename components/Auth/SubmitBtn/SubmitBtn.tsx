@@ -1,7 +1,11 @@
 import React from 'react';
+
 import { StyleSheet, TouchableOpacity } from 'react-native';
+
 import { CText } from '@/components/CText';
+
 import { FONTS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -28,7 +32,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   submitText: {
-    color: CONSTANTS.colors.bgDark,
+    color: CONSTANTS.colors.bgDarkest,
     fontFamily: FONTS.OpenSansBold,
   },
 });

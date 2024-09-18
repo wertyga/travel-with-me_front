@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   audioContainer: {
     zIndex: 2,
     top: 95,
-    backgroundColor: CONSTANTS.colors.bg2,
+    backgroundColor: CONSTANTS.colors.bgMiddle,
   },
   openedStyleAudio: {
     left: 15,

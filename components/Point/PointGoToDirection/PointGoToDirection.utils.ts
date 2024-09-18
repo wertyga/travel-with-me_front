@@ -11,7 +11,7 @@ export const gotoPointDirection = async (point: Place) => {
     identifier: IDENTIFIERS.pointDirection,
     content: {
       title: point.title,
-      color: CONSTANTS.colors.bg1,
+      color: CONSTANTS.colors.bgLight,
     },
   });
 
