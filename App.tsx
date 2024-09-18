@@ -53,13 +53,11 @@ function App() {
 
   return (
     <StoreProvider store={stores}>
-      <ModalProvider>
-        <StatusBar style="light" />
-        <Navigator />
-        <PermissionRequestPopup />
-        <Toast />
-        <UpdateApp />
-      </ModalProvider>
+      <StatusBar style="light" />
+      <Navigator />
+      <PermissionRequestPopup />
+      <Toast />
+      <UpdateApp />
     </StoreProvider>
   );
 }

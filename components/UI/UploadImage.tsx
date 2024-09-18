@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   Image,
@@ -12,8 +12,8 @@ import Toast from 'react-native-toast-message';
 
 import * as ImagePicker from 'expo-image-picker';
 
+import { Modal } from '@/components/Common/Modal/Modal';
 import { UploadChoice, UploadTypes } from '@/components/UI/UploadChoice';
-import { useModal } from '@/hooks';
 
 export type ImageStorage = {
   uri: string;
@@ -36,7 +36,11 @@ export const UploadImage = ({
   imageStyle,
   additionalContent,
 }: Props) => {
-  const { toggleShow, createModal } = useModal();
+  const [isModalShown, setIsModalShown] = useState(false);
+
+  const toggleModalShow = () => {
+    setIsModalShown(!isModalShown);
+  };
 
   const onLoadFromInnerStorage = async () => {
     try {
@@ -50,7 +54,7 @@ export const UploadImage = ({
       });
 
       onUpdate({ uri });
-      toggleShow();
+      toggleModalShow();
     } catch (e) {
       if (e.message?.includes('non-iterable instance.')) {
         return;
@@ -75,7 +79,7 @@ export const UploadImage = ({
       });
 
       onUpdate({ uri });
-      toggleShow();
+      toggleModalShow();
     } catch (e) {
       if (e.message?.includes('non-iterable instance.')) {
         return;
@@ -97,16 +101,27 @@ export const UploadImage = ({
     }
   };
 
-  useEffect(() => {
-    createModal(<UploadChoice onChoose={onChooseType} />);
-  }, []);
-
   return (
-    <TouchableOpacity onPress={toggleShow} style={[styles.container, style]}>
-      {!!uri && <Image source={{ uri }} style={[styles.image, imageStyle]} />}
-      {!uri && children}
-      {additionalContent}
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity
+        onPress={toggleModalShow}
+        style={[styles.container, style]}
+      >
+        {!!uri && <Image source={{ uri }} style={[styles.image, imageStyle]} />}
+        {!uri && children}
+        {additionalContent}
+      </TouchableOpacity>
+
+      <Modal
+        visible={isModalShown}
+        onClose={() => setIsModalShown(false)}
+        title="Choose image"
+        style={{ alignItems: 'center', justifyContent: 'center' }}
+        transparent
+      >
+        <UploadChoice onChoose={onChooseType} />
+      </Modal>
+    </>
   );
 };
 

@@ -1,16 +1,17 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { Modal } from '@/components/Common/Modal/Modal';
 import LanguagesSelectList from '@/components/User/LanguagesSelect/LanguagesSelectList';
-import { useModal, useStores } from '@/hooks';
+import { useStores } from '@/hooks';
 
 export const LanguagesSelect = () => {
-  const { toggleShow, createModal } = useModal();
+  const [isOpen, setIsOpen] = useState(false);
 
   const { userLanguages } = useStores(stores => {
     return {
@@ -18,24 +19,36 @@ export const LanguagesSelect = () => {
     };
   });
 
-  useEffect(() => {
-    createModal(<LanguagesSelectList />);
-  }, []);
-
   return (
-    <Button high onPress={toggleShow} style={styles.container}>
-      {!userLanguages.length && <CText>Choose your language</CText>}
-      {!!userLanguages.length && <CText>Languages:</CText>}
+    <>
+      <Button
+        high
+        onPress={() => {
+          setIsOpen(!isOpen);
+        }}
+        style={styles.container}
+      >
+        {!userLanguages.length && <CText>Choose your language</CText>}
+        {!!userLanguages.length && <CText>Languages:</CText>}
 
-      {userLanguages.slice(0, 3).map(({ language, flag }) => {
-        return (
-          <CText key={language} style={styles.buttonContent}>
-            {flag}
-          </CText>
-        );
-      })}
-      {userLanguages.length > 3 && <CText>...</CText>}
-    </Button>
+        {userLanguages.slice(0, 3).map(({ language, flag }) => {
+          return (
+            <CText key={language} style={styles.buttonContent}>
+              {flag}
+            </CText>
+          );
+        })}
+        {userLanguages.length > 3 && <CText>...</CText>}
+      </Button>
+
+      <Modal
+        visible={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Choose your languages"
+      >
+        <LanguagesSelectList />
+      </Modal>
+    </>
   );
 };
 

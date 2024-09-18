@@ -47,33 +47,31 @@ const LanguagesSelectList = () => {
   };
 
   return (
-    <View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.container}
-        contentContainerStyle={styles.content}
-      >
-        {languagesList.map((lang, i) => {
-          const isIncluded = userLanguages.find(({ language: userLang }) => {
-            return userLang === lang.language;
-          });
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.container}
+      contentContainerStyle={styles.content}
+    >
+      {languagesList.map((lang, i) => {
+        const isIncluded = userLanguages.find(({ language: userLang }) => {
+          return userLang === lang.language;
+        });
 
-          return (
-            <TouchableOpacity
-              key={`${lang.language}-${i}`}
-              style={styles.item}
-              onPress={() => toggleSelectLanguage(lang)}
-            >
-              {isIncluded && <Feather name="check" size={20} color="white" />}
-              <View style={{ flexDirection: 'row', gap: 15 }}>
-                <CText>{lang.flag}</CText>
-                <CText>{lang.language}</CText>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    </View>
+        return (
+          <TouchableOpacity
+            key={`${lang.language}-${i}`}
+            style={styles.item}
+            onPress={() => toggleSelectLanguage(lang)}
+          >
+            {isIncluded && <Feather name="check" size={20} color="white" />}
+            <View style={{ flexDirection: 'row', gap: 15 }}>
+              <CText>{lang.flag}</CText>
+              <CText>{lang.language}</CText>
+            </View>
+          </TouchableOpacity>
+        );
+      })}
+    </ScrollView>
   );
 };
 
@@ -81,18 +79,13 @@ export default observer(LanguagesSelectList);
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 50,
-    marginBottom: 50,
-    marginTop: 50,
-    borderRadius: 6,
+    marginBottom: 20,
+    flex: 1,
   },
   content: {
-    backgroundColor: CONSTANTS.colors.bg2,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    borderRadius: 6,
-    width: Dimensions.get('window').width * 0.8,
+    paddingTop: 15,
     gap: 15,
+    flexGrow: 1,
   },
   item: {
     flexDirection: 'row',

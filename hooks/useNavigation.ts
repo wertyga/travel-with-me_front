@@ -1,7 +1,7 @@
 import { NavigationProp } from '@react-navigation/core/src/types';
 import { useNavigation as useNativeNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/app/Navigator';
-import { SCREENS, getLastRoute } from '@/types';
+
+import { RootStackParamList, SCREENS, getLastRoute } from '@/types';
 
 export const useNavigation = () => {
   const navi = useNativeNavigation<NavigationProp<RootStackParamList>>();
