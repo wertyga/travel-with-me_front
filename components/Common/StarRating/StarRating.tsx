@@ -20,7 +20,7 @@ export const StarRating: React.FC<Props> = ({ rating }) => {
         starSize={20}
         color="white"
       />
-      <CText>{rating}</CText>
+      <CText light>{rating}</CText>
     </View>
   );
 };

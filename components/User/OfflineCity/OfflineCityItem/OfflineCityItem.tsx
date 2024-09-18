@@ -85,15 +85,19 @@ const OfflineCityItem = ({ city }: Props) => {
             }}
           >
             <View>
-              <CText numberOfLines={1} style={styles.title}>
+              <CText numberOfLines={1} style={styles.title} light>
                 {city.title}
               </CText>
-              <CText numberOfLines={1} style={styles.subtitle}>
+              <CText numberOfLines={1} style={styles.subtitle} light>
                 {city.country.title}
               </CText>
             </View>
 
-            {!!state.size && <CText numberOfLines={1}>{state.size}</CText>}
+            {!!state.size && (
+              <CText numberOfLines={1} light>
+                {state.size}
+              </CText>
+            )}
           </View>
         </Button>
         <Button style={styles.removeBtn} rectangle onPress={onPurge}>

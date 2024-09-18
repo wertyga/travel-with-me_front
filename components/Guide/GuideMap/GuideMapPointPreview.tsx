@@ -41,7 +41,7 @@ const GuideMapPointPreview = ({
   return (
     <BackgroundGradient style={styles.carouselWrapper}>
       <Trigger style={styles.swipeTrigger}>
-        <CText style={styles.pointTitle} numberOfLines={1}>
+        <CText style={styles.pointTitle} numberOfLines={1} light>
           {point.title}
         </CText>
       </Trigger>
@@ -71,7 +71,9 @@ const GuideMapPointPreview = ({
           style={styles.descriptionContainer}
           contentContainerStyle={{ paddingBottom: SCROLL_VIEW_BOTTOM_SPACE }}
         >
-          <CText style={styles.description}>{point.story}</CText>
+          <CText style={styles.description} light>
+            {point.story}
+          </CText>
         </ScrollView>
       </View>
     </BackgroundGradient>
@@ -97,7 +99,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'white',
     width: '100%',
     textTransform: 'uppercase',
   },
@@ -106,7 +107,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   description: {
-    color: 'white',
     lineHeight: 20,
     fontSize: 14,
   },

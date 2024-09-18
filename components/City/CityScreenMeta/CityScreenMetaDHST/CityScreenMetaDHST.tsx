@@ -2,13 +2,7 @@ import { useMemo } from 'react';
 
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 
-import { WebView } from 'react-native-webview';
-
 import { Entypo } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -28,11 +22,11 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
 
   const Component = useMemo(() => {
     if (type === 'Description') {
-      return <CText>{city.description}</CText>;
+      return <CText light>{city.description}</CText>;
     }
 
     if (type === 'History') {
-      return <CText>{city.history}</CText>;
+      return <CText light>{city.history}</CText>;
     }
 
     if (type === 'Security') {

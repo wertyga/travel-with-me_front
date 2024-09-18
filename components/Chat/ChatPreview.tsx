@@ -33,15 +33,15 @@ export const ChatPreview = ({
         <Avatar avatar={user.avatar} username={user.username} size={50} />
 
         <View>
-          <CText>{user.username}</CText>
-          <CText style={styles.text} numberOfLines={1}>
+          <CText light>{user.username}</CText>
+          <CText style={styles.text} numberOfLines={1} light>
             {lastMessage.text}
           </CText>
         </View>
       </View>
 
       <View style={styles.sideContent}>
-        <CText style={styles.date}>{`${date} ${time}`}</CText>
+        <CText style={styles.date} light>{`${date} ${time}`}</CText>
         {hasChatUnreadMessage && <View style={styles.hasNew} />}
       </View>
     </Button>

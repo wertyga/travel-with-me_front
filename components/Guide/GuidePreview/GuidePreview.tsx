@@ -11,8 +11,6 @@ import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
 import { useNavigation } from '@/hooks';
 
-import { defaultGuideImage } from '@/utils';
-
 import { FONTS, Guide, SCREENS } from '@/types';
 
 type Props = {
@@ -36,7 +34,7 @@ export const GuidePreview = ({ guide, country }: Props) => {
     <ImageBackgroundWithGradient
       gradient="top-bottom"
       style={styles.container}
-      image={guide.hImage || defaultGuideImage}
+      image={guide.hImage}
       contentStyle={styles.content}
       isFastImage
     >
@@ -48,10 +46,12 @@ export const GuidePreview = ({ guide, country }: Props) => {
         <CountryPill title={country} />
 
         <View>
-          <CText style={styles.title}>{guide.title}</CText>
+          <CText style={styles.title} light>
+            {guide.title}
+          </CText>
           {!!guide.pointsCount && <Text>{guide.pointsCount}</Text>}
 
-          <CText numberOfLines={3} style={styles.description}>
+          <CText numberOfLines={3} style={styles.description} light>
             {guide.description}
           </CText>
         </View>

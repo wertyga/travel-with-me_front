@@ -28,8 +28,8 @@ export const LanguagesSelect = () => {
         }}
         style={styles.container}
       >
-        {!userLanguages.length && <CText>Choose your language</CText>}
-        {!!userLanguages.length && <CText>Languages:</CText>}
+        {!userLanguages.length && <CText light>Choose your language</CText>}
+        {!!userLanguages.length && <CText light>Languages:</CText>}
 
         {userLanguages.slice(0, 3).map(({ language, flag }) => {
           return (
@@ -38,7 +38,7 @@ export const LanguagesSelect = () => {
             </CText>
           );
         })}
-        {userLanguages.length > 3 && <CText>...</CText>}
+        {userLanguages.length > 3 && <CText light>...</CText>}
       </Button>
 
       <Modal

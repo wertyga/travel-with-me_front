@@ -42,6 +42,7 @@ export type CustomButtonProps = TouchableOpacityProps & {
   rounded?: boolean;
   transparent?: boolean;
   isLoading?: boolean;
+  light?: boolean;
 };
 
 export const BaseButton = ({
@@ -67,6 +68,7 @@ export const BaseButton = ({
   rounded,
   transparent,
   isLoading,
+  light,
   ...rest
 }: CustomButtonProps) => {
   const { button: btnStyles, text: textStyles } = getArrayedButtonStyles(
@@ -115,6 +117,11 @@ export const BaseButton = ({
             styles.text,
             filled && styles.textFilled,
             !!disabled && styles.textDisabled,
+            {
+              color: light
+                ? CONSTANTS.colors.typographyLight
+                : CONSTANTS.colors.typography,
+            },
             ...(textStyles as any),
           ]}
         >

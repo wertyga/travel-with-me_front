@@ -39,11 +39,13 @@ export const AvatarWithName = ({
         {...avatarProps}
       />
       <View style={styles.nameContainer}>
-        <CText style={styles.username} numberOfLines={1}>
+        <CText style={styles.username} numberOfLines={1} light>
           {username}
         </CText>
         {!!underNameText && (
-          <CText style={styles.underNameText}>{underNameText}</CText>
+          <CText style={styles.underNameText} light>
+            {underNameText}
+          </CText>
         )}
       </View>
     </View>

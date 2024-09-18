@@ -1,7 +1,7 @@
 export const CONSTANTS = {
   colors: {
-    bgDarkest: '#152e31',
-    bg: '#f0f1f1',
+    typography: '#000000',
+    typographyLight: '#ffffff',
     accent: '#ed522e',
     dark: '#101010',
     text: '#969797',
@@ -10,6 +10,7 @@ export const CONSTANTS = {
     blue: '#19b9dd',
     ultramarine: '#30D5C8',
     ultramarine1: '#28a99f',
+    bgDarkest: '#152e31',
     bgLight: '#036068',
     bgMiddle: '#00353B',
     bgDark: '#17282E',

@@ -63,8 +63,8 @@ const Login = () => {
       isLoading={isLoading}
     >
       <ScrollView style={styles.content}>
-        <Button style={styles.goToText} onPress={onChangeForm} textable>
-          <CText>{screen === 'signin' ? 'Register' : 'Login'}</CText>
+        <Button style={styles.goToText} onPress={onChangeForm} textable light>
+          {screen === 'signin' ? 'Register' : 'Login'}
         </Button>
 
         {screen === 'signup' && <SignUpForm onSubmit={onSignUp} />}
@@ -75,6 +75,7 @@ const Login = () => {
         </View>
 
         <Button
+          light
           textable
           href={SCREENS.RecoveryPassword}
           style={styles.forgotText}

@@ -43,7 +43,9 @@ export const CityPreview = ({ city, disabled }: Props) => {
             style={styles.country}
             icon="map-point-small"
           />
-          <CText style={styles.header}>{city.title}</CText>
+          <CText style={styles.header} light>
+            {city.title}
+          </CText>
         </View>
       </ImageBackgroundWithGradient>
     </TouchableOpacity>

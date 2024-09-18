@@ -72,10 +72,10 @@ const CitiesListScreen = () => {
       bgColors={[CONSTANTS.colors.bgLight, CONSTANTS.colors.bgDark]}
       headerTitle={!isNetConnected && 'Offline Mode'}
     >
-      <FastImageBackground
-        source={SplashBgImage}
-        style={StyleSheet.absoluteFillObject}
-      />
+      {/*<FastImageBackground*/}
+      {/*  source={SplashBgImage}*/}
+      {/*  style={StyleSheet.absoluteFillObject}*/}
+      {/*/>*/}
 
       <View
         style={{
@@ -94,6 +94,7 @@ const CitiesListScreen = () => {
                 key={id}
                 style={[styles.header, state.tab === id && styles.chosenHeader]}
                 onPress={onChangeTab(id)}
+                light
               >
                 {title}
               </CText>

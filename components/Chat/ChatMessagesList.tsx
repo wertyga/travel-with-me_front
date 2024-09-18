@@ -34,7 +34,9 @@ export const ChatMessagesList = ({ chat, mainUser }: Props) => {
       ref={scrollViewRef}
     >
       {!messages.length && (
-        <CText style={styles.noMessages}>No messages yet</CText>
+        <CText style={styles.noMessages} light>
+          No messages yet
+        </CText>
       )}
 
       {messages.map(message => {

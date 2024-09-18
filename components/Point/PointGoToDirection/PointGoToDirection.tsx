@@ -6,7 +6,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import { observer } from 'mobx-react-lite';
 
-import Button, { CustomButtonProps } from '@/components/Button';
+import Button from '@/components/Button';
+import { CustomButtonProps } from '@/components/Button/BaseButton';
 import { CText } from '@/components/CText';
 import { gotoPointDirection } from '@/components/Point/PointGoToDirection/PointGoToDirection.utils';
 import { useStores } from '@/hooks';
@@ -49,7 +50,9 @@ const PointGoToDirection = ({ style = {}, onPress, point }: Props) => {
     >
       <MaterialIcons name="directions" size={24} color="white" />
       {!!distanceToPoint && (
-        <CText style={{ marginLeft: 5 }}>{distanceToPoint}</CText>
+        <CText style={{ marginLeft: 5 }} light>
+          {distanceToPoint}
+        </CText>
       )}
     </Button>
   );

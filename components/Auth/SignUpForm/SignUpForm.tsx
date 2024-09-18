@@ -1,9 +1,13 @@
 import React from 'react';
+
 import { StyleSheet, View } from 'react-native';
+
 import { Controller, useForm } from 'react-hook-form';
+
 import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
 import { Input } from '@/components/Input';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import { REGISTER_FORM_SCHEMA } from './SignUpForm.utils';
 
 type Props = {
@@ -61,7 +65,7 @@ export const SignUpForm = ({ onSubmit }: Props) => {
             <Input
               style={styles.input}
               value={value}
-              onChangeText={onChange}
+              onChange={onChange}
               placeholder="Password"
               secureTextEntry
               textContentType="password"
@@ -78,7 +82,7 @@ export const SignUpForm = ({ onSubmit }: Props) => {
             <Input
               style={styles.input}
               value={value}
-              onChangeText={onChange}
+              onChange={onChange}
               placeholder="Confirm password"
               secureTextEntry
               textContentType="password"

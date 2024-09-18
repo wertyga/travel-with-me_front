@@ -79,11 +79,11 @@ const FavoritesListItem = ({
         >
           <FastImage source={image || defaultImage} style={styles.image} />
           <View>
-            <CText numberOfLines={1} style={styles.title}>
+            <CText numberOfLines={1} style={styles.title} light>
               {title}
             </CText>
             {!!subtitle && (
-              <CText numberOfLines={1} style={styles.subtitle}>
+              <CText numberOfLines={1} style={styles.subtitle} light>
                 {subtitle}
               </CText>
             )}

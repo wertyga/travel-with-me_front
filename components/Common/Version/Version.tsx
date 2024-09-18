@@ -9,7 +9,7 @@ export const Version = () => {
 
   return (
     <View style={{ alignItems: 'flex-end', marginVertical: 5 }}>
-      <CText style={{ fontSize: 12 }}>
+      <CText style={{ fontSize: 12 }} light>
         {`v ${Constants.expoConfig?.extra?.VERSION}`}
       </CText>
     </View>

@@ -47,11 +47,15 @@ export const ChatMessage = ({
       <View style={[styles.message, isOwner && styles.messageOwner]}>
         {!!timestamp && (
           <View style={styles.dateTime}>
-            <CText style={styles.date}>{date}</CText>
-            <CText style={styles.date}>{time}</CText>
+            <CText style={styles.date} light>
+              {date}
+            </CText>
+            <CText style={styles.date} light>
+              {time}
+            </CText>
           </View>
         )}
-        <CText>{message}</CText>
+        <CText light>{message}</CText>
       </View>
     </View>
   );

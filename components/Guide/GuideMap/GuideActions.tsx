@@ -64,10 +64,14 @@ export const GuideActionsComponent = ({
       >
         <FontAwesome5 name="walking" size={18} color="white" />
         {!liveCoords && (
-          <CText style={{ marginLeft: 10 }}>Loading location...</CText>
+          <CText style={{ marginLeft: 10 }} light>
+            Loading location...
+          </CText>
         )}
         {!!nearestPoint && !!liveCoords && (
-          <CText style={{ marginLeft: 10 }}>{nearestPointLabel}</CText>
+          <CText style={{ marginLeft: 10 }} light>
+            {nearestPointLabel}
+          </CText>
         )}
       </Button>
     </ScrollHorizontalNoEdges>

@@ -25,8 +25,8 @@ export const ChangeVisibilityButton = () => {
       onPress={onChangeVisibility}
     >
       <View style={{ flex: 1 }}>
-        <CText>Show me for other people</CText>
-        <CText style={styles.optionSubtext}>
+        <CText light>Show me for other people</CText>
+        <CText style={styles.optionSubtext} light>
           This option will show you for other users who is in the same city as
           you and allow them to write to you
         </CText>

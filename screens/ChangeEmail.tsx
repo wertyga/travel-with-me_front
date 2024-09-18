@@ -1,10 +1,14 @@
 import { StyleSheet } from 'react-native';
+
 import Toast from 'react-native-toast-message';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import { ChangeEmailForm } from '@/components/Auth';
 import { CText } from '@/components/CText';
 import { useFocus, useStores } from '@/hooks';
+
 import { SCREENS } from '@/types';
 
 const RecoveryPassword = ({ navigation }) => {
@@ -34,7 +38,9 @@ const RecoveryPassword = ({ navigation }) => {
 
   return (
     <MainLayout headerTitle="Change E-mail" isLoading={isLoading}>
-      <CText style={styles.title}>Enter confirmation number</CText>
+      <CText style={styles.title} light>
+        Enter confirmation number
+      </CText>
       <ChangeEmailForm onSubmit={onSubmit} />
     </MainLayout>
   );

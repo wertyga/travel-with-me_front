@@ -23,7 +23,9 @@ export const GuideMetaComponent = ({ guide, isFetching }: Props) => {
       <GuideMetaTitle guide={guide} isFetching={isFetching} />
       <GuideMetaActions travelTime={travelTime} guide={guide} />
 
-      <CText style={{ marginBottom: 20 }}>{guide.description}</CText>
+      <CText style={{ marginBottom: 20 }} light>
+        {guide.description}
+      </CText>
 
       <>
         {isRenderPointsList && (

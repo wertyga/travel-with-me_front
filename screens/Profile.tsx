@@ -98,7 +98,9 @@ const ProfileScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={[styles.item, styles.avatarAndName]}>
             <Avatar editable />
-            <CText style={styles.name}>{user.username}</CText>
+            <CText style={styles.name} light>
+              {user.username}
+            </CText>
           </View>
 
           <Button
@@ -106,12 +108,14 @@ const ProfileScreen = () => {
             href={isNetConnected && SCREENS.ChangeEmail}
             noPaddings
           >
-            <CText>{user.email}</CText>
-            <CText style={styles.edit}>{editLabel}</CText>
+            <CText light>{user.email}</CText>
+            <CText style={styles.edit} light>
+              {editLabel}
+            </CText>
           </Button>
 
           <Button style={styles.item} noPaddings onPress={changePermissions}>
-            <CText>Foreground position permission</CText>
+            <CText light>Foreground position permission</CText>
             <Switch value={granted} onChange={changePermissions} />
           </Button>
 
@@ -131,6 +135,7 @@ const ProfileScreen = () => {
               href={SCREENS.ChatList}
               high
               style={{ marginBottom: 20, marginTop: 10 }}
+              light
             >
               Chats
             </Button>
@@ -147,8 +152,10 @@ const ProfileScreen = () => {
               href={isNetConnected && SCREENS.Contact}
               noPaddings
             >
-              <CText>Support</CText>
-              <CText style={styles.edit}>{getHelpLabel}</CText>
+              <CText light>Support</CText>
+              <CText style={styles.edit} light>
+                {getHelpLabel}
+              </CText>
             </Button>
           )}
 
@@ -158,8 +165,10 @@ const ProfileScreen = () => {
               href={SCREENS.OfflineStorage}
               noPaddings
             >
-              <CText>Offline Storage</CText>
-              <CText style={styles.edit}>{editLabel}</CText>
+              <CText light>Offline Storage</CText>
+              <CText style={styles.edit} light>
+                {editLabel}
+              </CText>
             </Button>
           )}
 
@@ -169,19 +178,30 @@ const ProfileScreen = () => {
               high
               style={styles.separateBtn}
               solid
+              light
             >
               Update Profile
             </Button>
           )}
 
           {isNetConnected && (
-            <Button onPress={handleLogout} high style={styles.separateBtn}>
+            <Button
+              onPress={handleLogout}
+              high
+              style={styles.separateBtn}
+              light
+            >
               Logout
             </Button>
           )}
 
           {isShowUpdateBtn && (
-            <Button onPress={handleUpdateApp} high style={styles.separateBtn}>
+            <Button
+              onPress={handleUpdateApp}
+              high
+              style={styles.separateBtn}
+              light
+            >
               Update app
             </Button>
           )}

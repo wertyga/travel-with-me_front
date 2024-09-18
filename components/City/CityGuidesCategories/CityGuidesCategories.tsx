@@ -1,9 +1,13 @@
 import { StyleSheet, View, ViewStyle } from 'react-native';
+
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
+
 import { FONTS } from '@/types';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
@@ -21,7 +25,9 @@ export const CityGuidesCategories = ({
 }: Props) => {
   return (
     <View style={style}>
-      <CText style={styles.title}>Guide categories</CText>
+      <CText style={styles.title} light>
+        Guide categories
+      </CText>
 
       <ScrollHorizontalNoEdges edge={CONSTANTS.spaces.paddingHorizontal}>
         {Object.entries(categories).map(([title, count]) => {

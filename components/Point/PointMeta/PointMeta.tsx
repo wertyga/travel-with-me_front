@@ -83,7 +83,7 @@ export const PointMeta = ({ point, isFetching }: Props) => {
             style={{ flexDirection: 'row', justifyContent: 'flex-start' }}
           >
             <MaterialIcons name="directions" size={24} color="white" />
-            <CText style={styles.directionText} numberOfLines={2}>
+            <CText style={styles.directionText} numberOfLines={2} light>
               {address}
             </CText>
           </Button>
@@ -92,15 +92,24 @@ export const PointMeta = ({ point, isFetching }: Props) => {
       </View>
 
       <View style={styles.titles}>
-        <Expander title={META_TEXT.description.title} defaultState={true}>
-          <CText>{point.description}</CText>
+        <Expander title={META_TEXT.description.title} defaultState={true} light>
+          <CText light>{point.description}</CText>
         </Expander>
-        <Expander title={META_TEXT.story.title} style={styles.aboutTextNext}>
-          <CText>{point.story}</CText>
+        <Expander
+          title={META_TEXT.story.title}
+          style={styles.aboutTextNext}
+          light
+        >
+          <CText light>{point.story}</CText>
         </Expander>
-        <Expander title={META_TEXT.contact.title} style={styles.aboutTextNext}>
+        <Expander
+          title={META_TEXT.contact.title}
+          style={styles.aboutTextNext}
+          light
+        >
           {!!contactData.phone && (
             <CText
+              light
               style={[styles.description]}
               onPress={() => {
                 Linking.openURL(`tel:${contactData.phone}`);
@@ -109,6 +118,7 @@ export const PointMeta = ({ point, isFetching }: Props) => {
           )}
           {!!contactData.email && (
             <CText
+              light
               style={[styles.description]}
               onPress={() => {
                 Linking.openURL(`mailto:${contactData.email}`);
@@ -117,6 +127,7 @@ export const PointMeta = ({ point, isFetching }: Props) => {
           )}
           {!!contactData.website && (
             <CText
+              light
               style={[styles.description]}
               onPress={() => {
                 Linking.openURL(contactData.website);
@@ -125,10 +136,10 @@ export const PointMeta = ({ point, isFetching }: Props) => {
           )}
         </Expander>
         {!!contactData.workTime?.length && (
-          <Expander title="Work time" style={styles.aboutTextNext}>
+          <Expander title="Work time" style={styles.aboutTextNext} light>
             {contactData.workTime.map(time => {
               return (
-                <CText key={time} style={styles.description}>
+                <CText key={time} style={styles.description} light>
                   {time}
                 </CText>
               );
@@ -140,7 +151,9 @@ export const PointMeta = ({ point, isFetching }: Props) => {
       <>
         {!!point.audioStory && (
           <>
-            <CText style={styles.aboutTitle}>Audio play of the story</CText>
+            <CText style={styles.aboutTitle} light>
+              Audio play of the story
+            </CText>
             <AudioContainer
               audioUrl={point.audioStory}
               title={point.title}

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -8,13 +8,13 @@ import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
-import { CText } from '@/components/CText';
-import { Avatar as UIAvatar } from '@/components/UI/Avatar';
 import { AvatarWithName } from '@/components/UI/AvatarWithName';
 import { useAuthGuard, useFocus, useNavigation, useStores } from '@/hooks';
 
 import { SCREENS } from '@/types';
 import { User } from '@/types/user';
+
+import { CONSTANTS } from '@/styles/constants';
 
 const UsersNearMeScreen = () => {
   useAuthGuard();
@@ -63,7 +63,11 @@ const UsersNearMeScreen = () => {
           rectangle
           onPress={() => fetchUsersNearMe(true)}
         >
-          <Ionicons name="reload" size={24} color="white" />
+          <Ionicons
+            name="reload"
+            size={24}
+            color={CONSTANTS.colors.typographyLight}
+          />
         </Button>
       </View>
 

@@ -11,6 +11,8 @@ import { useStores } from '@/hooks';
 
 import { City } from '@/types';
 
+import { CONSTANTS } from '@/styles/constants';
+
 type Props = {
   city: City;
 };
@@ -52,7 +54,11 @@ const CityDownloader = ({ city }: Props) => {
       <FontAwesome5 name="cloud-download-alt" size={24} color="white" />
       {isOfflineStoreLoading && <ActivityIndicator />}
       {isCityDownloaded && !isOfflineStoreLoading && (
-        <Ionicons name="reload" size={20} color="white" />
+        <Ionicons
+          name="reload"
+          size={20}
+          color={CONSTANTS.colors.typographyLight}
+        />
       )}
     </Button>
   );

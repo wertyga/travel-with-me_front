@@ -25,7 +25,9 @@ const GuideMetaTitle = ({ guide, isFetching }: Props) => {
           href={SCREENS.City}
           hrefParams={{ city: guide.city }}
         />
-        <CText style={styles.aboutText}>About the guide</CText>
+        <CText style={styles.aboutText} light>
+          About the guide
+        </CText>
       </View>
 
       <LikeAction

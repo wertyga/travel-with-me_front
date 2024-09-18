@@ -57,7 +57,9 @@ const FooterMenu = () => {
               )}
               {typeof icon === 'object' && icon}
 
-              <CText style={styles.title}>{title}</CText>
+              <CText style={styles.title} light>
+                {title}
+              </CText>
             </TouchableOpacity>
           );
         })}

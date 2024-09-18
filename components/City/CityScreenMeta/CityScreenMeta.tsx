@@ -85,7 +85,9 @@ const CityScreenMeta = ({ city }: Props) => {
               outlined={state.chosenCityTab !== title}
             >
               {icon}
-              <CText style={{ marginLeft: 5 }}>{title}</CText>
+              <CText style={{ marginLeft: 5 }} light>
+                {title}
+              </CText>
             </Button>
           );
         })}

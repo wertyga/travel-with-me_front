@@ -1,6 +1,9 @@
 import React from 'react';
+
 import { StyleSheet, View } from 'react-native';
+
 import { Controller, useForm } from 'react-hook-form';
+
 import { CHANGE_EMAIL_FORM_SCHEMA } from '@/components/Auth/ChangeEmailForm/ChangeEmailForm.utils';
 import Button from '@/components/Button';
 import { Input } from '@/components/Input';
@@ -57,7 +60,7 @@ export const ChangeEmailForm = ({ onSubmit }: Props) => {
           name="password"
         />
       </View>
-      <Button high fluid onPress={handleSubmit(onSubmit)}>
+      <Button high fluid onPress={handleSubmit(onSubmit)} light>
         Change E-mail
       </Button>
     </View>

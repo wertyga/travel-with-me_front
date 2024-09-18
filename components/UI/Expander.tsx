@@ -25,6 +25,7 @@ type Props = {
   title: string;
   style?: ViewStyle;
   defaultState?: boolean;
+  light?: boolean;
 };
 
 const { width: SCREEN_WIDTH } = Dimensions.get('screen');
@@ -47,6 +48,7 @@ export const Expander: React.FC<Props> = ({
   children,
   title,
   style,
+  light,
   defaultState = false,
 }) => {
   const { styles: rotateAStyles, update: updateRotate } = useAnimationRotate(
@@ -111,7 +113,9 @@ export const Expander: React.FC<Props> = ({
         activeOpacity={1}
         onPress={toggleExpand}
       >
-        <CText style={styles.title}>{title}</CText>
+        <CText style={styles.title} light={light}>
+          {title}
+        </CText>
         <Animated.View style={[styles.trigger, rotateAStyles]} />
       </TouchableOpacity>
       <Animated.View style={[isOpened && styles.children, aChildrenStyles]}>

@@ -11,6 +11,8 @@ import {
 
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
+import { CText } from '@/components/CText';
+
 import { CONSTANTS } from '@/styles/constants';
 
 type Props = Omit<TextInputProps, 'error' | 'onChangeText'> & {
@@ -35,7 +37,11 @@ export const Input = ({
         onChangeText={onChange}
         {...inputProps}
       />
-      {!!error && <Text style={styles.error}>{error}</Text>}
+      {!!error && (
+        <CText style={styles.error} light>
+          {error}
+        </CText>
+      )}
     </View>
   );
 };

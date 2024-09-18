@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+
 import { StyleSheet, View } from 'react-native';
+
 import { observer } from 'mobx-react-lite';
+
 import { MainLayout } from '@/Layouts';
 import { RecoveryPasswordForm } from '@/components/Auth';
 import Button from '@/components/Button';
 import { useNavigation, useStores } from '@/hooks';
+
 import { SCREENS } from '@/types';
 
 const RecoveryPassword = () => {
@@ -76,7 +80,13 @@ const RecoveryPassword = () => {
   return (
     <MainLayout headerTitle="Recovery Password" isLoading={isLoading}>
       <View style={styles.container}>
-        <Button fluid textable style={styles.goToBtn} href={SCREENS.Login}>
+        <Button
+          fluid
+          textable
+          style={styles.goToBtn}
+          href={SCREENS.Login}
+          light
+        >
           Login
         </Button>
 

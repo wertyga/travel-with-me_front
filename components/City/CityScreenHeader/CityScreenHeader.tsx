@@ -55,8 +55,9 @@ export const CityScreenHeaderComponent = ({
   return (
     <Animated.View style={[styles.container, viewStyle, animatedStyles]}>
       <CText
-        style={[styles.title, isDark && styles.dark]}
+        style={[styles.title]}
         numberOfLines={numberOfLines}
+        light={!isDark}
       >
         {title}
       </CText>
@@ -88,9 +89,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     flex: 1,
-  },
-  dark: {
-    color: 'black',
   },
   hide: {
     opacity: 0,

@@ -36,7 +36,7 @@ export const Avatar = ({
       {!!avatar && <Image source={{ uri: avatar }} style={styles.imageStyle} />}
 
       {!avatar && !!username && (
-        <CText style={[{ fontSize: size / 2 }, filled && styles.filled]}>
+        <CText style={[{ fontSize: size / 2 }, filled && styles.filled]} light>
           {username.charAt(0).toUpperCase()}
         </CText>
       )}

@@ -39,7 +39,7 @@ export const CityScreenMetaDHSTSecurity = ({ security }: Props) => {
               size={24}
               color="white"
             />
-            <CText onPress={onCall(police)} style={styles.rowText}>
+            <CText onPress={onCall(police)} style={styles.rowText} light>
               {police}
             </CText>
             <AntDesign name="phone" size={12} color="white" />
@@ -48,7 +48,11 @@ export const CityScreenMetaDHSTSecurity = ({ security }: Props) => {
         {!!fireDepartment && (
           <View style={styles.row}>
             <SimpleLineIcons name="fire" size={24} color="white" />
-            <CText onPress={onCall(fireDepartment)} style={styles.rowText}>
+            <CText
+              onPress={onCall(fireDepartment)}
+              style={styles.rowText}
+              light
+            >
               {fireDepartment}
             </CText>
             <AntDesign name="phone" size={12} color="white" />
@@ -57,7 +61,7 @@ export const CityScreenMetaDHSTSecurity = ({ security }: Props) => {
         {!!ambulance && (
           <View style={styles.row}>
             <FontAwesome name="ambulance" size={24} color="white" />
-            <CText onPress={onCall(ambulance)} style={styles.rowText}>
+            <CText onPress={onCall(ambulance)} style={styles.rowText} light>
               {ambulance}
             </CText>
             <AntDesign name="phone" size={12} color="white" />

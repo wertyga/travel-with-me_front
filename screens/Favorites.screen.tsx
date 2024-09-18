@@ -45,7 +45,7 @@ const FavoritesScreen = () => {
       )}
       {isEmptyList && (
         <View style={styles.emptyText}>
-          <CText style={{ textAlign: 'center', fontSize: 14 }}>
+          <CText style={{ textAlign: 'center', fontSize: 14 }} light>
             This page is empty for now, but as soon as you select the guide or
             place you like, it will be displayed here
           </CText>

@@ -36,7 +36,9 @@ export const CountryPill = ({
       >
         {!!icon && <Icon name={icon as IconNames} />}
         {customIcon}
-        <CText style={styles.title}>{title}</CText>
+        <CText style={styles.title} light>
+          {title}
+        </CText>
       </Button>
     </TouchableOpacity>
   );

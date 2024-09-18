@@ -50,7 +50,9 @@ const OauthGoogle = () => {
       isLoading={isLoading}
     >
       <FontAwesome name="google" size={28} color="white" />
-      <CText style={styles.text}>Sign in with Google</CText>
+      <CText style={styles.text} light>
+        Sign in with Google
+      </CText>
     </Button>
   );
 };
