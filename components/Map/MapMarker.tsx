@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 
 import { Marker } from 'react-native-maps';
 
@@ -34,127 +34,128 @@ export const MapMarker = React.memo(
     onPress,
     isChosen,
     isChosenExists,
-    children,
-    title,
   }: Props) => {
     const [, setLoaded] = useState(false);
 
     const onLoad = useCallback(() => {
+      if (Platform.OS === 'ios') return;
+
       setTimeout(() => {
         setLoaded(true);
       }, 300);
     }, []);
 
-    const { rootMarkerSize, markerInnerSize, mainMarkerSize } = useMemo(() => {
-      const realSize = isChosen ? markerSize + 5 : markerSize;
-
-      return {
-        mainMarkerSize: {
-          height: realSize + 10,
-        },
-        rootMarkerSize: {
-          width: realSize + 2,
-          height: realSize + 2,
-          borderRadius: realSize + 2,
-          transform: [{ translateY: isChosen ? 0 : 8 }],
-        },
-        markerInnerSize: {
-          width: realSize - 4,
-          height: realSize - 4,
-          top: (realSize - (realSize - 4)) / 2,
-          left: (realSize - (realSize - 4)) / 2,
-        },
-      };
-    }, [markerSize, isChosen]);
-
     if (!coords?.lat || !coords?.lng) return null;
-
-    const opacity = isChosenExists && !isChosen ? 0.6 : 1;
 
     return (
       <Marker
         coordinate={{ latitude: coords.lat, longitude: coords.lng }}
         onPress={onPress}
-        tracksViewChanges={false}
+        tracksViewChanges={Platform.OS === 'ios'}
         tracksInfoWindowChanges={false}
-        opacity={opacity}
-        style={[mainMarkerSize, isChosen && { zIndex: 5 }]}
       >
         <View
           style={[
-            styles.rootMarker,
-            rootMarkerSize,
-            isChosen && styles.chosenParent,
+            styles.markerContainer,
+            isChosen && styles.markerContainerChosen,
           ]}
         >
           <View
             style={[
-              styles.marker,
-              markerInnerSize,
-              { borderRadius: markerSize },
-              isChosen && styles.chosenChild,
+              styles.imageContainer,
+              isChosen && styles.imageContainerChosen,
             ]}
           >
             <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
-            {!!image && (
-              <FastImage
-                source={image || DefaultPointImage}
-                style={[styles.image, { borderRadius: markerSize }]}
-                key={image}
-                onLoad={onLoad}
-              />
-            )}
-            {!image && !!title && (
-              <View style={[styles.image, markerInnerSize]}>
-                <Text>{title.charAt(0).toUpperCase()}</Text>
-              </View>
-            )}
-            {children}
+            <FastImage
+              source={image || DefaultPointImage}
+              style={{
+                width: markerSize,
+                height: markerSize,
+                borderRadius: markerSize,
+              }}
+              key={image}
+              onLoad={onLoad}
+            />
+          </View>
+          <View style={styles.caretContainer}>
+            <View
+              style={[styles.caretBorder, isChosen && styles.caretBorderChosen]}
+            />
+            <View style={[styles.caret, isChosen && styles.caretChosen]} />
           </View>
         </View>
-        {isChosen && <View style={styles.chosenDot} />}
       </Marker>
     );
   }
 );
 
 const styles = StyleSheet.create({
-  rootMarker: {
-    position: 'relative',
-    backgroundColor: 'white',
+  markerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingRight: 8,
+    paddingLeft: 8,
+    paddingBottom: 10, // Отступ снизу для хвостика
+    paddingTop: 10, // Отступ сверху для изображения
+    zIndex: 1,
+  },
+  markerContainerChosen: {
+    zIndex: 5,
+  },
+  imageContainer: {
+    backgroundColor: '#fff',
+    padding: 3,
+    borderRadius: 50,
     borderWidth: 1,
-    borderColor: 'black',
-    borderStyle: 'solid',
-    bottom: 0,
+    borderColor: '#fff',
+    //
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 10, // Для Android
   },
-  chosenParent: {
+  imageContainerChosen: {
     backgroundColor: CONSTANTS.colors.bgMiddle,
+    borderColor: CONSTANTS.colors.bgMiddle,
   },
-  chosenMarker: {},
-  chosenDot: {
-    width: 6,
-    height: 6,
-    backgroundColor: CONSTANTS.colors.bgMiddle,
-    borderRadius: 8,
+  caretContainer: {
     position: 'absolute',
-    bottom: 0,
-    left: '50%',
-    transform: [{ translateX: -3 }],
+    bottom: 4, // Позиционирование под маркером
+    alignItems: 'center',
   },
-  chosenChild: {},
-  marker: {
+  caret: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderTopWidth: 8,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#fff', // Цвет хвостика
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 10, // Для Android
+  },
+  caretChosen: {
+    borderTopColor: CONSTANTS.colors.bgMiddle,
+  },
+  caretBorder: {
     position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    backgroundColor: CONSTANTS.colors.blue,
+    top: 0,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 9,
+    borderRightWidth: 9,
+    borderTopWidth: 9,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#fff', // Цвет бордера хвостика
   },
-  image: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    resizeMode: 'cover',
-    alignItems: 'center',
-    justifyContent: 'center',
+  caretBorderChosen: {
+    borderTopColor: CONSTANTS.colors.bgMiddle,
   },
 });

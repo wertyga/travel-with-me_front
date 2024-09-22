@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+
+import { StyleSheet, View, ViewStyle } from 'react-native';
+
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+
 import { observer } from 'mobx-react-lite';
-import { CText } from '@/components/CText';
+
 import {
   customMapStyles,
   getMiddleCoordinates,
@@ -10,6 +13,7 @@ import {
 import { MapMarker } from '@/components/Map/MapMarker';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
+
 import { City, FONTS, SCREENS } from '@/types';
 
 const EUROPE_REGION = {
@@ -19,15 +23,16 @@ const EUROPE_REGION = {
   longitudeDelta: 61.60953674465418,
 };
 
-export const CitiesMapComponent = () => {
+type Props = {
+  containerStyle?: ViewStyle;
+};
+
+export const CitiesMapComponent = ({ containerStyle }: Props) => {
   const navi = useNavigation();
-  const { layoutHeight, getCityLightList, cityLightList } = useStores(
-    stores => ({
-      layoutHeight: stores.domStore.layoutHeight,
-      getCityLightList: stores.citiesListStore.getCityLightList,
-      cityLightList: stores.citiesListStore.cityLightList,
-    })
-  );
+  const { getCityLightList, cityLightList } = useStores(stores => ({
+    getCityLightList: stores.citiesListStore.getCityLightList,
+    cityLightList: stores.citiesListStore.cityLightList,
+  }));
 
   useEffect(() => {
     if (!cityLightList.length) {
@@ -48,7 +53,7 @@ export const CitiesMapComponent = () => {
   }
 
   return (
-    <View style={{ ...styles.map, height: layoutHeight - 230 }}>
+    <View style={[styles.map, containerStyle]}>
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.mapSelf}
@@ -65,9 +70,7 @@ export const CitiesMapComponent = () => {
               image={city.image}
               markerSize={42}
               onPress={navigateToCity(city)}
-            >
-              <CText style={styles.textCount}>{city.guidesCount}</CText>
-            </MapMarker>
+            />
           );
         })}
       </MapView>
@@ -78,6 +81,8 @@ export const CitiesMapComponent = () => {
 const styles = StyleSheet.create({
   map: {
     borderRadius: 6,
+    flex: 1,
+    position: 'relative',
     overflow: 'hidden',
   },
   mapSelf: {

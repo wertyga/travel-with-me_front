@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
-import { FastImageBackground } from '@/components/FastImage';
 import { SafeLoader } from '@/components/SafeLoader';
 import { GlobalSearch } from '@/components/Search';
 import { useFocus, useNavigation, useStores } from '@/hooks';
@@ -69,20 +68,16 @@ const CitiesListScreen = () => {
   return (
     <MainLayout
       style={styles.layout}
-      bgColors={[CONSTANTS.colors.bgLight, CONSTANTS.colors.bgDark]}
       headerTitle={!isNetConnected && 'Offline Mode'}
+      bgImage={SplashBgImage}
     >
-      {/*<FastImageBackground*/}
-      {/*  source={SplashBgImage}*/}
-      {/*  style={StyleSheet.absoluteFillObject}*/}
-      {/*/>*/}
-
       <View
         style={{
-          position: 'absolute',
-          top: CONSTANTS.spaces.paddingTop,
-          left: CONSTANTS.spaces.paddingHorizontal,
-          width: '100%',
+          // position: 'absolute',
+          // top: CONSTANTS.spaces.paddingTop,
+          // left: CONSTANTS.spaces.paddingHorizontal,
+          // width: '100%',
+          marginTop: CONSTANTS.spaces.paddingTop,
           zIndex: 1,
         }}
       >
@@ -104,12 +99,13 @@ const CitiesListScreen = () => {
       </View>
 
       {state.tab === 'list' && (
-        <CitiesList cities={cities} style={{ paddingTop: 160 }} />
+        <CitiesList cities={cities} style={{ paddingTop: 80 }} key="list" />
       )}
       {state.tab === 'map' && (
-        <View style={{ paddingTop: 160 }}>
-          <CitiesMap />
-        </View>
+        <CitiesMap
+          containerStyle={{ marginTop: 60, marginBottom: 5 }}
+          key="map"
+        />
       )}
     </MainLayout>
   );

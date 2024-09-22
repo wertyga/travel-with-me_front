@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
+import { BackButton } from '@/Layouts/MainLayout/components/BackButton';
 import Button from '@/components/Button';
 import { ChatMessagesList } from '@/components/Chat/ChatMessagesList';
 import { Input } from '@/components/Input';
@@ -82,19 +83,20 @@ const Chat = ({ mainUser, guestUser }: Props) => {
     };
   }, []);
 
-  const { messages = [] } = chat || {};
-
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <AvatarWithName
-          size={40}
-          avatar={guestUser.avatar}
-          username={guestUser.username}
-          style={styles.avatar}
-          containerStyle={styles.avatarContainer}
-          underNameText={guestUser.languages?.map(({ flag }) => flag).join(' ')}
-        />
+        <View style={styles.avatarContainer}>
+          <BackButton transparent />
+          <AvatarWithName
+            size={40}
+            avatar={guestUser.avatar}
+            username={guestUser.username}
+            underNameText={guestUser.languages
+              ?.map(({ flag }) => flag)
+              .join(' ')}
+          />
+        </View>
 
         <ChatMessagesList chat={chat} mainUser={mainUser} />
       </View>
@@ -133,12 +135,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 10,
   },
-  avatar: {},
   avatarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: CONSTANTS.colors.bgLight,
     paddingVertical: 10,
     marginHorizontal: -CONSTANTS.spaces.paddingHorizontal,
-    paddingLeft: CONSTANTS.spaces.paddingHorizontal,
   },
   content: {
     flex: 1,

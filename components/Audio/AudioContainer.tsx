@@ -180,10 +180,14 @@ const AudioContainer = ({
           ...(isOpen
             ? {
                 padding: 10,
+                height: 60,
               }
             : {
                 justifyContent: 'center',
                 padding: 0,
+                borderRadius: 40,
+                height: 50,
+                maxWidth: 50,
               }),
         },
         aContainerStyles,
@@ -201,7 +205,11 @@ const AudioContainer = ({
         ]}
       >
         <GestureHandlerRootView style={[styles.slider]}>
-          {withTitle && <CText style={styles.title}>{audioTitle}</CText>}
+          {withTitle && (
+            <CText style={styles.title} light>
+              {audioTitle}
+            </CText>
+          )}
           <Slider
             theme={SLIDER_THEME}
             progress={progress}
@@ -244,6 +252,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    backgroundColor: CONSTANTS.colors.bgMiddle,
+    zIndex: 1,
   },
   staticContainer: {
     padding: 5,
@@ -254,7 +264,6 @@ const styles = StyleSheet.create({
   absolute: {
     position: 'absolute',
     right: CONSTANTS.spaces.paddingHorizontal,
-    height: 60,
     borderRadius: 6,
   },
   actions: {

@@ -26,6 +26,7 @@ export const ChatPreview = ({
     <Button
       style={styles.container}
       transparent
+      noPaddings
       href={SCREENS.Chat}
       hrefParams={{ withUser: user }}
     >

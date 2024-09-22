@@ -6,15 +6,19 @@ import { Marker } from 'react-native-maps';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 
-import { Path } from '@/types';
+import { observer } from 'mobx-react-lite';
+
+import { useStores } from '@/hooks';
 
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = {
-  liveCoords: Path;
-};
+export const MyLocationMarker = observer(() => {
+  const { liveCoords } = useStores(stores => ({
+    liveCoords: stores.locationStore.liveCoords,
+  }));
 
-export const MyLocationMarker = ({ liveCoords }: Props) => {
+  if (!liveCoords) return null;
+
   return (
     <Marker
       coordinate={{
@@ -27,7 +31,7 @@ export const MyLocationMarker = ({ liveCoords }: Props) => {
       </View>
     </Marker>
   );
-};
+});
 
 const styles = StyleSheet.create({
   icon: {

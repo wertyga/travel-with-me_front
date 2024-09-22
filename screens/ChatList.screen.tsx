@@ -22,7 +22,7 @@ const ChatListScreen = () => {
   }, []);
 
   return (
-    <MainLayout headerTitle="My chats">
+    <MainLayout headerTitle="My chats" withBackButton>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}

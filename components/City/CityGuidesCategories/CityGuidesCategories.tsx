@@ -37,6 +37,7 @@ export const CityGuidesCategories = ({
               outlined={title !== chosenCategory}
               style={styles.category}
               onPress={onCategoryPress(title)}
+              light
             >{`${title}${count ? ` (${count})` : ''}`}</Button>
           );
         })}

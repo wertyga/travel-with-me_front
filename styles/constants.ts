@@ -13,12 +13,17 @@ export const CONSTANTS = {
     bgDarkest: '#152e31',
     bgLight: '#036068',
     bgMiddle: '#00353B',
+    footerColor: '#00353B',
     bgDark: '#17282E',
     bgDark2: '#182E2F',
   },
   spaces: {
-    paddingTop: 50,
+    paddingTop: 60,
     paddingHorizontal: 15,
     footerHeight: 60,
+    pullTriggerHeight: 6,
+  },
+  indexes: {
+    footerZIndex: 200,
   },
 };

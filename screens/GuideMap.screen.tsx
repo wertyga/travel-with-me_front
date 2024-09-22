@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -25,6 +25,12 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
       setIsFollowingGuide: stores.guideStore.setIsFollowingGuide,
       onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     }));
+
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+
+  const toggleHideHeader = (isHidden?: boolean) => {
+    setIsHeaderHidden(isHidden === undefined ? !isHeaderHidden : isHidden);
+  };
 
   useLayoutEffect(() => {
     if (!route.params?.guide) {
@@ -57,10 +63,10 @@ const GuideMapScreen: PageScreen<SCREENS.GuideMap> = ({ route }) => {
       headerTitle={guide.title}
       bgImage={guide.vImage}
       numberOfLinesTitle={1}
-      noFooter
       isHeaderDark
+      isHeaderHidden={isHeaderHidden}
     >
-      <GuideMap guide={guide} />
+      <GuideMap toggleHideHeader={toggleHideHeader} />
     </MainLayout>
   );
 };

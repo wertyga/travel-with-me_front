@@ -15,6 +15,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { Modal } from '@/components/Common/Modal/Modal';
 import { UploadChoice, UploadTypes } from '@/components/UI/UploadChoice';
 
+import { CONSTANTS } from '@/styles/constants';
+
 export type ImageStorage = {
   uri: string;
 };
@@ -116,7 +118,7 @@ export const UploadImage = ({
         visible={isModalShown}
         onClose={() => setIsModalShown(false)}
         title="Choose image"
-        style={{ alignItems: 'center', justifyContent: 'center' }}
+        style={styles.modal}
         transparent
       >
         <UploadChoice onChoose={onChooseType} />
@@ -137,5 +139,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
+  },
+  modal: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

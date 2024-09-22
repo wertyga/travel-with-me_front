@@ -33,7 +33,7 @@ export const LanguagesSelect = () => {
 
         {userLanguages.slice(0, 3).map(({ language, flag }) => {
           return (
-            <CText key={language} style={styles.buttonContent}>
+            <CText key={language} style={styles.buttonContent} light>
               {flag}
             </CText>
           );

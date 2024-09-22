@@ -12,7 +12,6 @@ import {
 import { getArrayedButtonStyles } from '@/components/Button/Button.utils';
 import { CText } from '@/components/CText';
 import { CTextStyleProp } from '@/components/CText/CText';
-import { useNavigation } from '@/hooks';
 
 import { FONTS, ParamsListType, SCREENS } from '@/types';
 

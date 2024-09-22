@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+
+import { useRoute } from '@react-navigation/native';
 
 import CarouselEx from 'react-native-snap-carousel';
 
-import { StatusBar } from 'expo-status-bar';
-
 import { observer } from 'mobx-react-lite';
 
+import { IOS_ADDITIONAL_FOOTER_SPACE } from '@/Layouts/MainLayout/MainLayout';
 import Button from '@/components/Button';
-import { GestureUp } from '@/components/Gestures/GestureUp';
+import { GestureUpFling } from '@/components/Gestures/GestureUpFling';
+import { ShowAllCityPlacesButton } from '@/components/Guide/GuideMap/components/ShowAllCityPlacesButton';
 import { Map } from '@/components/Map';
 import { DEFAULT_DELTA } from '@/components/Map/Map';
 import { useForegroundPermissions, useStores } from '@/hooks';
+import { useNavigation } from '@/hooks';
 
 import { FONTS, Guide, Place, SCREENS } from '@/types';
 
@@ -24,24 +27,32 @@ import GuideMapPointPreview from './GuideMapPointPreview';
 import { PointImagesCarousel } from './PointImagesCarousel';
 
 type Props = {
-  guide: Guide;
+  toggleHideHeader: (value?: boolean) => void;
 };
 
 const MAX_PREVIEW_SWIPE_TOP = 50;
-const PREVIEW_INITIAL_HEIGHT = 180;
+const PREVIEW_INITIAL_HEIGHT = Platform.OS === 'ios' ? 300 : 240;
 export const MAP_MARKER_SIZE = 40;
+export const ELEMENTS_ON_THE_TOP_OF_PREVIEW_POSITION = 230;
 
-const GuideMap = ({ guide }: Props) => {
+const GuideMap = ({ toggleHideHeader }: Props) => {
+  const router = useRoute();
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
   const { granted, status } = useForegroundPermissions();
 
-  const { visiblePoint, isFollowingToGuide, updateDomState } = useStores(
+  const isCitySource = (router.params as any)?.pointSource === 'city';
+
+  const { visiblePoint, isFollowingToGuide, guide, points } = useStores(
     stores => {
       return {
         visiblePoint: stores.guideStore.visiblePoint,
+        guide: stores.guideStore.guide,
+        points:
+          (isCitySource
+            ? stores.cityStore.currentCityPlaces
+            : stores.guideStore.guide?.points) || [],
         isFollowingToGuide: stores.guideStore.isFollowingToGuide,
-        updateDomState: stores.domStore.updateDomState,
       };
     }
   );
@@ -55,7 +66,7 @@ const GuideMap = ({ guide }: Props) => {
   });
 
   const onPointChoose = (point: Place) => {
-    const pointIndex = guide.points.findIndex(p => p._id === point._id);
+    const pointIndex = points.findIndex(p => p._id === point._id);
     carouselRef.current?.snapToItem(pointIndex, false);
 
     if (state.pointShowing?._id !== point._id) {
@@ -67,7 +78,7 @@ const GuideMap = ({ guide }: Props) => {
   };
 
   const handleSlideToPoint = (point: Place) => {
-    const pointIndex = guide.points.findIndex(({ _id }) => _id === point._id);
+    const pointIndex = points.findIndex(({ _id }) => _id === point._id);
     carouselRef.current?.snapToItem(pointIndex, false, false);
   };
 
@@ -82,9 +93,7 @@ const GuideMap = ({ guide }: Props) => {
   useEffect(() => {
     if (!visiblePoint || !isFollowingToGuide) return;
 
-    const fulfilledPoint = guide.points.find(
-      ({ _id }) => _id === visiblePoint?._id
-    );
+    const fulfilledPoint = points.find(({ _id }) => _id === visiblePoint?._id);
     setState(prev => ({
       ...prev,
       pointShowing: fulfilledPoint || visiblePoint,
@@ -94,31 +103,27 @@ const GuideMap = ({ guide }: Props) => {
   }, [visiblePoint?._id, isFollowingToGuide, guide]);
 
   useEffect(() => {
-    updateDomState({
-      header: {
-        display: state.pointShowing ? 'none' : 'flex',
-      },
-    });
-  }, [state.pointShowing]);
+    toggleHideHeader(state.isMetaOpened);
+  }, [state.isMetaOpened]);
 
   useEffect(() => {
     setState(prev => ({
       ...prev,
-      pointShowing: guide.points[0],
+      pointShowing: points[0],
     }));
-  }, [guide]);
+  }, [guide, isCitySource]);
 
   const isLocationDenied = status === 'denied';
 
   return (
     <>
       <Map
-        points={guide.points}
+        points={points}
         chosenPoint={state.pointShowing}
         onPointPress={onPointChoose}
         initialRegion={{
-          latitude: guide.points[0].coords.lat,
-          longitude: guide.points[0].coords.lng,
+          latitude: points[0].coords.lat,
+          longitude: points[0].coords.lng,
           latitudeDelta: DEFAULT_DELTA,
           longitudeDelta: DEFAULT_DELTA,
         }}
@@ -143,26 +148,27 @@ const GuideMap = ({ guide }: Props) => {
       </Map>
 
       {!!state.pointShowing && (
-        <GestureUp
+        <GestureUpFling
           initialHeight={PREVIEW_INITIAL_HEIGHT}
           maxTop={MAX_PREVIEW_SWIPE_TOP}
           onOpen={(isMetaOpened: boolean) => {
             setState(prev => ({ ...prev, isMetaOpened }));
           }}
+          zIndex={2}
         >
           {Trigger => {
             return (
               <GuideMapPointPreview
                 point={state.pointShowing}
                 Trigger={Trigger}
-                guide={guide}
+                points={points}
                 onPointChange={onPointChoose}
                 onOpenGallery={() => onToggleCarouselShow(true)}
-                isBig={state.isMetaOpened}
+                isOpened={state.isMetaOpened}
               />
             );
           }}
-        </GestureUp>
+        </GestureUpFling>
       )}
 
       {state.isShowCarouselImages && !!state.pointShowing && (
@@ -175,6 +181,8 @@ const GuideMap = ({ guide }: Props) => {
   );
 };
 
+export default observer(GuideMap);
+
 const styles = StyleSheet.create({
   map: {
     position: 'absolute',
@@ -182,11 +190,11 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   showMyLocationBtnStyle: {
-    bottom: PREVIEW_INITIAL_HEIGHT + 50,
+    bottom: ELEMENTS_ON_THE_TOP_OF_PREVIEW_POSITION,
   },
   mapActions: {
     position: 'absolute',
-    top: 100,
+    top: CONSTANTS.spaces.paddingTop + 50,
     paddingHorizontal: 10,
   },
   pointActions: {
@@ -223,5 +231,3 @@ const styles = StyleSheet.create({
     top: 80,
   },
 });
-
-export default observer(GuideMap);

@@ -22,7 +22,7 @@ export const UploadChoice = ({ onChoose }: UploadChoiceProps) => {
           onPress={() => onChoose('camera')}
         >
           <Entypo name="camera" size={35} color="white" />
-          <CText>Open camera</CText>
+          <CText light>Open camera</CText>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.item}
@@ -30,7 +30,7 @@ export const UploadChoice = ({ onChoose }: UploadChoiceProps) => {
           onPress={() => onChoose('folder')}
         >
           <Entypo name="folder" size={35} color="white" />
-          <CText>Open inner storage</CText>
+          <CText light>Open inner storage</CText>
         </TouchableOpacity>
       </View>
     </View>

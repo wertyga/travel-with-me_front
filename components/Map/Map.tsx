@@ -23,6 +23,7 @@ import Button from '@/components/Button';
 import { customMapStyles } from '@/components/Map/Map.utils';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
+import { ShowMyLocation } from '@/components/Map/ShowMyLocation';
 import { useStores } from '@/hooks';
 
 import { Place } from '@/types';
@@ -60,10 +61,6 @@ export const MapComponent = ({
 }: Props) => {
   const mapRef = useRef();
   const regionRef = useRef<Region>({} as Region);
-
-  const { liveCoords } = useStores(stores => ({
-    liveCoords: stores.locationStore.liveCoords,
-  }));
 
   const [currentRegion, setCurrentRegion] = useState<Region | undefined>();
 
@@ -135,15 +132,14 @@ export const MapComponent = ({
         initialRegion={initialRegion}
         {...mapViewProps}
       >
-        {!!liveCoords && showMyLocation && (
-          <MyLocationMarker liveCoords={liveCoords} />
-        )}
+        {showMyLocation && <MyLocationMarker />}
 
-        {formattedPoints.map((point, index) => {
-          const { coords, title, description, images, isChosen } = point;
+        {formattedPoints.map(point => {
+          const { coords, title, description, images, isChosen, _id } = point;
+
           return (
             <MapMarker
-              key={title + index}
+              key={_id}
               onPress={handlePointPress(point)}
               markerSize={mapMarkerSize}
               isChosenExists={!!chosenPoint}
@@ -152,17 +148,12 @@ export const MapComponent = ({
           );
         })}
       </MapView>
-      {!!liveCoords && (
-        <Button
-          style={[styles.showMyLocationBtn, showMyLocationBtnStyle]}
-          onPress={onGetMyLocationClick}
-          noPaddings
-          squareSize={40}
-          rounded
-        >
-          <MaterialIcons name="location-searching" size={20} color="white" />
-        </Button>
-      )}
+
+      <ShowMyLocation
+        onGetMyLocationClick={onGetMyLocationClick}
+        showMyLocationBtnStyle={showMyLocationBtnStyle}
+      />
+
       {children}
     </View>
   );
@@ -175,12 +166,6 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-  showMyLocationBtn: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-    backgroundColor: CONSTANTS.colors.bgLight,
-  },
 });
 
-export const Map = observer(MapComponent);
+export const Map = React.memo(MapComponent);

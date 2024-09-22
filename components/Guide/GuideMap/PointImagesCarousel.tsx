@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
 import {
   Gesture,
@@ -25,6 +25,8 @@ import { ZoomImage } from '@/components/Common/ZoomImage/ZoomImage';
 import { useStores } from '@/hooks';
 
 import { FONTS, Place } from '@/types';
+
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   point: Place;
@@ -145,23 +147,14 @@ export const PointImagesCarouselComponent = ({
       style={{
         ...styles.container,
         width: point.images.length * windowWidth,
-        height: layoutHeight,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
       }}
     >
-      <GestureHandlerRootView
-        style={[
-          {
-            height: layoutHeight,
-          },
-        ]}
-      >
+      <GestureHandlerRootView>
         <GestureDetector gesture={gesture}>
           <Animated.View
             style={[
               styles.gallery,
               {
-                height: layoutHeight,
                 width: point.images.length * windowWidth,
               },
               animatedWrapperStyles,
@@ -184,60 +177,58 @@ export const PointImagesCarouselComponent = ({
         </GestureDetector>
       </GestureHandlerRootView>
 
-      <LinearGradient
-        colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']}
-        style={styles.titleGradient}
-      >
-        <CText style={styles.title}>{point.title}</CText>
-      </LinearGradient>
+      {/*<LinearGradient*/}
+      {/*  colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']}*/}
+      {/*  style={styles.titleGradient}*/}
+      {/*>*/}
+      {/*  <CText style={styles.title} light>*/}
+      {/*    {point.title}*/}
+      {/*  </CText>*/}
+      {/*</LinearGradient>*/}
 
-      <LinearGradient
-        colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']}
-        style={styles.actionsContainer}
-      >
-        <ShowToSlideTop style={styles.showToTop} />
+      <View style={styles.actionsContainer}>
+        <ShowToSlideTop style={styles.showToTop} size={20} />
 
         <CarouselDots
           style={styles.dots}
           totalCount={point.images.length}
           currentIndex={currentIndex}
         />
-      </LinearGradient>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 200,
+    zIndex: 300,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
     ...StyleSheet.absoluteFillObject,
   },
   gallery: {
     flexDirection: 'row',
   },
-  titleGradient: {
-    zIndex: 200,
-    top: 0,
-    left: 0,
-    right: 0,
-    position: 'absolute',
-    paddingTop: 40,
-    paddingBottom: 40,
-  },
-  title: {
-    flex: 1,
-    width: Dimensions.get('window').width - 20,
-    textAlign: 'center',
-    fontSize: 25,
-    fontFamily: FONTS.CrimsonBold,
-  },
+  // titleGradient: {
+  //   zIndex: 300,
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   position: 'absolute',
+  //   paddingTop: 40,
+  //   paddingBottom: 40,
+  // },
+  // title: {
+  //   flex: 1,
+  //   width: Dimensions.get('window').width - 20,
+  //   textAlign: 'center',
+  //   fontSize: 25,
+  //   fontFamily: FONTS.CrimsonBold,
+  // },
   actionsContainer: {
     position: 'absolute',
-    zIndex: 10000,
     right: 0,
     left: 0,
-    bottom: 0,
-    height: 70,
+    bottom: 20,
     width: Dimensions.get('window').width,
   },
   scrollToCloseBtn: {
@@ -258,7 +249,7 @@ const styles = StyleSheet.create({
   showToTop: {
     position: 'absolute',
     right: 20,
-    bottom: 40,
+    bottom: 0,
   },
 });
 

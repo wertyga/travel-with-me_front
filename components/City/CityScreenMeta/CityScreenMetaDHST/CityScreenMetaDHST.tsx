@@ -33,50 +33,6 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
       if (!city.security) return null;
 
       return <CityScreenMetaDHSTSecurity security={city.security} />;
-
-      // const {
-      //   overview,
-      //   emergency: { police, fireDepartment, ambulance },
-      // } = city.security;
-      // return (
-      //   <View>
-      //     <View style={styles.security}>
-      //       {!!police && (
-      //         <View style={styles.row}>
-      //           <MaterialCommunityIcons
-      //             name="police-badge-outline"
-      //             size={24}
-      //             color="white"
-      //           />
-      //           <CText onPress={onCall(police)} style={styles.rowText}>
-      //             {police}
-      //           </CText>
-      //           <AntDesign name="phone" size={12} color="white" />
-      //         </View>
-      //       )}
-      //       {!!fireDepartment && (
-      //         <View style={styles.row}>
-      //           <SimpleLineIcons name="fire" size={24} color="white" />
-      //           <CText onPress={onCall(fireDepartment)} style={styles.rowText}>
-      //             {fireDepartment}
-      //           </CText>
-      //           <AntDesign name="phone" size={12} color="white" />
-      //         </View>
-      //       )}
-      //       {!!ambulance && (
-      //         <View style={styles.row}>
-      //           <FontAwesome name="ambulance" size={24} color="white" />
-      //           <CText onPress={onCall(ambulance)} style={styles.rowText}>
-      //             {ambulance}
-      //           </CText>
-      //           <AntDesign name="phone" size={12} color="white" />
-      //         </View>
-      //       )}
-      //     </View>
-      //     <WebView></WebView>
-      //     <CText style={styles.overview}>{overview}</CText>
-      //   </View>
-      // );
     }
 
     if (type === 'Transport') {
@@ -87,19 +43,21 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
 
       return (
         <View>
-          <CText style={styles.overview}>{overview}</CText>
+          <CText style={styles.overview} light>
+            {overview}
+          </CText>
 
           <ScrollView
             style={styles.apps}
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            {filteredApps.map(({ name, link, description }) => {
+            {filteredApps.map(({ name, link }) => {
               return (
                 <Button style={styles.row} key={name} outlined>
                   <Entypo name="google-play" size={24} color="white" />
 
-                  <CText onPress={onApp(link)} style={styles.rowText}>
+                  <CText onPress={onApp(link)} style={styles.rowText} light>
                     {name}
                   </CText>
                 </Button>

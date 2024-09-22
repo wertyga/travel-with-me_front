@@ -10,7 +10,7 @@ import { withLoading } from '@/mobx/store.utils';
 import { action, makeObservable, observable } from 'mobx';
 import { storage } from '@/utils';
 import { RootStoreType } from '@/types';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+// import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export class AuthStore {
   @observable isLoading: boolean;
@@ -57,7 +57,7 @@ export class AuthStore {
       this.rootStore.userStore.dropStore();
       // this.rootStore.subscriptionStore.dropStore();
       
-      await this.googleLogout();
+      // await this.googleLogout();
       this.rootStore.runDropStores();
     } catch (e) {}
   }
@@ -101,12 +101,12 @@ export class AuthStore {
     }
   }
   
-  async googleLogout() {
-    const googleUser = GoogleSignin.getCurrentUser();
-    
-    if (googleUser) {
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-    }
-  }
+  // async googleLogout() {
+  //   const googleUser = GoogleSignin.getCurrentUser();
+  //
+  //   if (googleUser) {
+  //     await GoogleSignin.revokeAccess();
+  //     await GoogleSignin.signOut();
+  //   }
+  // }
 }

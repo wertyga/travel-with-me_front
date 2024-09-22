@@ -2,6 +2,12 @@ import React, { useRef, useState } from 'react';
 
 import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
 
+import {
+  Directions,
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -9,38 +15,38 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { GesturesContainer } from './Gestures';
-
-const FCKING_TRANSITION_LAG = 0;
-
-export type GestureUpProps = {
+export type GestureUpFlingProps = {
   initialHeight: number;
   maxTop?: number;
-  activateThreshold?: number;
+  zIndex?: number;
   children: (
     Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>,
     isOpened: boolean
   ) => React.ReactNode;
   onOpen?: (isOpened: boolean) => void;
+  style?: ViewStyle;
 };
 
-export const GestureUp: React.FC<GestureUpProps> = ({
+const { height: windowHeight } = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('screen');
+
+export const GestureUpFling: React.FC<GestureUpFlingProps> = ({
   children,
   initialHeight = 200,
   maxTop = 50,
-  activateThreshold = 50,
   onOpen,
+  style,
+  zIndex,
 }) => {
   const currentStateRef = useRef({
-    initialTop: Dimensions.get('window').height - initialHeight,
-    currentTop: Dimensions.get('window').height - initialHeight,
+    initialTop: windowHeight - initialHeight,
+    currentTop: windowHeight - initialHeight,
   });
 
   const [stateIsOpened, setStateIsOpened] = useState(false);
 
   const swipeTop = useSharedValue(currentStateRef.current.currentTop);
   const isOpened = useSharedValue(false);
-  const canBeActivate = useSharedValue(false);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -72,58 +78,35 @@ export const GestureUp: React.FC<GestureUpProps> = ({
     });
   };
 
-  const onUpdate = e => {
-    const distance = e.absoluteY + FCKING_TRANSITION_LAG;
-    swipeTop.value = distance;
-
-    const activation = isOpened.value
-      ? distance - maxTop
-      : currentStateRef.current.initialTop - distance;
-
-    canBeActivate.value = activation > activateThreshold;
-  };
-
-  const onEnd = e => {
-    if (!canBeActivate.value) {
-      swipeTop.value = isOpened.value
-        ? maxTop
-        : currentStateRef.current.initialTop;
-      return;
-    }
-
-    if (isOpened.value) {
-      runOnJS(handleClose)();
-    } else {
-      runOnJS(handleOpen)();
-    }
-  };
-
-  const onStart = () => {};
+  const gesture = Gesture.Fling()
+    .direction(Directions.UP | Directions.DOWN)
+    .onEnd(() => {
+      if (isOpened.value) {
+        runOnJS(handleClose)();
+      } else {
+        runOnJS(handleOpen)();
+      }
+    });
 
   const Trigger: React.FC<{
     style?: ViewStyle;
     children?: React.ReactNode;
   }> = ({ style = {}, children }) => (
-    <GesturesContainer onUpdate={onUpdate} onEnd={onEnd} onStart={onStart}>
-      <View style={[styles.triggerWrapper, style]}>
-        <View style={styles.trigger} />
-        {children}
-      </View>
-    </GesturesContainer>
+    <GestureHandlerRootView>
+      <GestureDetector gesture={gesture}>
+        <View style={[styles.triggerWrapper, style]}>
+          <View style={styles.trigger} />
+
+          {children}
+        </View>
+      </GestureDetector>
+    </GestureHandlerRootView>
   );
 
   return (
     <>
       <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            zIndex: 10,
-          },
-          animatedStyles,
-        ]}
+        style={[styles.container, animatedStyles, style, { zIndex }]}
       >
         {children(Trigger, stateIsOpened)}
       </Animated.View>
@@ -132,6 +115,11 @@ export const GestureUp: React.FC<GestureUpProps> = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+  },
   triggerWrapper: {
     alignItems: 'center',
     paddingVertical: 10,

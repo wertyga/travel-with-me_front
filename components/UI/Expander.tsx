@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
   Dimensions,
@@ -8,12 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { FadeInLeft } from 'react-native-reanimated';
 
 import { CText } from '@/components/CText';
 import { useAnimationRotate } from '@/components/Common/Animation/useAnimationRotate';
@@ -28,22 +23,6 @@ type Props = {
   light?: boolean;
 };
 
-const { width: SCREEN_WIDTH } = Dimensions.get('screen');
-
-const CLOSED_STATE = {
-  height: 0,
-  translateX: -SCREEN_WIDTH,
-  opacity: 0,
-};
-
-const OPENED_STATE = {
-  height: undefined,
-  translateX: 0,
-  opacity: 1,
-};
-
-const DURATION = 150;
-
 export const Expander: React.FC<Props> = ({
   children,
   title,
@@ -56,54 +35,9 @@ export const Expander: React.FC<Props> = ({
   );
   const [isOpened, setIsOpened] = useState(defaultState);
 
-  const actualAState = isOpened ? OPENED_STATE : CLOSED_STATE;
-
-  const aHeight = useSharedValue(actualAState.height);
-  const aTranslateX = useSharedValue(actualAState.translateX);
-  const aOpacity = useSharedValue(actualAState.opacity);
-
-  const aChildrenStyles = useAnimatedStyle(() => {
-    return {
-      height: aHeight.value,
-      transform: [
-        {
-          translateX: aTranslateX.value,
-        },
-      ],
-      opacity: aOpacity.value,
-    };
-  });
-
-  const updateATransitions = () => {
-    if (isOpened) {
-      aHeight.value = OPENED_STATE.height;
-      aTranslateX.value = withTiming(OPENED_STATE.translateX, {
-        duration: DURATION,
-      });
-      aOpacity.value = withTiming(OPENED_STATE.opacity, {
-        duration: DURATION * 2,
-      });
-    } else {
-      aOpacity.value = withTiming(CLOSED_STATE.opacity, {
-        duration: DURATION * 2,
-      });
-      aTranslateX.value = withTiming(CLOSED_STATE.translateX, {
-        duration: DURATION,
-      });
-      aHeight.value = withDelay(
-        DURATION,
-        withTiming(CLOSED_STATE.height, { duration: 0 })
-      );
-    }
-  };
-
   const toggleExpand = useCallback(() => {
     updateRotate(isOpened ? -45 : 45);
     setIsOpened(!isOpened);
-  }, [isOpened]);
-
-  useEffect(() => {
-    updateATransitions();
   }, [isOpened]);
 
   return (
@@ -118,9 +52,11 @@ export const Expander: React.FC<Props> = ({
         </CText>
         <Animated.View style={[styles.trigger, rotateAStyles]} />
       </TouchableOpacity>
-      <Animated.View style={[isOpened && styles.children, aChildrenStyles]}>
-        {children}
-      </Animated.View>
+      {isOpened && (
+        <Animated.View style={styles.children} entering={FadeInLeft}>
+          {children}
+        </Animated.View>
+      )}
     </View>
   );
 };

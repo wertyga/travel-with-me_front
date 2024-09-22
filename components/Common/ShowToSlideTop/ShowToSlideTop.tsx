@@ -51,6 +51,7 @@ export const ShowToSlideTop = ({ size = 40, style }: Props) => {
 const styles = StyleSheet.create({
   container: {
     borderColor: 'white',
-    borderWidth: 1,
+    borderWidth: 2,
+    backgroundColor: 'white',
   },
 });

@@ -4,6 +4,7 @@ import { Linking, StyleSheet, View } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
+import { BackButton } from '@/Layouts/MainLayout/components/BackButton';
 import { AudioContainer } from '@/components/Audio';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -57,7 +58,8 @@ export const PointMeta = ({ point, isFetching }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <View style={{ gap: 10, flexDirection: 'row', alignItems: 'center' }}>
+        <View style={styles.nameAndLike}>
+          <BackButton transparent />
           <CountryPill
             title={cityTitle}
             icon="map-point-small"
@@ -173,6 +175,11 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 20,
   },
+  nameAndLike: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: -CONSTANTS.spaces.paddingHorizontal,
+  },
   galleryAction: {
     width: 35,
     height: 35,
@@ -189,7 +196,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    gap: 10,
     marginBottom: 20,
   },
   titles: {

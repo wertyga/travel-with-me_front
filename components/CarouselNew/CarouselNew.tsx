@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import {
   Dimensions,
   StyleProp,
@@ -6,12 +7,15 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
 import Animated, {
   runOnJS,
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
+
 import { LinearGradient } from 'expo-linear-gradient';
+
 import { CarouselDots } from '@/components/Carousel';
 import { useStores } from '@/hooks';
 
@@ -89,7 +93,11 @@ export const CarouselNew = <T,>({
     isDefaultIndexChanged.value = true;
     const offsetX = currentCardWith * defaultIndex;
 
-    scrollRef.current?.scrollTo({ x: offsetX, animated: true });
+    if (scrollRef.current) {
+      setTimeout(() => {
+        scrollRef.current.scrollTo({ x: offsetX });
+      });
+    }
   }, [defaultIndex]);
 
   return (

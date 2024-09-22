@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-  Dimensions,
   Modal as ModalNative,
   ModalProps,
   StyleSheet,
@@ -9,8 +8,9 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { AntDesign } from '@expo/vector-icons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
+import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 
 import { CONSTANTS } from '@/styles/constants';
@@ -45,13 +45,14 @@ export const Modal = ({
         ]}
       >
         <View style={styles.titleContainer}>
-          {!!title && <CText style={styles.title}>{title}</CText>}
-          <AntDesign
-            name="closecircleo"
-            size={24}
-            color="white"
-            onPress={onClose}
-          />
+          <Button squareSize={40} rectangle onPress={onClose}>
+            <FontAwesome5
+              name="angle-left"
+              size={24}
+              color={CONSTANTS.colors.typographyLight}
+            />
+          </Button>
+          {!!title && <CText light>{title}</CText>}
         </View>
 
         <View style={[{ flex: 1 }, style]}>{children}</View>
@@ -64,9 +65,9 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: CONSTANTS.colors.bgMiddle,
     padding: CONSTANTS.spaces.paddingHorizontal,
+    paddingTop: 70,
     paddingBottom: 20,
     flex: 1,
-    width: Dimensions.get('window').width,
   },
   titleContainer: {
     paddingBottom: 15,
@@ -74,5 +75,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  title: {},
 });

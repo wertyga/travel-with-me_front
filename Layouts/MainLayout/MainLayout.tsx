@@ -1,20 +1,17 @@
 import React, { ReactNode } from 'react';
 
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 
 import { observer } from 'mobx-react-lite';
 
-import { FetchErrorWrapper } from '@/Layouts/MainLayout/FetchErrorWrapper';
+import { BgContent } from '@/Layouts/MainLayout/components/BgContent';
+import HeaderTitle from '@/Layouts/MainLayout/components/HeaderTitle';
 import { AudioContainer } from '@/components/Audio';
-import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { CityScreenHeader } from '@/components/City/CityScreenHeader/CityScreenHeader';
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
-import { FastImage } from '@/components/FastImage';
 import { FooterMenu } from '@/components/FooterMenu';
 import { Loader } from '@/components/Loader';
 import { useStores } from '@/hooks';
@@ -23,7 +20,7 @@ import { SCREENS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = {
+export type Props = {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
@@ -42,7 +39,11 @@ type Props = {
   fetchError?: { message: string; statusCode: number };
   reFetchMethod?: (data?: any) => void;
   bgColors?: string[];
+  withBackButton?: boolean;
+  isHeaderHidden?: boolean;
 };
+
+export const IOS_ADDITIONAL_FOOTER_SPACE = 30;
 
 export const MainLayoutComponent = ({
   children,
@@ -59,10 +60,11 @@ export const MainLayoutComponent = ({
   bgContent,
   withHeaderShadow,
   bgColors,
-  numberOfLinesTitle,
+  withBackButton,
+  isHeaderHidden,
+  numberOfLinesTitle = 1,
 }: Props) => {
   const {
-    layoutHeight,
     updateDomState,
     isPaused,
     isPlaceScreen,
@@ -70,7 +72,6 @@ export const MainLayoutComponent = ({
     place,
     audioTitle,
   } = useStores(stores => ({
-    layoutHeight: stores.domStore.layoutHeight,
     updateDomState: stores.domStore.updateDomState,
     place: stores.placeStore.place,
     isPlaying: stores.soundStore.isPlaying,
@@ -97,54 +98,32 @@ export const MainLayoutComponent = ({
         });
       }}
     >
+      <BgContent
+        bgImage={bgImage}
+        onBgPress={onBgPress}
+        bgContent={bgContent}
+        bgColors={bgColors}
+      />
+
       {isHeaderDark && <StatusBar style="dark" />}
-      {!bgImage && (
-        <BackgroundGradient style={styles.bgGradient} colors={bgColors} />
-      )}
+
       <>
         {isLoading && <Loader textColor={loaderTextColor} />}
 
         {!!headerTitle && (
-          <LinearGradient
-            colors={
-              withHeaderShadow
-                ? ['rgba(0, 0, 0, 0.6)', 'transparent']
-                : ['transparent', 'transparent']
-            }
-            style={styles.header}
-          >
-            <CityScreenHeader
-              title={headerTitle}
-              isDark={isHeaderDark}
-              menu={menu}
-              numberOfLines={numberOfLinesTitle}
-            />
-          </LinearGradient>
+          <HeaderTitle
+            withHeaderShadow={withHeaderShadow}
+            headerTitle={headerTitle}
+            isHeaderDark={isHeaderDark}
+            numberOfLinesTitle={numberOfLinesTitle}
+            withBackButton={withBackButton}
+            isHeaderHidden={isHeaderHidden}
+          />
         )}
-
-        {!!bgContent && <View style={styles.bgImage}>{bgContent}</View>}
-
-        {bgImage && (
-          <TouchableOpacity
-            onPress={onBgPress}
-            style={[StyleSheet.absoluteFillObject, { height: layoutHeight }]}
-            activeOpacity={1}
-          >
-            <FastImage source={bgImage} style={styles.bgImage} />
-            <LinearGradient
-              colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
-              style={[StyleSheet.absoluteFillObject]}
-            />
-          </TouchableOpacity>
-        )}
-
         <View
           style={[
             styles.content,
-            !noFooter && styles.withFooter,
-            {
-              paddingTop: !!headerTitle ? 100 : 50,
-            },
+            { paddingTop: !!headerTitle ? 120 : 70 },
             style,
           ]}
         >
@@ -159,8 +138,20 @@ export const MainLayoutComponent = ({
             containerStyle={styles.audioContainer}
           />
         )}
-        {!noFooter && <FooterMenu />}
       </>
+      {!noFooter && (
+        <View
+          style={{
+            paddingBottom:
+              Platform.OS === 'ios' ? IOS_ADDITIONAL_FOOTER_SPACE : 0,
+          }}
+        >
+          <FooterMenu />
+          <View style={styles.bottomPlaceholder}>
+            <Text>placeholder</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -173,44 +164,22 @@ const styles = StyleSheet.create({
   },
   container: {},
   audioContainer: {
-    zIndex: 2,
-    top: 95,
-    backgroundColor: CONSTANTS.colors.bgMiddle,
-  },
-  openedStyleAudio: {
-    left: 15,
-    paddingLeft: 15,
-    paddingRight: 10,
-  },
-  bgGradient: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: -1,
+    top: CONSTANTS.spaces.paddingTop,
+    zIndex: 20,
   },
   content: {
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
+    paddingTop: CONSTANTS.spaces.paddingTop,
     flex: 1,
     flexGrow: 1,
   },
-  withFooter: {
-    marginBottom: CONSTANTS.spaces.footerHeight,
-  },
-  bgImage: {
-    objectFit: 'cover',
-    width: '100%',
-    height: '100%',
-    ...StyleSheet.absoluteFillObject,
-  },
-  header: {
-    top: 0,
-    left: 0,
-    paddingTop: 40,
-    paddingBottom: 20,
+  bottomPlaceholder: {
     position: 'absolute',
-    width: '100%',
-    zIndex: 10,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: CONSTANTS.colors.footerColor,
+    zIndex: CONSTANTS.indexes.footerZIndex - 1,
+    height: CONSTANTS.spaces.footerHeight,
   },
 });

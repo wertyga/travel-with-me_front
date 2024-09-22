@@ -5,7 +5,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
-import { OauthGoogle, SignInForm, SignUpForm } from '@/components/Auth';
+import { SignInForm, SignUpForm } from '@/components/Auth';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
 import { Version } from '@/components/Common';
@@ -70,9 +70,7 @@ const Login = () => {
         {screen === 'signup' && <SignUpForm onSubmit={onSignUp} />}
         {screen === 'signin' && <SignInForm onSubmit={onSignIn} />}
 
-        <View style={styles.oauth}>
-          <OauthGoogle />
-        </View>
+        {/*<View style={styles.oauth}>/!*<OauthGoogle />*!/</View>*/}
 
         <Button
           light

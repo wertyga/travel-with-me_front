@@ -35,6 +35,7 @@ const FavoritesScreen = () => {
       headerTitle="Favorites"
       style={styles.container}
       isLoading={isLoading}
+      withBackButton
     >
       {isRenderList && !isEmptyList && (
         <FavoritesList

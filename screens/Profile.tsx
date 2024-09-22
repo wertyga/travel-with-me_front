@@ -92,7 +92,7 @@ const ProfileScreen = () => {
 
   return (
     <>
-      <MainLayout headerTitle="Profile" style={styles.container}>
+      <MainLayout headerTitle="Profile" withBackButton>
         {isLoading && <Loader />}
 
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -140,11 +140,6 @@ const ProfileScreen = () => {
               Chats
             </Button>
           )}
-
-          {/*<Button style={styles.item} href={SCREENS.Achievements} noPaddings>*/}
-          {/*  <CText>Achievements</CText>*/}
-          {/*  <CText style={styles.edit}>{user.rank}</CText>*/}
-          {/*</Button>*/}
 
           {isNetConnected && (
             <Button
@@ -214,7 +209,6 @@ const ProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
   avatarAndName: {
     alignItems: 'center',
   },

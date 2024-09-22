@@ -37,7 +37,11 @@ const RecoveryPassword = ({ navigation }) => {
   }, [user]);
 
   return (
-    <MainLayout headerTitle="Change E-mail" isLoading={isLoading}>
+    <MainLayout
+      headerTitle="Change E-mail"
+      isLoading={isLoading}
+      withBackButton
+    >
       <CText style={styles.title} light>
         Enter confirmation number
       </CText>

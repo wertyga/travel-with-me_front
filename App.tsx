@@ -21,7 +21,6 @@ import * as stores from '@/mobx/stores';
 import { PermissionRequestPopup } from '@/components/Location/PermissionRequestPopup';
 import { Toast } from '@/components/Toast';
 import UpdateApp from '@/components/UpdateApp/UpdateApp';
-import ModalProvider from '@/context/ModalContext/ModalContext';
 
 import { initiateConsoleTime } from '@/utils';
 

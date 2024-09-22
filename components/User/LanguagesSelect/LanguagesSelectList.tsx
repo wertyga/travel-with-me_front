@@ -65,8 +65,8 @@ const LanguagesSelectList = () => {
           >
             {isIncluded && <Feather name="check" size={20} color="white" />}
             <View style={{ flexDirection: 'row', gap: 15 }}>
-              <CText>{lang.flag}</CText>
-              <CText>{lang.language}</CText>
+              <CText light>{lang.flag}</CText>
+              <CText light>{lang.language}</CText>
             </View>
           </TouchableOpacity>
         );

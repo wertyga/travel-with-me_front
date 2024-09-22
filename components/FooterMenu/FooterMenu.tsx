@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Animated, {
   useAnimatedStyle,
@@ -44,26 +44,28 @@ const FooterMenu = () => {
 
   return (
     <Animated.View style={[styles.container, animatedStyles]}>
-      <View style={styles.menu}>
-        {FOOTER_MENU.map(({ icon, screen, title, iconSize }) => {
-          return (
-            <TouchableOpacity
-              key={title}
-              style={styles.item}
-              onPress={redirectTo(screen)}
-            >
-              {typeof icon === 'string' && (
-                <Icon name={icon as IconNames} color="white" size={iconSize} />
-              )}
-              {typeof icon === 'object' && icon}
+      {FOOTER_MENU.map(({ icon, screen, title, iconSize }) => {
+        return (
+          <TouchableOpacity
+            key={title}
+            style={styles.item}
+            onPress={redirectTo(screen)}
+          >
+            {typeof icon === 'string' && (
+              <Icon
+                name={icon as IconNames}
+                color={CONSTANTS.colors.typographyLight}
+                size={iconSize}
+              />
+            )}
+            {typeof icon === 'object' && icon}
 
-              <CText style={styles.title} light>
-                {title}
-              </CText>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+            <CText style={styles.title} light>
+              {title}
+            </CText>
+          </TouchableOpacity>
+        );
+      })}
     </Animated.View>
   );
 };
@@ -72,20 +74,14 @@ export default observer(FooterMenu);
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    paddingTop: 10,
-    paddingBottom: 8,
     height: CONSTANTS.spaces.footerHeight,
     width: '100%',
-    backgroundColor: CONSTANTS.colors.bgMiddle,
-    zIndex: 200,
-  },
-  menu: {
-    width: '100%',
+    backgroundColor: CONSTANTS.colors.footerColor,
+    zIndex: CONSTANTS.indexes.footerZIndex,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
   },
   item: {
     alignItems: 'center',

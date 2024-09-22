@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+
 import { StyleSheet, View } from 'react-native';
+
 import { Controller, useForm } from 'react-hook-form';
 import Toast from 'react-native-toast-message';
+
 import { MainLayout } from '@/Layouts';
 import { sendHelpMessage } from '@/api';
 import { SubmitBtn } from '@/components/Auth/SubmitBtn/SubmitBtn';
@@ -44,7 +47,7 @@ const ContactScreen = () => {
   };
 
   return (
-    <MainLayout headerTitle="Support" isLoading={isLoading}>
+    <MainLayout headerTitle="Support" isLoading={isLoading} withBackButton>
       <View>
         <Controller
           control={control}

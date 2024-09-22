@@ -55,7 +55,7 @@ export const GuideActionsComponent = ({
       contentContainerStyle={styles.actions}
     >
       <Button
-        style={[styles.actionBtn, !!nearestPoint && styles.activeBtn]}
+        style={[styles.actionBtn]}
         onPress={chooseNearestPoint}
         solid
         squareSize={!nearestPoint && !!liveCoords && 40}
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
   actionBtn: {
     height: 40,
     gap: 10,
+    paddingHorizontal: 15,
   },
   activeBtn: {},
   pointBtn: {

@@ -6,6 +6,8 @@ import { observer } from 'mobx-react-lite';
 
 import { City } from '@/types';
 
+import { CONSTANTS } from '@/styles/constants';
+
 import { CityPreview } from '../CityPreview/CityPreview';
 
 type Props = {
@@ -32,7 +34,7 @@ export default observer(CitiesList);
 const styles = StyleSheet.create({
   list: {
     gap: 10,
-    paddingBottom: 200,
+    paddingBottom: CONSTANTS.spaces.footerHeight + 40,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },

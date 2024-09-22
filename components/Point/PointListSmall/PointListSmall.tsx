@@ -25,7 +25,7 @@ type Props = {
 };
 
 const IMAGE_SIZE = 60;
-const BIG_IMAGE_SIZE = 180;
+const BIG_IMAGE_SIZE = 150;
 const BIG_IMAGE_SIZE_BORDER_RADIUS = 6;
 
 const PointListSmall: React.FC<Props> = ({

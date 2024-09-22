@@ -4,11 +4,13 @@ import { StyleSheet, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
-import { CText } from '@/components/CText';
+import { BackButton } from '@/Layouts/MainLayout/components/BackButton';
 import { CountryPill } from '@/components/Country';
 import { LikeAction } from '@/components/LikeAction';
 
-import { FONTS, Guide, SCREENS, SOCIAL_MODELS } from '@/types';
+import { Guide, SCREENS, SOCIAL_MODELS } from '@/types';
+
+import { CONSTANTS } from '@/styles/constants';
 
 type Props = {
   guide: Guide;
@@ -18,17 +20,14 @@ type Props = {
 const GuideMetaTitle = ({ guide, isFetching }: Props) => {
   return (
     <View style={styles.title}>
-      <View>
+      <BackButton transparent style={styles.leftSide}>
         <CountryPill
           title={guide.city.title}
           icon="map-point-small"
           href={SCREENS.City}
           hrefParams={{ city: guide.city }}
         />
-        <CText style={styles.aboutText} light>
-          About the guide
-        </CText>
-      </View>
+      </BackButton>
 
       <LikeAction
         modelType={SOCIAL_MODELS.Guide}
@@ -43,15 +42,13 @@ const GuideMetaTitle = ({ guide, isFetching }: Props) => {
 export default observer(GuideMetaTitle);
 
 const styles = StyleSheet.create({
+  leftSide: {
+    flexDirection: 'row',
+    marginLeft: -CONSTANTS.spaces.paddingHorizontal,
+  },
   title: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-  },
-  aboutText: {
-    fontFamily: FONTS.CrimsonSemiBold,
-    fontSize: 22,
-    marginTop: 20,
-    marginBottom: 10,
   },
 });

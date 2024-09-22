@@ -43,7 +43,7 @@ const OfflineStorage = () => {
   }, [cachedCitiesIds]);
 
   return (
-    <MainLayout headerTitle="Offline Storage">
+    <MainLayout headerTitle="Offline Storage" withBackButton>
       <ScrollView contentContainerStyle={styles.content}>
         {cities.map(city => {
           return <OfflineCityItem key={city._id} city={city} />;
