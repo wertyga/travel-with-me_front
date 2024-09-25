@@ -12,7 +12,7 @@ const OfflineScreen = () => {
     <MainLayout
       bgImage={NoConnectionsImage}
       noFooter
-      headerTitle="Internet Connection failed"
+      headerTitle="Connection failed"
       withBackButton
       style={{
         alignItems: 'center',

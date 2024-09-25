@@ -65,6 +65,8 @@ const CitiesListScreen = () => {
     return <SafeLoader />;
   }
 
+  const contentPaddingTop = isNetConnected ? 80 : 100;
+
   return (
     <MainLayout
       style={styles.layout}
@@ -73,10 +75,6 @@ const CitiesListScreen = () => {
     >
       <View
         style={{
-          // position: 'absolute',
-          // top: CONSTANTS.spaces.paddingTop,
-          // left: CONSTANTS.spaces.paddingHorizontal,
-          // width: '100%',
           marginTop: CONSTANTS.spaces.paddingTop,
           zIndex: 1,
         }}
@@ -99,11 +97,15 @@ const CitiesListScreen = () => {
       </View>
 
       {state.tab === 'list' && (
-        <CitiesList cities={cities} style={{ paddingTop: 80 }} key="list" />
+        <CitiesList
+          cities={cities}
+          style={{ paddingTop: contentPaddingTop }}
+          key="list"
+        />
       )}
       {state.tab === 'map' && (
         <CitiesMap
-          containerStyle={{ marginTop: 60, marginBottom: 5 }}
+          containerStyle={{ marginTop: contentPaddingTop, marginBottom: 5 }}
           key="map"
         />
       )}

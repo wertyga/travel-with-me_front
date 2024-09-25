@@ -134,12 +134,12 @@ export const MapComponent = ({
       >
         {showMyLocation && <MyLocationMarker />}
 
-        {formattedPoints.map(point => {
+        {formattedPoints.map((point, index) => {
           const { coords, title, description, images, isChosen, _id } = point;
 
           return (
             <MapMarker
-              key={_id}
+              key={_id + index}
               onPress={handlePointPress(point)}
               markerSize={mapMarkerSize}
               isChosenExists={!!chosenPoint}

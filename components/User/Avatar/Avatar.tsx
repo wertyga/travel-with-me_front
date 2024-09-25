@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Feather from '@expo/vector-icons/Feather';
 
@@ -17,22 +17,22 @@ type Props = {
 };
 
 export const Avatar = ({ size = 70, editable }: Props) => {
-  const { firstUsernameLetter, avatar, updateUser, user } = useStores(
-    stores => ({
+  const { firstUsernameLetter, avatar, fetchUpdateUser, user, isNetConnected } =
+    useStores(stores => ({
       firstUsernameLetter: stores.userStore.user?.username
         .charAt(0)
         .toUpperCase(),
       user: stores.userStore.user,
       avatar: stores.userStore.user?.avatar,
-      updateUser: stores.userStore.updateUser,
-    })
-  );
+      fetchUpdateUser: stores.userStore.fetchUpdateUser,
+      isNetConnected: stores.appStateStore.isNetConnected,
+    }));
 
   const onUpdate = ({ uri }: ImageStorage) => {
-    updateUser({ avatar: uri });
+    fetchUpdateUser({ avatar: uri });
   };
 
-  if (!editable) {
+  if (!editable || !isNetConnected) {
     return <UIAvatar size={size} avatar={avatar} username={user.username} />;
   }
 

@@ -2,25 +2,27 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 import { City, Path, RootStoreType } from '@/types';
 import {fetchLightCityList} from '@/api';
 import {cacheWrap} from "@/utils/cache_request";
-import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import { isPointInSquare } from '@/utils/map';
+import { getIsNetConnected } from '@/utils/etc';
 
 export class CitiesListStore {
   @observable isLoading: boolean;
   @observable cityLightList: City[] = [];
   @observable total: number = 0;
-  
+
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
-  
+
   @action async getCityLightList() {
     try {
-      if (!AppStateStore.isNetConnected) {
-        // It set up in OfflineStore
+      if (!getIsNetConnected()) {
+        this.cityLightList = this.rootStore.offlineStore.cities;
+        this.total = this.rootStore.offlineStore.cities.length;
+
         return;
       }
-      
+
       const cachedReq = cacheWrap.apply(this, [fetchLightCityList]);
       const {cities, total} = await cachedReq.withLoading().invoke();
 
@@ -32,7 +34,7 @@ export class CitiesListStore {
       this.rootStore.routerStore.navigateToError(e.message)
     }
   }
-  
+
   getCityByCoords({ lat, lng }: Path) {
     return this.cityLightList.find(({squareCoords}) => {
       return isPointInSquare(lat, lng, squareCoords);

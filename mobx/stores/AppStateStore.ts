@@ -13,17 +13,17 @@ export class AppStateStore {
 		stripePk: (Constants.expoConfig?.extra as any).STRIPE_PUBLIC_KEY,
 	};
 	static isNetConnected = true;
-	
+
 	netConnectionUnsubscribe: NetInfoSubscription;
-	
+
 	@observable isAppReady: boolean = false;
 	@observable isUpdateAvailable: boolean = false;
 	@observable isNetConnected: boolean = undefined;
-	
+
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
-	
+
 	async onInitiate() {
 		this.applyNetConnectionListener();
 		this.applyAppStateChangeListener();
@@ -31,14 +31,14 @@ export class AppStateStore {
 			this.getEnvs(),
 			// this.rootStore.subscriptionStore.getMySubscription({isActive: true})
 		])
-		
+
 		runInAction(() => {
 			this.isAppReady = true;
 		});
-		
+
 		await this.checkForUpdates();
 	}
-	
+
 	@action setIsNetConnected(value: boolean) {
 		if (this.isNetConnected === value) return;
 
@@ -49,7 +49,7 @@ export class AppStateStore {
 			this.rootStore.offlineStore.populateOfflineStore();
 		}
 	}
-	
+
 	@action async checkForUpdates() {
 		try {
 			const update = await Updates.checkForUpdateAsync();
@@ -60,7 +60,7 @@ export class AppStateStore {
 			}
 		} catch (e) {}
 	}
-	
+
 	@action async getEnvs() {
 		try {
 			const envs = await fetchEnvs();
@@ -72,7 +72,7 @@ export class AppStateStore {
 				AppStateStore.ENV = envs;
 				this.rootStore.offlineStore.saveEnv(envs);
 			}
-			
+
 			runInAction(() => {
 				this.isUpdateAvailable = !!Constants.expoConfig?.extra?.VERSION &&
 					!!envs.runtimeVersion &&
@@ -80,7 +80,7 @@ export class AppStateStore {
 			})
 		} catch (e) {}
 	}
-	
+
 	@action applyAppStateChangeListener() {
 		AppState.addEventListener(
 			'change',
@@ -94,7 +94,7 @@ export class AppStateStore {
 						// this.rootStore.subscriptionStore.getMySubscription({isActive: true}),
 						this.checkForUpdates(),
 					]);
-					
+
 					runInAction(() => {
 						this.isAppReady = true;
 					})
@@ -107,7 +107,7 @@ export class AppStateStore {
 			}
 		);
 	}
-	
+
 	@action applyNetConnectionListener() {
 		this.netConnectionUnsubscribe = addEventListener(state => {
 			this.setIsNetConnected(state.isConnected);

@@ -6,8 +6,8 @@ import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
 import { SignInForm, SignUpForm } from '@/components/Auth';
+import OauthGoogle from '@/components/Auth/OauthGoogle/OauthGoogle';
 import Button from '@/components/Button';
-import { CText } from '@/components/CText';
 import { Version } from '@/components/Common';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
@@ -70,7 +70,9 @@ const Login = () => {
         {screen === 'signup' && <SignUpForm onSubmit={onSignUp} />}
         {screen === 'signin' && <SignInForm onSubmit={onSignIn} />}
 
-        {/*<View style={styles.oauth}>/!*<OauthGoogle />*!/</View>*/}
+        <View style={styles.oauth}>
+          <OauthGoogle />
+        </View>
 
         <Button
           light

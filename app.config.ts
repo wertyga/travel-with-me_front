@@ -5,7 +5,7 @@ export const PRODUCT_NAME = 'Travel With Me';
 
 const ENV = {
   // API_BASE_URL:
-  //   'https://e048-2a02-a31a-80c7-8300-7d28-d1c5-cd22-e653.ngrok-free.app',
+  //   'https://cb58-2a02-a31a-80c7-8300-b50a-d499-a7f3-bb23.ngrok-free.app',
   API_BASE_URL: 'https://api.traveljet.org',
   GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
 };
@@ -31,13 +31,13 @@ const appPlugins: ExpoConfig['plugins'] = [
       username: 'wertyga13',
     },
   ],
-  // [
-  //   '@react-native-google-signin/google-signin',
-  //   {
-  //     iosUrlScheme:
-  //       'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
-  //   },
-  // ],
+  [
+    '@react-native-google-signin/google-signin',
+    {
+      iosUrlScheme:
+        'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
+    },
+  ],
   [
     'expo-image-picker',
     {

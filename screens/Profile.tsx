@@ -36,18 +36,13 @@ const ProfileScreen = () => {
     logout,
     isUpdateAvailable,
     cachedCitiesIds,
-    hasUserChanged,
-    fetchUpdateUser,
-    resetUpdatedUser,
     isLoading,
     onStartWatchingLocation,
     getMyChats,
     myChatsCount,
+    isNetConnected,
   } = useStores(stores => ({
     user: stores.userStore.user,
-    hasUserChanged: stores.userStore.hasUserChanged,
-    fetchUpdateUser: stores.userStore.fetchUpdateUser,
-    resetUpdatedUser: stores.userStore.resetUpdatedUser,
     isLoading: stores.userStore.isLoading,
     logout: stores.authStore.logout,
     isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
@@ -55,6 +50,7 @@ const ProfileScreen = () => {
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     getMyChats: stores.chatsStore.getMyChats,
     myChatsCount: stores.chatsStore.myChatsCount,
+    isNetConnected: stores.appStateStore.isNetConnected,
   }));
 
   const { granted } = useForegroundPermissions();
@@ -71,7 +67,6 @@ const ProfileScreen = () => {
   };
 
   useFocus(() => {
-    resetUpdatedUser();
     getMyChats();
   }, []);
 
@@ -84,7 +79,6 @@ const ProfileScreen = () => {
 
   if (!user) return null;
 
-  const isNetConnected = getIsNetConnected();
   const editLabel = isNetConnected ? 'Edit' : 'Offline';
   const getHelpLabel = isNetConnected ? 'Get Help' : 'Offline';
   const isShowUpdateBtn = isNetConnected && isUpdateAvailable;
@@ -121,7 +115,9 @@ const ProfileScreen = () => {
 
           {isNetConnected && (
             <>
-              <ChangeVisibilityButton />
+              <View style={styles.item}>
+                <ChangeVisibilityButton />
+              </View>
               <UsersNearMeButton />
             </>
           )}
@@ -134,7 +130,7 @@ const ProfileScreen = () => {
             <Button
               href={SCREENS.ChatList}
               high
-              style={{ marginBottom: 20, marginTop: 10 }}
+              style={{ marginTop: 10 }}
               light
             >
               Chats
@@ -156,7 +152,7 @@ const ProfileScreen = () => {
 
           {isShowOfflineStorage && (
             <Button
-              style={styles.item}
+              style={[styles.item, {}]}
               href={SCREENS.OfflineStorage}
               noPaddings
             >
@@ -164,18 +160,6 @@ const ProfileScreen = () => {
               <CText style={styles.edit} light>
                 {editLabel}
               </CText>
-            </Button>
-          )}
-
-          {hasUserChanged && isNetConnected && (
-            <Button
-              onPress={fetchUpdateUser}
-              high
-              style={styles.separateBtn}
-              solid
-              light
-            >
-              Update Profile
             </Button>
           )}
 
@@ -213,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   item: {
-    marginBottom: 25,
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',

@@ -8,7 +8,7 @@ import { withLoading } from '@/mobx/store.utils';
 export class ChatsStore {
   @observable isLoading = false;
   @observable myChats: Chat[] = [];
-  
+
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
@@ -20,17 +20,17 @@ export class ChatsStore {
       return chat;
     } catch (e) {}
   }
-  
+
   @withLoading async sendMessage(data: { text: string; to: string; }) {
     try {
       const message = await sendMessageApi(data);
 
       return message;
     } catch (e) {
-    
+
     }
   }
-  
+
    async getMyChats() {
     try {
       const chats = await fetchMyChats();
@@ -42,8 +42,8 @@ export class ChatsStore {
       return [];
     }
   }
-  
+
   @computed get myChatsCount() {
-    return this.myChats.length;
+    return this.myChats?.length || 0;
   }
 }

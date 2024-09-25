@@ -25,7 +25,7 @@ type Props = {
   style?: ViewStyle;
   imageStyle?: ImageStyle;
   uri: string;
-  onUpdate: (data: ImageStorage) => void;
+  onUpdate: (data: ImageStorage) => void | Promise<void>;
   children?: React.ReactNode;
   additionalContent?: React.ReactNode;
 };
@@ -55,7 +55,7 @@ export const UploadImage = ({
         quality: 1,
       });
 
-      onUpdate({ uri });
+      await onUpdate({ uri });
       toggleModalShow();
     } catch (e) {
       if (e.message?.includes('non-iterable instance.')) {

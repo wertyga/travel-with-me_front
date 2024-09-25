@@ -10,7 +10,7 @@ import { withLoading } from '@/mobx/store.utils';
 import { action, makeObservable, observable } from 'mobx';
 import { storage } from '@/utils';
 import { RootStoreType } from '@/types';
-// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export class AuthStore {
   @observable isLoading: boolean;
@@ -23,10 +23,10 @@ export class AuthStore {
   @withLoading async signIn(...data: Parameters<typeof signInRequest>) {
     try {
       const { user } = await signInRequest(...data);
-      
+
       this.rootStore.userStore.setUser(user);
       // this.rootStore.subscriptionStore.dropStore();
-      
+
       return !!user;
     } catch (e) {
       console.error(e);
@@ -53,11 +53,11 @@ export class AuthStore {
   @action async logout() {
     try {
       await storage.delete('token');
-      
+
       this.rootStore.userStore.dropStore();
       // this.rootStore.subscriptionStore.dropStore();
-      
-      // await this.googleLogout();
+
+      await this.googleLogout();
       this.rootStore.runDropStores();
     } catch (e) {}
   }
@@ -65,7 +65,7 @@ export class AuthStore {
   @withLoading async changeEmail(...data: Parameters<typeof changeEmailApi>) {
     try {
       const response = await changeEmailApi(...data);
-      
+
       return response;
     } catch (e) {}
   }
@@ -75,7 +75,7 @@ export class AuthStore {
   ) {
     try {
       const response = await recoveryPasswordInitApi(...data);
-    
+
       return response;
     } catch (e) {}
   }
@@ -89,7 +89,7 @@ export class AuthStore {
       return response
     } catch (e) {}
   }
-  
+
   @withLoading async oauthGoogleRegister(...data: Parameters<typeof oauthGoogleRegister>) {
     const { user } = await oauthGoogleRegister(...data);
 
@@ -100,13 +100,13 @@ export class AuthStore {
       this.rootStore.routerStore.navigator.goBack();
     }
   }
-  
-  // async googleLogout() {
-  //   const googleUser = GoogleSignin.getCurrentUser();
-  //
-  //   if (googleUser) {
-  //     await GoogleSignin.revokeAccess();
-  //     await GoogleSignin.signOut();
-  //   }
-  // }
+
+  async googleLogout() {
+    const googleUser = GoogleSignin.getCurrentUser();
+
+    if (googleUser) {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+    }
+  }
 }

@@ -24,11 +24,30 @@ export async function findImageInCache(uri: string) {
   }
 }
 
+const cacheImagesPromises = {};
+
 export async function cacheImage(uri: string) {
   try {
     const cacheUri = getCacheDirectoryForUri(uri);
-    const downloadImage = FileSystem.createDownloadResumable(uri, cacheUri, {});
-    const downloaded = await downloadImage.downloadAsync();
+
+    let downloadImage: Promise<FileSystem.FileSystemDownloadResult> =
+      cacheImagesPromises[uri];
+
+    let downloaded;
+
+    if (!downloadImage) {
+      downloadImage = FileSystem.createDownloadResumable(
+        uri,
+        cacheUri,
+        {}
+      ).downloadAsync();
+
+      downloaded = await downloadImage;
+
+      delete cacheImagesPromises[uri];
+    } else {
+      downloaded = await downloadImage;
+    }
 
     return {
       cached: true,
@@ -47,6 +66,7 @@ export async function cacheImage(uri: string) {
 
 export const getImageFromCacheOrSaveImageToCache = async (imageUri: string) => {
   let cachedImage: any = await findImageInCache(imageUri);
+
   if (cachedImage.exists && cachedImage.uri) {
     return cachedImage.uri;
   }
