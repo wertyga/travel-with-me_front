@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Dimensions,
+  Platform,
   ScrollView,
   StyleSheet,
   View,
-  ViewStyle,
 } from 'react-native';
+
+import {
+  Directions,
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { observer } from 'mobx-react-lite';
 
@@ -16,96 +29,166 @@ import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { CText } from '@/components/CText';
 import { GuideMapPointActions } from '@/components/Guide/GuideMap/GuideMapPointActions';
 import { PointListSmall } from '@/components/Point';
+import { PullTrigger } from '@/components/UI/PullTrigger';
 
-import { FONTS, Guide, Place } from '@/types';
+import { FONTS, Place } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
-const TRIGGER_HEIGHT = 380;
-const SCROLL_VIEW_BOTTOM_SPACE = TRIGGER_HEIGHT + 100;
-
 type Props = {
   point: Place;
-  Trigger: React.FC<{ style: ViewStyle; children?: React.ReactNode }>;
   onPointChange: (point: Place) => void;
   onOpenGallery: () => void;
-  isOpened?: boolean;
+  toggleHideHeader: (value?: boolean) => void;
   points: Place[];
 };
 
+const INITIAL_GENERIC_HEIGHT = 250;
+export const MAX_PREVIEW_SWIPE_TOP = 50;
+export const PREVIEW_INITIAL_HEIGHT =
+  Platform.OS === 'ios'
+    ? INITIAL_GENERIC_HEIGHT + CONSTANTS.spaces.iosAdditionalSpaceBottom
+    : INITIAL_GENERIC_HEIGHT;
+
 const GuideMapPointPreview = ({
   point,
-  Trigger,
   onOpenGallery,
   onPointChange,
-  isOpened,
   points,
+  toggleHideHeader,
 }: Props) => {
+  const windowHeight = Dimensions.get('window').height;
+  const openedTopValue = windowHeight - PREVIEW_INITIAL_HEIGHT;
+
+  const [stateIsOpened, setStateIsOpened] = useState(false);
+  const [containerHeight, setContainerHeight] = useState(0);
+
+  const isOpened = useSharedValue(false);
+
+  const animatedStyles = useAnimatedStyle(() => {
+    if (!isOpened.value) {
+      return {
+        top: withTiming(openedTopValue, {
+          duration: 150,
+        }),
+      };
+    }
+
+    return {
+      top: withTiming(MAX_PREVIEW_SWIPE_TOP, {
+        duration: 150,
+      }),
+    };
+  });
+
+  const handleClose = () => {
+    isOpened.value = false;
+
+    setTimeout(() => {
+      setStateIsOpened(false);
+    });
+  };
+
+  const handleOpen = () => {
+    isOpened.value = true;
+
+    setTimeout(() => {
+      setStateIsOpened(true);
+    });
+  };
+
+  const gesture = Gesture.Fling()
+    .direction(Directions.UP | Directions.DOWN)
+    .onEnd(() => {
+      if (isOpened.value) {
+        runOnJS(handleClose)();
+      } else {
+        runOnJS(handleOpen)();
+      }
+    });
+
+  useEffect(() => {
+    toggleHideHeader(stateIsOpened);
+  }, [stateIsOpened]);
+
   return (
-    <BackgroundGradient style={styles.carouselWrapper}>
-      <Trigger style={styles.swipeTrigger}>
-        <BackButton transparent style={styles.swipeTriggerContent}>
-          <CText style={styles.pointTitle} numberOfLines={1} light>
-            {point.title}
-          </CText>
-        </BackButton>
-      </Trigger>
+    <Animated.View
+      style={[styles.animatedContainer, animatedStyles]}
+      onLayout={e => {
+        setContainerHeight(e.nativeEvent.layout.height);
+      }}
+    >
+      <BackgroundGradient style={[styles.wrapper]}>
+        <GestureHandlerRootView>
+          <GestureDetector gesture={gesture}>
+            <View>
+              <PullTrigger style={styles.swipeTrigger} />
+              <BackButton transparent>
+                <CText style={styles.pointTitle} numberOfLines={1} light>
+                  {point.title}
+                </CText>
+              </BackButton>
+            </View>
+          </GestureDetector>
+        </GestureHandlerRootView>
 
-      <View style={styles.content}>
-        <PointListSmall
-          points={points}
-          chosenPointId={point._id}
-          onPointChange={onPointChange}
-          isBig={isOpened}
-        />
+        <View style={styles.content}>
+          <PointListSmall
+            points={points}
+            chosenPointId={point._id}
+            onPointChange={onPointChange}
+            isBig={stateIsOpened}
+          />
 
-        <View style={styles.actions}>
-          <GuideMapPointActions point={point} onOpenGallery={onOpenGallery} />
+          <View style={styles.actions}>
+            <GuideMapPointActions point={point} onOpenGallery={onOpenGallery} />
+          </View>
+
+          {stateIsOpened && (
+            <>
+              {!!point.audioStory && (
+                <AudioContainer
+                  audioUrl={point.audioStory}
+                  title={point.title}
+                  checkTitles
+                  defaultOpenState={true}
+                />
+              )}
+
+              <ScrollView
+                style={[
+                  styles.descriptionContainer,
+                  { height: containerHeight - 350 },
+                ]}
+                contentContainerStyle={styles.descriptionContent}
+              >
+                <CText style={styles.description} light>
+                  {point.story}
+                </CText>
+              </ScrollView>
+            </>
+          )}
         </View>
-
-        {isOpened && (
-          <>
-            {!!point.audioStory && (
-              <AudioContainer
-                audioUrl={point.audioStory}
-                title={point.title}
-                checkTitles
-                defaultOpenState={true}
-              />
-            )}
-
-            <ScrollView
-              style={styles.descriptionContainer}
-              contentContainerStyle={{
-                paddingBottom: SCROLL_VIEW_BOTTOM_SPACE,
-              }}
-            >
-              <CText style={styles.description} light>
-                {point.story}
-              </CText>
-            </ScrollView>
-          </>
-        )}
-      </View>
-    </BackgroundGradient>
+      </BackgroundGradient>
+    </Animated.View>
   );
 };
 
 export default observer(GuideMapPointPreview);
 
 const styles = StyleSheet.create({
-  carouselWrapper: {
+  animatedContainer: {
+    position: 'absolute',
+    zIndex: 2,
+    bottom: 0,
+  },
+  wrapper: {
     borderTopRightRadius: 6,
     borderTopLeftRadius: 6,
-    minHeight: Dimensions.get('window').height,
+    flex: 1,
   },
   swipeTrigger: {
-    flex: 1,
-    flexGrow: 1,
-    width: '100%',
-  },
-  swipeTriggerContent: {
-    marginTop: 10,
+    paddingTop: 10,
   },
   pointTitle: {
     fontFamily: FONTS.OpenSansSemiBold,
@@ -113,9 +196,9 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     width: '90%',
   },
-  descriptionContainer: {
-    height: Dimensions.get('window').height,
-    paddingBottom: 20,
+  descriptionContainer: {},
+  descriptionContent: {
+    paddingBottom: 0,
   },
   description: {
     lineHeight: 20,
@@ -128,6 +211,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 10,
+    marginVertical: 10,
   },
 });

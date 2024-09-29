@@ -56,13 +56,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 100,
     backgroundColor: 'white',
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    top: 0,
-    left: 0,
   },
   text: {
     fontFamily: FONTS.OpenSansSemiBold,

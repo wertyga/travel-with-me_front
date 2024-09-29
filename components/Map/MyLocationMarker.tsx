@@ -27,7 +27,11 @@ export const MyLocationMarker = observer(() => {
       }}
     >
       <View style={styles.icon}>
-        <FontAwesome5 name="walking" size={18} color="white" />
+        <FontAwesome5
+          name="walking"
+          size={18}
+          color={CONSTANTS.colors.typographyLight}
+        />
       </View>
     </Marker>
   );

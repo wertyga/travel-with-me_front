@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { useRoute } from '@react-navigation/native';
 
@@ -9,14 +9,11 @@ import CarouselEx from 'react-native-snap-carousel';
 
 import { observer } from 'mobx-react-lite';
 
-import { IOS_ADDITIONAL_FOOTER_SPACE } from '@/Layouts/MainLayout/MainLayout';
 import Button from '@/components/Button';
 import { GestureUpFling } from '@/components/Gestures/GestureUpFling';
-import { ShowAllCityPlacesButton } from '@/components/Guide/GuideMap/components/ShowAllCityPlacesButton';
 import { Map } from '@/components/Map';
 import { DEFAULT_DELTA } from '@/components/Map/Map';
 import { useForegroundPermissions, useStores } from '@/hooks';
-import { useNavigation } from '@/hooks';
 
 import { FONTS, Guide, Place, SCREENS } from '@/types';
 
@@ -30,8 +27,6 @@ type Props = {
   toggleHideHeader: (value?: boolean) => void;
 };
 
-const MAX_PREVIEW_SWIPE_TOP = 50;
-const PREVIEW_INITIAL_HEIGHT = Platform.OS === 'ios' ? 300 : 240;
 export const MAP_MARKER_SIZE = 40;
 export const ELEMENTS_ON_THE_TOP_OF_PREVIEW_POSITION = 230;
 
@@ -62,7 +57,6 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
     isShowCarouselImages: false,
     isAudioPlaying: false,
     isBgPermissionDenied: false,
-    isMetaOpened: false,
   });
 
   const onPointChoose = (point: Place) => {
@@ -103,10 +97,6 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
   }, [visiblePoint?._id, isFollowingToGuide, guide]);
 
   useEffect(() => {
-    toggleHideHeader(state.isMetaOpened);
-  }, [state.isMetaOpened]);
-
-  useEffect(() => {
     setState(prev => ({
       ...prev,
       pointShowing: points[0],
@@ -116,7 +106,7 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
   const isLocationDenied = status === 'denied';
 
   return (
-    <>
+    <View style={{ ...StyleSheet.absoluteFillObject }}>
       <Map
         points={points}
         chosenPoint={state.pointShowing}
@@ -148,27 +138,13 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
       </Map>
 
       {!!state.pointShowing && (
-        <GestureUpFling
-          initialHeight={PREVIEW_INITIAL_HEIGHT}
-          maxTop={MAX_PREVIEW_SWIPE_TOP}
-          onOpen={(isMetaOpened: boolean) => {
-            setState(prev => ({ ...prev, isMetaOpened }));
-          }}
-          zIndex={2}
-        >
-          {Trigger => {
-            return (
-              <GuideMapPointPreview
-                point={state.pointShowing}
-                Trigger={Trigger}
-                points={points}
-                onPointChange={onPointChoose}
-                onOpenGallery={() => onToggleCarouselShow(true)}
-                isOpened={state.isMetaOpened}
-              />
-            );
-          }}
-        </GestureUpFling>
+        <GuideMapPointPreview
+          point={state.pointShowing}
+          points={points}
+          onPointChange={onPointChoose}
+          onOpenGallery={() => onToggleCarouselShow(true)}
+          toggleHideHeader={toggleHideHeader}
+        />
       )}
 
       {state.isShowCarouselImages && !!state.pointShowing && (
@@ -177,7 +153,7 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
           onClose={onToggleCarouselShow}
         />
       )}
-    </>
+    </View>
   );
 };
 

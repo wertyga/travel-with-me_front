@@ -1,6 +1,13 @@
 import React, { ReactNode } from 'react';
 
-import { Platform, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  Dimensions,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -143,13 +150,13 @@ export const MainLayoutComponent = ({
         <View
           style={{
             paddingBottom:
-              Platform.OS === 'ios' ? IOS_ADDITIONAL_FOOTER_SPACE : 0,
+              Platform.OS === 'ios'
+                ? CONSTANTS.spaces.iosAdditionalSpaceBottom
+                : 0,
           }}
         >
           <FooterMenu />
-          <View style={styles.bottomPlaceholder}>
-            <Text>placeholder</Text>
-          </View>
+          <View style={styles.bottomPlaceholder} />
         </View>
       )}
     </View>

@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 
-import { Linking, ScrollView, StyleSheet, View } from 'react-native';
+import { Linking, Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -10,10 +11,14 @@ import { CityScreenMetaDHSTSecurity } from '@/components/City/CityScreenMeta/Cit
 
 import { City } from '@/types';
 
+import { CONSTANTS } from '@/styles/constants';
+
 type Props = {
   type: 'Description' | 'History' | 'Security' | 'Transport';
   city: City;
 };
+
+const DEVICE = Platform.OS;
 
 export const CityScreenMetaDHST = ({ type, city }: Props) => {
   const onApp = (link: string) => () => {
@@ -39,7 +44,8 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
       if (!city.transport) return null;
 
       const { overview, apps } = city.transport;
-      const filteredApps = apps.filter(app => !!app.link && !!app.name);
+
+      const filteredApps = apps[DEVICE].filter(app => !!app.link && !!app.name);
 
       return (
         <View>
@@ -54,8 +60,21 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
           >
             {filteredApps.map(({ name, link }) => {
               return (
-                <Button style={styles.row} key={name} outlined>
-                  <Entypo name="google-play" size={24} color="white" />
+                <Button style={styles.row} key={name} outlined rectangle>
+                  {DEVICE === 'android' && (
+                    <Entypo
+                      name="google-play"
+                      size={24}
+                      color={CONSTANTS.colors.typographyLight}
+                    />
+                  )}
+                  {DEVICE === 'ios' && (
+                    <FontAwesome5
+                      name="app-store-ios"
+                      size={24}
+                      color={CONSTANTS.colors.typographyLight}
+                    />
+                  )}
 
                   <CText onPress={onApp(link)} style={styles.rowText} light>
                     {name}
@@ -88,7 +107,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   rowText: {
-    marginLeft: 5,
+    marginLeft: 8,
     marginRight: 5,
   },
 });

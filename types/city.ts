@@ -25,9 +25,14 @@ export type CitySecurityType = {
   };
 };
 
+type CityPublicTransportApp = {
+  name: string;
+  description: string;
+  link: string;
+};
 export type CityPublicTransport = {
   overview: string;
-  apps: { name: string; description: string; link: string }[];
+  apps: { android: CityPublicTransportApp[]; ios: CityPublicTransportApp[] };
 };
 
 export type City = {

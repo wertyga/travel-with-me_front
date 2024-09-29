@@ -52,7 +52,6 @@ export const ImageBackgroundWithGradient = ({
       style={style}
       imageWidth={imageWidth}
       withBlur={withBlur}
-      resizeMode="cover"
     >
       <LinearGradient
         colors={gradientValue}

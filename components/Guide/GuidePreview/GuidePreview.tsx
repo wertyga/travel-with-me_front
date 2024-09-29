@@ -19,7 +19,7 @@ type Props = {
   country: string;
 };
 
-const width = Dimensions.get('window').width * 0.7;
+const WIDTH = Dimensions.get('window').width * 0.7;
 
 export const GuidePreview = ({ guide, country }: Props) => {
   const navi = useNavigation();
@@ -62,11 +62,11 @@ export const GuidePreview = ({ guide, country }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width,
-    height: width,
+    width: WIDTH,
+    aspectRatio: 1,
     borderRadius: 20,
-    overflow: 'hidden',
     marginRight: 10,
+    overflow: 'hidden',
   },
   content: {
     padding: 15,

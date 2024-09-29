@@ -35,23 +35,12 @@ export const MapMarker = React.memo(
     isChosen,
     isChosenExists,
   }: Props) => {
-    const [, setLoaded] = useState(false);
-
-    const onLoad = useCallback(() => {
-      if (Platform.OS === 'ios') return;
-
-      setTimeout(() => {
-        setLoaded(true);
-      }, 300);
-    }, []);
-
     if (!coords?.lat || !coords?.lng) return null;
 
     return (
       <Marker
         coordinate={{ latitude: coords.lat, longitude: coords.lng }}
         onPress={onPress}
-        tracksViewChanges={Platform.OS === 'ios'}
         tracksInfoWindowChanges={false}
       >
         <View
@@ -66,17 +55,22 @@ export const MapMarker = React.memo(
               isChosen && styles.imageContainerChosen,
             ]}
           >
-            <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
-            <FastImage
-              source={image || DefaultPointImage}
+            <View
               style={{
+                overflow: 'hidden',
+                borderRadius: markerSize,
                 width: markerSize,
                 height: markerSize,
-                borderRadius: markerSize,
               }}
-              key={image}
-              onLoad={onLoad}
-            />
+            >
+              <FastImage
+                source={image || DefaultPointImage}
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                }}
+                hideProgress
+              />
+            </View>
           </View>
           <View style={styles.caretContainer}>
             <View

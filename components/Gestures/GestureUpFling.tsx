@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
 
@@ -27,9 +27,6 @@ export type GestureUpFlingProps = {
   style?: ViewStyle;
 };
 
-const { height: windowHeight } = Dimensions.get('window');
-const { height: screenHeight } = Dimensions.get('screen');
-
 export const GestureUpFling: React.FC<GestureUpFlingProps> = ({
   children,
   initialHeight = 200,
@@ -38,26 +35,30 @@ export const GestureUpFling: React.FC<GestureUpFlingProps> = ({
   style,
   zIndex,
 }) => {
-  const currentStateRef = useRef({
-    initialTop: windowHeight - initialHeight,
-    currentTop: windowHeight - initialHeight,
-  });
+  const { height: windowHeight } = Dimensions.get('window');
+  const openedTopValue = windowHeight - initialHeight;
 
   const [stateIsOpened, setStateIsOpened] = useState(false);
 
-  const swipeTop = useSharedValue(currentStateRef.current.currentTop);
   const isOpened = useSharedValue(false);
 
   const animatedStyles = useAnimatedStyle(() => {
+    if (!isOpened.value) {
+      return {
+        top: withTiming(openedTopValue, {
+          duration: 150,
+        }),
+      };
+    }
+
     return {
-      top: swipeTop.value,
+      top: withTiming(maxTop, {
+        duration: 150,
+      }),
     };
   });
 
   const handleClose = () => {
-    swipeTop.value = withTiming(currentStateRef.current.initialTop, {
-      duration: 150,
-    });
     isOpened.value = false;
 
     setTimeout(() => {
@@ -67,9 +68,6 @@ export const GestureUpFling: React.FC<GestureUpFlingProps> = ({
   };
 
   const handleOpen = () => {
-    swipeTop.value = withTiming(maxTop, {
-      duration: 150,
-    });
     isOpened.value = true;
 
     setTimeout(() => {
@@ -106,7 +104,14 @@ export const GestureUpFling: React.FC<GestureUpFlingProps> = ({
   return (
     <>
       <Animated.View
-        style={[styles.container, animatedStyles, style, { zIndex }]}
+        style={[
+          styles.container,
+          animatedStyles,
+          style,
+          {
+            zIndex,
+          },
+        ]}
       >
         {children(Trigger, stateIsOpened)}
       </Animated.View>
@@ -117,8 +122,6 @@ export const GestureUpFling: React.FC<GestureUpFlingProps> = ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: 0,
-    right: 0,
   },
   triggerWrapper: {
     alignItems: 'center',

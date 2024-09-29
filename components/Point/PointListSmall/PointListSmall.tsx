@@ -84,7 +84,6 @@ const PointListSmall: React.FC<Props> = ({
 const styles = StyleSheet.create({
   content: {
     gap: 5,
-    paddingBottom: 15,
   },
   imageContainer: {
     borderColor: 'white',

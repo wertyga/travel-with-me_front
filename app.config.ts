@@ -1,11 +1,11 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
-export const version = '30.0.0';
+export const version = '31.0.0';
 export const PRODUCT_NAME = 'Travel With Me';
 
 const ENV = {
   // API_BASE_URL:
-  //   'https://cb58-2a02-a31a-80c7-8300-b50a-d499-a7f3-bb23.ngrok-free.app',
+  //   'https://d53d-2a02-a31a-80c7-8300-d47-8985-f46a-180b.ngrok-free.app',
   API_BASE_URL: 'https://api.traveljet.org',
   GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
 };
@@ -31,13 +31,13 @@ const appPlugins: ExpoConfig['plugins'] = [
       username: 'wertyga13',
     },
   ],
-  [
-    '@react-native-google-signin/google-signin',
-    {
-      iosUrlScheme:
-        'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
-    },
-  ],
+  // [
+  //   '@react-native-google-signin/google-signin',
+  //   {
+  //     iosUrlScheme:
+  //       'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
+  //   },
+  // ],
   [
     'expo-image-picker',
     {

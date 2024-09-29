@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 export const CONSTANTS = {
   colors: {
     typography: '#000000',
@@ -22,6 +24,7 @@ export const CONSTANTS = {
     paddingHorizontal: 15,
     footerHeight: 60,
     pullTriggerHeight: 6,
+    iosAdditionalSpaceBottom: 30,
   },
   indexes: {
     footerZIndex: 200,
