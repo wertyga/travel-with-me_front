@@ -31,13 +31,13 @@ const appPlugins: ExpoConfig['plugins'] = [
       username: 'wertyga13',
     },
   ],
-  // [
-  //   '@react-native-google-signin/google-signin',
-  //   {
-  //     iosUrlScheme:
-  //       'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
-  //   },
-  // ],
+  [
+    '@react-native-google-signin/google-signin',
+    {
+      iosUrlScheme:
+        'com.googleusercontent.apps.277624245533-hmaoaah21er9j4b7le8rhgeu9tvpogcr',
+    },
+  ],
   [
     'expo-image-picker',
     {
