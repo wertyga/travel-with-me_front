@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CText } from '@/components/CText';
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { useNavigation } from '@/hooks';
 
 import { getHeight } from '@/utils';
@@ -35,6 +36,7 @@ export const CityPreview = ({ city, disabled }: Props) => {
         style={styles.image}
         gradient="top-bottom"
         locations={[0.1, 0.2, 1]}
+        mediaSize={MEDIA_SIZES.Small}
         isFastImage
       >
         <View style={styles.content}>

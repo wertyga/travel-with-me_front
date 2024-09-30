@@ -5,19 +5,19 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { FastImage } from './FastImage';
+import { FastImage, FastImageProps } from './FastImage';
 
 type Props = Omit<ImageBackgroundProps, 'style' | 'source'> & {
   source: string | number;
   style?: ImageBackgroundProps['style'] | ViewStyle;
-  imageWidth?: number;
   withBlur?: boolean;
+  mediaSize?: FastImageProps['mediaSize'];
 };
 
 export const FastImageBackground = ({
   source,
   style = {},
-  imageWidth,
+  mediaSize,
   withBlur,
   defaultSource,
   ...imageProps
@@ -26,6 +26,7 @@ export const FastImageBackground = ({
     <View style={[style]}>
       <FastImage
         source={source}
+        mediaSize={mediaSize}
         style={{
           ...StyleSheet.absoluteFillObject,
           width: '100%',

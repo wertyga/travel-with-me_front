@@ -9,6 +9,7 @@ import {
 import { CText } from '@/components/CText';
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { useNavigation } from '@/hooks';
 
 import { FONTS, Guide, SCREENS } from '@/types';
@@ -37,6 +38,7 @@ export const GuidePreview = ({ guide, country }: Props) => {
       image={guide.hImage}
       contentStyle={styles.content}
       isFastImage
+      mediaSize={MEDIA_SIZES.Big}
     >
       <TouchableOpacity
         onPress={navigateToGuide}

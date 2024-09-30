@@ -8,8 +8,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { FastImage } from '@/components/FastImage';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
+import { FastImage } from 'components/FastImage';
 
 import { Place } from '@/types';
 
@@ -72,6 +73,7 @@ const PointListSmall: React.FC<Props> = ({
               <FastImage
                 style={styles.image}
                 source={point.images[0] || DefaultPointImage}
+                mediaSize={MEDIA_SIZES.Small}
               />
             </Animated.View>
           </TouchableOpacity>

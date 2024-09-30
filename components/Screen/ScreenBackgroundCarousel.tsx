@@ -3,7 +3,7 @@ import React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
-import { FastImage } from '@/components/FastImage';
+import { FastImage } from 'components/FastImage';
 
 type Props = {
   images: string[];

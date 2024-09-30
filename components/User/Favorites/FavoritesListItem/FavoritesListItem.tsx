@@ -5,13 +5,15 @@ import Animated from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { setLike } from '@/api';
-import Button, { CustomButtonProps } from '@/components/Button';
+import Button from '@/components/Button';
+import { CustomButtonProps } from '@/components/Button/BaseButton';
 import { CText } from '@/components/CText';
-import { FastImage } from '@/components/FastImage';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { useSlideLeft, useStores } from '@/hooks';
+import { FastImage } from 'components/FastImage';
 
-import { FONTS, SCREENS, SOCIAL_MODELS } from '@/types';
+import { FONTS, SOCIAL_MODELS } from '@/types';
 
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
@@ -77,7 +79,11 @@ const FavoritesListItem = ({
           activeOpacity={1}
           rectangle
         >
-          <FastImage source={image || defaultImage} style={styles.image} />
+          <FastImage
+            source={image || defaultImage}
+            style={styles.image}
+            mediaSize={MEDIA_SIZES.Small}
+          />
           <View>
             <CText numberOfLines={1} style={styles.title} light>
               {title}

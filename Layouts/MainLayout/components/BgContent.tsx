@@ -7,8 +7,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { observer } from 'mobx-react-lite';
 
 import { BackgroundGradient } from '@/components/BackgroundGradient';
-import { FastImage } from '@/components/FastImage';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { useStores } from '@/hooks';
+import { FastImage } from 'components/FastImage';
 
 import { Props as MainLayoutProps } from '../MainLayout';
 
@@ -37,7 +38,11 @@ export const BgContent = observer(
         style={[StyleSheet.absoluteFillObject, { height: layoutHeight }]}
         activeOpacity={1}
       >
-        <FastImage source={bgImage} style={styles.bgImage} />
+        <FastImage
+          source={bgImage}
+          style={styles.bgImage}
+          mediaSize={MEDIA_SIZES.Big}
+        />
         <LinearGradient
           colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
           style={[StyleSheet.absoluteFillObject]}

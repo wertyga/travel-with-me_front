@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { PointDistance } from '@/components/Point';
 import { useNavigation } from '@/hooks';
 
@@ -35,6 +36,8 @@ export const GuidePointsList = ({ points }: Props) => {
             <ImageBackgroundWithGradient
               image={point.images[0] || PointPlaceholder}
               style={styles.imageWrapper}
+              isFastImage
+              mediaSize={MEDIA_SIZES.Big}
             >
               {!!point.distance && (
                 <PointDistance

@@ -10,17 +10,30 @@ import {
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { Image } from 'expo-image';
-
+// import { Image as ExpoImage } from 'expo-image';
+import { sendLogs } from '@/api';
 import { CText } from '@/components/CText';
 
-type Props = {
+export enum MEDIA_SIZES {
+  Large = '1000',
+  Big = '800',
+  Small = '500',
+  ExtraSmall = '200',
+}
+
+export type FastImageProps = {
   source: string | number;
   style?: ImageStyle;
   hideProgress?: boolean;
+  mediaSize?: MEDIA_SIZES;
 };
 
-export const FastImage = ({ source, style = {}, hideProgress }: Props) => {
+export const FastImage = ({
+  source,
+  style = {},
+  hideProgress,
+  mediaSize,
+}: FastImageProps) => {
   const [state, setState] = useState({
     progress: 0,
     isLoading: false,
@@ -28,7 +41,8 @@ export const FastImage = ({ source, style = {}, hideProgress }: Props) => {
     isError: false,
   });
 
-  const onError = useCallback(() => {
+  const onError = useCallback(e => {
+    sendLogs(e);
     setState(prev => ({
       ...prev,
       isError: true,
@@ -71,8 +85,6 @@ export const FastImage = ({ source, style = {}, hideProgress }: Props) => {
   }, []);
 
   const isShowPlaceholder = state.isError || state.isLoading;
-  const shouldRenderRnImage =
-    typeof source === 'number' || source.startsWith('file://');
   return (
     <>
       {isShowPlaceholder && (
@@ -89,23 +101,33 @@ export const FastImage = ({ source, style = {}, hideProgress }: Props) => {
           )}
         </View>
       )}
-      {shouldRenderRnImage && (
-        <RNImage
-          source={typeof source === 'number' ? source : { uri: source }}
-          style={style}
-        />
-      )}
-      {!shouldRenderRnImage && (
-        <Image
-          source={source}
-          style={style}
-          cachePolicy="disk"
-          onError={onError}
-          onLoad={onLoadSuccess}
-          onLoadStart={onLoadStart}
-          onProgress={onProgress}
-        />
-      )}
+      {/*{shouldRenderRnImage && (*/}
+      <RNImage
+        source={
+          typeof source === 'number'
+            ? source
+            : {
+                uri: mediaSize ? `${source}?width=${mediaSize}` : source,
+              }
+        }
+        style={style}
+        onError={onError}
+        onLoad={onLoadSuccess}
+        onLoadStart={onLoadStart}
+      />
+      {/*)}*/}
+
+      {/*{!shouldRenderRnImage && (*/}
+      {/*  <ExpoImage*/}
+      {/*    source={source}*/}
+      {/*    style={style}*/}
+      {/*    cachePolicy="memory"*/}
+      {/*    onError={onError}*/}
+      {/*    onLoad={onLoadSuccess}*/}
+      {/*    onLoadStart={onLoadStart}*/}
+      {/*    onProgress={onProgress}*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };

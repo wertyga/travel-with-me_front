@@ -18,15 +18,16 @@ import {
   CarouselNew,
   Props as CarouselProps,
 } from '@/components/CarouselNew/CarouselNew';
-import { FastImage } from '@/components/FastImage';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { useStores } from '@/hooks';
+import { FastImage } from 'components/FastImage';
 
 import { CONSTANTS } from '@/styles/constants';
 
 type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
   data: T[];
   carouselStyles?: StyleProp<ViewStyle>;
-  imageStyle?: StyleProp<ImageStyle>;
+  imageStyle?: ImageStyle;
   imageKey: string;
   defaultImage?: number;
   isFastImage?: boolean;
@@ -61,8 +62,9 @@ export const ScreenContentWrapperComponent = <DATA,>({
         <FastImage
           key={imageSrc}
           source={imageSrc}
-          style={[styles.image, imageStyle]}
-          defaultSource={defaultImage}
+          style={{ ...styles.image, ...imageStyle }}
+          mediaSize={MEDIA_SIZES.Big}
+          // defaultSource={defaultImage}
         />
       );
     }

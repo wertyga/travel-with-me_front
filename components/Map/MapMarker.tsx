@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Marker } from 'react-native-maps';
 
-import { FastImage } from '@/components/FastImage';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
+import { FastImage } from 'components/FastImage';
 
 import { Path } from '@/types';
 
@@ -69,6 +70,7 @@ export const MapMarker = React.memo(
                   ...StyleSheet.absoluteFillObject,
                 }}
                 hideProgress
+                mediaSize={MEDIA_SIZES.ExtraSmall}
               />
             </View>
           </View>

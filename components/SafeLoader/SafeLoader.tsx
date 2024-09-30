@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { CText } from '@/components/CText';
-import { FastImageBackground } from '@/components/FastImage';
+import { FastImageBackground } from 'components/FastImage';
 
 import { FONTS } from '@/types';
 

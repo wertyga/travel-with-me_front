@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import {
-  Image,
   ImageStyle,
   StyleSheet,
   TouchableOpacity,
@@ -13,9 +12,9 @@ import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
 
 import { Modal } from '@/components/Common/Modal/Modal';
+import { FastImage } from '@/components/FastImage';
+import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { UploadChoice, UploadTypes } from '@/components/UI/UploadChoice';
-
-import { CONSTANTS } from '@/styles/constants';
 
 export type ImageStorage = {
   uri: string;
@@ -109,7 +108,13 @@ export const UploadImage = ({
         onPress={toggleModalShow}
         style={[styles.container, style]}
       >
-        {!!uri && <Image source={{ uri }} style={[styles.image, imageStyle]} />}
+        {!!uri && (
+          <FastImage
+            source={uri}
+            style={{ ...styles.image, ...imageStyle }}
+            mediaSize={MEDIA_SIZES.Small}
+          />
+        )}
         {!uri && children}
         {additionalContent}
       </TouchableOpacity>

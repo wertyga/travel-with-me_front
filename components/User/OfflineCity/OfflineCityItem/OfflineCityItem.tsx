@@ -10,9 +10,9 @@ import { observer } from 'mobx-react-lite';
 
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
-import { FastImage } from '@/components/FastImage';
 import { GesturesContainer } from '@/components/Gestures/Gestures';
 import { useSlideLeft, useStores } from '@/hooks';
+import { FastImage } from 'components/FastImage';
 
 import { City, FONTS, SCREENS } from '@/types';
 
