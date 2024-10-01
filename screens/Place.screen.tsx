@@ -7,10 +7,13 @@ import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
 import { CarouselNew } from '@/components/CarouselNew/CarouselNew';
+import { FastImage } from '@/components/FastImage';
 import { PointImagesCarousel } from '@/components/Guide/GuideMap/PointImagesCarousel';
 import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { SafeLoader } from '@/components/SafeLoader';
 import { useAuthGuard, useStores } from '@/hooks';
+
+import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 
 const PlaceScreen = ({ route }) => {
   useAuthGuard();
@@ -41,7 +44,7 @@ const PlaceScreen = ({ route }) => {
   }
 
   const { width: windowWidth } = Dimensions.get('window');
-
+  const images = !!place.images.length ? place.images : [DefaultPlaceImage];
   return (
     <MainLayout
       style={{
@@ -56,7 +59,7 @@ const PlaceScreen = ({ route }) => {
           style={{
             height: layoutHeight - 300,
           }}
-          data={place.images}
+          data={images}
           cardWidth={windowWidth}
           onChange={() => setFullImageWidth(-1)}
           renderItem={({ item, index }) => {
@@ -66,8 +69,8 @@ const PlaceScreen = ({ route }) => {
                 activeOpacity={1}
                 onPress={toggleFullWidth(index)}
               >
-                <Image
-                  source={{ uri: item }}
+                <FastImage
+                  source={item}
                   style={{
                     width: windowWidth,
                     objectFit: 'cover',

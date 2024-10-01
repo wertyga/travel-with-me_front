@@ -55,6 +55,8 @@ export const PointMeta = ({ point, isFetching }: Props) => {
     workTime,
   };
 
+  const isContactFilled = !!phone || !!email || !!website;
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -104,39 +106,42 @@ export const PointMeta = ({ point, isFetching }: Props) => {
         >
           <CText light>{point.story}</CText>
         </Expander>
-        <Expander
-          title={META_TEXT.contact.title}
-          style={styles.aboutTextNext}
-          light
-        >
-          {!!contactData.phone && (
-            <CText
-              light
-              style={[styles.description]}
-              onPress={() => {
-                Linking.openURL(`tel:${contactData.phone}`);
-              }}
-            >{`Phone: ${contactData.phone}`}</CText>
-          )}
-          {!!contactData.email && (
-            <CText
-              light
-              style={[styles.description]}
-              onPress={() => {
-                Linking.openURL(`mailto:${contactData.email}`);
-              }}
-            >{`E-mail: ${contactData.email}`}</CText>
-          )}
-          {!!contactData.website && (
-            <CText
-              light
-              style={[styles.description]}
-              onPress={() => {
-                Linking.openURL(contactData.website);
-              }}
-            >{`Website: ${contactData.website}`}</CText>
-          )}
-        </Expander>
+
+        {isContactFilled && (
+          <Expander
+            title={META_TEXT.contact.title}
+            style={styles.aboutTextNext}
+            light
+          >
+            {!!contactData.phone && (
+              <CText
+                light
+                style={[styles.description]}
+                onPress={() => {
+                  Linking.openURL(`tel:${contactData.phone}`);
+                }}
+              >{`Phone: ${contactData.phone}`}</CText>
+            )}
+            {!!contactData.email && (
+              <CText
+                light
+                style={[styles.description]}
+                onPress={() => {
+                  Linking.openURL(`mailto:${contactData.email}`);
+                }}
+              >{`E-mail: ${contactData.email}`}</CText>
+            )}
+            {!!contactData.website && (
+              <CText
+                light
+                style={[styles.description]}
+                onPress={() => {
+                  Linking.openURL(contactData.website);
+                }}
+              >{`Website: ${contactData.website}`}</CText>
+            )}
+          </Expander>
+        )}
         {!!contactData.workTime?.length && (
           <Expander title="Work time" style={styles.aboutTextNext} light>
             {contactData.workTime.map(time => {

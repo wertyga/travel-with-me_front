@@ -1,4 +1,5 @@
 import { ReactNode, useState } from 'react';
+
 import {
   StyleSheet,
   TextInput,
@@ -7,8 +8,13 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import { Feather } from '@expo/vector-icons';
+
+import { Modal } from '@/components/Common/Modal/Modal';
+
 import { FONTS } from '@/types';
 
 type Props = {
@@ -16,7 +22,9 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   inputProps?: TextInputProps;
   onSearch?: (search: string) => void;
+  onClose: () => void;
   disabled?: boolean;
+  children?: ReactNode;
 };
 
 const Search = ({
@@ -25,6 +33,8 @@ const Search = ({
   inputProps: { style: inputStyles, ...inputProps } = {},
   onSearch,
   disabled,
+  children,
+  onClose,
 }: Props) => {
   const [search, setSearch] = useState('');
 
@@ -33,19 +43,25 @@ const Search = ({
   };
 
   return (
-    <View style={[styles.container, style]}>
-      <TextInput
-        style={[styles.input, inputStyles]}
-        value={search}
-        onEndEditing={handleConfirm}
-        onChangeText={setSearch}
-        placeholderTextColor="rgba(0, 53, 59, 0.60)"
-        {...inputProps}
-      />
-      <TouchableOpacity style={styles.search} onPress={handleConfirm}>
-        {icon || <Feather name="search" size={20} color="black" />}
-      </TouchableOpacity>
-      {disabled && <View style={styles.placeholder} />}
+    <View>
+      <View style={[styles.container, style]}>
+        <TextInput
+          style={[styles.input, inputStyles]}
+          value={search}
+          onEndEditing={handleConfirm}
+          onChangeText={setSearch}
+          placeholderTextColor="rgba(0, 53, 59, 0.60)"
+          {...inputProps}
+        />
+        <TouchableOpacity style={styles.search} onPress={handleConfirm}>
+          {icon || <Feather name="search" size={20} color="black" />}
+        </TouchableOpacity>
+        {disabled && <View style={styles.placeholder} />}
+      </View>
+
+      <Modal onClose={onClose} visible={!!children} white>
+        {children}
+      </Modal>
     </View>
   );
 };

@@ -2,8 +2,6 @@ import { useState } from 'react';
 
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { AntDesign } from '@expo/vector-icons';
-
 import { observer } from 'mobx-react-lite';
 
 import { useStores } from '@/hooks';
@@ -53,17 +51,10 @@ export const GlobalSearchComponent = () => {
           value: search,
           onChangeText: setSearch,
         }}
-      />
-      {isRenderList && (
-        <View style={styles.list}>
-          <AntDesign
-            name="close"
-            size={24}
-            color="black"
-            style={styles.closeIcon}
-            onPress={onClose}
-          />
-          <ScrollView contentContainerStyle={styles.listContent}>
+        onClose={onClose}
+      >
+        {isRenderList && (
+          <ScrollView showsVerticalScrollIndicator={false}>
             {!!cities.length && (
               <View style={styles.item}>
                 {cities.map(city => {
@@ -112,30 +103,15 @@ export const GlobalSearchComponent = () => {
               </View>
             )}
           </ScrollView>
-        </View>
-      )}
+        )}
+      </Search>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
-  list: {
-    top: 5,
-    left: 0,
-    width: '100%',
-    height: 300,
-    backgroundColor: 'white',
-    marginTop: 3,
-    borderRadius: 10,
-    zIndex: 2,
-  },
-  listContent: {
-    paddingTop: 10,
-    marginRight: 25,
-  },
   item: {
-    paddingHorizontal: 10,
+    gap: 10,
     paddingVertical: 3,
   },
   closeIcon: {

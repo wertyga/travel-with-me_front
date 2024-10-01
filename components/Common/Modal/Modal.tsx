@@ -18,7 +18,9 @@ import { CONSTANTS } from '@/styles/constants';
 type Props = ModalProps & {
   title?: string;
   onClose: () => void;
-  style?: ViewStyle;
+  containerStyle?: ViewStyle;
+  bodyStyle?: ViewStyle;
+  white?: boolean;
 };
 
 export const Modal = ({
@@ -26,9 +28,12 @@ export const Modal = ({
   animationType = 'slide',
   onClose,
   children,
-  style,
+  containerStyle,
+  bodyStyle,
   transparent,
   visible,
+  white,
+  style,
   ...props
 }: Props) => {
   return (
@@ -42,20 +47,31 @@ export const Modal = ({
         style={[
           styles.content,
           transparent && { backgroundColor: 'rgba(0, 0, 0, 0.7)' },
+          white && { backgroundColor: 'white' },
+          bodyStyle,
         ]}
       >
         <View style={styles.titleContainer}>
-          <Button squareSize={40} rectangle onPress={onClose}>
+          <Button
+            squareSize={40}
+            rectangle
+            onPress={onClose}
+            style={[white && { backgroundColor: 'rgba(0, 0, 0, 0.1)' }]}
+          >
             <FontAwesome5
               name="angle-left"
               size={24}
-              color={CONSTANTS.colors.typographyLight}
+              color={
+                white
+                  ? CONSTANTS.colors.typography
+                  : CONSTANTS.colors.typographyLight
+              }
             />
           </Button>
           {!!title && <CText light>{title}</CText>}
         </View>
 
-        <View style={[{ flex: 1 }, style]}>{children}</View>
+        {children}
       </View>
     </ModalNative>
   );
@@ -63,10 +79,10 @@ export const Modal = ({
 
 const styles = StyleSheet.create({
   content: {
+    paddingTop: 50,
+    paddingBottom: 50,
     backgroundColor: CONSTANTS.colors.bgMiddle,
-    padding: CONSTANTS.spaces.paddingHorizontal,
-    paddingTop: 70,
-    paddingBottom: 20,
+    paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
     flex: 1,
   },
   titleContainer: {
