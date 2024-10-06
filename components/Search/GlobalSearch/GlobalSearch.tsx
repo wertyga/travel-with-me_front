@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -15,28 +15,31 @@ import Search from '../Search';
 import { GlobalSearchItem } from './GlobalSearchItem';
 
 export const GlobalSearchComponent = () => {
-  const [search, setSearch] = useState('');
-  const { isLoading, global, dropStore, getGlobalSearch } = useStores(
-    stores => ({
+  const { isLoading, global, dropStore, getGlobalSearch, currentRoute } =
+    useStores(stores => ({
       global: stores.searchStore.global,
       isLoading: stores.searchStore.isLoading,
       dropStore: stores.searchStore.dropStore,
       getGlobalSearch: stores.searchStore.getGlobalSearch,
-    })
-  );
+      currentRoute: stores.routerStore.currentRoute,
+    }));
 
   const onClose = () => {
     dropStore();
-    setSearch('');
   };
 
-  const onSearch = async () => {
+  const onSearch = async (search: string) => {
     if (!search) {
       onClose();
       return;
     }
+
     await getGlobalSearch({ search });
   };
+
+  useEffect(() => {
+    onClose();
+  }, [currentRoute]);
 
   const { cities = [], guides = [], places = [] } = global;
   const isRenderList = !!cities.length || !!guides.length || !!places.length;
@@ -44,13 +47,9 @@ export const GlobalSearchComponent = () => {
   return (
     <>
       <Search
-        onSearch={onSearch}
+        onConfirm={onSearch}
         disabled={isLoading}
-        inputProps={{
-          placeholder: "I'm looking for...",
-          value: search,
-          onChangeText: setSearch,
-        }}
+        placeholder="I'm looking for..."
         onClose={onClose}
       >
         {isRenderList && (

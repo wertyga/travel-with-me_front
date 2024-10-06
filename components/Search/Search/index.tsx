@@ -20,18 +20,20 @@ import { FONTS } from '@/types';
 type Props = {
   icon?: ReactNode;
   style?: StyleProp<ViewStyle>;
-  inputProps?: TextInputProps;
-  onSearch?: (search: string) => void;
+  onConfirm: (search: string) => void;
   onClose: () => void;
   disabled?: boolean;
+  placeholder?: string;
   children?: ReactNode;
+  inputStyles?: TextInputProps['style'];
 };
 
 const Search = ({
   icon,
   style,
-  inputProps: { style: inputStyles, ...inputProps } = {},
-  onSearch,
+  placeholder,
+  inputStyles,
+  onConfirm,
   disabled,
   children,
   onClose,
@@ -39,7 +41,7 @@ const Search = ({
   const [search, setSearch] = useState('');
 
   const handleConfirm = () => {
-    onSearch?.((inputProps as TextInputProps)?.value || search);
+    onConfirm(search);
   };
 
   return (
@@ -51,7 +53,7 @@ const Search = ({
           onEndEditing={handleConfirm}
           onChangeText={setSearch}
           placeholderTextColor="rgba(0, 53, 59, 0.60)"
-          {...inputProps}
+          placeholder={placeholder}
         />
         <TouchableOpacity style={styles.search} onPress={handleConfirm}>
           {icon || <Feather name="search" size={20} color="black" />}
