@@ -90,7 +90,7 @@ const ProfileScreen = () => {
         {isLoading && <Loader />}
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={[styles.item, styles.avatarAndName]}>
+          <View style={[styles.avatarAndName]}>
             <Avatar editable />
             <CText style={styles.name} light>
               {user.username}
@@ -195,6 +195,8 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   avatarAndName: {
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   item: {
     marginTop: 20,

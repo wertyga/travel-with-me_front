@@ -29,9 +29,18 @@ export const BackButton = ({ transparent, children, style }: Props) => {
           navigation.goBack();
         }
       }}
-      style={[styles.container, style]}
+      style={[
+        !children && styles.container,
+        !children && transparent && transparent && styles.iconTransparent,
+        style,
+      ]}
     >
-      <View style={[styles.icon, transparent && styles.iconTransparent]}>
+      <View
+        style={[
+          !!children && styles.container,
+          !!children && transparent && styles.iconTransparent,
+        ]}
+      >
         <FontAwesome5
           name="angle-left"
           size={24}
@@ -44,8 +53,7 @@ export const BackButton = ({ transparent, children, style }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
-  icon: {
+  container: {
     backgroundColor: 'rgba(246, 245, 242, 0.40)',
     alignItems: 'center',
     justifyContent: 'center',

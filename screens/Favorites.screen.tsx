@@ -31,13 +31,8 @@ const FavoritesScreen = () => {
   const isEmptyList = isRenderList && !guides.length && !places.length;
 
   return (
-    <MainLayout
-      headerTitle="Favorites"
-      style={styles.container}
-      isLoading={isLoading}
-      withBackButton
-    >
-      {isRenderList && !isEmptyList && (
+    <MainLayout headerTitle="Favorites" isLoading={isLoading} withBackButton>
+      {!isEmptyList && isRenderList && (
         <FavoritesList
           guides={guides}
           places={places}
@@ -57,7 +52,6 @@ const FavoritesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
   emptyText: {
     height: '100%',
     paddingTop: 100,

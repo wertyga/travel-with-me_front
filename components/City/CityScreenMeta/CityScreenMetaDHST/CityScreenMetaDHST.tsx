@@ -90,10 +90,13 @@ export const CityScreenMetaDHST = ({ type, city }: Props) => {
     return null;
   }, [type, city]);
 
-  return Component;
+  return <View style={[!!type && styles.openedContainer]}>{Component}</View>;
 };
 
 const styles = StyleSheet.create({
+  openedContainer: {
+    marginBottom: 15,
+  },
   apps: {
     marginTop: 20,
   },

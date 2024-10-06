@@ -6,6 +6,8 @@ import {
   ImageStyle,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 
@@ -19,36 +21,37 @@ import {
   Props as CarouselProps,
 } from '@/components/CarouselNew/CarouselNew';
 import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
+import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
 import { useStores } from '@/hooks';
 import { FastImage } from 'components/FastImage';
 
 import { CONSTANTS } from '@/styles/constants';
 
-type Props<T> = Omit<CarouselProps, 'data' | 'renderItem'> & {
+type Props<T> = Pick<CarouselProps, 'defaultIndex' | 'onChange'> & {
   data: T[];
-  carouselStyles?: StyleProp<ViewStyle>;
   imageStyle?: ImageStyle;
   imageKey: string;
   defaultImage?: number;
   isFastImage?: boolean;
+  noBorderRadius?: boolean;
   children?: React.ReactNode;
   renderItem?: (data: { item: any }) => React.ReactNode;
 };
 
 export const ScreenContentWrapperComponent = <DATA,>({
   data,
-  carouselStyles,
   imageKey,
   children,
   defaultImage,
   renderItem,
   isFastImage,
+  noBorderRadius,
   imageStyle = {},
-  ...carouselProps
+  defaultIndex,
+  onChange,
 }: Props<DATA>) => {
-  const { layoutHeight } = useStores(stores => ({
-    layoutHeight: stores.domStore.layoutHeight,
-  }));
+  const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
+  const carouselHeight = windowHeight - 300;
 
   const renderItemHandler = <DATA,>(data: { item: DATA }) => {
     if (renderItem) {
@@ -62,9 +65,13 @@ export const ScreenContentWrapperComponent = <DATA,>({
         <FastImage
           key={imageSrc}
           source={imageSrc}
-          style={{ ...styles.image, ...imageStyle }}
+          style={{
+            ...styles.image,
+            height: carouselHeight,
+            width: windowWidth,
+            ...imageStyle,
+          }}
           mediaSize={MEDIA_SIZES.Big}
-          // defaultSource={defaultImage}
         />
       );
     }
@@ -72,7 +79,11 @@ export const ScreenContentWrapperComponent = <DATA,>({
       <Image
         key={imageSrc}
         source={{ uri: imageSrc }}
-        style={[styles.image, imageStyle]}
+        style={[
+          styles.image,
+          { height: carouselHeight, width: windowWidth },
+          imageStyle,
+        ]}
         defaultSource={defaultImage}
       />
     );
@@ -81,34 +92,27 @@ export const ScreenContentWrapperComponent = <DATA,>({
   return (
     <ScrollView
       contentContainerStyle={{
-        minHeight: '100%',
         paddingBottom: 20,
       }}
     >
       <CarouselNew<DATA>
+        dotsStyle={{
+          paddingBottom: 12,
+        }}
         data={data}
-        style={carouselStyles}
+        cardWidth={windowWidth}
+        defaultIndex={defaultIndex}
+        onChange={onChange}
         renderItem={renderItemHandler}
-        {...carouselProps}
       />
-      {!!children && (
-        <BackgroundGradient
-          style={[
-            styles.content,
-            { top: layoutHeight - 300, paddingBottom: layoutHeight - 300 },
-          ]}
-        >
-          {children}
-        </BackgroundGradient>
-      )}
+
+      {children}
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   image: {
-    width: '100%',
-    height: Dimensions.get('screen').height,
     objectFit: 'cover',
   },
   content: {
@@ -117,6 +121,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
+  dotsStyle: {},
 });
 
 export const ScreenContentWrapper = observer(ScreenContentWrapperComponent);

@@ -11,7 +11,7 @@ import { useStores } from '@/hooks';
 
 import { City } from '@/types';
 
-import { CONSTANTS } from '@/styles/constants';
+import { CONSTANTS, CUSTOM_VIEW_STYLES } from '@/styles/constants';
 
 type Props = {
   city: City;
@@ -50,14 +50,16 @@ const CityDownloader = ({ city }: Props) => {
       disabled={isOfflineStoreLoading}
       onPress={() => saveCityToOffline(city.slug)}
       style={styles.action}
+      solid
     >
       <FontAwesome5 name="cloud-download-alt" size={24} color="white" />
-      {isOfflineStoreLoading && <ActivityIndicator />}
+      {isOfflineStoreLoading && <ActivityIndicator style={{ marginLeft: 5 }} />}
       {isCityDownloaded && !isOfflineStoreLoading && (
         <Ionicons
           name="reload"
           size={20}
           color={CONSTANTS.colors.typographyLight}
+          style={{ marginLeft: 5 }}
         />
       )}
     </Button>
@@ -69,6 +71,6 @@ export default observer(CityDownloader);
 const styles = StyleSheet.create({
   action: {
     height: BTN_SIZE,
-    gap: 5,
+    ...CUSTOM_VIEW_STYLES.metaView.likeBtn,
   },
 });

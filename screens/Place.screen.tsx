@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import { Dimensions, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -45,6 +45,8 @@ const PlaceScreen = ({ route }) => {
 
   const { width: windowWidth } = Dimensions.get('window');
   const images = !!place.images.length ? place.images : [DefaultPlaceImage];
+  const imageHeight = layoutHeight - 300;
+
   return (
     <MainLayout
       style={{
@@ -57,7 +59,10 @@ const PlaceScreen = ({ route }) => {
       <ScrollView>
         <CarouselNew<string>
           style={{
-            height: layoutHeight - 300,
+            height: imageHeight,
+          }}
+          dotsStyle={{
+            paddingBottom: 12,
           }}
           data={images}
           cardWidth={windowWidth}
@@ -73,8 +78,8 @@ const PlaceScreen = ({ route }) => {
                   source={item}
                   style={{
                     width: windowWidth,
+                    height: imageHeight,
                     objectFit: 'cover',
-                    height: layoutHeight - 300,
                   }}
                 />
               </TouchableOpacity>

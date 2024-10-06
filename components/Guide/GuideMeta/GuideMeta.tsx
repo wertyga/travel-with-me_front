@@ -1,13 +1,15 @@
 import * as React from 'react';
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
 import { CText } from '@/components/CText';
-import { GoToPayContentLink } from '@/components/GoToPayContentLink';
+import { Tabs } from '@/components/UI/Tabs';
 
-import { FONTS, Guide } from '@/types';
+import { Guide } from '@/types';
+
+import { CONSTANTS } from '@/styles/constants';
 
 import { GuidePointsList } from '../GuidePointsList/GuidePointsList';
 import { GuideMetaActions } from './GuideMetaActions';
@@ -18,40 +20,43 @@ type Props = {
   isFetching?: boolean;
 };
 
+const TABS = ['Points', 'Info'];
+
 export const GuideMetaComponent = ({ guide, isFetching }: Props) => {
   const { travelTime } = guide;
   const isRenderPointsList = !!guide.points?.length;
 
   return (
-    <>
+    <View style={styles.container}>
       <GuideMetaTitle guide={guide} isFetching={isFetching} />
-
-      <CText style={styles.aboutText} light>
-        About the guide
-      </CText>
 
       <GuideMetaActions travelTime={travelTime} guide={guide} />
 
-      <CText style={{ marginBottom: 20 }} light>
-        {guide.description}
-      </CText>
-
-      <>
-        {isRenderPointsList && (
-          <GuidePointsList points={guide.points} guide={guide} />
-        )}
-      </>
-    </>
+      <Tabs tabs={TABS} tabTextProps={{ light: true }} style={styles.tabs}>
+        {[
+          <View key={TABS[0]}>
+            {isRenderPointsList && (
+              <GuidePointsList points={guide.points} guide={guide} />
+            )}
+          </View>,
+          <CText light key={TABS[1]}>
+            {guide.description}
+          </CText>,
+        ]}
+      </Tabs>
+    </View>
   );
 };
 
 export const GuideMeta = observer(GuideMetaComponent);
 
 const styles = StyleSheet.create({
-  aboutText: {
-    fontFamily: FONTS.CrimsonSemiBold,
-    fontSize: 22,
-    marginTop: 5,
-    marginBottom: 10,
+  container: {
+    position: 'relative',
+    paddingTop: 40,
+    paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
+  },
+  tabs: {
+    marginTop: 20,
   },
 });

@@ -4,6 +4,7 @@ import { ImageBackgroundWithGradient } from '@/components/Common';
 import { CountryPill } from '@/components/Country';
 import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { PointDistance } from '@/components/Point';
+import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useNavigation } from '@/hooks';
 
 import { getHeight } from '@/utils';
@@ -23,7 +24,10 @@ export const GuidePointsList = ({ points }: Props) => {
   const navi = useNavigation();
 
   return (
-    <ScrollView contentContainerStyle={{ gap: 10 }}>
+    <ScrollHorizontalNoEdges
+      contentContainerStyle={{ gap: 10 }}
+      edge={CONSTANTS.spaces.paddingHorizontal}
+    >
       {points.map(point => {
         return (
           <TouchableOpacity
@@ -50,7 +54,7 @@ export const GuidePointsList = ({ points }: Props) => {
           </TouchableOpacity>
         );
       })}
-    </ScrollView>
+    </ScrollHorizontalNoEdges>
   );
 };
 
@@ -62,13 +66,13 @@ const styles = StyleSheet.create({
   },
   point: {
     alignItems: 'center',
+    height: 250,
+    width: 250,
   },
   imageWrapper: {
-    width: '100%',
-    height: getHeight(56, CONSTANTS.spaces.paddingHorizontal * 2),
+    ...StyleSheet.absoluteFillObject,
     borderRadius: 10,
     overflow: 'hidden',
-    position: 'relative',
   },
   image: {
     flex: 1,

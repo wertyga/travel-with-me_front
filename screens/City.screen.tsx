@@ -101,11 +101,9 @@ const CityScreen = () => {
         defaultIndex={initialCityIndex}
         onChange={onChangeCity}
         imageKey="image"
-        noDots
-        isFullScreen
         isFastImage
       >
-        {!isLoading && <CityScreenMeta city={city} />}
+        <CityScreenMeta city={city} />
       </ScreenContentWrapper>
 
       {isCitySaved && <CityMapForDownload points={points} />}

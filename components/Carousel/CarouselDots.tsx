@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import { StyleSheet, View, ViewStyle } from 'react-native';
+
 import AnimatedDotsCarousel from 'react-native-animated-dots-carousel';
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 

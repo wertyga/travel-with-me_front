@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -69,7 +69,14 @@ const CitiesListScreen = () => {
     <MainLayout
       style={styles.layout}
       headerTitle={!isNetConnected && 'Offline Mode'}
-      bgImage={SplashBgImage}
+      // bgImage={SplashBgImage}
+      bgContent={
+        <Image
+          source={SplashBgImage}
+          style={{ width: '100%', height: '100%' }}
+          blurRadius={7}
+        />
+      }
     >
       <View
         style={{

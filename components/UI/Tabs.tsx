@@ -5,15 +5,23 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Animate, { FadeInDown, FadeOut } from 'react-native-reanimated';
 
 import { CText } from '@/components/CText';
+import { CTextProps } from '@/components/CText/CText';
 
 type Props = {
   tabs: string[];
   children: React.ReactNode[];
   style?: ViewStyle;
   tabStyle?: ViewStyle;
+  tabTextProps?: CTextProps;
 };
 
-export const Tabs = ({ tabs, children, style, tabStyle }: Props) => {
+export const Tabs = ({
+  tabs,
+  children,
+  style,
+  tabStyle,
+  tabTextProps,
+}: Props) => {
   const [chosenIndex, setChosenIndex] = useState<number>(0);
 
   return (
@@ -32,7 +40,9 @@ export const Tabs = ({ tabs, children, style, tabStyle }: Props) => {
                 tabStyle,
               ]}
             >
-              <CText style={styles.tabText}>{tab}</CText>
+              <CText style={styles.tabText} {...tabTextProps}>
+                {tab}
+              </CText>
               {chosenIndex === i && (
                 <Animate.View
                   entering={FadeInDown}
@@ -44,7 +54,7 @@ export const Tabs = ({ tabs, children, style, tabStyle }: Props) => {
           );
         })}
       </View>
-      <View>{children[chosenIndex]}</View>
+      {children[chosenIndex]}
     </View>
   );
 };

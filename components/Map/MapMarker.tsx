@@ -105,12 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     borderColor: '#fff',
-    //
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 10, // Для Android
+    ...CONSTANTS.shadow.default,
   },
   imageContainerChosen: {
     backgroundColor: CONSTANTS.colors.bgMiddle,

@@ -99,11 +99,10 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
         defaultIndex={initialGuideIndex}
         onChange={onChangeGuide}
         imageKey="vImage"
-        noDots
-        isFullScreen
         isFastImage
+        // noBorderRadius
       >
-        {!loading && <GuideMeta guide={guide} />}
+        {!!guide && <GuideMeta guide={guide} />}
       </ScreenContentWrapper>
     </MainLayout>
   );
@@ -113,11 +112,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
     paddingTop: 0,
-  },
-  guideImage: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
   },
 });
 

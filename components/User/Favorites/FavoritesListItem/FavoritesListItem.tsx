@@ -1,6 +1,6 @@
-import { StyleSheet, View } from 'react-native';
+import { useRef, useState } from 'react';
 
-import Animated from 'react-native-reanimated';
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -9,11 +9,12 @@ import Button from '@/components/Button';
 import { CustomButtonProps } from '@/components/Button/BaseButton';
 import { CText } from '@/components/CText';
 import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
-import { GesturesContainer } from '@/components/Gestures/Gestures';
-import { useSlideLeft, useStores } from '@/hooks';
+import { useStores } from '@/hooks';
 import { FastImage } from 'components/FastImage';
 
 import { FONTS, SOCIAL_MODELS } from '@/types';
+
+import { CONSTANTS } from '@/styles/constants';
 
 import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 import DefaultGuideImage from '@/assets/images/guide_placeholder.png';
@@ -39,6 +40,9 @@ const FavoritesListItem = ({
   href,
   hrefParams,
 }: Props) => {
+  const scrollRef = useRef<ScrollView | null>(null);
+  const [isOpened, setIsOpened] = useState(false);
+
   const { getFavorites } = useStores(stores => ({
     getFavorites: stores.userStore.getFavorites,
   }));
@@ -54,52 +58,52 @@ const FavoritesListItem = ({
   const defaultImage =
     modelType === SOCIAL_MODELS.Guide ? DefaultGuideImage : DefaultPlaceImage;
 
-  const { onUpdate, animatedStyles, onFinalize } = useSlideLeft({
-    thresholdForFinish: 100,
-    leftSideTranslation: -80,
-  });
+  const onScrollEnd = () => {
+    if (isOpened) {
+      scrollRef.current?.scrollTo({ x: 0, animated: true });
+    } else {
+      scrollRef.current?.scrollToEnd({ animated: true });
+    }
 
-  const gestureHandlers = isRemoveDisabled
-    ? {
-        onUpdate: () => {},
-        onFinalize: () => {},
-      }
-    : {
-        onUpdate,
-        onFinalize,
-      };
+    setIsOpened(!isOpened);
+  };
 
   return (
-    <GesturesContainer {...gestureHandlers}>
-      <Animated.View style={[animatedStyles, styles.wrapper]}>
-        <Button
-          href={href}
-          hrefParams={hrefParams}
-          style={styles.container}
-          activeOpacity={1}
-          rectangle
-        >
-          <FastImage
-            source={image || defaultImage}
-            style={styles.image}
-            mediaSize={MEDIA_SIZES.Small}
-          />
-          <View>
-            <CText numberOfLines={1} style={styles.title} light>
-              {title}
+    <ScrollView
+      horizontal
+      scrollEnabled={!isRemoveDisabled}
+      style={styles.wrapper}
+      showsHorizontalScrollIndicator={false}
+      onScrollEndDrag={onScrollEnd}
+      ref={scrollRef}
+    >
+      <Button
+        href={href}
+        hrefParams={hrefParams}
+        style={styles.container}
+        activeOpacity={1}
+        rectangle
+      >
+        <FastImage
+          source={image || defaultImage}
+          style={styles.image}
+          mediaSize={MEDIA_SIZES.Small}
+        />
+        <View>
+          <CText numberOfLines={1} style={styles.title} light>
+            {title}
+          </CText>
+          {!!subtitle && (
+            <CText numberOfLines={1} style={styles.subtitle} light>
+              {subtitle}
             </CText>
-            {!!subtitle && (
-              <CText numberOfLines={1} style={styles.subtitle} light>
-                {subtitle}
-              </CText>
-            )}
-          </View>
-        </Button>
-        <Button style={styles.removeBtn} rectangle onPress={onUnliked}>
-          <FontAwesome name="trash-o" size={34} color="white" />
-        </Button>
-      </Animated.View>
-    </GesturesContainer>
+          )}
+        </View>
+      </Button>
+      <Button style={styles.removeBtn} rectangle onPress={onUnliked}>
+        <FontAwesome name="trash-o" size={34} color="white" />
+      </Button>
+    </ScrollView>
   );
 };
 
@@ -108,6 +112,8 @@ export default FavoritesListItem;
 const styles = StyleSheet.create({
   wrapper: {
     position: 'relative',
+    width:
+      Dimensions.get('window').width - CONSTANTS.spaces.paddingHorizontal * 2,
   },
   container: {
     flex: 1,
@@ -116,6 +122,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     zIndex: 2,
+    width:
+      Dimensions.get('window').width - CONSTANTS.spaces.paddingHorizontal * 2,
   },
   image: {
     height: 60,
@@ -124,12 +132,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   removeBtn: {
-    position: 'absolute',
-    right: -80,
-    top: 0,
-    bottom: 0,
     width: 70,
     height: '100%',
+    marginLeft: 10,
   },
   title: {
     fontFamily: FONTS.OpenSansBold,

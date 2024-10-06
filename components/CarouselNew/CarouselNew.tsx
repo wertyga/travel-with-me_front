@@ -28,6 +28,7 @@ export type Props<T = any> = {
   noDots?: boolean;
   isFullScreen?: boolean;
   style?: StyleProp<ViewStyle>;
+  dotsStyle?: ViewStyle;
 };
 
 export const CarouselNew = <T,>({
@@ -39,6 +40,7 @@ export const CarouselNew = <T,>({
   onChange,
   defaultIndex = 0,
   isFullScreen,
+  dotsStyle,
 }: Props<T>) => {
   const scrollRef = useRef<Animated.ScrollView>();
   const currentIndexShared = useSharedValue(defaultIndex);
@@ -100,6 +102,8 @@ export const CarouselNew = <T,>({
     }
   }, [defaultIndex]);
 
+  const isShowDots = !noDots && data.length > 1;
+
   return (
     <View style={[isFullScreen && StyleSheet.absoluteFillObject, style]}>
       <Animated.ScrollView
@@ -131,10 +135,10 @@ export const CarouselNew = <T,>({
           });
         })}
       </Animated.ScrollView>
-      {!noDots && (
+      {isShowDots && (
         <LinearGradient
           colors={['rgba(0, 0, 0, 0.01)', 'rgba(0, 0, 0, 0.4)']}
-          style={styles.dots}
+          style={[styles.dots, dotsStyle]}
         >
           <CarouselDots currentIndex={currentIndex} totalCount={data.length} />
         </LinearGradient>

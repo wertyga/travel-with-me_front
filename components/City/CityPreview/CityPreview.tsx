@@ -57,9 +57,8 @@ export const CityPreview = ({ city, disabled }: Props) => {
 const styles = StyleSheet.create({
   preview: {
     width: '48%',
-    height: getHeight(70, CONSTANTS.spaces.paddingHorizontal * 2),
-    borderRadius: 15,
-    overflow: 'hidden',
+    aspectRatio: 0.67,
+    ...CONSTANTS.shadow.default,
   },
   disabled: {
     opacity: 0.3,
@@ -83,5 +82,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    borderRadius: 15,
+    overflow: 'hidden',
   },
 });

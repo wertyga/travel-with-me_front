@@ -105,14 +105,13 @@ export const MainLayoutComponent = ({
         });
       }}
     >
+      <StatusBar style={isHeaderDark ? 'dark' : 'light'} />
       <BgContent
         bgImage={bgImage}
         onBgPress={onBgPress}
         bgContent={bgContent}
         bgColors={bgColors}
       />
-
-      {isHeaderDark && <StatusBar style="dark" />}
 
       <>
         {isLoading && <Loader textColor={loaderTextColor} />}
@@ -176,7 +175,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
-    paddingTop: CONSTANTS.spaces.paddingTop,
     flex: 1,
     flexGrow: 1,
   },

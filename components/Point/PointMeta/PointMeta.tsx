@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Linking, StyleSheet, View } from 'react-native';
+import { Dimensions, Linking, StyleSheet, View } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -8,6 +8,7 @@ import { BackButton } from '@/Layouts/MainLayout/components/BackButton';
 import { AudioContainer } from '@/components/Audio';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
+import { PlaySoundIconButton } from '@/components/Common';
 import { StarRating } from '@/components/Common/StarRating/StarRating';
 import { CountryPill } from '@/components/Country';
 import { LikeAction } from '@/components/LikeAction';
@@ -16,7 +17,7 @@ import { Expander } from '@/components/UI/Expander';
 
 import { FONTS, Place, SCREENS, SOCIAL_MODELS } from '@/types';
 
-import { CONSTANTS } from '@/styles/constants';
+import { CONSTANTS, CUSTOM_VIEW_STYLES } from '@/styles/constants';
 
 import PointGoToDirection from '../PointGoToDirection/PointGoToDirection';
 
@@ -60,16 +61,16 @@ export const PointMeta = ({ point, isFetching }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <View style={styles.nameAndLike}>
-          <BackButton transparent />
+        <View style={styles.backAndCity}>
+          <BackButton transparent style={styles.backBtn} />
           <CountryPill
             title={cityTitle}
             icon="map-point-small"
             href={SCREENS.City}
             hrefParams={{ city: point.city }}
+            contentStyle={styles.cityPill}
+            rectangle
           />
-
-          <StarRating rating={rating} />
         </View>
 
         <LikeAction
@@ -77,8 +78,11 @@ export const PointMeta = ({ point, isFetching }: Props) => {
           _id={point._id}
           initialLike={point.likes}
           parentFetching={isFetching}
+          style={CUSTOM_VIEW_STYLES.metaView.likeBtn}
         />
       </View>
+
+      <StarRating rating={rating} />
 
       <View style={styles.address}>
         {!!address && (
@@ -96,7 +100,7 @@ export const PointMeta = ({ point, isFetching }: Props) => {
       </View>
 
       <View style={styles.titles}>
-        <Expander title={META_TEXT.description.title} defaultState={true} light>
+        <Expander title={META_TEXT.description.title} light>
           <CText light>{point.description}</CText>
         </Expander>
         <Expander
@@ -177,13 +181,28 @@ export const PointMeta = ({ point, isFetching }: Props) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
-    paddingTop: 10,
+    paddingTop: 30,
     paddingBottom: 20,
+    position: 'relative',
   },
-  nameAndLike: {
+  top: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    top: -20,
+    width: Dimensions.get('window').width,
+    paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
+  },
+  backAndCity: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: -CONSTANTS.spaces.paddingHorizontal,
+  },
+  backBtn: {
+    ...CUSTOM_VIEW_STYLES.metaView.backBtn,
+  },
+  cityPill: {
+    ...CUSTOM_VIEW_STYLES.metaView.cityPill,
   },
   galleryAction: {
     width: 35,
@@ -197,12 +216,7 @@ const styles = StyleSheet.create({
   aboutTextNext: {
     borderTopColor: 'transparent',
   },
-  top: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
+
   titles: {
     marginBottom: 20,
   },
@@ -219,6 +233,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   address: {
+    marginTop: 10,
     marginBottom: 20,
     overflow: 'hidden',
   },

@@ -14,7 +14,10 @@ type Props = {
 
 const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       {guides.map(({ vImage, hImage, title, slug, city, _id }) => {
         return (
           <FavoritesListItem
@@ -28,15 +31,17 @@ const FavoritesList = ({ guides, places, isRemoveDisabled }: Props) => {
             city={city as any}
             isRemoveDisabled={isRemoveDisabled}
             href={SCREENS.Guide}
-            hrefParams={{
-              guide: {
-                title,
-                image: vImage,
-                _id,
-                slug,
-                city,
-              },
-            }}
+            hrefParams={
+              {
+                guide: {
+                  title,
+                  image: vImage,
+                  _id,
+                  slug,
+                  city,
+                },
+              } as any
+            }
           />
         );
       })}
@@ -68,5 +73,6 @@ export default observer(FavoritesList);
 const styles = StyleSheet.create({
   container: {
     gap: 10,
+    paddingBottom: 20,
   },
 });

@@ -11,6 +11,8 @@ import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
 import { useStores } from '@/hooks';
 import { FastImage } from 'components/FastImage';
 
+import { CONSTANTS } from '@/styles/constants';
+
 import { Props as MainLayoutProps } from '../MainLayout';
 
 type Props = Pick<
@@ -66,5 +68,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     zIndex: -1,
+    backgroundColor: CONSTANTS.colors.bgDark2,
   },
 });

@@ -49,7 +49,7 @@ export const CityScreenHeaderComponent = ({
 
   return (
     <View style={[styles.container, viewStyle]}>
-      {withBackButton && <BackButton />}
+      {withBackButton && <BackButton style={styles.backBtn} />}
       <View style={[styles.titleContainer]}>
         <CText
           style={[styles.title, withBackButton && { left: -20 }]}
@@ -73,6 +73,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 10,
     flexGrow: 1,
+  },
+  backBtn: {
+    left: CONSTANTS.spaces.paddingHorizontal,
+    position: 'relative',
   },
   titleContainer: {
     flexGrow: 1,

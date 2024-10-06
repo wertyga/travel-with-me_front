@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
@@ -20,7 +20,7 @@ import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/Sc
 
 import { City, FONTS } from '@/types';
 
-import { CONSTANTS } from '@/styles/constants';
+import { CONSTANTS, CUSTOM_VIEW_STYLES } from '@/styles/constants';
 
 type Props = {
   city: City;
@@ -29,24 +29,28 @@ type Props = {
 const CityScreenMeta = ({ city }: Props) => {
   const [state, setState] = useState({
     filterByCategory: '',
-    chosenCityTab: CITY_TABS[0].title,
+    chosenCityTab: '',
   });
 
-  const onChangeFilterByCategory = (filterByCategory: string) => () => {
-    setState(prev => {
-      return {
-        ...prev,
-        filterByCategory:
-          prev.filterByCategory === filterByCategory ? '' : filterByCategory,
-      };
-    });
-  };
+  // const onChangeFilterByCategory = (filterByCategory: string) => () => {
+  //   setState(prev => {
+  //     return {
+  //       ...prev,
+  //       filterByCategory:
+  //         prev.filterByCategory === filterByCategory ? '' : filterByCategory,
+  //     };
+  //   });
+  // };
 
   const onChangeTextData = (chosenCityTab: string) => () => {
-    setState(prev => ({ ...prev, chosenCityTab }));
+    const isTheSame = chosenCityTab === state.chosenCityTab;
+    setState(prev => ({
+      ...prev,
+      chosenCityTab: isTheSame ? '' : chosenCityTab,
+    }));
   };
 
-  const guidesCityCategories = getGuidesCategories(city?.guides || []);
+  // const guidesCityCategories = getGuidesCategories(city?.guides || []);
   const filteredGuides = !state.filterByCategory
     ? city?.guides || []
     : city?.guides.filter(({ categories }) =>
@@ -68,9 +72,14 @@ const CityScreenMeta = ({ city }: Props) => {
   }
 
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.top}>
-        <CountryPill title={city.country.title} icon="map-point-small" />
+        <CountryPill
+          title={city.country.title}
+          customIcon={<Text>{city.country.flag}</Text>}
+          contentStyle={styles.countryPill}
+          rectangle
+        />
 
         <CityDownloader city={city} />
       </View>
@@ -96,27 +105,39 @@ const CityScreenMeta = ({ city }: Props) => {
       <CityScreenMetaDHST type={state.chosenCityTab as any} city={city} />
 
       <>
-        <CityGuidesCategories
-          categories={guidesCityCategories}
-          onCategoryPress={onChangeFilterByCategory}
-          chosenCategory={state.filterByCategory}
-          style={styles.categories}
-        />
+        {/*<CityGuidesCategories*/}
+        {/*  categories={guidesCityCategories}*/}
+        {/*  onCategoryPress={onChangeFilterByCategory}*/}
+        {/*  chosenCategory={state.filterByCategory}*/}
+        {/*  style={styles.categories}*/}
+        {/*/>*/}
 
-        <GuidesSlideList guides={filteredGuides} country={city.country.title} />
+        <GuidesSlideList
+          guides={filteredGuides}
+          country={city.country.title}
+          title="Free self tours"
+        />
       </>
-    </>
+    </View>
   );
 };
 
 export default observer(CityScreenMeta);
 
 const styles = StyleSheet.create({
+  container: {
+    position: 'relative',
+    paddingTop: 40,
+    paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
+  },
   top: {
-    marginBottom: 15,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    position: 'absolute',
+    top: -20,
+    width: Dimensions.get('window').width,
+    paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
   },
   country: {
     fontFamily: FONTS.OpenSansSemiBold,
@@ -132,5 +153,8 @@ const styles = StyleSheet.create({
   categories: {
     marginBottom: 30,
     marginTop: 10,
+  },
+  countryPill: {
+    ...CUSTOM_VIEW_STYLES.metaView.cityPill,
   },
 });

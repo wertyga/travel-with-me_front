@@ -9,8 +9,11 @@ import { Icon, IconNames } from '@/components/Icon';
 
 import { FONTS } from '@/types';
 
-type Props = Pick<CustomButtonProps, 'href' | 'hrefParams'> & {
+import { CONSTANTS } from '@/styles/constants';
+
+type Props = Pick<CustomButtonProps, 'href' | 'hrefParams' | 'rectangle'> & {
   style?: StyleProp<ViewStyle>;
+  contentStyle?: ViewStyle;
   title: string;
   icon?: IconNames;
   customIcon?: React.ReactNode; // Size - 22
@@ -25,14 +28,20 @@ export const CountryPill = ({
   onPress,
   hrefParams,
   href,
+  contentStyle = {},
+  rectangle,
 }: Props) => {
   return (
     <TouchableOpacity style={[styles.container, style]} activeOpacity={1}>
       <Button
         onPress={onPress}
-        style={styles.content}
+        style={{
+          ...styles.content,
+          ...contentStyle,
+        }}
         href={href}
         hrefParams={hrefParams}
+        rectangle={rectangle}
       >
         {!!icon && <Icon name={icon as IconNames} />}
         {customIcon}
