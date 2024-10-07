@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
+
 import { Path } from '@/types';
 
 const LOCATION_TASK_NAME = 'background-location-task';
@@ -65,7 +66,6 @@ export const startWatchToLiveLocation = async (
     {
       accuracy: Location.LocationAccuracy.BestForNavigation,
       distanceInterval: minDistance,
-      timeInterval: 1000,
     },
     newLocation => {
       let { coords } = newLocation;

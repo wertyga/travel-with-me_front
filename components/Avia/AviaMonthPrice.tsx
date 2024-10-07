@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Linking, StyleSheet, View, ViewStyle } from 'react-native';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
+import { observer } from 'mobx-react-lite';
 
 import { sendLogs } from '@/api';
 import { fetchAviaMonthPriceMatrix } from '@/api/avia.api';
@@ -26,7 +28,7 @@ type Props = {
   destinationCity: string;
 };
 
-export const AviaMonthPrice = ({ style, destinationCity }: Props) => {
+export const AviaMonthPrice = observer(({ style, destinationCity }: Props) => {
   const { myCity, isNetConnected } = useStores(stores => {
     return {
       myCity: stores.userStore.myCity,
@@ -39,7 +41,7 @@ export const AviaMonthPrice = ({ style, destinationCity }: Props) => {
     currency: CURRENCY;
   }>({ data: [], currency: CURRENCY.Eur });
 
-  const fetchMonthPriceMatrix = useCallback(async (destinationCity: string) => {
+  const fetchMonthPriceMatrix = async (destinationCity: string) => {
     setState({
       data: [],
       currency: CURRENCY.Eur,
@@ -64,7 +66,7 @@ export const AviaMonthPrice = ({ style, destinationCity }: Props) => {
     } catch (e) {
       await sendLogs(e);
     }
-  }, []);
+  };
 
   useEffect(() => {
     if (!isNetConnected || !myCity || !destinationCity) return;
@@ -122,7 +124,7 @@ export const AviaMonthPrice = ({ style, destinationCity }: Props) => {
       </ScrollHorizontalNoEdges>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   title: {
