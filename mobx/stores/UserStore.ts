@@ -11,7 +11,6 @@ import {
 } from '@/api';
 import { City, Path, RootStoreType } from '@/types';
 import {withLoading} from "@/mobx/store.utils";
-import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import * as FileSystem from 'expo-file-system';
 import { getIsNetConnected } from '@/utils/etc';
 import { cacheWrap } from '@/utils/cache_request';
@@ -175,8 +174,17 @@ export class UserStore {
 	}
 
 	 getMyCity() {
-		const {liveCoords} = this.rootStore.locationStore;
-		if (!liveCoords) return null;
+		const { liveCoords, locationWatcher, getLiveCoords } = this.rootStore.locationStore;
+
+		if (!liveCoords && !locationWatcher) {
+			return null;
+		};
+
+		if (!liveCoords && !!locationWatcher) {
+			// Force coordinates fetch
+			getLiveCoords();
+			return;
+		}
 
 		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
 	}
