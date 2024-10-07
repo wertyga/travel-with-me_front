@@ -4,6 +4,7 @@ import { Linking, StyleSheet, View, ViewStyle } from 'react-native';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+import { sendLogs } from '@/api';
 import { fetchAviaMonthPriceMatrix } from '@/api/avia.api';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -48,17 +49,21 @@ export const AviaMonthPrice = ({ style, destinationCity }: Props) => {
       return;
     }
 
-    const cachedReq = cacheWrap(fetchAviaMonthPriceMatrix, {
-      origin: myCity.title,
-      destination: destinationCity,
-    });
+    try {
+      const cachedReq = cacheWrap(fetchAviaMonthPriceMatrix, {
+        origin: myCity.title,
+        destination: destinationCity,
+      });
 
-    const { data, currency } = await cachedReq.invoke();
+      const { data, currency } = await cachedReq.invoke();
 
-    setState({
-      data: data,
-      currency,
-    });
+      setState({
+        data: data,
+        currency,
+      });
+    } catch (e) {
+      await sendLogs(e);
+    }
   }, []);
 
   useEffect(() => {
