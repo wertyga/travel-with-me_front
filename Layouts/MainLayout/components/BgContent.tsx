@@ -34,12 +34,18 @@ export const BgContent = observer(
       return <BackgroundGradient style={styles.bgGradient} colors={bgColors} />;
     }
 
+    const Wrapper: any = !!onBgPress ? TouchableOpacity : View;
+    const style = [StyleSheet.absoluteFillObject, { height: layoutHeight }];
+    const wrapperProps = !!onBgPress
+      ? {
+          onPress: onBgPress,
+          style,
+          activeOpacity: 1,
+        }
+      : { style };
+
     return (
-      <TouchableOpacity
-        onPress={onBgPress}
-        style={[StyleSheet.absoluteFillObject, { height: layoutHeight }]}
-        activeOpacity={1}
-      >
+      <Wrapper {...wrapperProps}>
         <FastImage
           source={bgImage}
           style={styles.bgImage}
@@ -49,7 +55,7 @@ export const BgContent = observer(
           colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
           style={[StyleSheet.absoluteFillObject]}
         />
-      </TouchableOpacity>
+      </Wrapper>
     );
   }
 );

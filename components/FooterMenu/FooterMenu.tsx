@@ -1,49 +1,25 @@
-import { useEffect } from 'react';
+import React from 'react';
 
-import { StyleSheet, TouchableOpacity } from 'react-native';
-
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-
-import { observer } from 'mobx-react-lite';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { CText } from '@/components/CText';
 import { FOOTER_MENU } from '@/components/FooterMenu/FooterMenu.utils';
 import { Icon, IconNames } from '@/components/Icon';
 import { useNavigation } from '@/hooks';
-import { useStores } from '@/hooks';
 
 import { SCREENS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
-const FooterMenu = () => {
+export const FooterMenu = () => {
   const navi = useNavigation();
-
-  const { footer } = useStores(stores => ({
-    footer: stores.domStore.footer,
-  }));
-
-  const translateY = useSharedValue(0);
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: translateY.value }],
-    } as any;
-  });
-
-  useEffect(() => {
-    translateY.value = withTiming(footer.hidden ? 100 : 0);
-  }, [footer.hidden]);
 
   const redirectTo = (screen: SCREENS) => () => {
     navi.navigate(screen);
   };
 
   return (
-    <Animated.View style={[styles.container, animatedStyles]}>
+    <View style={[styles.container]}>
       {FOOTER_MENU.map(({ icon, screen, title, iconSize }) => {
         return (
           <TouchableOpacity
@@ -66,11 +42,9 @@ const FooterMenu = () => {
           </TouchableOpacity>
         );
       })}
-    </Animated.View>
+    </View>
   );
 };
-
-export default observer(FooterMenu);
 
 const styles = StyleSheet.create({
   container: {

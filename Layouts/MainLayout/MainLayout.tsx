@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useLayoutEffect } from 'react';
 
 import {
   Dimensions,
@@ -20,6 +20,7 @@ import HeaderTitle from '@/Layouts/MainLayout/components/HeaderTitle';
 import { AudioContainer } from '@/components/Audio';
 import { HeaderMenuProps } from '@/components/City/CityScreenHeader/HeaderMenu';
 import { FooterMenu } from '@/components/FooterMenu';
+import { Footer } from '@/components/FooterMenu/Footer';
 import { Loader } from '@/components/Loader';
 import { useStores } from '@/hooks';
 
@@ -50,8 +51,6 @@ export type Props = {
   isHeaderHidden?: boolean;
 };
 
-export const IOS_ADDITIONAL_FOOTER_SPACE = 30;
-
 export const MainLayoutComponent = ({
   children,
   style,
@@ -78,9 +77,11 @@ export const MainLayoutComponent = ({
     isPlaying,
     place,
     audioTitle,
+    currentRoute,
   } = useStores(stores => ({
     updateDomState: stores.domStore.updateDomState,
     place: stores.placeStore.place,
+    currentRoute: stores.routerStore.currentRoute,
     isPlaying: stores.soundStore.isPlaying,
     isPaused: stores.soundStore.isPaused,
     audioTitle: stores.soundStore.audioTitle,
@@ -89,6 +90,17 @@ export const MainLayoutComponent = ({
     isGuideMapScreen:
       stores.routerStore.currentRoute?.name === SCREENS.GuideMap,
   }));
+
+  useLayoutEffect(() => {
+    updateDomState({
+      header: {
+        hidden: false,
+      },
+      footer: {
+        hidden: false,
+      },
+    });
+  }, [currentRoute]);
 
   const isInAction = isPlaying || isPaused;
   const isShowOnPlaceScreen =
@@ -145,19 +157,7 @@ export const MainLayoutComponent = ({
           />
         )}
       </>
-      {!noFooter && (
-        <View
-          style={{
-            paddingBottom:
-              Platform.OS === 'ios'
-                ? CONSTANTS.spaces.iosAdditionalSpaceBottom
-                : 0,
-          }}
-        >
-          <FooterMenu />
-          <View style={styles.bottomPlaceholder} />
-        </View>
-      )}
+      {!noFooter && <Footer />}
     </View>
   );
 };
@@ -177,14 +177,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
     flex: 1,
     flexGrow: 1,
-  },
-  bottomPlaceholder: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: CONSTANTS.colors.footerColor,
-    zIndex: CONSTANTS.indexes.footerZIndex - 1,
-    height: CONSTANTS.spaces.footerHeight,
   },
 });
