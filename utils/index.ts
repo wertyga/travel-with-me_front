@@ -5,7 +5,6 @@ export * from './image';
 export * from './object';
 export * from './route';
 export * from './cache';
-export * from './swipe';
 export * from './location';
 export * from './logger';
 export * from './number';

@@ -71,7 +71,9 @@ const Login = () => {
         {screen === 'signin' && <SignInForm onSubmit={onSignIn} />}
 
         <View style={styles.oauth}>
+          {/**/}
           <OauthGoogle />
+          {/*  */}
         </View>
 
         <Button

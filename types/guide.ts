@@ -11,8 +11,8 @@ export enum GUIDE_TAGS {
 }
 
 export enum CURRENCY {
-  Usd = 'usd',
-  Eur = 'eur',
+  Usd = 'USD',
+  Eur = 'EUR',
 }
 
 export type Price = {

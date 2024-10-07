@@ -10,7 +10,6 @@ type Props = {
 };
 
 export const ScreenBackgroundCarousel = ({ images }: Props) => {
-  console.log({ images });
   return (
     <CarouselNew
       data={images}

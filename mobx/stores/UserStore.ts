@@ -181,6 +181,10 @@ export class UserStore {
 		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
 	}
 
+	@computed get myCity() {
+		return this.getMyCity();
+	}
+
 	async getLanguages() {
 		try {
 			const cachedReq = cacheWrap.apply(this, [fetchLanguages]);
