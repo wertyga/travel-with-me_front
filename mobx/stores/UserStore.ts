@@ -4,10 +4,10 @@ import {storage} from "@/utils";
 import {
 	fetchFavorites,
 	fetchLanguages,
-	fetchSelfUser,
+	fetchSelfUser, fetchUsersInTheCity,
 	fetchUsersNearMe,
 	updateSelf,
-	updateSelfLastCoords,
+	updateSelfLastCoords, UpdateUserReq,
 } from '@/api';
 import { City, Path, RootStoreType } from '@/types';
 import {withLoading} from "@/mobx/store.utils";
@@ -41,7 +41,7 @@ export class UserStore {
 		), liveCoords => {
 			if (!liveCoords) return;
 
-			this.updateLastCoords(liveCoords);
+			// this.updateLastCoords(liveCoords);
 		})
 	}
 
@@ -110,7 +110,7 @@ export class UserStore {
 		}
 	}
 
-	@withLoading async fetchUpdateUser(userData: Partial<User>) {
+	@withLoading async fetchUpdateUser(userData: UpdateUserReq) {
 		try {
 			let avatar = userData.avatar;
 			if (avatar?.includes('file://')) {
@@ -137,6 +137,20 @@ export class UserStore {
 		} catch (e) {
 			console.log({e});
 
+			return [];
+		}
+	}
+
+	@action async getUsersInTheCity(cityId: string) {
+		try {
+			const { users } = await fetchUsersInTheCity(cityId);
+
+			runInAction(() => {
+				this.usersNearMe = users;
+			});
+
+			return users;
+		} catch (e) {
 			return [];
 		}
 	}
@@ -189,8 +203,30 @@ export class UserStore {
 		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
 	}
 
-	@computed get myCity() {
-		return this.getMyCity();
+	@computed get myCurrentCity() {
+		const { liveCoords, locationWatcher, getLiveCoords } = this.rootStore.locationStore;
+
+		if (!liveCoords && !locationWatcher) {
+			return null;
+		};
+
+		if (!liveCoords && !!locationWatcher) {
+			// Force coordinates fetch
+			getLiveCoords();
+			return null;
+		}
+
+		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
+	}
+
+	async getSavedMyCityBefore() {
+		const savedCity = await storage.get('myCity');
+
+		return savedCity || this.myCurrentCity;
+	}
+	async setMyCity(city: City) {
+		await storage.set('myCity', city);
+		await this.fetchUpdateUser({ lastCity: city._id })
 	}
 
 	async getLanguages() {

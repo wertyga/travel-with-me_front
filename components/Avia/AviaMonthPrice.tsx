@@ -16,7 +16,7 @@ import { useStores } from '@/hooks';
 import { getCurrencyMeta } from '@/utils';
 import { cacheWrap } from '@/utils/cache_request';
 
-import { CURRENCY, FONTS, PriceMatrixItem } from '@/types';
+import { CURRENCY, City, FONTS, PriceMatrixItem } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
@@ -29,9 +29,9 @@ type Props = {
 };
 
 export const AviaMonthPrice = observer(({ style, destinationCity }: Props) => {
-  const { myCity, isNetConnected } = useStores(stores => {
+  const { liveCoords, isNetConnected } = useStores(stores => {
     return {
-      myCity: stores.userStore.myCity,
+      liveCoords: stores.locationStore.liveCoords,
       isNetConnected: stores.appStateStore.isNetConnected,
     };
   });
@@ -39,29 +39,29 @@ export const AviaMonthPrice = observer(({ style, destinationCity }: Props) => {
   const [state, setState] = useState<{
     data: PriceMatrixItem[];
     currency: CURRENCY;
-  }>({ data: [], currency: CURRENCY.Eur });
+    originCity: City | null;
+  }>({ data: [], currency: CURRENCY.Eur, originCity: null });
 
   const fetchMonthPriceMatrix = async (destinationCity: string) => {
     setState({
       data: [],
       currency: CURRENCY.Eur,
+      originCity: null,
     });
 
-    if (destinationCity === myCity.title) {
-      return;
-    }
-
     try {
-      const cachedReq = cacheWrap(fetchAviaMonthPriceMatrix, {
-        origin: myCity.title,
-        destination: destinationCity,
-      });
-
-      const { data, currency } = await cachedReq.invoke();
+      const { data, currency, originCity } = await cacheWrap(
+        fetchAviaMonthPriceMatrix,
+        {
+          originCoords: liveCoords,
+          destination: destinationCity,
+        }
+      ).invoke();
 
       setState({
         data: data,
         currency,
+        originCity,
       });
     } catch (e) {
       await sendLogs(e);
@@ -69,12 +69,12 @@ export const AviaMonthPrice = observer(({ style, destinationCity }: Props) => {
   };
 
   useEffect(() => {
-    if (!isNetConnected || !myCity || !destinationCity) return;
+    if (!isNetConnected || !liveCoords || !destinationCity) return;
 
     fetchMonthPriceMatrix(destinationCity);
-  }, [isNetConnected, myCity?._id, destinationCity]);
+  }, [isNetConnected, destinationCity]);
 
-  if (!isNetConnected || !myCity || !state.data.length) return null;
+  if (!isNetConnected || !liveCoords || !state.data.length) return null;
 
   return (
     <View style={style}>
@@ -84,7 +84,11 @@ export const AviaMonthPrice = observer(({ style, destinationCity }: Props) => {
           size={24}
           color={CONSTANTS.colors.typographyLight}
         />
-        <CText light>{`${myCity.title} - ${destinationCity}`}</CText>
+        {!!state.originCity && (
+          <CText
+            light
+          >{`${state.originCity?.title} - ${destinationCity}`}</CText>
+        )}
       </View>
       <ScrollHorizontalNoEdges
         edge={CONSTANTS.spaces.paddingHorizontal}

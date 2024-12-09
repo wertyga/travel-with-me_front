@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -8,10 +8,14 @@ import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
+import { CText } from '@/components/CText';
+import { CityDropdownWithLabel } from '@/components/City/CityListDropdown/CityDropdownWithLabel';
 import { AvatarWithName } from '@/components/UI/AvatarWithName';
 import { useAuthGuard, useFocus, useNavigation, useStores } from '@/hooks';
 
-import { SCREENS } from '@/types';
+import { storage } from '@/utils';
+
+import { City, SCREENS } from '@/types';
 import { User } from '@/types/user';
 
 import { CONSTANTS } from '@/styles/constants';
@@ -21,48 +25,105 @@ const UsersNearMeScreen = () => {
 
   const navi = useNavigation();
 
-  const { getUsersNearMe, usersNearMe, getMyCity } = useStores(stores => ({
+  const {
+    usersNearMe,
+    cityLightList,
+    getUsersInTheCity,
+    user,
+    getSavedMyCityBefore,
+    setMyCity,
+  } = useStores(stores => ({
     usersNearMe: stores.userStore.usersNearMe,
-    getUsersNearMe: stores.userStore.getUsersNearMe,
-    getMyCity: stores.userStore.getMyCity,
+    user: stores.userStore.user,
+    getSavedMyCityBefore: stores.userStore.getSavedMyCityBefore,
+    getUsersInTheCity: stores.userStore.getUsersInTheCity,
+    setMyCity: stores.userStore.setMyCity,
+    cityLightList: stores.citiesListStore.cityLightList,
   }));
 
   const [state, setState] = useState({
-    myCity: null,
     isLoading: false,
-    isShowLoading: true,
+    chosenCity: null,
+    myCity: null,
   });
 
-  const fetchUsersNearMe = async (isShowLoading?: boolean) => {
-    setState(prev => ({ ...prev, isLoading: true, isShowLoading }));
-    await getUsersNearMe();
+  const fetchUsersInTheCity = async () => {
+    if (!state.chosenCity) return;
 
-    setState(prev => ({ ...prev, myCity: getMyCity(), isLoading: false }));
+    setState(prev => ({ ...prev, isLoading: true }));
+    await getUsersInTheCity(state.chosenCity._id);
+
+    setState(prev => ({ ...prev, isLoading: false }));
   };
 
   const onPressGoToChat = async (user: User) => {
     navi.navigate(SCREENS.Chat, { withUser: user });
   };
 
-  useFocus(() => {
-    fetchUsersNearMe();
+  const onChangeMyCity = async (city: City) => {
+    setState(prev => ({ ...prev, myCity: city }));
+
+    await setMyCity(city);
+  };
+
+  const onChangeTargetCity = async (city: City) => {
+    setState(prev => ({ ...prev, chosenCity: city }));
+
+    await storage.set('findPeopleInTheCity', city);
+  };
+
+  useEffect(() => {
+    const getInitialMyCity = async () => {
+      const cityChosenBefore = await getSavedMyCityBefore();
+      const targetCityBefore = await storage.get('findPeopleInTheCity');
+
+      setState(prev => ({
+        ...prev,
+        myCity: cityChosenBefore,
+        chosenCity: targetCityBefore || cityChosenBefore,
+      }));
+    };
+
+    getInitialMyCity();
   }, []);
 
-  const isLoading =
-    state.isLoading && (!usersNearMe.length || state.isShowLoading);
+  useFocus(() => {
+    if (!state.chosenCity) return;
+
+    fetchUsersInTheCity();
+  }, [state.chosenCity]);
+
+  const isRenderEmptyList = !usersNearMe?.length && user?.isVisible;
+  const isRenderWarning = !user?.isVisible;
 
   return (
     <MainLayout
-      headerTitle={`Users Near Me • ${state.myCity?.title}`}
-      bgImage={state.myCity?.image}
-      isLoading={isLoading}
+      headerTitle="People Near Me"
+      bgImage={state.chosenCity?.image}
+      isLoading={state.isLoading}
     >
+      <View
+        style={{
+          gap: 10,
+        }}
+      >
+        <CityDropdownWithLabel
+          label="My city"
+          subLabel="Help other people to find you"
+          defaultCity={state.myCity}
+          cities={cityLightList}
+          onChange={onChangeMyCity}
+        />
+        <CityDropdownWithLabel
+          label=" Find people in"
+          defaultCity={state.chosenCity}
+          cities={cityLightList}
+          onChange={onChangeTargetCity}
+        />
+      </View>
+
       <View style={styles.reload}>
-        <Button
-          squareSize={40}
-          rectangle
-          onPress={() => fetchUsersNearMe(true)}
-        >
+        <Button squareSize={40} rectangle onPress={fetchUsersInTheCity} darkBg>
           <Ionicons
             name="reload"
             size={24}
@@ -71,8 +132,30 @@ const UsersNearMeScreen = () => {
         </Button>
       </View>
 
+      {isRenderWarning && (
+        <CText
+          light
+          style={{
+            fontSize: 18,
+          }}
+        >
+          To see people in the city - enable your visibility
+        </CText>
+      )}
+
+      {isRenderEmptyList && (
+        <CText
+          light
+          style={{
+            fontSize: 18,
+          }}
+        >
+          Empty
+        </CText>
+      )}
+
       <ScrollView contentContainerStyle={styles.list}>
-        {usersNearMe.map(user => {
+        {usersNearMe?.map(user => {
           return (
             <Button
               key={user._id}
@@ -113,7 +196,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   reload: {
+    flexDirection: 'row',
     paddingBottom: 20,
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'flex-end',
+    marginTop: 10,
   },
 });

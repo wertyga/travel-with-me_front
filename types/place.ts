@@ -1,4 +1,5 @@
 import { City } from '@/types/city';
+import { Country } from '@/types/country';
 import { Guide, Path } from '@/types/guide';
 import { Like } from '@/types/likes';
 import { User } from '@/types/user';
@@ -16,6 +17,7 @@ export type Place = {
   story: string;
   audioStory: string;
   images: string[];
+  country: Country;
   coords: Path;
   owner: User;
   likes: Like;

@@ -22,7 +22,10 @@ export const fetchFavorites = async (): Promise<UserFavoritesResponse> => {
   return data;
 };
 
-export const updateSelf = async (userData: Partial<User>): Promise<User> => {
+export type UpdateUserReq = Partial<
+  Omit<User, 'lastCity'> & { lastCity: string }
+>;
+export const updateSelf = async (userData: UpdateUserReq): Promise<User> => {
   const {
     data: { user },
   } = await baseQuery({
@@ -52,6 +55,23 @@ export const fetchUsersNearMe = async (): Promise<{ users: User[] }> => {
     {
       method: 'get',
       url: '/users/users-near-me',
+    },
+    { users: [] }
+  );
+
+  return data;
+};
+
+export const fetchUsersInTheCity = async (
+  cityId: string
+): Promise<{ users: User[] }> => {
+  const { data } = await baseQuery(
+    {
+      method: 'get',
+      url: '/users/users-in-the-city',
+      params: {
+        city: cityId,
+      },
     },
     { users: [] }
   );

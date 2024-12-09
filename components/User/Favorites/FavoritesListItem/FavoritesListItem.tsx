@@ -1,18 +1,16 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet } from 'react-native';
 
 import { FontAwesome } from '@expo/vector-icons';
 
 import { setLike } from '@/api';
 import Button from '@/components/Button';
 import { CustomButtonProps } from '@/components/Button/BaseButton';
-import { CText } from '@/components/CText';
-import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
+import { FavoriteListItemUI } from '@/components/UI/FavoriteListItemUI';
 import { useStores } from '@/hooks';
-import { FastImage } from 'components/FastImage';
 
-import { FONTS, SOCIAL_MODELS } from '@/types';
+import { SOCIAL_MODELS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
@@ -77,29 +75,14 @@ const FavoritesListItem = ({
       onScrollEndDrag={onScrollEnd}
       ref={scrollRef}
     >
-      <Button
+      <FavoriteListItemUI
         href={href}
         hrefParams={hrefParams}
-        style={styles.container}
-        activeOpacity={1}
-        rectangle
-      >
-        <FastImage
-          source={image || defaultImage}
-          style={styles.image}
-          mediaSize={MEDIA_SIZES.Small}
-        />
-        <View>
-          <CText numberOfLines={1} style={styles.title} light>
-            {title}
-          </CText>
-          {!!subtitle && (
-            <CText numberOfLines={1} style={styles.subtitle} light>
-              {subtitle}
-            </CText>
-          )}
-        </View>
-      </Button>
+        title={title}
+        subtitle={subtitle}
+        image={image || defaultImage}
+        style={styles.item}
+      />
       <Button style={styles.removeBtn} rectangle onPress={onUnliked}>
         <FontAwesome name="trash-o" size={34} color="white" />
       </Button>
@@ -115,32 +98,15 @@ const styles = StyleSheet.create({
     width:
       Dimensions.get('window').width - CONSTANTS.spaces.paddingHorizontal * 2,
   },
-  container: {
-    flex: 1,
-    padding: 5,
-    paddingHorizontal: 5,
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    zIndex: 2,
+  item: {
     width:
-      Dimensions.get('window').width - CONSTANTS.spaces.paddingHorizontal * 2,
-  },
-  image: {
-    height: 60,
-    width: 60,
-    borderRadius: 6,
-    marginRight: 10,
+      Dimensions.get('window').width -
+      CONSTANTS.spaces.paddingHorizontal * 2 -
+      20,
   },
   removeBtn: {
     width: 70,
     height: '100%',
     marginLeft: 10,
-  },
-  title: {
-    fontFamily: FONTS.OpenSansBold,
-  },
-  subtitle: {
-    marginTop: 10,
-    fontSize: 14,
   },
 });

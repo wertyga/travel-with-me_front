@@ -10,9 +10,9 @@ import { getIsNetConnected } from '@/utils/etc';
 import { SCREENS } from '@/types';
 
 export const UsersNearMeButton = () => {
-  const { getUsersNearMe, myCity, user } = useStores(stores => ({
+  const { getUsersNearMe, myCurrentCity, user } = useStores(stores => ({
     user: stores.userStore.user,
-    myCity: stores.userStore.getMyCity(),
+    myCurrentCity: stores.userStore.myCurrentCity,
     getUsersNearMe: stores.userStore.getUsersNearMe,
   }));
 
@@ -21,7 +21,8 @@ export const UsersNearMeButton = () => {
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const isShowUsersNearMe = getIsNetConnected() && user.isVisible && !!myCity;
+  const isShowUsersNearMe =
+    getIsNetConnected() && user.isVisible && !!myCurrentCity;
 
   const onPress = async () => {
     setIsLoading(true);
@@ -47,7 +48,7 @@ export const UsersNearMeButton = () => {
 
   return (
     <Button high isLoading={isLoading} onPress={onPress} light>
-      {`${title} • ${myCity.title}`}
+      {`${title} • ${myCurrentCity.title}`}
     </Button>
   );
 };

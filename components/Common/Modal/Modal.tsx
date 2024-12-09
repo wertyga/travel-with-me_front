@@ -15,7 +15,7 @@ import { CText } from '@/components/CText';
 
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = ModalProps & {
+export type Props = ModalProps & {
   title?: string;
   onClose: () => void;
   containerStyle?: ViewStyle;
@@ -79,8 +79,8 @@ export const Modal = ({
 
 const styles = StyleSheet.create({
   content: {
-    paddingTop: 50,
-    paddingBottom: 50,
+    paddingTop: 30,
+    paddingBottom: 30,
     backgroundColor: CONSTANTS.colors.bgMiddle,
     paddingHorizontal: CONSTANTS.spaces.paddingHorizontal,
     flex: 1,

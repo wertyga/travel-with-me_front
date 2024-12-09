@@ -13,7 +13,6 @@ import { handleUpdateApp } from '@/components/UpdateApp/UpdateApp.utils';
 import { Avatar } from '@/components/User/Avatar/Avatar';
 import ChangeVisibilityButton from '@/components/User/ChangeVisibilityButton/ChangeVisibilityButton';
 import { LanguagesSelect } from '@/components/User/LanguagesSelect/LanguagesSelect';
-import UsersNearMeButton from '@/components/User/UsersNearMeButton/UsersNearMeButton';
 import {
   useAuthGuard,
   useFocus,
@@ -21,8 +20,6 @@ import {
   useNavigation,
   useStores,
 } from '@/hooks';
-
-import { getIsNetConnected } from '@/utils/etc';
 
 import { SCREENS } from '@/types';
 
@@ -118,7 +115,6 @@ const ProfileScreen = () => {
               <View style={styles.item}>
                 <ChangeVisibilityButton />
               </View>
-              <UsersNearMeButton />
             </>
           )}
 

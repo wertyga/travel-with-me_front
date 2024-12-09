@@ -2,6 +2,7 @@ import Toast from 'react-native-toast-message';
 
 import Constants from 'expo-constants';
 
+import { sendLogs } from '@/api';
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { storage } from '@/utils';

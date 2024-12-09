@@ -11,6 +11,7 @@ export type CTextProps = Omit<TextProps, 'style'> & {
   style?: CTextStyleProp | CTextStyleProp[];
   small?: boolean;
   light?: boolean;
+  bold?: boolean;
 };
 
 export const CText = ({
@@ -18,6 +19,7 @@ export const CText = ({
   style,
   small,
   light,
+  bold,
   ...props
 }: CTextProps) => {
   return (
@@ -26,6 +28,7 @@ export const CText = ({
       style={[
         styles.container,
         small && styles.small,
+        bold && styles.bold,
         {
           color: light
             ? CONSTANTS.colors.typographyLight
@@ -46,5 +49,8 @@ const styles = StyleSheet.create({
   },
   small: {
     fontSize: 12,
+  },
+  bold: {
+    fontFamily: FONTS.OpenSansSemiBold,
   },
 });

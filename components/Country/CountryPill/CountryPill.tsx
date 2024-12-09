@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -9,9 +9,10 @@ import { Icon, IconNames } from '@/components/Icon';
 
 import { FONTS } from '@/types';
 
-import { CONSTANTS } from '@/styles/constants';
-
-type Props = Pick<CustomButtonProps, 'href' | 'hrefParams' | 'rectangle'> & {
+type Props = Pick<
+  CustomButtonProps,
+  'href' | 'hrefParams' | 'rectangle' | 'textable'
+> & {
   style?: StyleProp<ViewStyle>;
   contentStyle?: ViewStyle;
   title: string;
@@ -30,9 +31,10 @@ export const CountryPill = ({
   href,
   contentStyle = {},
   rectangle,
+  textable,
 }: Props) => {
   return (
-    <TouchableOpacity style={[styles.container, style]} activeOpacity={1}>
+    <View style={[styles.container, style]}>
       <Button
         onPress={onPress}
         style={{
@@ -42,6 +44,7 @@ export const CountryPill = ({
         href={href}
         hrefParams={hrefParams}
         rectangle={rectangle}
+        textable={textable}
       >
         {!!icon && <Icon name={icon as IconNames} />}
         {customIcon}
@@ -49,7 +52,7 @@ export const CountryPill = ({
           {title}
         </CText>
       </Button>
-    </TouchableOpacity>
+    </View>
   );
 };
 

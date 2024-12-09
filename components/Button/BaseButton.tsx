@@ -42,6 +42,7 @@ export type CustomButtonProps = TouchableOpacityProps & {
   transparent?: boolean;
   isLoading?: boolean;
   light?: boolean;
+  darkBg?: boolean;
 };
 
 export const BaseButton = ({
@@ -68,6 +69,7 @@ export const BaseButton = ({
   transparent,
   isLoading,
   light,
+  darkBg,
   ...rest
 }: CustomButtonProps) => {
   const { button: btnStyles, text: textStyles } = getArrayedButtonStyles(
@@ -93,6 +95,7 @@ export const BaseButton = ({
         solid && styles.solid,
         (disabled || isLoading) && styles.disabled,
         free && styles.free,
+        darkBg && styles.darkBg,
         squareSize && {
           width: squareSize,
           height: squareSize,
@@ -143,6 +146,9 @@ const styles = StyleSheet.create({
   },
   loadingIndicator: {
     marginRight: 10,
+  },
+  darkBg: {
+    backgroundColor: 'rgba(67,67,67,0.4)',
   },
   text: {
     color: 'white',

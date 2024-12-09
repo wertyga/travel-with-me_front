@@ -9,13 +9,13 @@ import { CText } from '@/components/CText';
 import { useStores } from '@/hooks';
 
 export const ChangeVisibilityButton = () => {
-  const { fetchUpdateUserImmidiately, user } = useStores(stores => ({
-    fetchUpdateUserImmidiately: stores.userStore.fetchUpdateUserImmidiately,
+  const { fetchUpdateUser, user } = useStores(stores => ({
+    fetchUpdateUser: stores.userStore.fetchUpdateUser,
     user: stores.userStore.user,
   }));
 
   const onChangeVisibility = () => {
-    fetchUpdateUserImmidiately({ isVisible: !user.isVisible });
+    fetchUpdateUser({ isVisible: !user.isVisible });
   };
 
   return (

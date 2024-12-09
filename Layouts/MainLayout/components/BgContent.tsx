@@ -52,7 +52,9 @@ export const BgContent = observer(
           mediaSize={MEDIA_SIZES.Big}
         />
         <LinearGradient
-          colors={['rgba(0, 0, 0, 0.2)', 'rgba(0, 0, 0, 0.01)']}
+          colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 0.45 }}
           style={[StyleSheet.absoluteFillObject]}
         />
       </Wrapper>
