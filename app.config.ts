@@ -1,14 +1,9 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
-export const version = '31.0.0';
-export const PRODUCT_NAME = 'Travel With Me';
+import * as process from 'node:process';
 
-const ENV = {
-  // API_BASE_URL:
-  //   'https://1818-2a02-a31a-80c7-8300-6db3-e2f5-dc98-8a00.ngrok-free.app',
-  API_BASE_URL: 'https://api.traveljet.org',
-  GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
-};
+export const version = '32.0.0';
+export const PRODUCT_NAME = 'Travel With Me';
 
 const appPlugins: ExpoConfig['plugins'] = [
   ['expo-location'],
@@ -47,6 +42,7 @@ const appPlugins: ExpoConfig['plugins'] = [
         'The app accesses your photos to let you share them with your friends.',
     },
   ],
+  '@react-native-firebase/app',
 ];
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -72,7 +68,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: 'travel-with-me',
   ios: {
     config: {
-      googleMapsApiKey: ENV.GOOGLE_MAPS_API_KEY,
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     },
     supportsTablet: true,
     bundleIdentifier: 'com.wertyga.travelwithme',
@@ -82,9 +78,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     versionCode: parseInt(version),
+    googleServicesFile: './ga.json',
     config: {
       googleMaps: {
-        apiKey: ENV.GOOGLE_MAPS_API_KEY,
+        apiKey: process.env.GOOGLE_MAPS_API_KEY,
       },
     },
     adaptiveIcon: {
@@ -102,7 +99,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: 'a4baaa78-7e41-475d-882f-f9add4d911c3',
     },
-    API_BASE_URL: ENV.API_BASE_URL,
+    API_BASE_URL: process.env.API_BASE_URL,
     PLAY_STORE_URL:
       'https://play.google.com/store/apps/details?id=com.wertyga.travelwithme',
     APP_MARKET_URL: '',

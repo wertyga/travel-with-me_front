@@ -3,6 +3,7 @@ import React, { ReactNode, useEffect, useLayoutEffect } from 'react';
 import {
   Dimensions,
   Platform,
+  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -35,6 +36,7 @@ export type Props = {
   isHeaderDark?: boolean;
   bgImage?: string | number;
   noFooter?: boolean;
+  noPaddings?: boolean;
   isLoading?: boolean;
   headerTitle?: string;
   floatingTitle?: boolean;
@@ -68,6 +70,7 @@ export const MainLayoutComponent = ({
   bgColors,
   withBackButton,
   isHeaderHidden,
+  noPaddings,
   numberOfLinesTitle = 1,
 }: Props) => {
   const {
@@ -109,7 +112,7 @@ export const MainLayoutComponent = ({
     (!isPlaceScreen && isInAction) || (isShowOnPlaceScreen && isInAction);
 
   return (
-    <View
+    <SafeAreaView
       style={[styles.main, containerStyle]}
       onLayout={e => {
         updateDomState({
@@ -142,6 +145,7 @@ export const MainLayoutComponent = ({
           style={[
             styles.content,
             { paddingTop: !!headerTitle ? 120 : 70 },
+            noPaddings && { paddingHorizontal: 0 },
             style,
           ]}
         >
@@ -158,7 +162,7 @@ export const MainLayoutComponent = ({
         )}
       </>
       {!noFooter && <Footer />}
-    </View>
+    </SafeAreaView>
   );
 };
 

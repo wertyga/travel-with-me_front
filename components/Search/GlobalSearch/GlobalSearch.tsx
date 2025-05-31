@@ -95,7 +95,7 @@ export const GlobalSearchComponent = () => {
                       title={place.title}
                       description={place.city.title}
                       href={SCREENS.Place}
-                      hrefParams={{ placeSlug: place.slug }}
+                      hrefParams={{ point: place }}
                     />
                   );
                 })}

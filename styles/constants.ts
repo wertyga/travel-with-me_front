@@ -18,6 +18,8 @@ export const CONSTANTS = {
     footerColor: '#00353B',
     bgDark: '#17282E',
     bgDark2: '#182E2F',
+    bgSemiTransparent: 'rgba(67,67,67,0.4)',
+    bgSemiTransparentDark: 'rgba(0, 0, 0, 0.5)',
   },
   spaces: {
     paddingTop: 60,

@@ -33,7 +33,6 @@ export const Modal = ({
   transparent,
   visible,
   white,
-  style,
   ...props
 }: Props) => {
   return (
@@ -41,7 +40,7 @@ export const Modal = ({
       {...props}
       animationType={animationType}
       visible={visible}
-      transparent={transparent}
+      transparent
     >
       <View
         style={[

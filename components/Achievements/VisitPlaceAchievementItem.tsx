@@ -24,7 +24,8 @@ export const VisitPlaceAchievementItem = ({
     <Button
       style={styles.container}
       href={SCREENS.Place}
-      hrefParams={{ placeSlug: slug }}
+      hrefParams={{ point: {} as any }}
+      // hrefParams={{ placeSlug: slug }}
       rectangle
     >
       {!!image && <Image source={{ uri: image }} style={styles.image} />}

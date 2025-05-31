@@ -5,7 +5,6 @@ import {
 	fetchFavorites,
 	fetchLanguages,
 	fetchSelfUser, fetchUsersInTheCity,
-	fetchUsersNearMe,
 	updateSelf,
 	updateSelfLastCoords, UpdateUserReq,
 } from '@/api';
@@ -20,8 +19,7 @@ export class UserStore {
 	@observable token: string
 	@observable isLoading: boolean;
 	@observable lastCity: City | null = null;
-	@observable favorites: UserFavoritesResponse = {} as UserFavoritesResponse
-	@observable usersNearMe: User[] = []
+	// @observable favorites: UserFavoritesResponse = {} as UserFavoritesResponse
 	@observable languages: Language[] = []
 
 	lastCoords: Path | null = null;
@@ -41,22 +39,16 @@ export class UserStore {
 		), liveCoords => {
 			if (!liveCoords) return;
 
-			// this.updateLastCoords(liveCoords);
+			this.updateLastCoords(liveCoords);
 		})
 	}
 
 	@action async updateLastCoords(coords: Path) {
-		if (!getIsNetConnected()) return;
-
 		try {
-		  const data = await updateSelfLastCoords(coords);
+			this.lastCity = this.rootStore.citiesListStore.getCityByCoords(coords);
 
-			runInAction(() => {
-				this.lastCoords = coords;
-				this.lastCity = this.rootStore.citiesListStore.getCityByCoords(coords);
-			});
+			await updateSelfLastCoords(coords);
 
-			return data;
 		} catch (e) {
 		}
 	}
@@ -90,23 +82,26 @@ export class UserStore {
 		}
 	}
 
-	@withLoading async getFavorites() {
+async fetchFavorites() {
 		try {
 			if (!getIsNetConnected()) {
-				this.favorites = {
+				return {
 					guides: this.rootStore.offlineStore.guides,
 					places: []
-				}
-
-				return;
+				};
 			}
+			
 		  const data = await fetchFavorites();
 
-			runInAction(() => {
-				this.favorites = data
-			})
+			return {
+				guides: data.guides,
+				places: data.places
+			}
 		} catch (e) {
-
+			return {
+				guides: [],
+				places: []
+			}
 		}
 	}
 
@@ -123,31 +118,9 @@ export class UserStore {
 		} catch (e) {}
 	}
 
-	@action async getUsersNearMe() {
-		try {
-			if (!this.user.isVisible) return [];
-
-			const { users } = await fetchUsersNearMe();
-
-			runInAction(() => {
-				this.usersNearMe = users;
-			});
-
-			return users;
-		} catch (e) {
-			console.log({e});
-
-			return [];
-		}
-	}
-
-	@action async getUsersInTheCity(cityId: string) {
+async getUsersInTheCity(cityId: string) {
 		try {
 			const { users } = await fetchUsersInTheCity(cityId);
-
-			runInAction(() => {
-				this.usersNearMe = users;
-			});
 
 			return users;
 		} catch (e) {
@@ -180,27 +153,10 @@ export class UserStore {
 		this.token = undefined;
 		this.lastCoords = null;
 		this.lastCity = null;
-		this.usersNearMe = [];
 	}
 
 	@computed get isUserExists() {
 		return !!this.user?._id;
-	}
-
-	 getMyCity() {
-		const { liveCoords, locationWatcher, getLiveCoords } = this.rootStore.locationStore;
-
-		if (!liveCoords && !locationWatcher) {
-			return null;
-		};
-
-		if (!liveCoords && !!locationWatcher) {
-			// Force coordinates fetch
-			getLiveCoords();
-			return;
-		}
-
-		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
 	}
 
 	@computed get myCurrentCity() {
@@ -217,16 +173,6 @@ export class UserStore {
 		}
 
 		return this.rootStore.citiesListStore.getCityByCoords(liveCoords);
-	}
-
-	async getSavedMyCityBefore() {
-		const savedCity = await storage.get('myCity');
-
-		return savedCity || this.myCurrentCity;
-	}
-	async setMyCity(city: City) {
-		await storage.set('myCity', city);
-		await this.fetchUpdateUser({ lastCity: city._id })
 	}
 
 	async getLanguages() {

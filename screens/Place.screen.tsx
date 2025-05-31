@@ -18,7 +18,7 @@ import DefaultPlaceImage from '@/assets/images/default_point_image.png';
 const PlaceScreen = ({ route }) => {
   useAuthGuard();
 
-  const { params: { placeSlug } = {} as any } = route;
+  const { params: { point } = {} as any } = route;
 
   const [fullImageWidth, setFullImageWidth] = useState(-1);
 
@@ -34,10 +34,10 @@ const PlaceScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    if (!placeSlug) return;
+    if (!point) return;
 
-    getPlace({ slug: placeSlug });
-  }, [placeSlug]);
+    getPlace({ slug: point.slug });
+  }, [point]);
 
   if (!place || isLoading) {
     return <SafeLoader />;

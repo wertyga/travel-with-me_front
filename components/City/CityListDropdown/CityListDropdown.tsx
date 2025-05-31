@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -58,7 +58,11 @@ export const CityListDropdown = ({
         }
       />
 
-      <Modal visible={isOpened} onClose={() => setIsOpened(false)}>
+      <Modal
+        visible={isOpened}
+        onClose={() => setIsOpened(false)}
+        bodyStyle={styles.modalContainer}
+      >
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.citiesContent}
@@ -86,5 +90,9 @@ const styles = StyleSheet.create({
   },
   citiesContent: {
     gap: 5,
+  },
+  modalContainer: {
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
   },
 });

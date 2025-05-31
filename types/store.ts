@@ -19,4 +19,5 @@ export type RootStoreType = RootStoreTypeRoot<{
   offlineStore: stores.OfflineStore;
   achievementsStore: stores.AchievementsStore;
   chatsStore: stores.ChatsStore;
+  analyticStore: stores.AnalyticStore;
 }>;

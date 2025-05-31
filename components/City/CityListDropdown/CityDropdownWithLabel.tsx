@@ -28,7 +28,7 @@ export const CityDropdownWithLabel = ({
 
   return (
     <Button rectangle darkBg style={styles.container}>
-      <View style={styles.content}>
+      <View>
         <CText light bold>
           {label}
         </CText>
@@ -52,8 +52,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  content: {
-    width: '70%',
   },
 });

@@ -21,7 +21,6 @@ export const OFFLINE_KEYS = {
 
 export class OfflineStore {
   @observable cities: City[] = [];
-  // @observable userSubscription: UserSubscription | null = null;
   @observable cachedCitiesIds: string[] = [];
 
   @observable isLoading = false;
@@ -107,10 +106,6 @@ export class OfflineStore {
     return storage.get(OFFLINE_KEYS.user)
   }
 
-  // saveUserSubscription(subscription: UserSubscription) {
-  //   storage.set(OFFLINE_KEYS.userSubscription, subscription)
-  // }
-
   saveUser(user: User) {
     storage.set(OFFLINE_KEYS.user, user)
   }
@@ -188,7 +183,9 @@ export class OfflineStore {
         this.cities = cities;
         this.cachedCitiesIds = cities.map(({_id}) => _id);
         this.setIsCitySaved(true);
-      })
+      });
+
+      console.log(this.cachedCitiesIds);
     } catch (e) {
       Toast.show({
         type: 'error',
@@ -230,22 +227,11 @@ export class OfflineStore {
     const [cachedCities, cachedUser, env] = await Promise.all([
       this.getCities(),
       storage.get(OFFLINE_KEYS.user),
-      // storage.get(OFFLINE_KEYS.userSubscription),
       storage.get(OFFLINE_KEYS.env),
     ]);
 
-    // const isSubscriptionValid = !!mySubscription && new Date(mySubscription.validUntil).getTime() > Date.now();
-    // if (!isSubscriptionValid) {
-    //   Toast.show({
-    //     type: 'error',
-    //     text1: 'Your subscription is expired',
-    //   });
-    //   return;
-    // }
-
     runInAction(() => {
       this.rootStore.userStore.setUser(cachedUser);
-      // this.rootStore.subscriptionStore.mySubscription = mySubscription;
       this.cities = cachedCities || [];
       AppStateStore.ENV = env;
     })

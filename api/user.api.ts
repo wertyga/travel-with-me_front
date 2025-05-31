@@ -50,18 +50,6 @@ export const updateSelfLastCoords = async (
   return data;
 };
 
-export const fetchUsersNearMe = async (): Promise<{ users: User[] }> => {
-  const { data } = await baseQuery(
-    {
-      method: 'get',
-      url: '/users/users-near-me',
-    },
-    { users: [] }
-  );
-
-  return data;
-};
-
 export const fetchUsersInTheCity = async (
   cityId: string
 ): Promise<{ users: User[] }> => {

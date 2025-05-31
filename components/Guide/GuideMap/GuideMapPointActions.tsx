@@ -27,7 +27,7 @@ export const GuideMapPointActions = ({
 
       <Button
         href={SCREENS.Place}
-        hrefParams={{ placeSlug: point.slug }}
+        hrefParams={{ point }}
         noPaddings
         squareSize={40}
         rounded

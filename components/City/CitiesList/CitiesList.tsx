@@ -34,7 +34,7 @@ export default observer(CitiesList);
 const styles = StyleSheet.create({
   list: {
     gap: 10,
-    paddingBottom: CONSTANTS.spaces.footerHeight + 40,
+    paddingBottom: CONSTANTS.spaces.footerHeight + 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },

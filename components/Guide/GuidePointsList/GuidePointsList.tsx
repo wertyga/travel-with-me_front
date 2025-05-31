@@ -33,9 +33,7 @@ export const GuidePointsList = ({ points }: Props) => {
           <TouchableOpacity
             key={point._id}
             style={styles.point}
-            onPress={() =>
-              navi.navigate(SCREENS.Place, { placeSlug: point.slug })
-            }
+            onPress={() => navi.navigate(SCREENS.Place, { point })}
           >
             <ImageBackgroundWithGradient
               image={point.images[0] || PointPlaceholder}

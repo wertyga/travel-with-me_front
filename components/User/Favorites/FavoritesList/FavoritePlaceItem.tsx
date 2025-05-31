@@ -9,13 +9,11 @@ type Props = {
   isRemoveDisabled?: boolean;
 };
 
-export const FavoritePlaceItem = ({
-  place: { slug, title, city, _id, images },
-  isRemoveDisabled,
-}: Props) => {
+export const FavoritePlaceItem = ({ place, isRemoveDisabled }: Props) => {
+  const { slug, title, city, _id, images } = place;
   const linkProps = {
     href: SCREENS.Place,
-    hrefParams: { placeSlug: slug },
+    hrefParams: { point: place },
   };
 
   return (

@@ -14,3 +14,4 @@ export { SoundStore } from './SoundStore';
 export { OfflineStore } from './OfflineStore';
 export { AchievementsStore } from './AchievementsStore';
 export { ChatsStore } from './ChatsStore';
+export { AnalyticStore } from './AnalyticStore';

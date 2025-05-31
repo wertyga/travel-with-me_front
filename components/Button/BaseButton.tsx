@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   darkBg: {
-    backgroundColor: 'rgba(67,67,67,0.4)',
+    backgroundColor: CONSTANTS.colors.bgSemiTransparentDark,
   },
   text: {
     color: 'white',

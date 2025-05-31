@@ -69,7 +69,6 @@ const CitiesListScreen = () => {
     <MainLayout
       style={styles.layout}
       headerTitle={!isNetConnected && 'Offline Mode'}
-      // bgImage={SplashBgImage}
       bgContent={
         <Image
           source={SplashBgImage}
@@ -84,7 +83,8 @@ const CitiesListScreen = () => {
           zIndex: 1,
         }}
       >
-        {isNetConnected && <GlobalSearch />}
+        <View style={{ height: 60 }}>{isNetConnected && <GlobalSearch />}</View>
+
         <View style={styles.headers}>
           {HEADERS_LIST.map(({ title, id }) => {
             return (
@@ -102,11 +102,11 @@ const CitiesListScreen = () => {
       </View>
 
       {state.tab === 'list' && (
-        <CitiesList cities={cities} style={{ paddingTop: 80 }} key="list" />
+        <CitiesList cities={cities} style={{ paddingTop: 50 }} key="list" />
       )}
       {state.tab === 'map' && (
         <CitiesMap
-          containerStyle={{ marginTop: 80, marginBottom: 5 }}
+          containerStyle={{ marginTop: 50, marginBottom: 5 }}
           key="map"
         />
       )}

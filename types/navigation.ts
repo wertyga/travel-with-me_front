@@ -3,6 +3,7 @@ import React from 'react';
 import { RouteProp } from '@react-navigation/core';
 
 import { Chat } from '@/types/chat';
+import { Place } from '@/types/place';
 import { User } from '@/types/user';
 
 import { City } from './city';
@@ -49,7 +50,7 @@ export type RootStackParamList = {
   [SCREENS.UsersNearMe]: undefined;
   [SCREENS.ChatList]: undefined;
   [SCREENS.Chat]: { withUser: User };
-  [SCREENS.Place]: { placeSlug: string };
+  [SCREENS.Place]: { point: Place };
   [SCREENS.Error]: { error: string };
 };
 

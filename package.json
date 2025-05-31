@@ -21,6 +21,8 @@
     "@npmcli/agent": "^3.0.0",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/netinfo": "11.1.0",
+    "@react-native-firebase/analytics": "^21.6.1",
+    "@react-native-firebase/app": "^21.6.1",
     "@react-native-google-signin/google-signin": "^12.2.1",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.16",
@@ -65,7 +67,8 @@
     "react-native-svg": "14.1.0",
     "react-native-toast-message": "^2.1.7",
     "typescript": "^5.3.0",
-    "yup": "^1.3.2"
+    "yup": "^1.3.2",
+    "expo-router": "~3.4.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

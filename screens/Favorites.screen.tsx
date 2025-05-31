@@ -8,19 +8,26 @@ import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
 import { FavoritesList } from '@/components/User';
-import { useAuthGuard, useFocus, useStores } from '@/hooks';
+import { useAuthGuard, useFetch, useFocus, useStores } from '@/hooks';
 
 const FavoritesScreen = () => {
   useAuthGuard();
 
-  const { getFavorites, favorites, isLoading, isNetConnected } = useStores(
-    stores => ({
-      getFavorites: stores.userStore.getFavorites,
-      favorites: stores.userStore.favorites,
-      isLoading: stores.userStore.isLoading,
-      isNetConnected: stores.appStateStore.isNetConnected,
-    })
-  );
+  const { fetchFavorites, isNetConnected } = useStores(stores => ({
+    fetchFavorites: stores.userStore.fetchFavorites,
+    isNetConnected: stores.appStateStore.isNetConnected,
+  }));
+
+  const [
+    getFavorites,
+    {
+      isLoading,
+      data: favorites = {
+        guides: [],
+        places: [],
+      },
+    },
+  ] = useFetch(fetchFavorites);
 
   useFocus(() => {
     getFavorites();
