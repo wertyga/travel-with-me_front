@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { StyleSheet, View } from 'react-native';
 
@@ -13,29 +13,18 @@ import { CONSTANTS } from '@/styles/constants';
 
 import DefaultPointImage from '@/assets/images/default_point_image.png';
 
-type Props = {
+type TMapMarkerProps = {
   coords: Path;
-  description?: string;
   isChosen?: boolean;
-  isChosenExists?: boolean;
   image?: string;
-  title?: string;
   markerSize?: number;
-  children?: React.ReactNode;
   onPress: () => void;
 };
 
 const MARKER_SIZE = 50;
 
-export const MapMarker = React.memo(
-  ({
-    coords,
-    image,
-    markerSize = MARKER_SIZE,
-    onPress,
-    isChosen,
-    isChosenExists,
-  }: Props) => {
+export const MapMarker: FC<TMapMarkerProps> = React.memo(
+  ({ coords, image, markerSize = MARKER_SIZE, onPress, isChosen }) => {
     if (!coords?.lat || !coords?.lng) return null;
 
     return (

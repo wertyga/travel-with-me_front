@@ -27,6 +27,7 @@ export const Toast = () => {
             style={{
               borderLeftColor: 'red',
               height: 50,
+              zIndex: 100,
             }}
             contentContainerStyle={{ paddingLeft: 5 }}
             text1Style={{

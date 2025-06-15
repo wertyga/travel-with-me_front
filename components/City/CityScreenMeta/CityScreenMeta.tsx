@@ -15,6 +15,7 @@ import {
 import { CityScreenMetaDHST } from '@/components/City/CityScreenMeta/CityScreenMetaDHST/CityScreenMetaDHST';
 import { CountryPill } from '@/components/Country';
 import { GuidesSlideList } from '@/components/Guide';
+import { DonationBtn } from '@/components/Payment/DonationBtn/DonationBtn';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 
 import { City, FONTS } from '@/types';
@@ -100,7 +101,7 @@ const CityScreenMeta = ({ city }: Props) => {
           );
         })}
       </ScrollHorizontalNoEdges>
-
+      {/*<DonationBtn />*/}
       <CityScreenMetaDHST type={state.chosenCityTab as any} city={city} />
 
       <>

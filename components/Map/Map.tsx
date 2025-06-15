@@ -14,21 +14,14 @@ import MapView, {
   Region,
 } from 'react-native-maps';
 
-import { MaterialIcons } from '@expo/vector-icons';
-
 import { getMyLocation } from '@/mobx/stores/location/location.utils';
-import { observer } from 'mobx-react-lite';
 
-import Button from '@/components/Button';
 import { customMapStyles } from '@/components/Map/Map.utils';
 import { MapMarker } from '@/components/Map/MapMarker';
 import { MyLocationMarker } from '@/components/Map/MyLocationMarker';
 import { ShowMyLocation } from '@/components/Map/ShowMyLocation';
-import { useStores } from '@/hooks';
 
 import { Place } from '@/types';
-
-import { CONSTANTS } from '@/styles/constants';
 
 type Props = MapViewProps & {
   points: Place[];

@@ -60,20 +60,6 @@ export const FastImage = ({
     }));
   }, []);
 
-  const onProgress = useCallback(
-    ({ loaded, total }) => {
-      if (hideProgress) return;
-
-      const onePercent = total / 100;
-
-      setState(prev => ({
-        ...prev,
-        progress: Math.round(loaded / onePercent),
-      }));
-    },
-    [hideProgress]
-  );
-
   const onLoadStart = useCallback(() => {
     setState(prev => ({
       ...prev,
@@ -101,7 +87,6 @@ export const FastImage = ({
           )}
         </View>
       )}
-      {/*{shouldRenderRnImage && (*/}
       <RNImage
         source={
           typeof source === 'number'
@@ -115,19 +100,6 @@ export const FastImage = ({
         onLoad={onLoadSuccess}
         onLoadStart={onLoadStart}
       />
-      {/*)}*/}
-
-      {/*{!shouldRenderRnImage && (*/}
-      {/*  <ExpoImage*/}
-      {/*    source={source}*/}
-      {/*    style={style}*/}
-      {/*    cachePolicy="memory"*/}
-      {/*    onError={onError}*/}
-      {/*    onLoad={onLoadSuccess}*/}
-      {/*    onLoadStart={onLoadStart}*/}
-      {/*    onProgress={onProgress}*/}
-      {/*  />*/}
-      {/*)}*/}
     </>
   );
 };

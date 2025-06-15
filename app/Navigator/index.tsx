@@ -12,6 +12,8 @@ import { onLineScreens } from '@/app/Navigator/navigator.utils';
 import { useStores } from '@/hooks';
 import TransitionScreen from '@/screens/TransitionScreen';
 
+import { getIsNetConnected } from '@/utils/etc';
+
 import { RootStackParamList, SCREENS } from '@/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -19,26 +21,38 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Navigator = () => {
   const navigationRef = useNavigationContainerRef();
 
-  const { onRouterStoreReady, isAuthLoading, isNetConnected } = useStores(
-    stores => ({
-      onRouterStoreReady: stores.routerStore.onReady,
-      isAuthLoading: stores.authStore.isInitialLoading,
-      isNetConnected: stores.appStateStore.isNetConnected,
-    })
-  );
+  const {
+    onRouterStoreReady,
+    isAuthLoading,
+    isNetConnected,
+    getCityLightList,
+    cityLightList,
+  } = useStores(stores => ({
+    onRouterStoreReady: stores.routerStore.onReady,
+    isAuthLoading: stores.authStore.isInitialLoading,
+    isNetConnected: stores.appStateStore.isNetConnected,
+    getCityLightList: stores.citiesListStore.getCityLightList,
+    cityLightList: stores.citiesListStore.cityLightList,
+  }));
 
   const onReady = async () => {
     onRouterStoreReady(navigationRef);
 
-    if (!isNetConnected) {
-      navigationRef.current.navigate(SCREENS.CitiesList as never);
+    const { total } = await getCityLightList();
+
+    if (!total && !getIsNetConnected()) {
+      navigationRef.current.navigate(SCREENS.Offline as never);
+
+      return;
     }
   };
 
   useEffect(() => {
-    if (isNetConnected || !navigationRef.current) return;
-
-    navigationRef.current.navigate(SCREENS.CitiesList as never);
+    if (!isNetConnected && cityLightList.length) {
+      navigationRef.current?.navigate(SCREENS.CitiesList as never);
+    } else if (!isNetConnected && !cityLightList.length) {
+      navigationRef.current?.navigate(SCREENS.Offline as never);
+    }
   }, [isNetConnected]);
 
   if (isAuthLoading) {

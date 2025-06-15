@@ -7,11 +7,10 @@ import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts';
 import { CText } from '@/components/CText';
 import { CitiesList, CitiesMap } from '@/components/City';
-import { SafeLoader } from '@/components/SafeLoader';
 import { GlobalSearch } from '@/components/Search';
-import { useFocus, useNavigation, useStores } from '@/hooks';
+import { useStores } from '@/hooks';
 
-import { FONTS, SCREENS } from '@/types';
+import { FONTS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
@@ -29,11 +28,8 @@ const HEADERS_LIST = [
 ];
 
 const CitiesListScreen = () => {
-  const navi = useNavigation();
-
-  const { cities, getCityLightList, isNetConnected } = useStores(stores => ({
+  const { cities, isNetConnected } = useStores(stores => ({
     cities: stores.citiesListStore.cityLightList,
-    getCityLightList: stores.citiesListStore.getCityLightList,
     isNetConnected: stores.appStateStore.isNetConnected,
   }));
 
@@ -44,26 +40,6 @@ const CitiesListScreen = () => {
   const onChangeTab = (tab: string) => () => {
     setState(prev => ({ ...prev, tab }));
   };
-
-  useFocus(() => {
-    getCityLightList();
-
-    return () => {
-      setState(prev => ({ ...prev, tab: 'list' }));
-    };
-  }, [isNetConnected]);
-
-  useFocus(() => {
-    if (isNetConnected === false && !cities.length) {
-      navi.navigate(SCREENS.Offline);
-    }
-
-    return () => {};
-  }, [isNetConnected, cities]);
-
-  if (!cities.length) {
-    return <SafeLoader />;
-  }
 
   return (
     <MainLayout

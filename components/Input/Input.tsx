@@ -15,7 +15,7 @@ import { CText } from '@/components/CText';
 
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = Omit<TextInputProps, 'error' | 'onChangeText'> & {
+type Props = Omit<TextInputProps, 'error' | 'onChangeText' | 'onChange'> & {
   onChange: (value: string) => void;
   error?: string;
   style?: StyleProp<ViewStyle>;

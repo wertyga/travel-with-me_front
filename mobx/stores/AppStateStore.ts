@@ -12,7 +12,7 @@ export class AppStateStore {
 	static ENV: Partial<EnvMap> = {
 		stripePk: (Constants.expoConfig?.extra as any).STRIPE_PUBLIC_KEY,
 	};
-	static isNetConnected = true;
+	static isNetConnected = false;
 
 	netConnectionUnsubscribe: NetInfoSubscription;
 

@@ -9,6 +9,7 @@ import { observer } from 'mobx-react-lite';
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { CityScreenMeta } from '@/components/City';
 import { CityMapForDownload } from '@/components/City/CityMapForDownload/CityMapForDownload';
+import { DonationBtn } from '@/components/Payment/DonationBtn/DonationBtn';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
 import { useFocus, useNavigation } from '@/hooks';

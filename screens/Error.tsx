@@ -2,6 +2,8 @@ import { StyleSheet, View } from 'react-native';
 
 import Toast from 'react-native-toast-message';
 
+import Constants from 'expo-constants';
+
 import { MainLayout } from '@/Layouts';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
@@ -32,11 +34,14 @@ const Error = ({ route, navigation }) => {
     <MainLayout>
       <View style={styles.scrollView}>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <CText>Oops... Something went wrong</CText>
-          <CText>{route.params?.error}</CText>
+          <CText light>Oops... Something went wrong</CText>
+          <CText light>{route.params?.error}</CText>
+
+          <CText light>{Constants.expoConfig.version}</CText>
+          <CText light>{Constants.expoConfig.extra.API_BASE_URL}</CText>
         </View>
 
-        <Button onPress={goBack} fluid high>
+        <Button onPress={goBack} fluid high light>
           Go Back
         </Button>
       </View>

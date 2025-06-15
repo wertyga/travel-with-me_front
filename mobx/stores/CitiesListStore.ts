@@ -7,7 +7,7 @@ import { getIsNetConnected } from '@/utils/etc';
 
 export class CitiesListStore {
   @observable isLoading: boolean;
-  @observable cityLightList: City[] = [];
+  @observable cityLightList: City[] = []
   @observable total: number = 0;
 
   constructor(public rootStore: RootStoreType) {
@@ -19,17 +19,20 @@ export class CitiesListStore {
       if (!getIsNetConnected()) {
         this.cityLightList = this.rootStore.offlineStore.cities;
         this.total = this.rootStore.offlineStore.cities.length;
+      } else {
+        const cachedReq = cacheWrap.apply(this, [fetchLightCityList]);
+        const {cities, total} = await cachedReq.withLoading().invoke();
 
-        return;
+        runInAction(() => {
+          this.cityLightList = cities;
+          this.total = total;
+        });
       }
 
-      const cachedReq = cacheWrap.apply(this, [fetchLightCityList]);
-      const {cities, total} = await cachedReq.withLoading().invoke();
-
-      runInAction(() => {
-        this.cityLightList = cities;
-        this.total = total;
-      });
+      return {
+        cities: this.cityLightList,
+        total: this.total
+      }
     } catch (e) {
       this.rootStore.routerStore.navigateToError(e.message)
     }
