@@ -45,7 +45,6 @@ export type User = {
   story: string;
   languages: Language[];
   isVisible: boolean;
-  lastCoords?: Path;
   lastCity?: City;
 };
 

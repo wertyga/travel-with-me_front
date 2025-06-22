@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { StyleSheet } from 'react-native';
 
 import Toast from 'react-native-toast-message';
@@ -17,10 +15,6 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { FONTS } from '@/types';
 
 const OauthGoogle = () => {
-  useState(() => {
-    GoogleSignin.configure();
-  });
-
   const { isLoading, oauthGoogleRegister } = useStores(stores => ({
     oauthGoogleRegister: stores.authStore.oauthGoogleRegister,
     isLoading: stores.authStore.isLoading,

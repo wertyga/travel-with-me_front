@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     borderColor: 'white',
-    borderWidth: 2,
-    padding: 2,
+    borderWidth: 4,
+    padding: 4,
     position: 'relative',
     overflow: 'hidden',
   },

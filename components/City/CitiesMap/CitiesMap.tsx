@@ -4,6 +4,7 @@ import { ViewStyle } from 'react-native';
 
 import { observer } from 'mobx-react-lite';
 
+import { getMiddleCoordinates } from '@/components/Map/Map.utils';
 import { MapBoxView } from '@/components/Map/MapBox/MapBoxView';
 import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
@@ -31,11 +32,16 @@ export const CitiesMapComponent = ({ containerStyle }: Props) => {
     navi.navigate(SCREENS.City, { city });
   };
 
+  const middlePoint = getMiddleCoordinates(
+    cityLightList.map(({ coords }) => coords)
+  );
+
   return (
     <MapBoxView
       points={cityLightList}
       onPress={navigateToCity}
       containerStyle={containerStyle}
+      initialCoords={[middlePoint.lng, middlePoint.lat]}
     />
   );
 };

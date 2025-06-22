@@ -1,13 +1,17 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import Constants from 'expo-constants';
 
-import { getMiddleCoordinates } from '@/components/Map/Map.utils';
-import Mapbox, { MapView } from '@rnmapbox/maps';
+import { observer } from 'mobx-react-lite';
 
-import { MapBoxMarker, TMapBoxMarkerProps } from './components/MapBoxMarker';
+import { MyLocation } from '@/components/Map/MyLocation';
+import { MyLocationMarker } from '@/components/Map/MyLocation/MyLocationMarker';
+import { useStores } from '@/hooks';
+import Mapbox, { CameraAnimationMode, MapView } from '@rnmapbox/maps';
+
+import { MapBoxMarker, TMapBoxMarkerProps } from './MapBoxMarker';
 
 Mapbox.setAccessToken(Constants.expoConfig.extra.MAP_BOX_KEY);
 
@@ -15,31 +19,58 @@ export type TMapBoxViewProps<P> = {
   points: (P & Omit<TMapBoxMarkerProps, 'onPress'>)[];
   onPress?: (point: P & TMapBoxMarkerProps) => void;
   containerStyle?: ViewStyle;
-  initialCoords?: [number, number];
+  initialCoords?: [number, number]; // [lng, lat]
+  zoomLevel?: number;
+  isShowMyLocation?: boolean;
+  showMyLocationBtnStyle?: ViewStyle;
+  animationMode?: CameraAnimationMode;
+  children?: React.ReactNode;
 };
 
-export const MapBoxView = <P,>({
+const MapBoxViewComponent = <P,>({
   points,
   onPress,
   containerStyle = {},
+  zoomLevel = 4,
   initialCoords: propsInitialCoordinates = [0, 0],
+  animationMode = 'none',
+  children,
+  isShowMyLocation,
+  showMyLocationBtnStyle,
 }: TMapBoxViewProps<P>) => {
-  const [initialCoords, setInitialCoords] = useState<[number, number]>(
-    propsInitialCoordinates
-  );
+  const { liveCoords } = useStores(stores => ({
+    liveCoords: stores.locationStore.liveCoords,
+  }));
+
+  const [currentCoordinates, setCurrentCoordinates] = useState<
+    [number, number]
+  >(propsInitialCoordinates);
+
+  const handleOnPointPress = (point: P & TMapBoxMarkerProps) => {
+    setCurrentCoordinates([point.coords.lng, point.coords.lat]);
+    onPress?.(point);
+  };
+
+  const pressOnMyLocation = () => {
+    if (!liveCoords) return;
+
+    setCurrentCoordinates([liveCoords.lng, liveCoords.lat]);
+  };
 
   useEffect(() => {
-    const middlePoint = getMiddleCoordinates(
-      points.map(({ coords }) => coords)
-    );
-
-    setInitialCoords([middlePoint.lng, middlePoint.lat]);
-  }, [points]);
+    setCurrentCoordinates(propsInitialCoordinates);
+  }, [propsInitialCoordinates]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <MapView style={[{ flex: 1 }, containerStyle]}>
-        <Mapbox.Camera zoomLevel={4} centerCoordinate={initialCoords} />
+    <View style={{ flex: 1, position: 'relative' }}>
+      <MapView
+        style={[{ flex: 1, ...StyleSheet.absoluteFillObject }, containerStyle]}
+      >
+        <Mapbox.Camera
+          zoomLevel={zoomLevel}
+          centerCoordinate={currentCoordinates}
+          animationMode={animationMode}
+        />
 
         {points.map(point => (
           <MapBoxMarker
@@ -47,10 +78,21 @@ export const MapBoxView = <P,>({
             _id={point._id}
             image={point.image}
             coords={point.coords}
-            onPress={() => onPress?.(point)}
+            onPress={() => handleOnPointPress(point)}
           />
         ))}
+        {isShowMyLocation && <MyLocationMarker />}
       </MapView>
+
+      {isShowMyLocation && (
+        <MyLocation
+          onPress={pressOnMyLocation}
+          style={showMyLocationBtnStyle}
+        />
+      )}
+      {children}
     </View>
   );
 };
+
+export const MapBoxView = observer(MapBoxViewComponent);

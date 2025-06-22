@@ -1,13 +1,10 @@
 import { FC } from 'react';
 
-import { Touchable, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
-import Mapbox, { MapView } from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 
-import {
-  MapMarkerGeneric,
-  TMapMarkerGenericProps,
-} from '../../MapMarkerGeneric';
+import { MapMarkerGeneric, TMapMarkerGenericProps } from '../MapMarkerGeneric';
 
 export type TMapBoxMarkerProps = Pick<
   TMapMarkerGenericProps,
@@ -30,7 +27,7 @@ export const MapBoxMarker: FC<TMapBoxMarkerProps> = ({
           coords={coords}
           isChosen={false}
           image={image}
-          markerSize={30}
+          markerSize={40}
         />
       </TouchableOpacity>
     </Mapbox.MarkerView>

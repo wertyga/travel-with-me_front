@@ -1,14 +1,13 @@
 import { action, computed, makeObservable, observable, reaction, runInAction } from 'mobx';
-import { Language, User, UserFavoritesResponse } from '@/types/user';
+import { Language, User } from '@/types/user';
 import {storage} from "@/utils";
 import {
 	fetchFavorites,
 	fetchLanguages,
 	fetchSelfUser, fetchUsersInTheCity,
-	updateSelf,
-	updateSelfLastCoords, UpdateUserReq,
+	updateSelf, UpdateUserReq, updateSelfCityAPI
 } from '@/api';
-import { City, Path, RootStoreType } from '@/types';
+import { RootStoreType } from '@/types';
 import {withLoading} from "@/mobx/store.utils";
 import * as FileSystem from 'expo-file-system';
 import { getIsNetConnected } from '@/utils/etc';
@@ -18,39 +17,14 @@ export class UserStore {
 	@observable user: User | null = null;
 	@observable token: string
 	@observable isLoading: boolean;
-	@observable lastCity: City | null = null;
-	// @observable favorites: UserFavoritesResponse = {} as UserFavoritesResponse
 	@observable languages: Language[] = []
-
-	lastCoords: Path | null = null;
 
 	constructor(public rootStore: RootStoreType) {
 		makeObservable(this);
 	}
 
-	onInitiate() {
-		this.getSelf();
-		this.getLanguages();
-
-		reaction(() => (
-			this.isUserExists
-			&& this.user.isVisible
-			&& this.rootStore.locationStore.liveCoords
-		), liveCoords => {
-			if (!liveCoords) return;
-
-			this.updateLastCoords(liveCoords);
-		})
-	}
-
-	@action async updateLastCoords(coords: Path) {
-		try {
-			this.lastCity = this.rootStore.citiesListStore.getCityByCoords(coords);
-
-			await updateSelfLastCoords(coords);
-
-		} catch (e) {
-		}
+	async updateMyCity(cityId: string) {
+		await updateSelfCityAPI(cityId)
 	}
 
 	@action async getSelf() {
@@ -66,6 +40,7 @@ export class UserStore {
 			}
 
 			const token = await storage.get('token');
+
 			if (!token) {
 				return;
 			}
@@ -90,7 +65,7 @@ async fetchFavorites() {
 					places: []
 				};
 			}
-			
+
 		  const data = await fetchFavorites();
 
 			return {
@@ -151,8 +126,6 @@ async getUsersInTheCity(cityId: string) {
 	@action dropStore() {
 		this.user = null;
 		this.token = undefined;
-		this.lastCoords = null;
-		this.lastCity = null;
 	}
 
 	@computed get isUserExists() {

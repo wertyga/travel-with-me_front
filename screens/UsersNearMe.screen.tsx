@@ -32,11 +32,11 @@ const UsersNearMeScreen = () => {
 
   const fetchTimer = useRef(null);
 
-  const { cityLightList, getUsersInTheCity, user, myLastCity } = useStores(
+  const { cityLightList, getUsersInTheCity, user, updateMyCity } = useStores(
     stores => ({
       user: stores.userStore.user,
       getUsersInTheCity: stores.userStore.getUsersInTheCity,
-      myLastCity: stores.userStore.lastCity,
+      updateMyCity: stores.userStore.updateMyCity,
       cityLightList: stores.citiesListStore.cityLightList,
     })
   );
@@ -44,7 +44,7 @@ const UsersNearMeScreen = () => {
   const [fetchUsersInTheCity, { data: usersNearMe = [] }] =
     useFetch(getUsersInTheCity);
 
-  const [state, setState] = useState({
+  const [state, setState] = useState<{ chosenCity: City | null }>({
     chosenCity: null,
   });
 
@@ -76,7 +76,7 @@ const UsersNearMeScreen = () => {
 
       setState(prev => ({
         ...prev,
-        chosenCity: targetCityBefore || myLastCity || cityLightList[0],
+        chosenCity: targetCityBefore || cityLightList[0],
       }));
     };
 
@@ -90,6 +90,8 @@ const UsersNearMeScreen = () => {
 
   useFocus(() => {
     if (!state.chosenCity) return;
+
+    updateMyCity(state.chosenCity._id);
 
     fetchUsersInTheCity(state.chosenCity._id).then(
       longPollingFetchUsersInTheCity

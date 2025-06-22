@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useRoute } from '@react-navigation/native';
 
@@ -10,16 +10,13 @@ import CarouselEx from 'react-native-snap-carousel';
 import { observer } from 'mobx-react-lite';
 
 import Button from '@/components/Button';
-import { GestureUpFling } from '@/components/Gestures/GestureUpFling';
-import { Map } from '@/components/Map';
-import { DEFAULT_DELTA } from '@/components/Map/Map';
+import { MapBoxView } from '@/components/Map';
 import { useForegroundPermissions, useStores } from '@/hooks';
 
 import { FONTS, Guide, Place, SCREENS } from '@/types';
 
 import { CONSTANTS } from '@/styles/constants';
 
-import { GuideActions } from './GuideActions';
 import GuideMapPointPreview from './GuideMapPointPreview';
 import { PointImagesCarousel } from './PointImagesCarousel';
 
@@ -34,7 +31,7 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
   const router = useRoute();
   const carouselRef = useRef<CarouselEx<Guide> | null>(null);
 
-  const { granted, status } = useForegroundPermissions();
+  const { status } = useForegroundPermissions();
 
   const isCitySource = (router.params as any)?.pointSource === 'city';
 
@@ -59,7 +56,7 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
     isBgPermissionDenied: false,
   });
 
-  const onPointChoose = (point: Place) => {
+  const onPointChoose = (point: Place & { image: string }) => {
     const pointIndex = points.findIndex(p => p._id === point._id);
     carouselRef.current?.snapToItem(pointIndex, false);
 
@@ -103,24 +100,30 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
     }));
   }, [guide, isCitySource]);
 
+  const actualPoints = useMemo(() => {
+    return points.map(({ images, ...pointProps }) => {
+      return {
+        image: images[0],
+        images,
+        ...pointProps,
+      };
+    });
+  }, [points]);
+
   const isLocationDenied = status === 'denied';
 
   return (
     <View style={{ ...StyleSheet.absoluteFillObject }}>
-      <Map
-        points={points}
-        chosenPoint={state.pointShowing}
-        onPointPress={onPointChoose}
-        initialRegion={{
-          latitude: points[0].coords.lat,
-          longitude: points[0].coords.lng,
-          latitudeDelta: DEFAULT_DELTA,
-          longitudeDelta: DEFAULT_DELTA,
-        }}
-        mapMarkerSize={MAP_MARKER_SIZE}
-        mapStyles={styles.map}
+      <MapBoxView
+        points={actualPoints}
+        zoomLevel={14}
+        onPress={onPointChoose}
+        isShowMyLocation
         showMyLocationBtnStyle={styles.showMyLocationBtnStyle}
-        showMyLocation
+        initialCoords={[
+          state.pointShowing?.coords.lng || 0,
+          state.pointShowing?.coords.lat || 0,
+        ]}
       >
         {isLocationDenied && (
           <Button style={styles.accessReminder} href={SCREENS.Profile}>
@@ -128,14 +131,7 @@ const GuideMap = ({ toggleHideHeader }: Props) => {
             can grant the access back in your profile menu
           </Button>
         )}
-        {granted && (
-          <GuideActions
-            guide={guide}
-            onPointChoose={onPointChoose}
-            style={styles.mapActions}
-          />
-        )}
-      </Map>
+      </MapBoxView>
 
       {!!state.pointShowing && (
         <GuideMapPointPreview

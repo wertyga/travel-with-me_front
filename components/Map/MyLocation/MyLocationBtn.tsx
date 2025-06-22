@@ -11,13 +11,13 @@ import { useStores } from '@/hooks';
 
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = {
-  onGetMyLocationClick: () => void;
-  showMyLocationBtnStyle?: ViewStyle;
+export type TMyLocationBtnProps = {
+  onPress: () => void;
+  style?: ViewStyle;
 };
 
-export const ShowMyLocation = observer(
-  ({ onGetMyLocationClick, showMyLocationBtnStyle }: Props) => {
+export const MyLocationBtn = observer(
+  ({ onPress, style }: TMyLocationBtnProps) => {
     const { liveCoords } = useStores(stores => ({
       liveCoords: stores.locationStore.liveCoords,
     }));
@@ -26,8 +26,8 @@ export const ShowMyLocation = observer(
 
     return (
       <Button
-        style={[styles.showMyLocationBtn, showMyLocationBtnStyle]}
-        onPress={onGetMyLocationClick}
+        style={[styles.showMyLocationBtn, style]}
+        onPress={onPress}
         noPaddings
         squareSize={40}
         rounded

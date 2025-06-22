@@ -2,7 +2,7 @@ import Toast from 'react-native-toast-message';
 import {
   changeEmail as changeEmailApi, oauthGoogleRegister,
   recoveryPassword as recoveryPasswordApi,
-  recoveryPasswordInit as recoveryPasswordInitApi,
+  recoveryPasswordInit as recoveryPasswordInitApi, sendLogs,
   signInRequest,
   signUpRequest,
 } from '@/api';
@@ -20,12 +20,15 @@ export class AuthStore {
     makeObservable(this);
   }
 
+  onInitiate() {
+    GoogleSignin.configure();
+  }
+
   @withLoading async signIn(...data: Parameters<typeof signInRequest>) {
     try {
       const { user } = await signInRequest(...data);
 
       this.rootStore.userStore.setUser(user);
-      // this.rootStore.subscriptionStore.dropStore();
 
       return !!user;
     } catch (e) {
@@ -55,11 +58,12 @@ export class AuthStore {
       await storage.delete('token');
 
       this.rootStore.userStore.dropStore();
-      // this.rootStore.subscriptionStore.dropStore();
 
       await this.googleLogout();
       this.rootStore.runDropStores();
-    } catch (e) {}
+    } catch (e) {
+      sendLogs({ logout: e })
+    }
   }
 
   @withLoading async changeEmail(...data: Parameters<typeof changeEmailApi>) {
@@ -94,7 +98,6 @@ export class AuthStore {
     const { user } = await oauthGoogleRegister(...data);
 
     this.rootStore.userStore.setUser(user);
-    // this.rootStore.subscriptionStore.dropStore();
 
     if (this.rootStore.routerStore.navigator.canGoBack()) {
       this.rootStore.routerStore.navigator.goBack();

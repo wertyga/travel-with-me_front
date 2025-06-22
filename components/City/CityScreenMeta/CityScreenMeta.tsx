@@ -81,7 +81,7 @@ const CityScreenMeta = ({ city }: Props) => {
           rectangle
         />
 
-        <CityDownloader city={city} />
+        {/*<CityDownloader city={city} />*/}
       </View>
 
       <ScrollHorizontalNoEdges edge={CONSTANTS.spaces.paddingHorizontal}>

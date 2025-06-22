@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { StyleSheet, View } from 'react-native';
-
-import { Marker } from 'react-native-maps';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { observer } from 'mobx-react-lite';
 
 import { useStores } from '@/hooks';
+import Mapbox from '@rnmapbox/maps';
 
 import { CONSTANTS } from '@/styles/constants';
 
-export const MyLocationMarker = observer(() => {
+export type TMyLocationMarkerProps = {};
+
+export const MyLocationMarker: FC<TMyLocationMarkerProps> = observer(() => {
   const { liveCoords } = useStores(stores => ({
     liveCoords: stores.locationStore.liveCoords,
   }));
@@ -20,11 +21,9 @@ export const MyLocationMarker = observer(() => {
   if (!liveCoords) return null;
 
   return (
-    <Marker
-      coordinate={{
-        latitude: liveCoords.lat,
-        longitude: liveCoords.lng,
-      }}
+    <Mapbox.MarkerView
+      coordinate={[liveCoords.lng, liveCoords.lat]}
+      id="my-location"
     >
       <View style={styles.icon}>
         <FontAwesome5
@@ -33,7 +32,7 @@ export const MyLocationMarker = observer(() => {
           color={CONSTANTS.colors.typographyLight}
         />
       </View>
-    </Marker>
+    </Mapbox.MarkerView>
   );
 });
 

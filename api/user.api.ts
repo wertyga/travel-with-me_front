@@ -37,14 +37,15 @@ export const updateSelf = async (userData: UpdateUserReq): Promise<User> => {
   return user;
 };
 
-export const updateSelfLastCoords = async (
-  coords: Path
+export const updateSelfCityAPI = async (
+  city: string
 ): Promise<SuccessResponse> => {
   const { data } = await baseQuery({
     method: 'post',
-    url: '/users/last-coords',
-    data: coords,
-    silentError: true,
+    url: '/users/users-city',
+    data: {
+      city,
+    },
   });
 
   return data;

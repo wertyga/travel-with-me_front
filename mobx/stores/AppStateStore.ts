@@ -14,6 +14,8 @@ export class AppStateStore {
 	};
 	static isNetConnected = false;
 
+	hasInitiated = false;
+
 	netConnectionUnsubscribe: NetInfoSubscription;
 
 	@observable isAppReady: boolean = false;
@@ -29,7 +31,6 @@ export class AppStateStore {
 		this.applyAppStateChangeListener();
 		await Promise.all([
 			this.getEnvs(),
-			// this.rootStore.subscriptionStore.getMySubscription({isActive: true})
 		])
 
 		runInAction(() => {
@@ -89,9 +90,7 @@ export class AppStateStore {
 				if (nextState === 'active') {
 					await Promise.all([
 						this.getEnvs(),
-						// this.rootStore.soundStore.stopPointPlaybackIfNoNotification(),
 						removeNotification(IDENTIFIERS.pointDirection),
-						// this.rootStore.subscriptionStore.getMySubscription({isActive: true}),
 						this.checkForUpdates(),
 					]);
 
@@ -111,6 +110,13 @@ export class AppStateStore {
 	@action applyNetConnectionListener() {
 		this.netConnectionUnsubscribe = addEventListener(state => {
 			this.setIsNetConnected(state.isConnected);
+
+			if (!this.hasInitiated) {
+				this.rootStore.userStore.getSelf();
+				this.rootStore.userStore.getLanguages();
+
+				this.hasInitiated = true;
+			}
 		});
 	}
 }

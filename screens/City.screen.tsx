@@ -107,7 +107,7 @@ const CityScreen = () => {
         <CityScreenMeta city={city} />
       </ScreenContentWrapper>
 
-      {isCitySaved && <CityMapForDownload points={points} />}
+      {/*{isCitySaved && <CityMapForDownload points={points} />}*/}
     </MainLayout>
   );
 };
