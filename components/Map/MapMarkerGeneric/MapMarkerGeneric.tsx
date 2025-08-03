@@ -42,7 +42,11 @@ export const MapMarkerGeneric: FC<TMapMarkerGenericProps> = React.memo(
           >
             <FastImage
               source={image || DefaultPointImage}
-              style={StyleSheet.absoluteFillObject}
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                width: markerSize,
+                height: markerSize,
+              }}
               hideProgress
               mediaSize={MEDIA_SIZES.ExtraSmall}
             />

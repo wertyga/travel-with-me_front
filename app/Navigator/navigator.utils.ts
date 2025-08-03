@@ -1,5 +1,7 @@
 import React from 'react';
 
+import AddGuideMapScreen from '@/screens/AddGuideMap';
+import AddGuideStepOneScreen from '@/screens/AddGuideStepOne/AddGuideStepOne.screen';
 import ChangeEmailScreen from '@/screens/ChangeEmail';
 import ChatScreen from '@/screens/Chat.screen';
 import ChatListScreen from '@/screens/ChatList.screen';
@@ -103,6 +105,14 @@ export const onLineScreens: ScreenType[] = [
   {
     name: SCREENS.ChatList,
     component: ChatListScreen,
+  },
+  {
+    name: SCREENS.AddGuideStepOne,
+    component: AddGuideStepOneScreen,
+  },
+  {
+    name: SCREENS.AddGuideMap,
+    component: AddGuideMapScreen,
   },
 ];
 

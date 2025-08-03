@@ -184,8 +184,6 @@ export class OfflineStore {
         this.cachedCitiesIds = cities.map(({_id}) => _id);
         this.setIsCitySaved(true);
       });
-
-      console.log(this.cachedCitiesIds);
     } catch (e) {
       Toast.show({
         type: 'error',

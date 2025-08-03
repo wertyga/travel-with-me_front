@@ -30,6 +30,8 @@ export enum SCREENS {
   UsersNearMe = 'UsersNearMe',
   Chat = 'Chat',
   ChatList = 'ChatList',
+  AddGuideStepOne = 'AddGuideStepOne',
+  AddGuideMap = 'AddGuideMap',
 }
 
 export type RootStackParamList = {
@@ -49,6 +51,12 @@ export type RootStackParamList = {
   [SCREENS.Achievements]: undefined;
   [SCREENS.UsersNearMe]: undefined;
   [SCREENS.ChatList]: undefined;
+  [SCREENS.AddGuideStepOne]: undefined;
+  [SCREENS.AddGuideMap]: {
+    title: string;
+    description: string;
+    city: City;
+  };
   [SCREENS.Chat]: { withUser: User };
   [SCREENS.Place]: { point: Place };
   [SCREENS.Error]: { error: string };

@@ -19,10 +19,11 @@ export const GuideMetaActionsComponent = ({ travelTime, guide }: Props) => {
 
   return (
     <View style={[styles.scrollView, styles.container]}>
-      {!!travelTime && <CountryPill title={travelTime} icon="clock" />}
+      {!!travelTime && <CountryPill title={travelTime} icon="clock" outlined />}
       <CountryPill
         title={`${guide.pointsCount} points`}
         icon="map-point-small"
+        outlined
       />
       <CountryPill
         title="Explore"

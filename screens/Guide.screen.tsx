@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 import { useRoute } from '@react-navigation/native';
 
@@ -85,7 +85,6 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
   const initialGuideIndex = guides.findIndex(
     ({ _id }) => _id === route.params?.guide._id
   );
-  const loading = isLoading || isCityLoading;
 
   return (
     <MainLayout
@@ -100,7 +99,6 @@ const GuideScreen: PageScreen<SCREENS.Guide> = ({ route }) => {
         onChange={onChangeGuide}
         imageKey="vImage"
         isFastImage
-        // noBorderRadius
       >
         {!!guide && <GuideMeta guide={guide} />}
       </ScreenContentWrapper>

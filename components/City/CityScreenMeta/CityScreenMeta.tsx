@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { AviaMonthPrice } from '@/components/Avia/AviaMonthPrice';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
-import CityDownloader from '@/components/City/CityDownloader/CityDownloader';
+// import CityDownloader from '@/components/City/CityDownloader/CityDownloader';
 import {
   CITY_TABS,
   getCityMetaData,
@@ -15,7 +15,7 @@ import {
 import { CityScreenMetaDHST } from '@/components/City/CityScreenMeta/CityScreenMetaDHST/CityScreenMetaDHST';
 import { CountryPill } from '@/components/Country';
 import { GuidesSlideList } from '@/components/Guide';
-import { DonationBtn } from '@/components/Payment/DonationBtn/DonationBtn';
+// import { DonationBtn } from '@/components/Payment/DonationBtn/DonationBtn';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 
 import { City, FONTS } from '@/types';

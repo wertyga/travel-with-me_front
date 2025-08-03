@@ -41,8 +41,7 @@ export const FastImage = ({
     isError: false,
   });
 
-  const onError = useCallback(e => {
-    sendLogs(e);
+  const onError = useCallback(() => {
     setState(prev => ({
       ...prev,
       isError: true,
@@ -71,6 +70,7 @@ export const FastImage = ({
   }, []);
 
   const isShowPlaceholder = state.isError || state.isLoading;
+
   return (
     <>
       {isShowPlaceholder && (

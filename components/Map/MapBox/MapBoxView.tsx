@@ -25,6 +25,7 @@ export type TMapBoxViewProps<P> = {
   showMyLocationBtnStyle?: ViewStyle;
   animationMode?: CameraAnimationMode;
   children?: React.ReactNode;
+  onMapPress?: (e: GeoJSON.Feature) => void;
 };
 
 const MapBoxViewComponent = <P,>({
@@ -37,6 +38,7 @@ const MapBoxViewComponent = <P,>({
   children,
   isShowMyLocation,
   showMyLocationBtnStyle,
+  onMapPress,
 }: TMapBoxViewProps<P>) => {
   const { liveCoords } = useStores(stores => ({
     liveCoords: stores.locationStore.liveCoords,
@@ -59,12 +61,13 @@ const MapBoxViewComponent = <P,>({
 
   useEffect(() => {
     setCurrentCoordinates(propsInitialCoordinates);
-  }, [propsInitialCoordinates]);
+  }, [propsInitialCoordinates[0], propsInitialCoordinates[1]]);
 
   return (
     <View style={{ flex: 1, position: 'relative' }}>
       <MapView
         style={[{ flex: 1, ...StyleSheet.absoluteFillObject }, containerStyle]}
+        onPress={onMapPress}
       >
         <Mapbox.Camera
           zoomLevel={zoomLevel}

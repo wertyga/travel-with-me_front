@@ -39,7 +39,7 @@ export const GuidePointsList = ({ points }: Props) => {
               image={point.images[0] || PointPlaceholder}
               style={styles.imageWrapper}
               isFastImage
-              mediaSize={MEDIA_SIZES.Big}
+              mediaSize={MEDIA_SIZES.Small}
             >
               {!!point.distance && (
                 <PointDistance

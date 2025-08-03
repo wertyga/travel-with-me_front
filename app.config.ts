@@ -14,15 +14,11 @@ function getLocalIP() {
   return '0.0.0.0';
 }
 
-export const version = '32.0.0';
-export const PRODUCT_NAME = 'Travel With Me';
-
-const isProd = process.env.NODE_ENV === 'production';
+export const version = '33.0.0';
 
 const ENVS = {
   // API_BASE_URL: 'https://api.traveljet.org',
   API_BASE_URL: `http://${getLocalIP()}:6001`,
-
   GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
 };
 

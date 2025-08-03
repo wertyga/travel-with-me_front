@@ -15,6 +15,7 @@ type Props = Pick<
 > & {
   label: string;
   subLabel?: string;
+  noBg?: boolean;
 };
 
 export const CityDropdownWithLabel = ({
@@ -23,11 +24,16 @@ export const CityDropdownWithLabel = ({
   onChange,
   label,
   subLabel,
+  noBg,
 }: Props) => {
   if (!cities.length) return null;
 
   return (
-    <Button rectangle darkBg style={styles.container}>
+    <Button
+      rectangle
+      darkBg
+      style={[styles.container, noBg && { backgroundColor: 'transparent' }]}
+    >
       <View>
         <CText light bold>
           {label}

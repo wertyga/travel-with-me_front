@@ -6,23 +6,15 @@ import {
   ImageStyle,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
 } from 'react-native';
-
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import { observer } from 'mobx-react-lite';
 
-import { BackgroundGradient } from '@/components/BackgroundGradient';
 import {
   CarouselNew,
   Props as CarouselProps,
 } from '@/components/CarouselNew/CarouselNew';
 import { MEDIA_SIZES } from '@/components/FastImage/FastImage';
-import { PointMeta } from '@/components/Point/PointMeta/PointMeta';
-import { useStores } from '@/hooks';
 import { FastImage } from 'components/FastImage';
 
 import { CONSTANTS } from '@/styles/constants';
@@ -38,78 +30,81 @@ type Props<T> = Pick<CarouselProps, 'defaultIndex' | 'onChange'> & {
   renderItem?: (data: { item: any }) => React.ReactNode;
 };
 
-export const ScreenContentWrapperComponent = <DATA,>({
-  data,
-  imageKey,
-  children,
-  defaultImage,
-  renderItem,
-  isFastImage,
-  noBorderRadius,
-  imageStyle = {},
-  defaultIndex,
-  onChange,
-}: Props<DATA>) => {
-  const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
-  const carouselHeight = windowHeight - 300;
+export const ScreenContentWrapper = observer(
+  <DATA,>({
+    data,
+    imageKey,
+    children,
+    defaultImage,
+    renderItem,
+    isFastImage,
+    noBorderRadius,
+    imageStyle = {},
+    defaultIndex,
+    onChange,
+  }: Props<DATA>) => {
+    const { width: windowWidth, height: windowHeight } =
+      Dimensions.get('window');
+    const carouselHeight = windowHeight - 300;
 
-  const renderItemHandler = <DATA,>(data: { item: DATA }) => {
-    if (renderItem) {
-      return renderItem(data);
-    }
+    const renderItemHandler = <DATA,>(data: { item: DATA }) => {
+      if (renderItem) {
+        return renderItem(data);
+      }
 
-    const imageSrc: string = (data.item as any)[imageKey] as string;
+      const imageSrc: string = (data.item as any)[imageKey] as string;
 
-    if (isFastImage) {
+      if (isFastImage) {
+        return (
+          <FastImage
+            key={imageSrc}
+            source={imageSrc}
+            style={{
+              ...styles.image,
+              height: carouselHeight,
+              width: windowWidth,
+              ...imageStyle,
+            }}
+            mediaSize={MEDIA_SIZES.Small}
+          />
+        );
+      }
       return (
-        <FastImage
+        <Image
           key={imageSrc}
-          source={imageSrc}
-          style={{
-            ...styles.image,
-            height: carouselHeight,
-            width: windowWidth,
-            ...imageStyle,
-          }}
-          mediaSize={MEDIA_SIZES.Big}
+          source={{ uri: imageSrc }}
+          style={[
+            styles.image,
+            { height: carouselHeight, width: windowWidth },
+            imageStyle,
+          ]}
+          defaultSource={defaultImage}
         />
       );
-    }
+    };
+
     return (
-      <Image
-        key={imageSrc}
-        source={{ uri: imageSrc }}
-        style={[
-          styles.image,
-          { height: carouselHeight, width: windowWidth },
-          imageStyle,
-        ]}
-        defaultSource={defaultImage}
-      />
-    );
-  };
-
-  return (
-    <ScrollView
-      contentContainerStyle={{
-        paddingBottom: 20,
-      }}
-    >
-      <CarouselNew<DATA>
-        dotsStyle={{
-          paddingBottom: 12,
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 20,
         }}
-        data={data}
-        cardWidth={windowWidth}
-        defaultIndex={defaultIndex}
-        onChange={onChange}
-        renderItem={renderItemHandler}
-      />
+      >
+        <CarouselNew<DATA>
+          dotsStyle={{
+            paddingBottom: 12,
+          }}
+          data={data}
+          cardWidth={windowWidth}
+          defaultIndex={defaultIndex}
+          onChange={onChange}
+          renderItem={renderItemHandler}
+        />
 
-      {children}
-    </ScrollView>
-  );
-};
+        {children}
+      </ScrollView>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   image: {
@@ -124,4 +119,4 @@ const styles = StyleSheet.create({
   dotsStyle: {},
 });
 
-export const ScreenContentWrapper = observer(ScreenContentWrapperComponent);
+// export const ScreenContentWrapper = observer(ScreenContentWrapperComponent);

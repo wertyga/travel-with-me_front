@@ -118,20 +118,19 @@ const ProfileScreen = () => {
             </>
           )}
 
-          <View style={{ marginTop: 10 }}>
+          <View style={{ gap: 10 }}>
             <LanguagesSelect />
-          </View>
 
-          {!!myChatsCount && (
-            <Button
-              href={SCREENS.ChatList}
-              high
-              style={{ marginTop: 10 }}
-              light
-            >
-              Chats
+            {!!myChatsCount && (
+              <Button href={SCREENS.ChatList} high light>
+                Chats
+              </Button>
+            )}
+
+            <Button href={SCREENS.AddGuideStepOne} high light>
+              Add my guide
             </Button>
-          )}
+          </View>
 
           {isNetConnected && (
             <Button

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import {
   Modal as ModalNative,
@@ -21,6 +21,7 @@ export type Props = ModalProps & {
   containerStyle?: ViewStyle;
   bodyStyle?: ViewStyle;
   white?: boolean;
+  titleSlot?: ReactNode;
 };
 
 export const Modal = ({
@@ -33,6 +34,7 @@ export const Modal = ({
   transparent,
   visible,
   white,
+  titleSlot,
   ...props
 }: Props) => {
   return (
@@ -68,6 +70,7 @@ export const Modal = ({
             />
           </Button>
           {!!title && <CText light>{title}</CText>}
+          {titleSlot}
         </View>
 
         {children}

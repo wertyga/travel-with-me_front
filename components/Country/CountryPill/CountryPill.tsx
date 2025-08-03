@@ -16,6 +16,7 @@ type Props = Pick<
   style?: StyleProp<ViewStyle>;
   contentStyle?: ViewStyle;
   title: string;
+  outlined?: boolean;
   icon?: IconNames;
   customIcon?: React.ReactNode; // Size - 22
   onPress?: () => void;
@@ -32,6 +33,7 @@ export const CountryPill = ({
   contentStyle = {},
   rectangle,
   textable,
+  outlined,
 }: Props) => {
   return (
     <View style={[styles.container, style]}>
@@ -45,6 +47,7 @@ export const CountryPill = ({
         hrefParams={hrefParams}
         rectangle={rectangle}
         textable={textable}
+        outlined={outlined}
       >
         {!!icon && <Icon name={icon as IconNames} />}
         {customIcon}

@@ -15,7 +15,10 @@ import { CText } from '@/components/CText';
 
 import { CONSTANTS } from '@/styles/constants';
 
-type Props = Omit<TextInputProps, 'error' | 'onChangeText' | 'onChange'> & {
+export type TInputProps = Omit<
+  TextInputProps,
+  'error' | 'onChangeText' | 'onChange'
+> & {
   onChange: (value: string) => void;
   error?: string;
   style?: StyleProp<ViewStyle>;
@@ -28,7 +31,7 @@ export const Input = ({
   style,
   inputStyle,
   ...inputProps
-}: Props) => {
+}: TInputProps) => {
   return (
     <View style={[styles.container, style]}>
       <TextInput

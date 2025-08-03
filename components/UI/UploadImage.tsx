@@ -20,7 +20,7 @@ export type ImageStorage = {
   uri: string;
 };
 
-type Props = {
+export type TUploadImageProps = {
   style?: ViewStyle;
   imageStyle?: ImageStyle;
   uri: string;
@@ -36,7 +36,7 @@ export const UploadImage = ({
   children,
   imageStyle,
   additionalContent,
-}: Props) => {
+}: TUploadImageProps) => {
   const [isModalShown, setIsModalShown] = useState(false);
 
   const toggleModalShow = () => {
