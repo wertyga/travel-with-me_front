@@ -13,7 +13,7 @@ import { CText } from '@/components/CText';
 import { ScrollHorizontalNoEdges } from '@/components/ScrollHorizontalNoEdges/ScrollHorizontalNoEdges';
 import { useStores } from '@/hooks';
 
-import { getCurrencyMeta } from '@/utils';
+import { DateUnit, getCurrencyMeta } from '@/utils';
 import { cacheWrap } from '@/utils/cache_request';
 
 import { CURRENCY, City, FONTS, PriceMatrixItem } from '@/types';
@@ -55,6 +55,9 @@ export const AviaMonthPrice = observer(({ style, destinationCity }: Props) => {
         {
           originCoords: liveCoords,
           destination: destinationCity,
+        },
+        {
+          expireIn: DateUnit.oneSecond,
         }
       ).invoke();
 

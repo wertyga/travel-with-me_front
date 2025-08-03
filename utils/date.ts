@@ -15,3 +15,8 @@ export const getBeautifyDateTime = (timestamp: string | Date) => {
     time,
   };
 };
+
+export const DateUnit = {
+  oneSecond: 1000,
+  oneMinute: 1000 * 60,
+};

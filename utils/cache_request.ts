@@ -2,6 +2,9 @@ import { AppStateStore } from '@/mobx/stores/AppStateStore';
 import { runInAction } from 'mobx';
 
 const DEFAULT_CACHE_TIME = 86400000; // 24h
+export type TCacheOptions = Partial<{
+  expireIn: number;
+}>;
 
 export class CacheReq {
   private static cache = new Map<string, Record<'data' | 'expiredAt', any>>();
@@ -34,10 +37,10 @@ export class CacheReq {
     return CacheReq.setCacheByKey(CacheReq.getCacheKey(reqName, params), data);
   }
 
-  static setCacheByKey(key: string, data: any) {
+  static setCacheByKey(key: string, data: any, options: TCacheOptions = {}) {
     const cacheTimeActual = !Number.isNaN(Number(AppStateStore.ENV?.cacheTime))
       ? AppStateStore.ENV?.cacheTime
-      : DEFAULT_CACHE_TIME;
+      : (options.expireIn ?? DEFAULT_CACHE_TIME);
 
     return CacheReq.cache.set(key, {
       data,
@@ -61,7 +64,8 @@ class CacheHandler {
   constructor(
     private _parent: any,
     private _promise: (...params: any) => Promise<any>,
-    private _params?: any
+    private _params?: any,
+    private _options?: TCacheOptions
   ) {
     this.key = CacheReq.getCacheKey(_promise.name, _params);
   }
@@ -91,7 +95,7 @@ class CacheHandler {
         : [this._params];
       const result = await this._promise(...params);
 
-      CacheReq.setCacheByKey(this.key, result);
+      CacheReq.setCacheByKey(this.key, result, this._options);
 
       if (this.loadingKey) {
         runInAction(() => {
@@ -114,9 +118,10 @@ class CacheHandler {
 
 export function cacheWrap(
   promise: (params?: any) => Promise<any>,
-  params?: any
+  params?: any,
+  options?: TCacheOptions
 ) {
-  const handler = new CacheHandler(this, promise, params);
+  const handler = new CacheHandler(this, promise, params, options);
 
   return handler;
 }
