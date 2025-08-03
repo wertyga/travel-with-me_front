@@ -13,12 +13,21 @@ export class CitiesListStore {
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
+  
+  @action private async getCityLightListFromOffline() {
+    const cities = await this.rootStore.offlineStore.getCities();
+    
+    runInAction(() => {
+      this.cityLightList = cities;
+      this.total = this.cityLightList.length;
+    })
+
+  }
 
   @action async getCityLightList() {
     try {
       if (!getIsNetConnected()) {
-        this.cityLightList = this.rootStore.offlineStore.cities;
-        this.total = this.rootStore.offlineStore.cities.length;
+        await this.getCityLightListFromOffline()
       } else {
         const cachedReq = cacheWrap.apply(this, [fetchLightCityList]);
         const {cities, total} = await cachedReq.withLoading().invoke();

@@ -37,17 +37,11 @@ const Navigator = () => {
 
   const onReady = async () => {
     onRouterStoreReady(navigationRef);
-
-    const { total } = await getCityLightList();
-
-    if (!total && !getIsNetConnected()) {
-      navigationRef.current.navigate(SCREENS.Offline as never);
-
-      return;
-    }
   };
 
   useEffect(() => {
+    if (isNetConnected === undefined) return;
+
     if (!isNetConnected && cityLightList.length) {
       navigationRef.current?.navigate(SCREENS.CitiesList as never);
     } else if (!isNetConnected && !cityLightList.length) {

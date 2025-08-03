@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction, computed } from 'mobx';
 import * as Updates from 'expo-updates';
 import {AppState} from "react-native";
 import { IDENTIFIERS, removeNotification } from '@/utils';
@@ -7,14 +7,13 @@ import { fetchEnvs } from '@/api/tech.api';
 import Constants from "expo-constants";
 import {CacheReq} from "@/utils/cache_request";
 import { addEventListener, NetInfoSubscription } from '@react-native-community/netinfo';
+import { Logger } from '@rnmapbox/maps';
 
 export class AppStateStore {
 	static ENV: Partial<EnvMap> = {
 		stripePk: (Constants.expoConfig?.extra as any).STRIPE_PUBLIC_KEY,
 	};
 	static isNetConnected = false;
-
-	hasInitiated = false;
 
 	netConnectionUnsubscribe: NetInfoSubscription;
 
@@ -25,10 +24,24 @@ export class AppStateStore {
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
+	
+	@computed get isDev() {
+		return process.env.NODE_ENV === 'development'
+	}
+	
+	private mapBoxLogs() {
+		Logger.setLogCallback(e => {
+			if (this.isNetConnected) return true;
+	
+			return !!e.message.includes('Map load failed');
+		})
+	}
 
 	async onInitiate() {
 		this.applyNetConnectionListener();
 		this.applyAppStateChangeListener();
+		this.mapBoxLogs();
+		
 		await Promise.all([
 			this.getEnvs(),
 		])
@@ -38,6 +51,12 @@ export class AppStateStore {
 		});
 
 		await this.checkForUpdates();
+	}
+	
+	async getInitialData() {
+		this.rootStore.userStore.getSelf();
+		this.rootStore.userStore.getLanguages();
+		this.rootStore.citiesListStore.getCityLightList();
 	}
 
 	@action setIsNetConnected(value: boolean) {
@@ -109,13 +128,12 @@ export class AppStateStore {
 
 	@action applyNetConnectionListener() {
 		this.netConnectionUnsubscribe = addEventListener(state => {
+			const oldState = this.isNetConnected;
+			
 			this.setIsNetConnected(state.isConnected);
-
-			if (!this.hasInitiated) {
-				this.rootStore.userStore.getSelf();
-				this.rootStore.userStore.getLanguages();
-
-				this.hasInitiated = true;
+			
+			if (state.isConnected !== oldState) {
+				this.getInitialData()
 			}
 		});
 	}

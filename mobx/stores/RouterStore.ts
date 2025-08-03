@@ -1,7 +1,6 @@
-import { action, makeObservable, computed, observable, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import {NavigationContainerRefWithCurrent} from "@react-navigation/native";
-import { RootStoreType, SCREENS, SOCIAL_MODELS } from '@/types';
-import analytics from '@react-native-firebase/analytics';
+import { RootStoreType, SCREENS } from '@/types';
 
 export class RouterStore {
 	navigator: NavigationContainerRefWithCurrent<ReactNavigation.RootParamList>;

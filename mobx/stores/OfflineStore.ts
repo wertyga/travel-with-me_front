@@ -2,6 +2,7 @@ import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import _flatten from 'lodash/flatten';
 import _flattenDeep from 'lodash/flattenDeep';
 import Toast from 'react-native-toast-message';
+import { offlineManager } from '@rnmapbox/maps';
 
 import { City, Guide, Place, RootStoreType } from '@/types';
 import { getCachedBunchImages, getImageFromCacheOrSaveImageToCache, storage, formatBytes } from '@/utils';
@@ -10,6 +11,7 @@ import { withLoading } from '@/mobx/store.utils';
 import { User } from '@/types/user';
 import * as FileSystem from 'expo-file-system';
 import { AppStateStore } from '@/mobx/stores/AppStateStore';
+import { Position } from 'geojson';
 
 export const OFFLINE_KEYS = {
   user: 'offline_user',
@@ -24,14 +26,13 @@ export class OfflineStore {
   @observable cachedCitiesIds: string[] = [];
 
   @observable isLoading = false;
-  @observable isCitySaved = false;
 
   constructor(public rootStore: RootStoreType) {
     makeObservable(this);
   }
 
   async onInitiate() {
-    const cachedCities = await  storage.get(OFFLINE_KEYS.cities);
+    const cachedCities = await storage.get(OFFLINE_KEYS.cities);
 
     runInAction(() => {
       this.cachedCitiesIds = (cachedCities || []).map(({_id}) => _id);
@@ -114,10 +115,6 @@ export class OfflineStore {
     storage.set(OFFLINE_KEYS.env, env)
   }
 
-  @action setIsCitySaved(value: boolean) {
-    this.isCitySaved = value;
-  }
-
   @computed get guides(): Guide[] {
     return _flatten(this.cities.map(({guides}) => guides));
   }
@@ -162,10 +159,29 @@ export class OfflineStore {
 
   @withLoading async saveCity(citySlug: string) {
     try {
-      const { city } = await fetchCity({slug: citySlug});
-      if (!city) return;
-
+      Toast.show({
+        type: 'success',
+        text1: 'Loading city data...'
+      });
+      
+      const { city } = await fetchCity({ slug: citySlug });
+     
+      if (!city) {
+        Toast.show({
+          type: 'error',
+          text1: 'City is not exists'
+        });
+        
+        return;
+      }
+      
       city.image = await getImageFromCacheOrSaveImageToCache(city.image);
+      
+      Toast.show({
+        type: 'success',
+        text1: 'Loading city guides...'
+      });
+      
       city.guides = await Promise.all(
         city.guides.map(guide =>
           fetchGuide({slug: guide.slug, withFullPoints: true})
@@ -178,11 +194,22 @@ export class OfflineStore {
       const cachedCities = await this.getCities().then(cities => (cities || []).filter(c => c._id !== city._id));
       const cities =  [...cachedCities, city]
       await storage.set(OFFLINE_KEYS.cities, cities);
+      
+      Toast.show({
+        type: 'success',
+        text1: 'Loading city map...'
+      });
+      
+      await this.downloadCityRegionMapBox(city)
 
       runInAction(() => {
         this.cities = cities;
         this.cachedCitiesIds = cities.map(({_id}) => _id);
-        this.setIsCitySaved(true);
+      });
+      
+      Toast.show({
+        type: 'success',
+        text1: 'Loaded'
       });
     } catch (e) {
       Toast.show({
@@ -237,5 +264,35 @@ export class OfflineStore {
 
   @action dropStore() {
     this.cities = [];
+  }
+  
+  async downloadCityRegionMapBox(city: City) {
+    const bbox: [Position, Position] = [
+      [city.squareCoords.ne.lng, city.squareCoords.ne.lat],
+      [city.squareCoords.sw.lng, city.squareCoords.sw.lat],
+    ];
+    const packName = city.title;
+    
+    const existingPack = await offlineManager.getPack(packName);
+    if (existingPack) {
+      await offlineManager.deletePack(packName);
+    }
+    
+    await offlineManager.createPack(
+      {
+        name: packName,
+        styleURL: 'mapbox://styles/mapbox/streets-v12',
+        minZoom: 12,
+        maxZoom: 17,
+        bounds: bbox,
+      },
+      undefined,
+      (_, err) => {
+        Toast.show({
+          type: 'error',
+          text1: err.message,
+        })
+      }
+    );
   }
 }

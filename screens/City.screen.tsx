@@ -8,11 +8,10 @@ import { observer } from 'mobx-react-lite';
 
 import { MainLayout } from '@/Layouts/MainLayout/MainLayout';
 import { CityScreenMeta } from '@/components/City';
-import { CityMapForDownload } from '@/components/City/CityMapForDownload/CityMapForDownload';
 import { DonationBtn } from '@/components/Payment/DonationBtn/DonationBtn';
 import { SafeLoader } from '@/components/SafeLoader';
 import { ScreenContentWrapper } from '@/components/Screen';
-import { useFocus, useNavigation } from '@/hooks';
+import { useNavigation } from '@/hooks';
 import { useStores } from '@/hooks';
 import _flatten from 'lodash/flatten';
 
@@ -30,8 +29,6 @@ const CityScreen = () => {
     cityLightList,
     city,
     isLoading,
-    isCitySaved,
-    setIsCitySaved,
     cachedCity,
   } = useStores(stores => ({
     getCityLightList: stores.citiesListStore.getCityLightList,
@@ -39,8 +36,6 @@ const CityScreen = () => {
     getCity: stores.cityStore.getCity,
     city: stores.cityStore.city,
     isLoading: stores.cityStore.isLoading,
-    isCitySaved: stores.offlineStore.isCitySaved,
-    setIsCitySaved: stores.offlineStore.setIsCitySaved,
     cachedCity: stores.offlineStore.getCity(cityFromParams?._id),
   }));
 
@@ -67,12 +62,6 @@ const CityScreen = () => {
 
     getCity({ _id: cityFromParams?._id });
   }, [cityFromParams, cityLightList.length]);
-
-  useFocus(() => {
-    return () => {
-      setIsCitySaved(false);
-    };
-  }, []);
 
   if (!cityLightList.length) {
     return (
@@ -106,8 +95,6 @@ const CityScreen = () => {
       >
         <CityScreenMeta city={city} />
       </ScreenContentWrapper>
-
-      {/*{isCitySaved && <CityMapForDownload points={points} />}*/}
     </MainLayout>
   );
 };

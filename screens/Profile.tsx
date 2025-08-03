@@ -32,7 +32,7 @@ const ProfileScreen = () => {
     user,
     logout,
     isUpdateAvailable,
-    // cachedCitiesIds,
+    cachedCitiesIds,
     isLoading,
     onStartWatchingLocation,
     getMyChats,
@@ -43,7 +43,7 @@ const ProfileScreen = () => {
     isLoading: stores.userStore.isLoading,
     logout: stores.authStore.logout,
     isUpdateAvailable: stores.appStateStore.isUpdateAvailable,
-    // cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
+    cachedCitiesIds: stores.offlineStore.cachedCitiesIds,
     onStartWatchingLocation: stores.locationStore.onStartWatchingLocation,
     getMyChats: stores.chatsStore.getMyChats,
     myChatsCount: stores.chatsStore.myChatsCount,
@@ -79,7 +79,7 @@ const ProfileScreen = () => {
   const editLabel = isNetConnected ? 'Edit' : 'Offline';
   const getHelpLabel = isNetConnected ? 'Get Help' : 'Offline';
   const isShowUpdateBtn = isNetConnected && isUpdateAvailable;
-  // const isShowOfflineStorage = !!cachedCitiesIds.length;
+  const isShowOfflineStorage = !!cachedCitiesIds.length;
 
   return (
     <>
@@ -145,18 +145,18 @@ const ProfileScreen = () => {
             </Button>
           )}
 
-          {/*{isShowOfflineStorage && (*/}
-          {/*  <Button*/}
-          {/*    style={[styles.item, {}]}*/}
-          {/*    href={SCREENS.OfflineStorage}*/}
-          {/*    noPaddings*/}
-          {/*  >*/}
-          {/*    <CText light>Offline Storage</CText>*/}
-          {/*    <CText style={styles.edit} light>*/}
-          {/*      {editLabel}*/}
-          {/*    </CText>*/}
-          {/*  </Button>*/}
-          {/*)}*/}
+          {isShowOfflineStorage && (
+            <Button
+              style={[styles.item, {}]}
+              href={SCREENS.OfflineStorage}
+              noPaddings
+            >
+              <CText light>Offline Storage</CText>
+              <CText style={styles.edit} light>
+                {editLabel}
+              </CText>
+            </Button>
+          )}
 
           {isNetConnected && (
             <Button

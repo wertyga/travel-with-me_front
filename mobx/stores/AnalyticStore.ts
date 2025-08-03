@@ -10,6 +10,8 @@ export class AnalyticStore {
   }
 
   async fireScreenChangeEvent() {
+    if (this.rootStore.appStateStore.isDev) return;
+
     const currentRoute = this.rootStore.routerStore.currentRoute;
 
     const title =

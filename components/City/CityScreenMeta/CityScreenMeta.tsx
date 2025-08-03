@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { AviaMonthPrice } from '@/components/Avia/AviaMonthPrice';
 import Button from '@/components/Button';
 import { CText } from '@/components/CText';
-// import CityDownloader from '@/components/City/CityDownloader/CityDownloader';
+import { CityDownloader } from '@/components/City';
 import {
   CITY_TABS,
   getCityMetaData,
@@ -32,16 +32,6 @@ const CityScreenMeta = ({ city }: Props) => {
     chosenCityTab: '',
   });
 
-  // const onChangeFilterByCategory = (filterByCategory: string) => () => {
-  //   setState(prev => {
-  //     return {
-  //       ...prev,
-  //       filterByCategory:
-  //         prev.filterByCategory === filterByCategory ? '' : filterByCategory,
-  //     };
-  //   });
-  // };
-
   const onChangeTextData = (chosenCityTab: string) => () => {
     const isTheSame = chosenCityTab === state.chosenCityTab;
     setState(prev => ({
@@ -50,7 +40,6 @@ const CityScreenMeta = ({ city }: Props) => {
     }));
   };
 
-  // const guidesCityCategories = getGuidesCategories(city?.guides || []);
   const filteredGuides = !state.filterByCategory
     ? city?.guides || []
     : city?.guides.filter(({ categories }) =>
@@ -81,7 +70,7 @@ const CityScreenMeta = ({ city }: Props) => {
           rectangle
         />
 
-        {/*<CityDownloader city={city} />*/}
+        <CityDownloader city={city} />
       </View>
 
       <ScrollHorizontalNoEdges edge={CONSTANTS.spaces.paddingHorizontal}>
@@ -101,30 +90,21 @@ const CityScreenMeta = ({ city }: Props) => {
           );
         })}
       </ScrollHorizontalNoEdges>
-      {/*<DonationBtn />*/}
+
       <CityScreenMetaDHST type={state.chosenCityTab as any} city={city} />
 
-      <>
-        {/*<CityGuidesCategories*/}
-        {/*  categories={guidesCityCategories}*/}
-        {/*  onCategoryPress={onChangeFilterByCategory}*/}
-        {/*  chosenCategory={state.filterByCategory}*/}
-        {/*  style={styles.categories}*/}
-        {/*/>*/}
+      <GuidesSlideList
+        guides={filteredGuides}
+        country={city.country.title}
+        title="Free self tours"
+      />
 
-        <GuidesSlideList
-          guides={filteredGuides}
-          country={city.country.title}
-          title="Free self tours"
-        />
-
-        <AviaMonthPrice
-          destinationCity={city.title}
-          style={{
-            marginTop: 15,
-          }}
-        />
-      </>
+      <AviaMonthPrice
+        destinationCity={city.title}
+        style={{
+          marginTop: 15,
+        }}
+      />
     </View>
   );
 };

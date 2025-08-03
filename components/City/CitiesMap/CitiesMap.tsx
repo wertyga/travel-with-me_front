@@ -11,13 +11,6 @@ import { useStores } from '@/hooks';
 
 import { City, SCREENS } from '@/types';
 
-const EUROPE_REGION = {
-  latitude: 43.13591618938807,
-  latitudeDelta: 64.52384581909979,
-  longitude: 13.603910151869059,
-  longitudeDelta: 61.60953674465418,
-};
-
 type Props = {
   containerStyle?: ViewStyle;
 };

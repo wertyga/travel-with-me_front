@@ -41,6 +41,9 @@ const CitiesListScreen = () => {
     setState(prev => ({ ...prev, tab }));
   };
 
+  const isRenderMap = state.tab === 'map' && !!cities.length;
+  const isRenderList = state.tab === 'list';
+
   return (
     <MainLayout
       style={styles.layout}
@@ -77,10 +80,10 @@ const CitiesListScreen = () => {
         </View>
       </View>
 
-      {state.tab === 'list' && (
+      {isRenderList && (
         <CitiesList cities={cities} style={{ paddingTop: 50 }} key="list" />
       )}
-      {state.tab === 'map' && (
+      {isRenderMap && (
         <CitiesMap
           containerStyle={{ marginTop: 50, marginBottom: 5 }}
           key="map"
