@@ -17,8 +17,8 @@ function getLocalIP() {
 export const version = '33.0.0';
 
 const ENVS = {
-  // API_BASE_URL: 'https://api.traveljet.org',
-  API_BASE_URL: `http://${getLocalIP()}:6001`,
+  API_BASE_URL: 'https://api.traveljet.org',
+  // API_BASE_URL: `http://${getLocalIP()}:6001`,
   GOOGLE_MAPS_API_KEY: 'AIzaSyA0w5GHoMSt37kTG-gWHxpYCTSCEnAUMFA',
 };
 
